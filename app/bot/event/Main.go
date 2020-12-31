@@ -20,12 +20,25 @@ func EventRouter(json string) {
 		if Type == nil {
 			return
 		}
+		jsr := jsoniter.ConfigCompatibleWithStandardLibrary
+
 		switch Type {
 		case "PrivateMsg":
-			jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 			var pm PM
 			jsr.UnmarshalFromString(json, &pm)
 			PrivateMsg(pm)
+			break
+
+		case "GroupMsg":
+			var gm GM
+			jsr.UnmarshalFromString(json, &gm)
+			GroupMsg(gm)
+			break
+
+		case "EventMsg":
+			var em EM
+			jsr.UnmarshalFromString(json, &em)
+			EventMsg(em)
 			break
 
 		default:

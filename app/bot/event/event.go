@@ -11,7 +11,7 @@ import (
 func EventRouter(json string) {
 	//save the data in the first place
 	LogsModel.Api_insert(json, "main")
-	data, err := Jsong.JObject(json)
+	_, err := Jsong.JObject(json)
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {

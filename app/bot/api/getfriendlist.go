@@ -7,6 +7,11 @@ import (
 	"main.go/tuuz/Net"
 )
 
+type GFL struct {
+	Ret  string     `json:"ret"`
+	List FriendList `json:"List"`
+}
+
 type FriendList []struct {
 	UIN      int    `json:"UIN"`
 	NickName string `json:"NickName"`
@@ -23,11 +28,11 @@ func Getfriendlist(bot interface{}) (FriendList, error) {
 		return nil, err
 	}
 	fmt.Println(data)
-	var fl FriendList
+	var gfl GFL
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &fl)
+	err = jsr.UnmarshalFromString(data, &gfl)
 	if err != nil {
 		return nil, err
 	}
-	return fl, nil
+	return gfl.List, nil
 }

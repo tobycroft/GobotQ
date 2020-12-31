@@ -1,4 +1,4 @@
-package LogsModel
+package LogErrorModel
 
 import (
 	"main.go/tuuz"

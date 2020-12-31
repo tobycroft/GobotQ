@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
@@ -18,6 +19,7 @@ func EventRouter(json string) {
 	} else {
 		Type := data["type"]
 		if Type == nil {
+			fmt.Println("typenot on")
 			return
 		}
 		jsr := jsoniter.ConfigCompatibleWithStandardLibrary
@@ -25,8 +27,12 @@ func EventRouter(json string) {
 		switch Type {
 		case "PrivateMsg":
 			var pm PM
-			jsr.UnmarshalFromString(json, &pm)
-			PrivateMsg(pm)
+			err = jsr.UnmarshalFromString(json, &pm)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				PrivateMsg(pm)
+			}
 			break
 
 		case "GroupMsg":

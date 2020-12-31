@@ -11,13 +11,13 @@ type GM struct {
 			La int `json:"La"`
 		} `json:"Pos"`
 	} `json:"FromQQ"`
-	LogonQQ   int `json:"LogonQQ"`
+	LogonQQ   int64 `json:"LogonQQ"`
 	TimeStamp struct {
 		Recv int `json:"Recv"`
 		Send int `json:"Send"`
 	} `json:"TimeStamp"`
 	FromGroup struct {
-		GIN  int    `json:"GIN"`
+		GIN  int64  `json:"GIN"`
 		Name string `json:"name"`
 	} `json:"FromGroup"`
 	Msg struct {

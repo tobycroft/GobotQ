@@ -3,16 +3,16 @@ package event
 type EM struct {
 	Type   string `json:"Type"`
 	FromQQ struct {
-		UIN      int    `json:"UIN"`
+		UIN      int64  `json:"UIN"`
 		NickName string `json:"NickName"`
 	} `json:"FromQQ"`
 	OperateQQ struct {
-		UIN      int    `json:"UIN"`
+		UIN      int64  `json:"UIN"`
 		NickName string `json:"NickName"`
 	} `json:"OperateQQ"`
-	LogonQQ   int `json:"LogonQQ"`
+	LogonQQ   int64 `json:"LogonQQ"`
 	FromGroup struct {
-		GIN  int    `json:"GIN"`
+		GIN  int64  `json:"GIN"`
 		Name string `json:"Name"`
 	} `json:"FromGroup"`
 	Msg struct {

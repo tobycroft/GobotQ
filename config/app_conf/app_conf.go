@@ -1,3 +1,5 @@
 package app_conf
 
-const Project = "tuuzgoweb"
+const Project = "gobot"
+
+const addr = "http://localhost:8000"

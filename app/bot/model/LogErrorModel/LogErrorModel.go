@@ -5,13 +5,14 @@ import (
 	"main.go/tuuz/Log"
 )
 
-const table = "logs"
+const table = "log_error"
 
-func Api_insert(discript string, log string) bool {
-	db := tuuz.DB().Table(table)
-	data := make(map[string]interface{})
-	data["log"] = log
-	data["discript"] = discript
+func Api_insert(error, discript interface{}) bool {
+	db := tuuz.Db().Table(table)
+	data := map[string]interface{}{
+		"error":    error,
+		"discript": discript,
+	}
 	db.Data(data)
 	_, err := db.Insert()
 	if err != nil {

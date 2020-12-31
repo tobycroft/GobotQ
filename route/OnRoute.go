@@ -1,15 +1,16 @@
 package route
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	v1 "main.go/route/v1"
 )
 
 func OnRoute(router *gin.Engine) {
-	router.Any("/", func(context *gin.Context) {
+	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
+		fmt.Println(string(data))
 		context.String(200, string(data))
-
 	})
 	version1 := router.Group("/v1")
 	{

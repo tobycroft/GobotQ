@@ -13,7 +13,7 @@ type FriendList []struct {
 	Email    string `json:"Email"`
 }
 
-func getfriendlist(bot interface{}) (FriendList, error) {
+func Getfriendlist(bot interface{}) (FriendList, error) {
 	post := map[string]interface{}{
 		"logonqq": bot,
 	}

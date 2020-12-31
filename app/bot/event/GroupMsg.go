@@ -3,7 +3,7 @@ package event
 type GM struct {
 	Type   string `json:"Type"`
 	FromQQ struct {
-		UIN       int64  `json:"UIN"`
+		UIN       int    `json:"UIN"`
 		Card      string `json:"Card"`
 		SpecTitle string `json:"SpecTitle"`
 		Pos       struct {
@@ -11,13 +11,13 @@ type GM struct {
 			La int `json:"La"`
 		} `json:"Pos"`
 	} `json:"FromQQ"`
-	LogonQQ   int64 `json:"LogonQQ"`
+	LogonQQ   int `json:"LogonQQ"`
 	TimeStamp struct {
 		Recv int `json:"Recv"`
 		Send int `json:"Send"`
 	} `json:"TimeStamp"`
 	FromGroup struct {
-		GIN  int64  `json:"GIN"`
+		GIN  int    `json:"GIN"`
 		Name string `json:"name"`
 	} `json:"FromGroup"`
 	Msg struct {

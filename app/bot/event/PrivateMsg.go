@@ -7,16 +7,16 @@ import (
 type PM struct {
 	Type   string `json:"Type"`
 	FromQQ struct {
-		UIN      int64  `json:"UIN"`
+		UIN      int    `json:"UIN"`
 		NickName string `json:"NickName"`
 	} `json:"FromQQ"`
-	LogonQQ   int64 `json:"LogonQQ"`
+	LogonQQ   int `json:"LogonQQ"`
 	TimeStamp struct {
 		Recv int `json:"Recv"`
 		Send int `json:"Send"`
 	} `json:"TimeStamp"`
 	FromGroup struct {
-		GIN int64 `json:"GIN"`
+		GIN int `json:"GIN"`
 	} `json:"FromGroup"`
 	Msg struct {
 		Req         int    `json:"Req"`

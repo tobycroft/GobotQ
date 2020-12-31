@@ -17,7 +17,7 @@ func EventRouter(json string) {
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {
-		Type := data["type"]
+		Type := data["Type"]
 		if Type == nil {
 			fmt.Println("typenot on")
 			return

@@ -2,4 +2,4 @@ package app_conf
 
 const Project = "gobot"
 
-const addr = "http://localhost:8000"
+const HttpAPI = "http://localhost:8000"

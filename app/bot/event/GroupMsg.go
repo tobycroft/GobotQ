@@ -1,0 +1,42 @@
+package event
+
+type GM struct {
+	Type   string `json:"Type"`
+	FromQQ struct {
+		UIN       int64  `json:"UIN"`
+		Card      string `json:"Card"`
+		SpecTitle string `json:"SpecTitle"`
+		Pos       struct {
+			Lo int `json:"Lo"`
+			La int `json:"La"`
+		} `json:"Pos"`
+	} `json:"FromQQ"`
+	LogonQQ   int `json:"LogonQQ"`
+	TimeStamp struct {
+		Recv int `json:"Recv"`
+		Send int `json:"Send"`
+	} `json:"TimeStamp"`
+	FromGroup struct {
+		GIN  int    `json:"GIN"`
+		Name string `json:"name"`
+	} `json:"FromGroup"`
+	Msg struct {
+		Req       int    `json:"Req"`
+		Random    int    `json:"Random"`
+		SubType   int    `json:"SubType"`
+		AppID     int    `json:"AppID"`
+		Text      string `json:"Text"`
+		TextReply string `json:"Text_Reply"`
+		BubbleID  int    `json:"BubbleID"`
+	} `json:"Msg"`
+	File struct {
+		ID   string `json:"ID"`
+		MD5  string `json:"MD5"`
+		Name string `json:"Name"`
+		Size int64  `json:"Size"`
+	} `json:"File"`
+}
+
+func GroupMsg(gm GM) {
+
+}

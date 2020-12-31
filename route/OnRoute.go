@@ -7,7 +7,9 @@ import (
 
 func OnRoute(router *gin.Engine) {
 	router.Any("/", func(context *gin.Context) {
-		context.String(0, router.BasePath())
+		data, _ := context.GetRawData()
+		context.String(200, string(data))
+
 	})
 	version1 := router.Group("/v1")
 	{

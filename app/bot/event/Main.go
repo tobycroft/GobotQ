@@ -42,8 +42,8 @@ func EventRouter(json string) {
 			break
 
 		default:
+			LogRecvModel.Api_insert(json)
 			break
 		}
-		LogRecvModel.Api_insert(json)
 	}
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -21,6 +22,7 @@ func Getfriendlist(bot interface{}) (FriendList, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(data)
 	var fl FriendList
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &fl)

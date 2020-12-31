@@ -39,6 +39,7 @@ func Api_select(bot interface{}) []gorose.Data {
 		"bot": bot,
 	}
 	db.Where(where)
+	db.Limit(30)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

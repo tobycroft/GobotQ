@@ -1,9 +1,9 @@
 package event
 
 import (
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/FriendListModel"
 	"main.go/app/bot/model/PrivateMsgModel"
 )
 
@@ -47,8 +47,14 @@ func PrivateMsg(pm PM) {
 
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		fmt.Println(api.Getfriendlist(bot["bot"]))
+		fl, err := api.Getfriendlist(bot["bot"])
+		if err != nil {
 
+		} else {
+			for _, fll := range fl {
+				FriendListModel.Api_insert(bot["bot"], fll.UIN, fll.NickName, fll.Remark, fll.Email)
+			}
+		}
 	}
 
 }

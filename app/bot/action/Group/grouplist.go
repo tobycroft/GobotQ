@@ -9,7 +9,7 @@ import (
 func App_fresh_group_list() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		fl, err := api.Getfriendlist(bot["bot"])
+		fl, err := api.Getgrouplist(bot["bot"])
 		if err != nil {
 
 		} else {

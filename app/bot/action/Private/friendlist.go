@@ -6,7 +6,7 @@ import (
 	"main.go/app/bot/model/FriendListModel"
 )
 
-func App_fresh_friend_list() {
+func App_refresh_friend_list() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
 		fl, err := api.Getfriendlist(bot["bot"])

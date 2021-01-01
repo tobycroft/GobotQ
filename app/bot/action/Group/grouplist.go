@@ -6,7 +6,7 @@ import (
 	"main.go/app/bot/model/GroupListModel"
 )
 
-func App_fresh_group_list() {
+func App_refresh_group_list() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
 		gl, err := api.Getgrouplist(bot["bot"])

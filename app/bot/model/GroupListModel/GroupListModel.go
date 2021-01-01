@@ -9,12 +9,12 @@ import (
 const table = "group_list"
 
 type GroupList struct {
-	bot        interface{} `gorose:"bot"`
-	gid        int         `gorose:"gid"`
-	group_name string      `gorose:"group_name"`
-	group_memo string      `gorose:"group_memo"`
-	owner      int         `gorose:"owner"`
-	number     int         `gorose:"number"`
+	Bot        interface{} `gorose:"bot"`
+	Gid        int         `gorose:"gid"`
+	Group_name string      `gorose:"group_name"`
+	Group_memo string      `gorose:"group_memo"`
+	Owner      int         `gorose:"owner"`
+	Number     int         `gorose:"number"`
 }
 
 func Api_insert(gl GroupList) bool {

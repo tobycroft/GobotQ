@@ -8,7 +8,7 @@ import (
 
 const table = "group_list"
 
-type Gl struct {
+type GroupList struct {
 	bot        interface{} `gorose:"bot"`
 	gid        int         `gorose:"gid"`
 	group_name string      `gorose:"group_name"`
@@ -17,9 +17,21 @@ type Gl struct {
 	number     int         `gorose:"number"`
 }
 
-func Api_insert(gl Gl) bool {
+func Api_insert(gl GroupList) bool {
 	db := tuuz.Db().Table(table)
 	db.Data(gl)
+	_, err := db.Insert()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func Api_insert_more(gls []GroupList) bool {
+	db := tuuz.Db().Table(table)
+	db.Data(gls)
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

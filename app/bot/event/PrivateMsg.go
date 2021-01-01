@@ -1,9 +1,6 @@
 package event
 
 import (
-	"main.go/app/bot/api"
-	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/FriendListModel"
 	"main.go/app/bot/model/PrivateMsgModel"
 )
 
@@ -44,26 +41,5 @@ type PM struct {
 func PrivateMsg(pm PM) {
 	PrivateMsgModel.Api_insert(pm.LogonQQ, pm.FromQQ.UIN, pm.Msg.Text, pm.Msg.Req, pm.Msg.Seq, pm.Msg.Type, pm.Msg.SubType, pm.File.ID,
 		pm.File.MD5, pm.File.Name, pm.File.Size)
-
-	bots := BotModel.Api_select()
-	for _, bot := range bots {
-		fl, err := api.Getfriendlist(bot["bot"])
-		if err != nil {
-
-		} else {
-			FriendListModel.Api_delete(bot["bot"])
-			var fss []FriendListModel.FriendList
-			for _, fll := range fl {
-				var fs FriendListModel.FriendList
-				fs.Bot = bot["bot"]
-				fs.Uid = fll.UIN
-				fs.Nickname = fll.NickName
-				fs.Email = fll.Email
-				fs.Remark = fll.Remark
-				fss = append(fss, fs)
-			}
-			FriendListModel.Api_insert_more(fss)
-		}
-	}
 
 }

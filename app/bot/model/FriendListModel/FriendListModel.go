@@ -41,7 +41,7 @@ func Api_insert(bot, uid, nickname, remark, email interface{}) bool {
 	}
 }
 
-type FriendList []struct {
+type FriendList struct {
 	bot      interface{}
 	uid      interface{}
 	nickname interface{}
@@ -49,7 +49,11 @@ type FriendList []struct {
 	email    interface{}
 }
 
-func Api_insert_more(fl FriendList) bool {
+type FriendLists struct {
+	Fl []FriendList
+}
+
+func Api_insert_more(fl FriendLists) bool {
 	db := tuuz.Db().Table(table)
 
 	db.Data(fl)

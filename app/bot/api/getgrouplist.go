@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -48,7 +47,6 @@ func Getgrouplist(bot interface{}) (GroupList, error) {
 		"logonqq": bot,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/getgrouplist", nil, post, nil, nil)
-	fmt.Println(data)
 	if err != nil {
 		return nil, err
 	}

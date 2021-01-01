@@ -40,3 +40,24 @@ func Api_insert(bot, uid, nickname, remark, email interface{}) bool {
 		return true
 	}
 }
+
+type FriendList []struct {
+	bot      interface{}
+	uid      interface{}
+	nickname interface{}
+	remark   interface{}
+	email    interface{}
+}
+
+func Api_insert_more(fl FriendList) bool {
+	db := tuuz.Db().Table(table)
+
+	db.Data(fl)
+	_, err := db.Insert()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

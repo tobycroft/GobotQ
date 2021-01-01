@@ -51,6 +51,7 @@ func PrivateMsg(pm PM) {
 		if err != nil {
 
 		} else {
+			FriendListModel.Api_delete(bot["bot"])
 			for _, fll := range fl {
 				FriendListModel.Api_insert(bot["bot"], fll.UIN, fll.NickName, fll.Remark, fll.Email)
 			}

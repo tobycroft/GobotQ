@@ -1,6 +1,7 @@
 package GroupMemberModel
 
 import (
+	"github.com/gohouse/gorose/v2"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )
@@ -45,6 +46,49 @@ func Api_insert_more(gms []GroupMember) bool {
 	}
 }
 
-func Api_select(bot) {
+func Api_select(bot, gid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"gid": gid,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
 
+func Api_delete_byGid(bot, gid interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"gid": gid,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func Api_delete(bot interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
 }

@@ -52,7 +52,7 @@ func PrivateMsg(pm PM) {
 
 		} else {
 			FriendListModel.Api_delete(bot["bot"])
-			var fss FriendListModel.FriendLists
+			var fss []FriendListModel.FriendList
 			for _, fll := range fl {
 				var fs FriendListModel.FriendList
 				fs.Bot = bot["bot"]
@@ -60,7 +60,7 @@ func PrivateMsg(pm PM) {
 				fs.Nickname = fll.NickName
 				fs.Email = fll.Email
 				fs.Remark = fll.Remark
-				fss.Fl = append(fss.Fl, fs)
+				fss = append(fss, fs)
 			}
 			FriendListModel.Api_insert_more(fss)
 		}

@@ -92,3 +92,20 @@ func Api_delete(bot interface{}) bool {
 		return true
 	}
 }
+
+func Api_find(bot, gid, uid interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"gid": gid,
+		"uid": uid,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

@@ -11,13 +11,14 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-sql-driver/mysql v1.5.1-0.20200531100419-12508c83901b
 	github.com/gohouse/converter v0.0.3 // indirect
+	github.com/gohouse/golib v0.0.0-20201013092821-ca87ab19b554 // indirect
 	github.com/gohouse/gorose v1.0.5
 	github.com/gohouse/gorose/v2 v2.1.10
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gomodule/redigo v1.8.3
 	github.com/json-iterator/go v1.1.10
-	github.com/kirinlabs/HttpRequest v1.0.5
+	github.com/kirinlabs/HttpRequest v1.1.1
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
@@ -25,7 +26,7 @@ require (
 	github.com/ugorji/go v1.2.2 // indirect
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
-	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
+	golang.org/x/sys v0.0.0-20201231184435-2d18734c6014 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

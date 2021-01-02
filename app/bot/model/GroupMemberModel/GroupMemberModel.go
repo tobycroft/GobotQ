@@ -9,17 +9,17 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	bot        interface{} `gorose:"uid"`
-	gid        int         `gorose:"gid"`
-	uid        int         `gorose:"uid"`
-	age        int         `gorose:"age"`
-	title      string      `gorose:"title"`
-	nickname   string      `gorose:"nickname"`
-	remark     string      `gorose:"remark"`
-	card       string      `gorose:"card"`
-	jointime   int         `gorose:"jointime"`
-	lastsend   int         `gorose:"lastsend"`
-	grouplevel int         `gorose:"grouplevel"`
+	Bot        interface{} `gorose:"uid"`
+	Gid        int         `gorose:"gid"`
+	Uid        int         `gorose:"uid"`
+	Age        int         `gorose:"age"`
+	Title      string      `gorose:"title"`
+	Nickname   string      `gorose:"nickname"`
+	Remark     string      `gorose:"remark"`
+	Card       string      `gorose:"card"`
+	Jointime   int         `gorose:"jointime"`
+	Lastsend   int         `gorose:"lastsend"`
+	Grouplevel int         `gorose:"grouplevel"`
 }
 
 func Api_insert(gm GroupMember) bool {

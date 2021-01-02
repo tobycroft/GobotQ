@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -46,6 +47,9 @@ func Sendprivatemsg(fromqq, toqq, text interface{}) (PrivateMsg, PrivateMsgRet, 
 	err = jsr.UnmarshalFromString(pm.Ret, &ret)
 	if err != nil {
 		return pm, PrivateMsgRet{}, err
+	}
+	if ret.Retcode != 0 {
+		return pm, ret, errors.New(ret.Retmsg)
 	}
 	return pm, ret, nil
 }

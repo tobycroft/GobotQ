@@ -23,11 +23,11 @@ type GroupMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendgroupmsg(fromqq, toqq, text interface{}) (GroupMsg, GroupMsgRet, error) {
+func Sendgroupmsg(fromqq, togroup, text interface{}) (GroupMsg, GroupMsgRet, error) {
 	post := map[string]interface{}{
-		"fromqq": fromqq,
-		"toqq":   toqq,
-		"text":   text,
+		"fromqq":  fromqq,
+		"togroup": togroup,
+		"text":    text,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
 	if err != nil {

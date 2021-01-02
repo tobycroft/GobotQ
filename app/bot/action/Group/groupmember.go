@@ -3,7 +3,7 @@ package Private
 import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupListModel"
+	"main.go/app/bot/model/GroupMemberModel"
 )
 
 func App_refresh_group_member() {
@@ -25,9 +25,23 @@ func App_refresh_group_member_one(bot, gid interface{}) {
 	if err != nil {
 
 	} else {
-
+		GroupMemberModel.Api_delete_byGid(bot, gid)
+		var gms []GroupMemberModel.GroupMember
 		for _, gmm := range gm {
-
+			var g GroupMemberModel.GroupMember
+			g.Bot = bot
+			g.Gid = gid
+			g.Uid = gmm.UIN
+			g.Remark = gmm.Remark
+			g.Nickname = gmm.NickName
+			g.Age = gmm.Age
+			g.Card = gmm.Card
+			g.Grouplevel = gmm.GroupLevel
+			g.Jointime = gmm.AddGroupTime
+			g.Title = gmm.SpecTitle
+			g.Lastsend = gmm.LastMsgTime
+			gms = append(gms, g)
 		}
+		GroupMemberModel.Api_insert_more(gms)
 	}
 }

@@ -10,8 +10,8 @@ const table = "group_member"
 
 type GroupMember struct {
 	Bot        interface{} `gorose:"uid"`
-	Gid        int         `gorose:"gid"`
-	Uid        int         `gorose:"uid"`
+	Gid        interface{} `gorose:"gid"`
+	Uid        interface{} `gorose:"uid"`
 	Age        int         `gorose:"age"`
 	Title      string      `gorose:"title"`
 	Nickname   string      `gorose:"nickname"`

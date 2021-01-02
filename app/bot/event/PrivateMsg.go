@@ -1,6 +1,8 @@
 package event
 
 import (
+	"fmt"
+	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateMsgModel"
 )
 
@@ -41,4 +43,6 @@ type PM struct {
 func PrivateMsg(pm PM) {
 	PrivateMsgModel.Api_insert(pm.LogonQQ, pm.FromQQ.UIN, pm.Msg.Text, pm.Msg.Req, pm.Msg.Seq, pm.Msg.Type, pm.Msg.SubType, pm.File.ID,
 		pm.File.MD5, pm.File.Name, pm.File.Size)
+
+	fmt.Println(api.Sendprivatemsg(pm.LogonQQ, 710209520, "testword"))
 }

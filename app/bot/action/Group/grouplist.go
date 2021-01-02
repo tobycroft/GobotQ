@@ -1,4 +1,4 @@
-package Private
+package Group
 
 import (
 	"main.go/app/bot/api"

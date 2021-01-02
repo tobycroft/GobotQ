@@ -1,4 +1,4 @@
-package Private
+package Group
 
 import (
 	"main.go/app/bot/api"
@@ -27,7 +27,10 @@ func App_refresh_group_member() {
 
 		} else {
 			for _, gll := range gl {
-				App_refresh_group_member_one(bot["bot"], gll.GIN)
+				var apm App_group_member
+				apm.Bot = bot["bot"]
+				apm.Gid = gll.GIN
+				Chan_refresh_group_member <- apm
 			}
 		}
 	}

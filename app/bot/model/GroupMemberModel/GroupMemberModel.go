@@ -109,3 +109,37 @@ func Api_find(bot, gid, uid interface{}) gorose.Data {
 		return ret
 	}
 }
+
+func Api_find_owner(bot, gid interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot":        bot,
+		"gid":        gid,
+		"grouplevel": 6,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_admin(bot, gid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot":        bot,
+		"gid":        gid,
+		"grouplevel": 4,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

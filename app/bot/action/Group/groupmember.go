@@ -6,6 +6,19 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 )
 
+type App_group_member struct {
+	Bot interface{}
+	Gid interface{}
+}
+
+var Chan_refresh_group_member = make(chan App_group_member, 99)
+
+func App_refresh_group_member_chan() {
+	for gm := range Chan_refresh_group_member {
+		App_refresh_group_member_one(gm.Bot, gm.Gid)
+	}
+}
+
 func App_refresh_group_member() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {

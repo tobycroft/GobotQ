@@ -60,13 +60,13 @@ func Queryuserinfo(logonqq, qq interface{}) (QueryUserInfo, error) {
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/queryuserinfo", nil, post, nil, nil)
 	if err != nil {
-		return Info{}, err
+		return QueryUserInfo{}, err
 	}
 	var ret1 QueryUserInfoRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &ret1)
 	if err != nil {
-		return Info{}, err
+		return QueryUserInfo{}, err
 	}
 	return ret1.Info, nil
 }

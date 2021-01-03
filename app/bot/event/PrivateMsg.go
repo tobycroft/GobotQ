@@ -46,5 +46,4 @@ func PrivateMsg(pm PM) {
 
 	ret1, ret2, err := api.Sendprivatemsg(pm.LogonQQ, 710209520, "testword")
 	fmt.Println(ret1, ret2, err)
-
 }

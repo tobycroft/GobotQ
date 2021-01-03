@@ -53,7 +53,7 @@ type QueryUserInfo struct {
 	TodayCLike  int           `json:"TodayCLike"`
 }
 
-func Queryuserinfo(logonqq, qq interface{}) (Info, error) {
+func Queryuserinfo(logonqq, qq interface{}) (QueryUserInfo, error) {
 	post := map[string]interface{}{
 		"logonqq": logonqq,
 		"qq":      qq,

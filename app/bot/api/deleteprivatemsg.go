@@ -10,7 +10,7 @@ type DeletePrivateMsgRet struct {
 	Ret string `json:"ret"`
 }
 
-func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) (DeletePrivateMsgRet, error) {
+func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"toqq":   toqq,
@@ -20,7 +20,7 @@ func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) (DeletePrivat
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/deleteprivatemsg", nil, post, nil, nil)
 	if err != nil {
-		return DeletePrivateMsgRet{}, err
+		return false, err
 	}
 	var ret DeletePrivateMsgRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary

@@ -1,0 +1,52 @@
+package api
+
+/*
+{
+    "ret": "true",
+    "Info": {
+        "UIN": 710209521,
+        "NickName": "修水熊伟伟",
+        "Remark": "恒邦保险熊",
+        "Email": "",
+        "OnlineState": "",
+        "CLike": 0,
+        "Sign": "恒邦保险熊",
+        "QQLevel": 26,
+        "Age": 33,
+        "Country": "中国",
+        "Province": "江西",
+        "City": "九江",
+        "SvcList": [],
+        "Group": "",
+        "TodayLiked": 0,
+        "TodayCLike": 10
+    }
+}
+*/
+
+type QueryUserInfoRet struct {
+	Ret  string `json:"ret"`
+	Info Info   `json:"Info"`
+}
+type Info struct {
+	UIN         int           `json:"UIN"`
+	NickName    string        `json:"NickName"`
+	Remark      string        `json:"Remark"`
+	Email       string        `json:"Email"`
+	OnlineState string        `json:"OnlineState"`
+	CLike       int           `json:"CLike"`
+	Sign        string        `json:"Sign"`
+	QQLevel     int           `json:"QQLevel"`
+	Age         int           `json:"Age"`
+	Country     string        `json:"Country"`
+	Province    string        `json:"Province"`
+	City        string        `json:"City"`
+	SvcList     []interface{} `json:"SvcList"`
+	Group       string        `json:"Group"`
+	TodayLiked  int           `json:"TodayLiked"`
+	TodayCLike  int           `json:"TodayCLike"`
+}
+
+func queryuserinfo() {
+
+}

@@ -13,15 +13,12 @@ type SetFriendAddRequest struct {
 const Request_friend_denide = 2
 const Request_friend_approve = 1
 
-func Setfriendaddrequest(fromqq, group, qq, seq, Request_group_, Type, reason interface{}) (bool, error) {
+func Setfriendaddrequest(fromqq, qq, seq, Request_friend_ interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
-		"group":  group,
 		"qq":     qq,
 		"seq":    seq,
-		"op":     Request_group_,
-		"type":   Type,
-		"reason": reason,
+		"op":     Request_friend_,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/setnickname", nil, post, nil, nil)
 	if err != nil {

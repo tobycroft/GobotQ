@@ -56,4 +56,5 @@ func PrivateHandle(bot int, uid int, text string) {
 	if active {
 		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！")
 	}
+
 }

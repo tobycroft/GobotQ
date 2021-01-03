@@ -51,6 +51,7 @@ func PrivateMsg(pm PM) {
 }
 
 func PrivateHandle(bot int, uid int, text string) {
-	active, _ := regexp.MatchString("^acfur/i", text)
-	fmt.Println("active", active)
+	active, _ := regexp.MatchString("(?i)^acfur", text)
+	fmt.Println(active)
+
 }

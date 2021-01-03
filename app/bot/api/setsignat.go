@@ -10,20 +10,24 @@ type SetSigNat struct {
 	Ret string `json:"ret"`
 }
 
-func Setsignat(fromqq, signature interface{}) (SetSigNat, error) {
+func Setsignat(fromqq, signature interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq":    fromqq,
 		"signature": signature,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/setsignat", nil, post, nil, nil)
 	if err != nil {
-		return SetSigNat{}, err
+		return false, err
 	}
-	var dpmr SetSigNat
+	var ret SetSigNat
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &dpmr)
+	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {
-		return SetSigNat{}, err
+		return false, err
 	}
-	return dpmr, nil
+	if ret.Ret == "true" {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }

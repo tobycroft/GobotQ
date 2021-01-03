@@ -10,13 +10,12 @@ type KickGroupMemberRet struct {
 	Ret string `json:"ret"`
 }
 
-func Kickgroupmember(fromqq, toqq, random, req, time interface{}) (KickGroupMemberRet, error) {
+func Kickgroupmember(fromqq, group, toqq interface{}, ignoreaddgrequest bool) (KickGroupMemberRet, error) {
 	post := map[string]interface{}{
-		"fromqq": fromqq,
-		"toqq":   toqq,
-		"random": random,
-		"req":    req,
-		"time":   time,
+		"fromqq":            fromqq,
+		"group":             group,
+		"toqq":              toqq,
+		"ignoreaddgrequest": ignoreaddgrequest,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/kickgroupmember", nil, post, nil, nil)
 	if err != nil {

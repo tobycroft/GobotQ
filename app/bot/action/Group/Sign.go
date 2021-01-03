@@ -15,7 +15,7 @@ func App_group_sign(bot, gid, uid interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
 	if len(sign) > 0 {
 		at := service.Serv_at(uid)
-		api.Sendgroupmsg(bot, gid, at+"你今天已经签到过了")
+		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at)
 	} else {
 		group_model := GroupBalanceModel.Api_find(gid, uid)
 		db := tuuz.Db()

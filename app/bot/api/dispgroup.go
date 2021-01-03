@@ -6,11 +6,11 @@ import (
 	"main.go/tuuz/Net"
 )
 
-type ExitGroupRet struct {
+type DispGroupRet struct {
 	Ret string `json:"ret"`
 }
 
-func Exitgroup(fromqq, group interface{}) (bool, error) {
+func Dispgroup(fromqq, group interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"group":  group,
@@ -19,7 +19,7 @@ func Exitgroup(fromqq, group interface{}) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	var ret ExitGroupRet
+	var ret DispGroupRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {

@@ -1,5 +1,11 @@
 package api
 
+import (
+	jsoniter "github.com/json-iterator/go"
+	"main.go/config/app_conf"
+	"main.go/tuuz/Net"
+)
+
 /*
 {
     "ret": "true",
@@ -47,6 +53,21 @@ type Info struct {
 	TodayCLike  int           `json:"TodayCLike"`
 }
 
-func queryuserinfo() {
+func queryuserinfo(logonqq, qq interface{}) (Info, error) {
+	post := map[string]interface{}{
+		"logonqq": logonqq,
+		"qq":      qq,
+	}
+	data, err := Net.Post(app_conf.Http_Api+"/getfriendlist", nil, post, nil, nil)
+	if err != nil {
+		return Info{}, err
+	}
+	var ret1 QueryUserInfoRet
+	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
+	err = jsr.UnmarshalFromString(data, &ret1)
+	if err != nil {
+		return Info{}, err
+	}
 
+	return ret1.Info, nil
 }

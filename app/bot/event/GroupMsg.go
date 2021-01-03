@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupMsgModel"
+	"regexp"
 )
 
 type GM struct {
@@ -64,8 +65,8 @@ func GroupMsg(gm GM) {
 }
 
 func GroupHandle(bot, gid, uid int, text string, req int, random int) {
-	//active, _ := regexp.MatchString("(?i)^acfur", text)
-
-	api.Sendgroupmsg(bot, gid, "Hi我是Acfur!")
-
+	active, _ := regexp.MatchString("(?i)^acfur", text)
+	if active {
+		api.Sendgroupmsg(bot, gid, "Hi我是Acfur!")
+	}
 }

@@ -10,7 +10,7 @@ type MuteGroupmeMberRet struct {
 	Ret string `json:"ret"`
 }
 
-func Mutegroupmember(fromqq, group, toqq interface{}, time int) (MuteGroupmeMberRet, error) {
+func Mutegroupmember(fromqq, group, toqq interface{}, time int) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"group":  group,
@@ -19,13 +19,17 @@ func Mutegroupmember(fromqq, group, toqq interface{}, time int) (MuteGroupmeMber
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/mutegroupmember", nil, post, nil, nil)
 	if err != nil {
-		return MuteGroupmeMberRet{}, err
+		return false, err
 	}
 	var ret MuteGroupmeMberRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {
-		return MuteGroupmeMberRet{}, err
+		return false, err
 	}
-	return ret, nil
+	if ret.Ret == "true" {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }

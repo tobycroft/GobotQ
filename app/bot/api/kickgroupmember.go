@@ -19,7 +19,7 @@ func Kickgroupmember(fromqq, group, toqq interface{}, ignoreaddgrequest bool) (b
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/kickgroupmember", nil, post, nil, nil)
 	if err != nil {
-		return KickGroupMemberRet{}, err
+		return false, err
 	}
 	var ret KickGroupMemberRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary

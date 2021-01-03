@@ -40,7 +40,7 @@ func App_group_sign(bot, gid, uid interface{}) {
 			return
 		} else {
 			at := service.Serv_at(uid)
-			api.Sendgroupmsg(bot, gid, at+"签到成功")
+			api.Sendgroupmsg(bot, gid, "签到成功"+at)
 		}
 	}
 }

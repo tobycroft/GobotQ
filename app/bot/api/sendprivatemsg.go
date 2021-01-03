@@ -28,7 +28,7 @@ type PrivateMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendprivatemsg(fromqq, toqq, text interface{}) (PrivateMsg, PrivateMsgRet, error) {
+func Sendprivatemsg(fromqq, toqq interface{}, text string) (PrivateMsg, PrivateMsgRet, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"toqq":   toqq,

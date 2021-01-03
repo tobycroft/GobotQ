@@ -17,11 +17,12 @@ type UploadGroupFacePicRet struct {
 	Time    string `json:"time"`
 }
 
-func Uploadgroupfacepic(fromqq, togroup, text interface{}) (UploadGroupFacePic, UploadGroupFacePicRet, error) {
+func Uploadgroupfacepic(fromqq, group, pic interface{}) (UploadGroupFacePic, UploadGroupFacePicRet, error) {
 	post := map[string]interface{}{
-		"fromqq":  fromqq,
-		"togroup": togroup,
-		"text":    text,
+		"fromqq":   fromqq,
+		"group":    group,
+		"fromtype": 0,
+		"pic":      pic,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/UploadGroupFacePic", nil, post, nil, nil)
 	if err != nil {

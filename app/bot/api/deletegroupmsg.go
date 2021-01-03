@@ -17,7 +17,7 @@ func Deletegroupmsg(fromqq, group, random, req interface{}) (DeleteGroupMsgRet, 
 		"random": random,
 		"req":    req,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/deletegroupmsg", nil, post, nil, nil)
 	if err != nil {
 		return DeleteGroupMsgRet{}, err
 	}

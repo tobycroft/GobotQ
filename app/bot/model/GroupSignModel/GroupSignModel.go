@@ -52,7 +52,7 @@ func Api_count(gid, uid interface{}) int64 {
 
 }
 
-func Api_select(gid, uid, interface{}) []gorose.Data {
+func Api_select(gid, uid interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,

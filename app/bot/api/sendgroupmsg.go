@@ -29,7 +29,7 @@ func Sendgroupmsg(fromqq, togroup, text interface{}) (GroupMsg, GroupMsgRet, err
 		"togroup": togroup,
 		"text":    text,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/sendgroupmsg", nil, post, nil, nil)
 	if err != nil {
 		return GroupMsg{}, GroupMsgRet{}, err
 	}

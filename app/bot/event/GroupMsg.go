@@ -1,6 +1,7 @@
 package event
 
 import (
+	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupMsgModel"
 	"regexp"
@@ -74,7 +75,7 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	}
 	is_sign, _ := regexp.MatchString("^签到$", new_text)
 	if is_sign {
-		api.Sendprivatemsg(bot, uid, "签到执行！"+new_text)
+		Group.App_group_sign(bot, gid, uid)
 		return
 	}
 }

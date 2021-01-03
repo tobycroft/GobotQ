@@ -10,13 +10,10 @@ type SetSigNat struct {
 	Ret string `json:"ret"`
 }
 
-func Setsignat(fromqq, toqq, random, req, time interface{}) (SetSigNat, error) {
+func Setsignat(fromqq, signature interface{}) (SetSigNat, error) {
 	post := map[string]interface{}{
-		"fromqq": fromqq,
-		"toqq":   toqq,
-		"random": random,
-		"req":    req,
-		"time":   time,
+		"fromqq":    fromqq,
+		"signature": signature,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/setsignat", nil, post, nil, nil)
 	if err != nil {

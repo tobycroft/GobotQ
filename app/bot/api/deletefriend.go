@@ -17,7 +17,7 @@ type DeleteFriendRet struct {
 	Time    string `json:"time"`
 }
 
-func deletefriend() (DeleteFriend, DeleteFriendRet, error) {
+func Deletefriend() (DeleteFriend, DeleteFriendRet, error) {
 	post := map[string]interface{}{
 		"fromqq":  fromqq,
 		"togroup": togroup,

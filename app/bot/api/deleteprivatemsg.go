@@ -22,11 +22,15 @@ func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) (DeletePrivat
 	if err != nil {
 		return DeletePrivateMsgRet{}, err
 	}
-	var dpmr DeletePrivateMsgRet
+	var ret DeletePrivateMsgRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &dpmr)
+	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {
-		return DeletePrivateMsgRet{}, err
+		return false, err
 	}
-	return dpmr, nil
+	if ret.Ret == "true" {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }

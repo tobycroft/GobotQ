@@ -10,7 +10,7 @@ type DeleteGroupMsgRet struct {
 	Ret string `json:"ret"`
 }
 
-func Deletegroupmsg(fromqq, group, random, req interface{}) (DeleteGroupMsgRet, error) {
+func Deletegroupmsg(fromqq, group, random, req interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"group":  group,
@@ -19,13 +19,17 @@ func Deletegroupmsg(fromqq, group, random, req interface{}) (DeleteGroupMsgRet, 
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/deletegroupmsg", nil, post, nil, nil)
 	if err != nil {
-		return DeleteGroupMsgRet{}, err
+		return false, err
 	}
-	var dgmr DeleteGroupMsgRet
+	var ret DeleteGroupMsgRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &dgmr)
+	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {
-		return DeleteGroupMsgRet{}, err
+		return false, err
 	}
-	return dgmr, nil
+	if ret.Ret == "true" {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }

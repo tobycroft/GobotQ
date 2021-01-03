@@ -23,7 +23,7 @@ func Setgroupaddrequest(fromqq, group, qq, seq, Request_group_, Type, reason int
 		"type":   Type,
 		"reason": reason,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/setnickname", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/setgroupaddrequest", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

@@ -24,7 +24,7 @@ func Uploadgroupfacepic(fromqq, group, pic interface{}) (UploadGroupFacePic, Upl
 		"fromtype": 0,
 		"pic":      pic,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/UploadGroupFacePic", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/uploadgroupfacepic", nil, post, nil, nil)
 	if err != nil {
 		return UploadGroupFacePic{}, UploadGroupFacePicRet{}, err
 	}

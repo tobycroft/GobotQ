@@ -31,10 +31,10 @@ import (
 */
 
 type QueryUserInfoRet struct {
-	Ret  string `json:"ret"`
-	Info Info   `json:"Info"`
+	Ret  string        `json:"ret"`
+	Info QueryUserInfo `json:"Info"`
 }
-type Info struct {
+type QueryUserInfo struct {
 	UIN         int           `json:"UIN"`
 	NickName    string        `json:"NickName"`
 	Remark      string        `json:"Remark"`
@@ -53,12 +53,12 @@ type Info struct {
 	TodayCLike  int           `json:"TodayCLike"`
 }
 
-func queryuserinfo(logonqq, qq interface{}) (Info, error) {
+func Queryuserinfo(logonqq, qq interface{}) (Info, error) {
 	post := map[string]interface{}{
 		"logonqq": logonqq,
 		"qq":      qq,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getfriendlist", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/queryuserinfo", nil, post, nil, nil)
 	if err != nil {
 		return Info{}, err
 	}

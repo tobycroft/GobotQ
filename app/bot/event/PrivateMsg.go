@@ -54,7 +54,7 @@ func PrivateHandle(bot int, uid int, text string) {
 	active, _ := regexp.MatchString("(?i)^acfur", text)
 
 	if active {
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！")
+		api.Sendprivatemsg(bot, uid, "Hi我是Acfur!")
 	}
 
 }

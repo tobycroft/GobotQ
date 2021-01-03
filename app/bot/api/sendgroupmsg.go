@@ -5,6 +5,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
+	"net/url"
 )
 
 /*
@@ -23,11 +24,11 @@ type GroupMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendgroupmsg(fromqq, togroup, text interface{}) (GroupMsg, GroupMsgRet, error) {
+func Sendgroupmsg(fromqq, togroup interface{}, text string) (GroupMsg, GroupMsgRet, error) {
 	post := map[string]interface{}{
 		"fromqq":  fromqq,
 		"togroup": togroup,
-		"text":    text,
+		"text":    url.QueryEscape(text),
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendgroupmsg", nil, post, nil, nil)
 	if err != nil {

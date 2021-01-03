@@ -5,7 +5,6 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
-	"net/url"
 )
 
 /*
@@ -33,7 +32,7 @@ func Sendgrouptempmsg(fromqq, togroup, toqq interface{}, text string) (SendGroup
 		"fromqq":  fromqq,
 		"togroup": togroup,
 		"toqq":    toqq,
-		"text":    url.QueryEscape(text),
+		"text":    text,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendgrouptempmsg", nil, post, nil, nil)
 	if err != nil {

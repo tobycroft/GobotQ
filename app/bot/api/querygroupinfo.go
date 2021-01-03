@@ -32,20 +32,20 @@ type QueryGroupInfo struct {
 	Introduction string `json:"Introduction"`
 }
 
-func querygroupinfo(logonqq, qq interface{}) (Info, error) {
+func querygroupinfo(logonqq, qq interface{}) (QueryGroupInfo, error) {
 	post := map[string]interface{}{
 		"logonqq": logonqq,
 		"qq":      qq,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/queryuserinfo", nil, post, nil, nil)
 	if err != nil {
-		return Info{}, err
+		return QueryGroupInfo{}, err
 	}
-	var ret1 QueryUserInfoRet
+	var ret1 QueryGroupInfoRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &ret1)
 	if err != nil {
-		return Info{}, err
+		return QueryGroupInfo{}, err
 	}
 	return ret1.Info, nil
 }

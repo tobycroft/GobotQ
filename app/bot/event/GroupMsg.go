@@ -66,6 +66,6 @@ func GroupMsg(gm GM) {
 func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	//active, _ := regexp.MatchString("(?i)^acfur", text)
 
-	api.Sendgroupmsg(bot, gid, "Hi我是V!")
+	api.Sendgroupmsg(bot, gid, "Hi我是Acfur!")
 
 }

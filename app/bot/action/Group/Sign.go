@@ -24,11 +24,13 @@ func App_group_sign(bot, gid, uid interface{}) {
 		gbp.Db = db
 		if len(group_model) < 1 {
 			if !gbp.Api_insert(gid, uid) {
+				db.Rollback()
 				Log.Errs(errors.New("GroupBalanceModel,写入失败"), tuuz.FUNCTION_ALL())
 				return
 			}
 		}
 		if !gbp.Api_incr(gid, uid, app_conf.Group_Sign_incr) {
+			db.Rollback()
 			Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 			return
 		}
@@ -36,9 +38,11 @@ func App_group_sign(bot, gid, uid interface{}) {
 		var gsp GroupSignModel.Interface
 		gsp.Db = db
 		if !gsp.Api_insert(gid, uid) {
+			db.Rollback()
 			Log.Errs(errors.New("GroupSignModel,插入失败"), tuuz.FUNCTION_ALL())
 			return
 		} else {
+			db.Commit()
 			at := service.Serv_at(uid)
 			api.Sendgroupmsg(bot, gid, "签到成功"+at)
 		}

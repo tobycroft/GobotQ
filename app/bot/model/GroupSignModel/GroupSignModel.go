@@ -9,8 +9,12 @@ import (
 
 const table = "group_sign"
 
-func Api_insert(gid, uid interface{}) bool {
-	db := tuuz.Db().Table(table)
+type Interface struct {
+	Db gorose.IOrm
+}
+
+func (self *Interface) Api_insert(gid, uid interface{}) bool {
+	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"gid": gid,
 		"uid": uid,

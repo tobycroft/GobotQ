@@ -10,7 +10,7 @@ type KickGroupMemberRet struct {
 	Ret string `json:"ret"`
 }
 
-func Kickgroupmember(fromqq, group, toqq interface{}, ignoreaddgrequest bool) (KickGroupMemberRet, error) {
+func Kickgroupmember(fromqq, group, toqq interface{}, ignoreaddgrequest bool) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq":            fromqq,
 		"group":             group,
@@ -25,7 +25,11 @@ func Kickgroupmember(fromqq, group, toqq interface{}, ignoreaddgrequest bool) (K
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {
-		return KickGroupMemberRet{}, err
+		return false, err
 	}
-	return ret, nil
+	if ret.Ret == "true" {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }

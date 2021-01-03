@@ -32,7 +32,7 @@ func Sendprivatemsg(fromqq, toqq interface{}, text string) (PrivateMsg, PrivateM
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"toqq":   toqq,
-		"text":   url.QueryEscape(text),
+		"text":   text,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
 	if err != nil {

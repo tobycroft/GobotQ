@@ -1,7 +1,6 @@
 package event
 
 import (
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateMsgModel"
 	"regexp"
@@ -55,9 +54,8 @@ func PrivateHandle(bot int, uid int, text string) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
-	fmt.Println("intext", new_text)
 	if active {
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！")
+		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+new_text)
 	}
 
 }

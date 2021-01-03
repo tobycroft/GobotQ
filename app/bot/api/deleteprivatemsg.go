@@ -1,13 +1,16 @@
 package api
 
 import (
-	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
 )
 
-func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) {
+type DeletePrivateMsgRet struct {
+	Ret string `json:"ret"`
+}
+
+func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) (DeletePrivateMsgRet, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"toqq":   toqq,
@@ -17,21 +20,13 @@ func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) {
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
 	if err != nil {
-		return PrivateMsg{}, PrivateMsgRet{}, err
+		return DeletePrivateMsgRet{}, err
 	}
-	var pm PrivateMsg
+	var dpmr DeletePrivateMsgRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &pm)
+	err = jsr.UnmarshalFromString(data, &dpmr)
 	if err != nil {
-		return PrivateMsg{}, PrivateMsgRet{}, err
+		return DeletePrivateMsgRet{}, err
 	}
-	var ret PrivateMsgRet
-	err = jsr.UnmarshalFromString(pm.Ret, &ret)
-	if err != nil {
-		return pm, PrivateMsgRet{}, err
-	}
-	if ret.Retcode != 0 {
-		return pm, ret, errors.New(ret.Retmsg)
-	}
-	return pm, ret, nil
+	return dpmr, nil
 }

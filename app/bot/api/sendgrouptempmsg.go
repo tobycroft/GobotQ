@@ -34,7 +34,7 @@ func Sendgrouptempmsg(fromqq, togroup, toqq, text interface{}) (SendGroupTempMsg
 		"toqq":    toqq,
 		"text":    text,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/sendSendGroupTempMsg", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/sendgrouptempmsg", nil, post, nil, nil)
 	if err != nil {
 		return SendGroupTempMsg{}, SendGroupTempMsgRet{}, err
 	}

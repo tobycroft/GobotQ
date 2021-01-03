@@ -65,8 +65,10 @@ func GroupMsg(gm GM) {
 }
 
 func GroupHandle(bot, gid, uid int, text string, req int, random int) {
-	active, _ := regexp.MatchString("(?i)^acfur", text)
+	reg := regexp.MustCompile("(?i)^acfur")
+	active := reg.MatchString(text)
+	new_text := reg.ReplaceAllString(text, "")
 	if active {
-		api.Sendgroupmsg(bot, gid, "Hi我是Acfur!")
+		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+new_text)
 	}
 }

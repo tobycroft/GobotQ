@@ -9,8 +9,12 @@ import (
 
 const table = "group_balance"
 
-func Api_insert(gid, uid interface{}) bool {
-	db := tuuz.Db().Table(table)
+type Interface struct {
+	Db gorose.IOrm
+}
+
+func (self *Interface) Api_insert(gid, uid interface{}) bool {
+	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"gid": gid,
 		"uid": uid,
@@ -72,8 +76,8 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
-func Api_update(gid, uid, balance interface{}) bool {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_update(gid, uid, balance interface{}) bool {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
 		"uid": uid,
@@ -92,8 +96,8 @@ func Api_update(gid, uid, balance interface{}) bool {
 	}
 }
 
-func Api_incr(gid, uid, balance_inc interface{}) bool {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_incr(gid, uid, balance_inc interface{}) bool {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
 		"uid": uid,
@@ -108,8 +112,8 @@ func Api_incr(gid, uid, balance_inc interface{}) bool {
 	}
 }
 
-func Api_decr(gid, uid, balance_decr interface{}) bool {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_decr(gid, uid, balance_decr interface{}) bool {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
 		"uid": uid,

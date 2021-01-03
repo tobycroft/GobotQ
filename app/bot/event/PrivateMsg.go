@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateMsgModel"
+	"main.go/tuuz/Base64"
 	"regexp"
 )
 
@@ -54,7 +55,7 @@ func PrivateHandle(bot int, uid int, text string) {
 	active, _ := regexp.MatchString("(?i)^acfur", text)
 
 	if active {
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur!")
+		api.Sendprivatemsg(bot, uid, Base64.Encode([]byte("Hi我是Acfur!")))
 	}
 
 }

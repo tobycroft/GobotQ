@@ -37,6 +37,13 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 	db.Where(where)
 	db.Where("date", ">", Date.Today())
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
 }
 
 func Api_count(gid, uid interface{}) int64 {

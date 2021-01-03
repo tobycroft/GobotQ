@@ -72,5 +72,9 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+new_text)
 		return
 	}
-	regexp.MatchString("^签到$")
+	is_sign, _ := regexp.MatchString("^签到$", new_text)
+	if is_sign {
+		api.Sendprivatemsg(bot, uid, "签到执行！"+new_text)
+		return
+	}
 }

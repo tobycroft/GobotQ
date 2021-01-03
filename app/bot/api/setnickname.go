@@ -10,13 +10,10 @@ type SetNickNameRet struct {
 	Ret string `json:"ret"`
 }
 
-func Setnickname(fromqq, toqq, random, req, time interface{}) (SetNickNameRet, error) {
+func Setnickname(fromqq, nickname interface{}) (SetNickNameRet, error) {
 	post := map[string]interface{}{
-		"fromqq": fromqq,
-		"toqq":   toqq,
-		"random": random,
-		"req":    req,
-		"time":   time,
+		"fromqq":   fromqq,
+		"nickname": nickname,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/setnickname", nil, post, nil, nil)
 	if err != nil {

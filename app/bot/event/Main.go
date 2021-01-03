@@ -22,6 +22,7 @@ func EventRouter(json string) {
 			fmt.Println("typenot on", data)
 			return
 		}
+		fmt.Println(data)
 		jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 
 		switch Type {

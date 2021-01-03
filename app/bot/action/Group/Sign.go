@@ -38,6 +38,9 @@ func App_group_sign(bot, gid, uid interface{}) {
 		if !gsp.Api_insert(gid, uid) {
 			Log.Errs(errors.New("GroupSignModel,插入失败"), tuuz.FUNCTION_ALL())
 			return
+		} else {
+			at := service.Serv_at(uid)
+			api.Sendgroupmsg(bot, gid, at+"签到成功")
 		}
 	}
 }

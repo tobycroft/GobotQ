@@ -68,6 +68,5 @@ func queryuserinfo(logonqq, qq interface{}) (Info, error) {
 	if err != nil {
 		return Info{}, err
 	}
-
 	return ret1.Info, nil
 }

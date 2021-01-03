@@ -5,6 +5,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
+	"net/url"
 )
 
 /*
@@ -31,7 +32,7 @@ func Sendprivatemsg(fromqq, toqq, text interface{}) (PrivateMsg, PrivateMsgRet, 
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"toqq":   toqq,
-		"text":   text,
+		"text":   url.QueryEscape(text),
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
 	if err != nil {

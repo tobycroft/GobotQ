@@ -23,6 +23,5 @@ func OnRoute(router *gin.Engine) {
 		{
 			v1.IndexRouter(index)
 		}
-
 	}
 }

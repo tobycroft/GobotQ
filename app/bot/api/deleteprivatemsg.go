@@ -18,7 +18,7 @@ func Deleteprivatemsg(fromqq, toqq, random, req, time interface{}) (DeletePrivat
 		"req":    req,
 		"time":   time,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
+	data, err := Net.Post(app_conf.Http_Api+"/deleteprivatemsg", nil, post, nil, nil)
 	if err != nil {
 		return DeletePrivateMsgRet{}, err
 	}

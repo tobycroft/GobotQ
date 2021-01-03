@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateMsgModel"
+	"regexp"
 )
 
 type PM struct {
@@ -45,5 +46,13 @@ func PrivateMsg(pm PM) {
 		pm.File.MD5, pm.File.Name, pm.File.Size)
 
 	ret1, ret2, err := api.Sendprivatemsg(pm.LogonQQ, 710209520, "testword")
-	fmt.Println(ret1, ret2, err)
+	bot := pm.LogonQQ
+	uid := pm.FromQQ.UIN
+	text := pm.Msg.Text
+	PrivateHandle(bot, uid, text)
+}
+
+func PrivateHandle(bot int, uid int, text string) {
+	active, _ := regexp.MatchString("^acfur", text)
+	fmt.Println("active", active)
 }

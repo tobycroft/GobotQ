@@ -42,4 +42,14 @@ type GM struct {
 func GroupMsg(gm GM) {
 	GroupMsgModel.Api_insert(gm.LogonQQ, gm.FromQQ.UIN, gm.FromGroup.GIN, gm.Msg.Text, gm.Msg.Req, gm.Msg.Random, gm.File.ID, gm.File.MD5,
 		gm.File.Name, gm.File.Size)
+
+	is_owner := false
+	is_admin := false
+
+	raw_msg := gm.Msg.Text
+	bot := gm.LogonQQ
+	uid := gm.FromQQ.UIN
+	gid := gm.FromGroup.GIN
+	retract := gm.Msg.Random
+
 }

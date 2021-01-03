@@ -1,6 +1,10 @@
 package event
 
-import "main.go/app/bot/model/GroupMsgModel"
+import (
+	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupMsgModel"
+	"regexp"
+)
 
 type GM struct {
 	Type   string `json:"Type"`
@@ -43,13 +47,20 @@ func GroupMsg(gm GM) {
 	GroupMsgModel.Api_insert(gm.LogonQQ, gm.FromQQ.UIN, gm.FromGroup.GIN, gm.Msg.Text, gm.Msg.Req, gm.Msg.Random, gm.File.ID, gm.File.MD5,
 		gm.File.Name, gm.File.Size)
 
-	//is_owner := false
-	//is_admin := false
-	//
-	//raw_msg := gm.Msg.Text
-	//bot := gm.LogonQQ
-	//uid := gm.FromQQ.UIN
-	//gid := gm.FromGroup.GIN
-	//retract := gm.Msg.Random
+	is_owner := false
+	is_admin := false
+
+	raw_msg := gm.Msg.Text
+	bot := gm.LogonQQ
+	uid := gm.FromQQ.UIN
+	gid := gm.FromGroup.GIN
+	retract := gm.Msg.Random
+
+}
+
+func GroupHandle(bot, gid, uid int, text string, req int, random int) {
+	active, _ := regexp.MatchString("(?i)^acfur", text)
+
+	api.Sendgroupmsg()
 
 }

@@ -19,7 +19,7 @@ func EventRouter(json string) {
 	} else {
 		Type := data["Type"]
 		if Type == nil {
-			fmt.Println("typenot on")
+			fmt.Println("typenot on", data)
 			return
 		}
 		jsr := jsoniter.ConfigCompatibleWithStandardLibrary

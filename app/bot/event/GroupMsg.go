@@ -78,4 +78,8 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 		Group.App_group_sign(bot, gid, uid)
 		return
 	}
+	is_lunpan, _ := regexp.MatchString("^轮盘$", new_text)
+	if is_lunpan {
+
+	}
 }

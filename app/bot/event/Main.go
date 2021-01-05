@@ -8,14 +8,7 @@ import (
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Jsong"
-	"time"
 )
-
-func Speed_Limit() {
-	for {
-		time.Sleep(2 * time.Second)
-	}
-}
 
 func EventRouter(json string) {
 	//save the data in the first place

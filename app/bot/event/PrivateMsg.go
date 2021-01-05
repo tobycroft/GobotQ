@@ -3,6 +3,8 @@ package event
 import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateMsgModel"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Redis"
 	"regexp"
 )
 
@@ -46,9 +48,15 @@ func PrivateMsg(pm PM) {
 
 	bot := pm.LogonQQ
 	uid := pm.FromQQ.UIN
+	uid_string := Calc.Int2String(uid)
 	text := pm.Msg.Text
 
-	//todo:机器人处理速度限制，超过限制自动开始丢弃
+	//todo:机器人处理速度限制，相同的问题，10秒内不作回应
+	if Redis.CheckExists("PrivateMsg_" + uid_string) {
+		return
+	}
+
+	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 10)
 	PrivateHandle(bot, uid, text)
 }
 

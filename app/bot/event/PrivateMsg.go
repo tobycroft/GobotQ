@@ -51,11 +51,12 @@ func PrivateMsg(pm PM) {
 	uid_string := Calc.Int2String(uid)
 	text := pm.Msg.Text
 
-	if Redis.CheckExists("PrivateMsg_" + uid_string) {
+	text_exists := Redis.CheckExists("PrivateMsg_" + uid_string)
+	if text_exists {
 		return
 	}
 
-	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 10)
+	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 2)
 
 	PrivateHandle(bot, uid, text)
 }
@@ -65,9 +66,13 @@ func PrivateHandle(bot int, uid int, text string) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+new_text)
+		privateHandle_acfur(bot, uid, new_text)
 	}
 
 	//todo:机器人内容匹配
 
+}
+
+func privateHandle_acfur(bot int, uid int, text string) {
+	api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+text)
 }

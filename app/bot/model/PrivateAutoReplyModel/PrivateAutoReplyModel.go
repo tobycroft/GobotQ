@@ -8,11 +8,12 @@ import (
 
 const table = "private_auto_reply"
 
-func Api_insert(bot, qq, key, value interface{}) bool {
+func Api_insert(bot, qq, mode, key, value interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"bot":   bot,
 		"qq":    qq,
+		"mode":  mode,
 		"key":   key,
 		"value": value,
 	}
@@ -45,6 +46,22 @@ func Api_select_byKey(key interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"key": key,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_byMode(bot interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot":  bot,
+		"semi": "semi",
 	}
 	db.Where(where)
 	ret, err := db.Get()

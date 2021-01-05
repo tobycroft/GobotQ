@@ -10,6 +10,11 @@ import (
 	"main.go/tuuz/Jsong"
 )
 
+func Speed_Limit() {
+	private_speed_limit = map[int]interface{}{}
+	group_speed_limit = map[int]interface{}{}
+}
+
 func EventRouter(json string) {
 	//save the data in the first place
 	LogsModel.Api_insert(json, "main")

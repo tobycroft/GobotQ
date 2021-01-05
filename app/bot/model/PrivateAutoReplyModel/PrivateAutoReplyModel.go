@@ -61,7 +61,7 @@ func Api_select_byMode(bot interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"bot":  bot,
-		"semi": "semi",
+		"mode": "semi",
 	}
 	db.Where(where)
 	ret, err := db.Get()

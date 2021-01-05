@@ -8,11 +8,15 @@ import (
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Jsong"
+	"time"
 )
 
 func Speed_Limit() {
-	private_speed_limit = map[int]interface{}{}
-	group_speed_limit = map[int]interface{}{}
+	for {
+		time.Sleep(1 * time.Second)
+		private_speed_limit = map[int]interface{}{}
+		group_speed_limit = map[int]interface{}{}
+	}
 }
 
 func EventRouter(json string) {

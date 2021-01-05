@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -53,14 +54,14 @@ type PrivateSendStruct struct {
 
 func Send_private() {
 	for pss := range Private_send_chan {
-		sendprivatemsg(pss)
+		fmt.Println(sendprivatemsg(pss))
 	}
 }
 
 func sendprivatemsg(pss PrivateSendStruct) (PrivateMsg, PrivateMsgRet, error) {
 	post := map[string]interface{}{
 		"fromqq": pss.Fromqq,
-		"toqq":   pss.Text,
+		"toqq":   pss.Toqq,
 		"text":   url.QueryEscape(pss.Text),
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)

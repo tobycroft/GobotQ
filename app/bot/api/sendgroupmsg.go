@@ -6,6 +6,7 @@ import (
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
 	"net/url"
+	"time"
 )
 
 /*
@@ -13,6 +14,7 @@ import (
     "ret": "{\"retcode\":0,\"retmsg\":\"\",\"time\":\"1609564779\"}"
 }
 */
+var Group_send_chan = make(chan GroupSendStruct, 20)
 
 type GroupMsg struct {
 	Ret string `json:"ret"`
@@ -24,11 +26,37 @@ type GroupMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendgroupmsg(fromqq, togroup interface{}, text string) (GroupMsg, GroupMsgRet, error) {
+func Sendgroupmsg(fromqq, togroup interface{}, text string) {
+	var gss GroupSendStruct
+	gss.Fromqq = fromqq
+	gss.Togroup = togroup
+	gss.Text = text
+
+	select {
+	case Group_send_chan <- gss:
+
+	case <-time.After(5 * time.Second):
+		return
+	}
+}
+
+type GroupSendStruct struct {
+	Fromqq  interface{}
+	Togroup interface{}
+	Text    string
+}
+
+func Send_group() {
+	for gss := range Group_send_chan {
+		sendgroupmsg(gss)
+	}
+}
+
+func sendgroupmsg(gss GroupSendStruct) (GroupMsg, GroupMsgRet, error) {
 	post := map[string]interface{}{
-		"fromqq":  fromqq,
-		"togroup": togroup,
-		"text":    url.QueryEscape(text),
+		"fromqq":  gss.Fromqq,
+		"togroup": gss.Togroup,
+		"text":    url.QueryEscape(gss.Text),
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendgroupmsg", nil, post, nil, nil)
 	if err != nil {

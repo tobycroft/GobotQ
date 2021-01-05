@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/model/PrivateMsgModel"
@@ -85,12 +86,16 @@ func private_auto_reply(bot int, uid int, text string) {
 	auto_replys := PrivateAutoReplyModel.Api_select_semi(bot)
 	for _, auto_reply := range auto_replys {
 		if auto_reply["key"] == nil {
+			fmt.Println("nil1")
 			continue
 		}
-		if strings.Contains(auto_reply["key"].(string), text) {
+		if strings.Contains(text, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
+				fmt.Println("nil2")
+
 				continue
 			}
+			fmt.Println("testtest")
 			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
 		}
 	}

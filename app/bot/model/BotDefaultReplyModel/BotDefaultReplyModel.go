@@ -1,4 +1,4 @@
-package PrivateAutoReplyModel
+package BotDefaultReplyModel
 
 import (
 	"github.com/gohouse/gorose/v2"

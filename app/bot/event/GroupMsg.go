@@ -62,7 +62,6 @@ func GroupMsg(gm GM) {
 	if !is_self {
 		GroupHandle(bot, gid, uid, text, gm.Msg.Req, retract)
 	}
-
 }
 
 func GroupHandle(bot, gid, uid int, text string, req int, random int) {

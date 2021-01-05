@@ -14,8 +14,6 @@ import (
 func Speed_Limit() {
 	for {
 		time.Sleep(2 * time.Second)
-		private_speed_limit = map[int]interface{}{}
-		group_speed_limit = map[int]interface{}{}
 	}
 }
 

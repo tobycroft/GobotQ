@@ -88,7 +88,12 @@ func private_auto_reply(bot int, uid int, text string) {
 		if auto_reply["key"] == nil {
 			continue
 		}
-		strings.Contains(auto_reply["key"].(string), text)
+		if strings.Contains(auto_reply["key"].(string), text) {
+			if auto_reply["value"] == nil {
+				continue
+			}
+			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
+		}
 	}
 }
 

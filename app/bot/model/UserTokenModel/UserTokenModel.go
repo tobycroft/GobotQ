@@ -86,6 +86,22 @@ func Api_delete_byToken(qq, token interface{}) bool {
 	}
 }
 
+func Api_delete_byId(qq, id interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"qq": qq,
+		"id": id,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_tuncate() {
 	db := tuuz.Db().Table(table)
 	db.Truncate()

@@ -75,7 +75,6 @@ func PrivateHandle(bot int, uid int, text string) {
 		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
 		if len(auto_reply) > 0 {
 			api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
-			return
 		} else {
 			private_auto_reply(bot, uid, text)
 		}

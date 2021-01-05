@@ -82,7 +82,7 @@ func PrivateHandle(bot int, uid int, text string) {
 }
 
 func private_auto_reply(bot int, uid int, text string) {
-	auto_replys := PrivateAutoReplyModel.Api_select_byMode(bot)
+	auto_replys := PrivateAutoReplyModel.Api_select_semi(bot)
 	for _, auto_reply := range auto_replys {
 		if auto_reply["key"] == nil {
 			continue

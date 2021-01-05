@@ -6,6 +6,7 @@ import (
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
 	"net/url"
+	"time"
 )
 
 /*
@@ -15,6 +16,8 @@ import (
     "req": 21315
 }
 */
+
+var Private_send_chan = make(chan PrivateSendStruct, 20)
 
 type PrivateMsg struct {
 	Ret    string `json:"ret"`
@@ -28,11 +31,37 @@ type PrivateMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendprivatemsg(fromqq, toqq interface{}, text string) (PrivateMsg, PrivateMsgRet, error) {
+func Sendprivatemsg(fromqq, toqq interface{}, text string) {
+	var pss PrivateSendStruct
+	pss.Fromqq = fromqq
+	pss.Toqq = toqq
+	pss.Text = text
+
+	select {
+	case Private_send_chan <- pss:
+
+	case <-time.After(5 * time.Second):
+		return
+	}
+}
+
+type PrivateSendStruct struct {
+	Fromqq interface{}
+	Toqq   interface{}
+	Text   string
+}
+
+func Send_private() {
+	for pss := range Private_send_chan {
+		sendprivatemsg(pss)
+	}
+}
+
+func sendprivatemsg(pss PrivateSendStruct) (PrivateMsg, PrivateMsgRet, error) {
 	post := map[string]interface{}{
-		"fromqq": fromqq,
-		"toqq":   toqq,
-		"text":   url.QueryEscape(text),
+		"fromqq": pss.Fromqq,
+		"toqq":   pss.Text,
+		"text":   url.QueryEscape(pss.Text),
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendprivatemsg", nil, post, nil, nil)
 	if err != nil {

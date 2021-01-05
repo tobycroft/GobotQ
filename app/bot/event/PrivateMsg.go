@@ -2,10 +2,13 @@ package event
 
 import (
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/model/PrivateMsgModel"
+	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Redis"
 	"regexp"
+	"strings"
 )
 
 type PM struct {
@@ -67,12 +70,32 @@ func PrivateHandle(bot int, uid int, text string) {
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
 		privateHandle_acfur(bot, uid, new_text)
+	} else {
+		//在未激活acfur的情况下应该对原始内容进行还原
+		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
+		if len(auto_reply) > 0 {
+			api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
+			return
+		}
 	}
+}
 
-	//todo:机器人内容匹配
-
+func private_auto_reply() {
+	auto_replys := PrivateAutoReplyModel.Api_select_byMode(bot)
+	for _, auto_reply := range auto_replys {
+		strings.Contains(auto_reply["key"], text)
+	}
 }
 
 func privateHandle_acfur(bot int, uid int, text string) {
-	api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+text)
+
+	switch text {
+	case "help":
+		api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
+		break
+
+	default:
+		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
+		break
+	}
 }

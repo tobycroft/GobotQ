@@ -29,7 +29,9 @@ var Retract_chan_group_instant = make(chan Retract_group, 20)
 
 func Retract() {
 	go retract_private()
-	retract_group()
+	go retract_group()
+	go retract_private_instant()
+	retract_group_instant()
 }
 
 func retract_private() {

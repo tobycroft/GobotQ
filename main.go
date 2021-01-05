@@ -12,6 +12,8 @@ func main() {
 	go Group.App_refresh_group_member_chan()
 
 	go cron.Retract()
+	go cron.Send_private()
+	go cron.Send_group()
 
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)

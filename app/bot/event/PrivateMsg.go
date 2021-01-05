@@ -74,7 +74,9 @@ func PrivateHandle(bot int, uid int, text string) {
 		privateHandle_acfur(bot, uid, new_text)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-
+		if private_default_reply(bot, uid, text) {
+			return
+		}
 		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
 		if len(auto_reply) > 0 {
 			api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
@@ -84,7 +86,7 @@ func PrivateHandle(bot int, uid int, text string) {
 	}
 }
 
-func private_default_reply(bot int, uid int, text string) {
+func private_default_reply(bot int, uid int, text string) bool {
 	default_reply := BotDefaultReplyModel.Api_select()
 	for _, auto_reply := range default_reply {
 		if auto_reply["key"] == nil {
@@ -95,7 +97,7 @@ func private_default_reply(bot int, uid int, text string) {
 				continue
 			}
 			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
-			return
+			return true
 		}
 	}
 }
@@ -111,7 +113,7 @@ func private_auto_reply(bot int, uid int, text string) {
 				continue
 			}
 			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
-			return
+			break
 		}
 	}
 }

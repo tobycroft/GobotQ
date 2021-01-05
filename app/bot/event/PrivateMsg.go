@@ -47,6 +47,8 @@ func PrivateMsg(pm PM) {
 	bot := pm.LogonQQ
 	uid := pm.FromQQ.UIN
 	text := pm.Msg.Text
+
+	//todo:机器人处理速度限制，超过限制自动开始丢弃
 	PrivateHandle(bot, uid, text)
 }
 

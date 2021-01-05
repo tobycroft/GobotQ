@@ -5,5 +5,5 @@ func Send_private() {
 }
 
 func Send_group() {
-
+	Send_group()
 }

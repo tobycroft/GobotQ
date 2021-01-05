@@ -58,4 +58,6 @@ func PrivateHandle(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！"+new_text)
 	}
 
+	//todo:机器人内容匹配
+
 }

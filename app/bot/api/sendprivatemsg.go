@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -54,7 +53,7 @@ type PrivateSendStruct struct {
 
 func Send_private() {
 	for pss := range Private_send_chan {
-		fmt.Println(sendprivatemsg(pss))
+		sendprivatemsg(pss)
 	}
 }
 

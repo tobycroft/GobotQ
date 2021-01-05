@@ -100,6 +100,7 @@ func private_default_reply(bot int, uid int, text string) bool {
 			return true
 		}
 	}
+	return false
 }
 
 func private_auto_reply(bot int, uid int, text string) {

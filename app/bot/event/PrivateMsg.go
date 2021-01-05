@@ -51,12 +51,12 @@ func PrivateMsg(pm PM) {
 	uid_string := Calc.Int2String(uid)
 	text := pm.Msg.Text
 
-	//todo:机器人处理速度限制，相同的问题，10秒内不作回应
 	if Redis.CheckExists("PrivateMsg_" + uid_string) {
 		return
 	}
 
 	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 10)
+
 	PrivateHandle(bot, uid, text)
 }
 

@@ -57,7 +57,7 @@ func Api_select_byKey(key interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_byMode(bot interface{}) []gorose.Data {
+func Api_select_semi(bot interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"bot":  bot,

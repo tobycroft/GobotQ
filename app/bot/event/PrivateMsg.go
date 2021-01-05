@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
@@ -71,6 +72,7 @@ func PrivateHandle(bot int, uid int, text string) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
+		fmt.Println(active)
 		privateHandle_acfur(bot, uid, new_text)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
@@ -79,7 +81,10 @@ func PrivateHandle(bot int, uid int, text string) {
 		}
 		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
 		if len(auto_reply) > 0 {
-			api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
+			if auto_reply["value"] == nil {
+				return
+			}
+			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
 		} else {
 			private_auto_reply(bot, uid, text)
 		}

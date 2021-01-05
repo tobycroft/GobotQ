@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/model/PrivateMsgModel"
 	"main.go/config/app_default"
@@ -73,11 +74,28 @@ func PrivateHandle(bot int, uid int, text string) {
 		privateHandle_acfur(bot, uid, new_text)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
+
 		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
 		if len(auto_reply) > 0 {
 			api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
 		} else {
 			private_auto_reply(bot, uid, text)
+		}
+	}
+}
+
+func private_default_reply(bot int, uid int, text string) {
+	default_reply := BotDefaultReplyModel.Api_select()
+	for _, auto_reply := range default_reply {
+		if auto_reply["key"] == nil {
+			continue
+		}
+		if strings.Contains(text, auto_reply["key"].(string)) {
+			if auto_reply["value"] == nil {
+				continue
+			}
+			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
+			return
 		}
 	}
 }
@@ -93,6 +111,7 @@ func private_auto_reply(bot int, uid int, text string) {
 				continue
 			}
 			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
+			return
 		}
 	}
 }

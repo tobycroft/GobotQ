@@ -101,8 +101,3 @@ func Api_delete_byId(qq, id interface{}) bool {
 		return true
 	}
 }
-
-func Api_tuncate() {
-	db := tuuz.Db().Table(table)
-	db.Truncate()
-}

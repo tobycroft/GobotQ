@@ -8,7 +8,7 @@ import (
 
 const table = "bot_default_reply"
 
-func Api_select(key interface{}) []gorose.Data {
+func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
 	ret, err := db.Get()
 	if err != nil {

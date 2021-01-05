@@ -76,14 +76,19 @@ func PrivateHandle(bot int, uid int, text string) {
 		if len(auto_reply) > 0 {
 			api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
 			return
+		} else {
+			private_auto_reply(bot, uid, text)
 		}
 	}
 }
 
-func private_auto_reply() {
+func private_auto_reply(bot int, uid int, text string) {
 	auto_replys := PrivateAutoReplyModel.Api_select_byMode(bot)
 	for _, auto_reply := range auto_replys {
-		strings.Contains(auto_reply["key"], text)
+		if auto_reply["key"] == nil {
+			continue
+		}
+		strings.Contains(auto_reply["key"].(string), text)
 	}
 }
 

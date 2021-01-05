@@ -1,6 +1,7 @@
 package event
 
 import (
+	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/model/PrivateMsgModel"
@@ -97,10 +98,13 @@ func private_auto_reply(bot int, uid int, text string) {
 }
 
 func privateHandle_acfur(bot int, uid int, text string) {
-
 	switch text {
 	case "help":
 		api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
+		break
+
+	case "登录", "登陆", "login":
+		Private.UserLogin(bot, uid, text)
 		break
 
 	default:

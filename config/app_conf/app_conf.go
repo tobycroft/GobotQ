@@ -14,3 +14,7 @@ const Db_limit = 40
 
 //每日签到积分
 const Group_Sign_incr = 10
+
+const TestMode = false
+
+const Debug = "65535"

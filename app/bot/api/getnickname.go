@@ -20,7 +20,7 @@ func Getnickname(fromqq, toqq, fromcache interface{}) (GetNickNameRet, error) {
 	if err != nil {
 		return GetNickNameRet{}, err
 	}
-	var ret LoginqqRet
+	var ret GetNickNameRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &ret)
 	if err != nil {

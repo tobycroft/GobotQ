@@ -12,7 +12,7 @@ func LoginedController() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("S-P-I", c.ClientIP())
 		c.Header("S-P-P", app_conf.Project)
-		uid, ok := Input.Post("qq", c, false)
+		uid, ok := Input.Post("uid", c, false)
 		if !ok {
 			c.Abort()
 			return

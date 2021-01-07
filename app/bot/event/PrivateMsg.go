@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
@@ -144,11 +145,12 @@ func privateHandle_acfur(bot int, uid int, text string) {
 
 	default:
 
-		function := make([]bool, private_function_number, private_function_number)
+		function := make([]bool, private_function_number+1, private_function_number+1)
+		fmt.Println(function)
 		var wg sync.WaitGroup
 		wg.Add(private_function_number)
 
-		new_text := make([]string, private_function_number, private_function_number)
+		new_text := make([]string, private_function_number+1, private_function_number+1)
 
 		go func(idx int) {
 			str, ok := service.Serv_text_match(text, []string{"密码", "password"})

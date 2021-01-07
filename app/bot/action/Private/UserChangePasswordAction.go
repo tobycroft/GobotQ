@@ -11,9 +11,11 @@ import (
 func App_userChangePassword(bot int, uid int, text string) {
 	if len(text) < 1 {
 		api.Sendprivatemsg(bot, uid, "密码长度应该大于1位")
+		return
 	}
 	if len(text) > 16 {
 		api.Sendprivatemsg(bot, uid, "密码长度应该小于等于16位")
+		return
 	}
 	if UserMemberModel.Api_update_password(uid, text) {
 		api.Sendprivatemsg(bot, uid, "您的密码已被修改为：\r\n↓↓↓↓↓↓↓↓"+text+"↑↑↑↑↑↑↑↑")

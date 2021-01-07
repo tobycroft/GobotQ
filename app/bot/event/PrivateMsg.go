@@ -157,7 +157,7 @@ func privateHandle_acfur_middle(bot *int, uid *int, text *string) {
 
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"密码", "password"})
+		str, ok := service.Serv_text_match(*text, []string{"密码", "password"})
 		fmt.Println(str, ok)
 		new_text[idx] = str
 		function[idx] = ok
@@ -170,7 +170,7 @@ func privateHandle_acfur_middle(bot *int, uid *int, text *string) {
 			break
 		}
 	}
-	privateHandle_acfur_other(private_function_type[function_route], bot, uid, new_text[function_route])
+	privateHandle_acfur_other(private_function_type[function_route], *bot, *uid, new_text[function_route])
 }
 
 func privateHandle_acfur_other(Type string, bot int, uid int, text string) {

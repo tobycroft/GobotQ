@@ -147,7 +147,6 @@ func privateHandle_acfur(bot int, uid int, text string) {
 
 		function := make([]bool, private_function_number+1, private_function_number+1)
 		new_text := make([]string, private_function_number+1, private_function_number+1)
-		fmt.Println(function)
 		var wg sync.WaitGroup
 		wg.Add(private_function_number)
 

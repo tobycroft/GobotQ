@@ -6,6 +6,7 @@ import (
 	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/model/PrivateMsgModel"
+	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Redis"
@@ -133,10 +134,15 @@ func privateHandle_acfur(bot int, uid int, text string) {
 		break
 
 	case "密码", "password":
-		Private.App_UserChangePassword(bot, uid, text)
+
 		break
 
 	default:
+
+		pw, ok := service.Serv_text_match(text, []string{"密码", "password"})
+		if ok {
+			Private.App_UserChangePassword(bot, uid, pw)
+		}
 		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
 		break
 	}

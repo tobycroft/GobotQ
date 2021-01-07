@@ -135,7 +135,11 @@ func privateHandle_acfur(bot int, uid int, text string) {
 		break
 
 	case "登录", "登陆", "login":
-		Private.App_UserLogin(bot, uid, text)
+		Private.App_userLogin(bot, uid, text)
+		break
+
+	case "清除登录":
+
 		break
 
 	default:
@@ -169,7 +173,7 @@ func privateHandle_acfur(bot int, uid int, text string) {
 func privateHandle_acfur_other(Type string, bot int, uid int, text string) {
 	switch Type {
 	case "password":
-		Private.App_UserChangePassword(bot, uid, text)
+		Private.App_userChangePassword(bot, uid, text)
 		break
 
 	default:

@@ -43,7 +43,8 @@ func Api_find(qq interface{}) gorose.Data {
 func Api_find_byToken(qq, token interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"qq": qq,
+		"qq":    qq,
+		"token": token,
 	}
 	db.Where(where)
 	ret, err := db.First()

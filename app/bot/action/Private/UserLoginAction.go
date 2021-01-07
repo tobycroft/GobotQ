@@ -7,7 +7,7 @@ import (
 	"main.go/tuuz/Calc"
 )
 
-func App_UserLogin(bot int, uid int, text string) {
+func App_userLogin(bot int, uid int, text string) {
 	rand := Calc.Rand(10000000, 99999999)
 	uname := ""
 	nickname, err := api.Getnickname(bot, uid, true)

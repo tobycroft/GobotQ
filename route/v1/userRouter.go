@@ -11,4 +11,5 @@ func UserRouter(route *gin.RouterGroup) {
 	})
 
 	controller.UserController(route.Group("user"))
+	controller.BotController(route.Group("bot"))
 }

@@ -18,9 +18,10 @@ func App_UserLogin(bot int, uid int, text string) {
 	}
 	usermember := UserMemberModel.Api_find(uid)
 	if len(usermember) > 0 {
-		if !UserMemberModel.Api_update_all(uid, uname, rand) {
+		if UserMemberModel.Api_update_all(uid, uname, rand) {
 			api.Sendprivatemsg(bot, uid, "您的登录密码：\r\n"+Calc.Int2String(rand))
-			return
+		} else {
+			api.Sendprivatemsg(bot, uid, app_default.Default_error_alert)
 		}
 	} else {
 		if UserMemberModel.Api_insert(uid, uname, rand) {

@@ -6,7 +6,6 @@ import (
 
 func IndexController(route *gin.RouterGroup) {
 	route.Any("/", index)
-	route.Any("/register")
 }
 
 func index(c *gin.Context) {

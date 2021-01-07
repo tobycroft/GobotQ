@@ -18,7 +18,7 @@ func App_userChangePassword(bot int, uid int, text string) {
 		return
 	}
 	if UserMemberModel.Api_update_password(uid, text) {
-		api.Sendprivatemsg(bot, uid, "您的密码已被修改为：\r\n↓↓↓↓↓↓↓↓\r\n"+text+"\r\n↑↑↑↑↑↑↑↑")
+		api.Sendprivatemsg(bot, uid, "您的密码已被修改为：【"+text+"】")
 	} else {
 		LogErrorModel.Api_insert("修改密码错误", tuuz.FUNCTION_ALL())
 		api.Sendprivatemsg(bot, uid, app_default.Default_error_alert)

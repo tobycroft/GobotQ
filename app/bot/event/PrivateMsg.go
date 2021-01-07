@@ -146,11 +146,10 @@ func privateHandle_acfur(bot int, uid int, text string) {
 	default:
 
 		function := make([]bool, private_function_number+1, private_function_number+1)
+		new_text := make([]string, private_function_number+1, private_function_number+1)
 		fmt.Println(function)
 		var wg sync.WaitGroup
 		wg.Add(private_function_number)
-
-		new_text := make([]string, private_function_number+1, private_function_number+1)
 
 		go func(idx int, wg *sync.WaitGroup) {
 			defer wg.Done()
@@ -160,6 +159,7 @@ func privateHandle_acfur(bot int, uid int, text string) {
 			function[idx] = ok
 		}(1, &wg)
 
+		wg.Wait()
 		function_route := 0
 		for i := range function {
 			if function[i] == true {

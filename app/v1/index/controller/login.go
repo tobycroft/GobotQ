@@ -32,6 +32,6 @@ func login(c *gin.Context) {
 			"token": token,
 		}, "登录成功")
 	} else {
-
+		RET.Fail(c, 0, nil, "登录信息不存在")
 	}
 }

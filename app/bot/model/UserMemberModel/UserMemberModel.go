@@ -10,12 +10,12 @@ const table = "user_member"
 
 func Api_insert(qq, uname, password interface{}) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	data := map[string]interface{}{
 		"qq":       qq,
 		"uname":    uname,
 		"password": password,
 	}
-	db.Where(where)
+	db.Data(data)
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

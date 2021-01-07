@@ -157,7 +157,6 @@ func privateHandle_acfur(bot int, uid int, text string) {
 			new_text[idx] = str
 			function[idx] = ok
 		}(1, &wg)
-
 		wg.Wait()
 		function_route := 0
 		for i := range function {
@@ -166,9 +165,7 @@ func privateHandle_acfur(bot int, uid int, text string) {
 				break
 			}
 		}
-
 		privateHandle_acfur_other(private_function_type[function_route], bot, uid, new_text[function_route])
-
 		break
 	}
 }

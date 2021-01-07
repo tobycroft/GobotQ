@@ -55,7 +55,7 @@ func Api_delete(qq interface{}) bool {
 	}
 }
 
-func Api_update(qq, uname interface{}) bool {
+func Api_update_uname(qq, uname interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"qq": qq,
@@ -63,6 +63,25 @@ func Api_update(qq, uname interface{}) bool {
 	db.Where(where)
 	data := map[string]interface{}{
 		"uname": uname,
+	}
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func Api_update_password(qq, password interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"qq": qq,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"password": password,
 	}
 	db.Data(data)
 	_, err := db.Update()

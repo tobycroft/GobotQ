@@ -139,7 +139,7 @@ func privateHandle_acfur(bot int, uid int, text string) {
 		break
 
 	case "清除登录":
-
+		Private.App_userClearLogin(bot, uid)
 		break
 
 	default:

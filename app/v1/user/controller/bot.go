@@ -1,0 +1,19 @@
+package controller
+
+import (
+	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/BotModel"
+	"main.go/common/BaseController"
+)
+
+func BotController(route *gin.RouterGroup) {
+
+	route.Use(BaseController.LoginedController(), gin.Recovery())
+
+	route.Any("bot_list", bot_list)
+}
+
+func bot_list(c *gin.Context) {
+	uid := c.PostForm("uid")
+	BotModel.Api_select_byOwner(uid)
+}

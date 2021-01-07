@@ -25,12 +25,14 @@ func login(c *gin.Context) {
 	if !ok {
 		return
 	}
-	if len(UserMemberModel.Api_find_byQqandPassword(qq, password)) > 0 {
+	user := UserMemberModel.Api_find_byQqandPassword(qq, password)
+	if len(user) > 0 {
 		token := Calc.GenerateToken()
 		UserTokenModel.Api_insert(qq, token, c.ClientIP())
 		RET.Success(c, 0, map[string]interface{}{
 			"uid":   qq,
 			"token": token,
+			"uname": user["uname"],
 		}, "登录成功")
 	} else {
 		RET.Fail(c, 0, nil, "登录信息不存在")

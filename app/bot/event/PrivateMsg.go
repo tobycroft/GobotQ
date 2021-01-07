@@ -129,22 +129,22 @@ const private_function_number = 1
 
 var private_function_type = []string{"unknow", "password"}
 
-func privateHandle_acfur(bot int, uid int, text string) {
-	switch text {
+func privateHandle_acfur(bot *int, uid *int, text *string) {
+	switch *text {
 	case "help":
 		api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
 		break
 
 	case "登录", "登陆", "login":
-		Private.App_userLogin(bot, uid, text)
+		Private.App_userLogin(*bot, *uid, *text)
 		break
 
 	case "清除登录":
-		Private.App_userClearLogin(bot, uid)
+		Private.App_userClearLogin(*bot, *uid)
 		break
 
 	default:
-		privateHandle_acfur_middle(&bot, &uid, &text)
+		privateHandle_acfur_middle(bot, uid, text)
 		break
 	}
 }

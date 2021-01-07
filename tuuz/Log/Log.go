@@ -43,6 +43,6 @@ func Crrs(logs error, discript string) {
 }
 
 func Dbrr(err error, log string) {
-	fmt.Println(err.Error())
+	fmt.Println(err.Error(), log)
 	Write("Dberror", log, "", err.Error())
 }

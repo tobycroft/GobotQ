@@ -12,6 +12,7 @@ import (
 	"main.go/tuuz/Redis"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 type PM struct {
@@ -123,6 +124,10 @@ func private_auto_reply(bot int, uid int, text string) {
 	}
 }
 
+const private_function_number = 1
+
+var private_function_type = []string{"unknow", "password"}
+
 func privateHandle_acfur(bot int, uid int, text string) {
 	switch text {
 	case "help":
@@ -133,17 +138,37 @@ func privateHandle_acfur(bot int, uid int, text string) {
 		Private.App_UserLogin(bot, uid, text)
 		break
 
-	case "密码", "password":
+	default:
+
+		function := make([]bool, private_function_number, private_function_number)
+		var wg sync.WaitGroup
+		wg.Add(private_function_number)
+
+		go func(idx int) {
+			service.Serv_text_match(text, []string{"密码", "password"})
+		}(0)
+
+		function_route := 0
+		for i := range function {
+			if function[i] == true {
+				function_route = i
+			}
+		}
+
+		privateHandle_acfur_other(private_function_type[function_route], bot, uid, text)
+
+		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
+		break
+	}
+}
+
+func privateHandle_acfur_other(Type string, bot int, uid int, text string) {
+	switch Type {
+	case "password":
 
 		break
 
 	default:
-
-		pw, ok := service.Serv_text_match(text, []string{"密码", "password"})
-		if ok {
-			Private.App_UserChangePassword(bot, uid, pw)
-		}
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
 		break
 	}
 }

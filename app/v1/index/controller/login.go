@@ -2,10 +2,12 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/UserMemberModel"
 	"main.go/app/bot/model/UserTokenModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Input"
+	"main.go/tuuz/RET"
 )
 
 func LoginController(route *gin.RouterGroup) {
@@ -23,6 +25,13 @@ func login(c *gin.Context) {
 	if !ok {
 		return
 	}
-	token := Calc.GenerateToken()
-	UserTokenModel.Api_insert(qq, token, "")
+	if len(UserMemberModel.Api_find_byQqandPassword(qq, password)) > 0 {
+		token := Calc.GenerateToken()
+		UserTokenModel.Api_insert(qq, token, c.ClientIP())
+		RET.Success(c, 0, map[string]interface{}{
+			"token": token,
+		}, "登录成功")
+	} else {
+
+	}
 }

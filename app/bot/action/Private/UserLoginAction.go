@@ -23,8 +23,10 @@ func App_UserLogin(bot int, uid int, text string) {
 			return
 		}
 	} else {
-		if !UserMemberModel.Api_insert(uid, uname, rand) {
+		if UserMemberModel.Api_insert(uid, uname, rand) {
 			api.Sendprivatemsg(bot, uid, "↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n"+Calc.Int2String(rand)+"\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n"+app_default.Default_str_login_text)
+		} else {
+			api.Sendprivatemsg(bot, uid, app_default.Default_error_alert)
 		}
 	}
 }

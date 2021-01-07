@@ -144,30 +144,33 @@ func privateHandle_acfur(bot int, uid int, text string) {
 		break
 
 	default:
-
-		function := make([]bool, private_function_number+1, private_function_number+1)
-		new_text := make([]string, private_function_number+1, private_function_number+1)
-		var wg sync.WaitGroup
-		wg.Add(private_function_number)
-
-		go func(idx int, wg *sync.WaitGroup) {
-			defer wg.Done()
-			str, ok := service.Serv_text_match(text, []string{"密码", "password"})
-			fmt.Println(str, ok)
-			new_text[idx] = str
-			function[idx] = ok
-		}(1, &wg)
-		wg.Wait()
-		function_route := 0
-		for i := range function {
-			if function[i] == true {
-				function_route = i
-				break
-			}
-		}
-		privateHandle_acfur_other(private_function_type[function_route], bot, uid, new_text[function_route])
+		privateHandle_acfur_middle(&bot, &uid, &text)
 		break
 	}
+}
+
+func privateHandle_acfur_middle(bot *int, uid *int, text *string) {
+	function := make([]bool, private_function_number+1, private_function_number+1)
+	new_text := make([]string, private_function_number+1, private_function_number+1)
+	var wg sync.WaitGroup
+	wg.Add(private_function_number)
+
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(text, []string{"密码", "password"})
+		fmt.Println(str, ok)
+		new_text[idx] = str
+		function[idx] = ok
+	}(1, &wg)
+	wg.Wait()
+	function_route := 0
+	for i := range function {
+		if function[i] == true {
+			function_route = i
+			break
+		}
+	}
+	privateHandle_acfur_other(private_function_type[function_route], bot, uid, new_text[function_route])
 }
 
 func privateHandle_acfur_other(Type string, bot int, uid int, text string) {

@@ -43,7 +43,8 @@ func Api_find(qq interface{}) gorose.Data {
 func Api_find_byQqandPassword(qq, password interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"qq": qq,
+		"qq":       qq,
+		"password": password,
 	}
 	db.Where(where)
 	ret, err := db.First()

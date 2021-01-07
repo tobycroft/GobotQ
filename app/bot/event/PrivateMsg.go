@@ -165,7 +165,7 @@ func privateHandle_acfur(bot int, uid int, text string) {
 func privateHandle_acfur_other(Type string, bot int, uid int, text string) {
 	switch Type {
 	case "password":
-
+		Private.App_UserChangePassword(bot, uid, text)
 		break
 
 	default:

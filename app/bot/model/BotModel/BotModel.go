@@ -34,13 +34,13 @@ func Api_find(bot interface{}) gorose.Data {
 	}
 }
 
-func Api_select_byOwner(owner interface{}) gorose.Data {
+func Api_select_byOwner(owner interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"owner": owner,
 	}
 	db.Where(where)
-	ret, err := db.First()
+	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil

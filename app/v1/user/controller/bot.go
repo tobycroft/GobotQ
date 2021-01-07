@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/BotModel"
 	"main.go/common/BaseController"
+	"main.go/tuuz/RET"
 )
 
 func BotController(route *gin.RouterGroup) {
@@ -15,5 +16,6 @@ func BotController(route *gin.RouterGroup) {
 
 func bot_list(c *gin.Context) {
 	uid := c.PostForm("uid")
-	BotModel.Api_select_byOwner(uid)
+	bots := BotModel.Api_select_byOwner(uid)
+	RET.Success(c, 0, bots, nil)
 }

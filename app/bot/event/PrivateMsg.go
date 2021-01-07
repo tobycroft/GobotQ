@@ -170,17 +170,17 @@ func privateHandle_acfur_middle(bot *int, uid *int, text *string) {
 			break
 		}
 	}
-	privateHandle_acfur_other(private_function_type[function_route], *bot, *uid, new_text[function_route])
+	privateHandle_acfur_other(private_function_type[function_route], bot, uid, new_text[function_route])
 }
 
-func privateHandle_acfur_other(Type string, bot int, uid int, text string) {
+func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 	switch Type {
 	case "password":
-		Private.App_userChangePassword(bot, uid, text)
+		Private.App_userChangePassword(*bot, *uid, text)
 		break
 
 	default:
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
+		api.Sendprivatemsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
 		break
 	}
 }

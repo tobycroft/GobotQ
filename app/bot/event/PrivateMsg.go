@@ -64,7 +64,7 @@ func PrivateMsg(pm PM) {
 		return
 	}
 
-	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 5)
+	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 3)
 
 	PrivateHandle(bot, uid, text)
 }

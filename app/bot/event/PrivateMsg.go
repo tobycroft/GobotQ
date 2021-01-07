@@ -144,18 +144,23 @@ func privateHandle_acfur(bot int, uid int, text string) {
 		var wg sync.WaitGroup
 		wg.Add(private_function_number)
 
+		new_text := make([]string, private_function_number, private_function_number)
+
 		go func(idx int) {
-			service.Serv_text_match(text, []string{"密码", "password"})
+			str, ok := service.Serv_text_match(text, []string{"密码", "password"})
+			new_text[idx] = str
+			function[idx] = ok
 		}(1)
 
 		function_route := 0
 		for i := range function {
 			if function[i] == true {
 				function_route = i
+				break
 			}
 		}
 
-		privateHandle_acfur_other(private_function_type[function_route], bot, uid, text)
+		privateHandle_acfur_other(private_function_type[function_route], bot, uid, new_text[function_route])
 
 		break
 	}

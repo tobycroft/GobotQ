@@ -29,6 +29,7 @@ func login(c *gin.Context) {
 		token := Calc.GenerateToken()
 		UserTokenModel.Api_insert(qq, token, c.ClientIP())
 		RET.Success(c, 0, map[string]interface{}{
+			"uid":   qq,
 			"token": token,
 		}, "登录成功")
 	} else {

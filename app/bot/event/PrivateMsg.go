@@ -74,10 +74,10 @@ func PrivateHandle(bot int, uid int, text string) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
-		privateHandle_acfur(bot, uid, new_text)
+		privateHandle_acfur(&bot, &uid, new_text)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		if private_default_reply(bot, uid, text) {
+		if private_default_reply(&bot, &uid, &text) {
 			return
 		}
 		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
@@ -87,39 +87,39 @@ func PrivateHandle(bot int, uid int, text string) {
 			}
 			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
 		} else {
-			private_auto_reply(bot, uid, text)
+			private_auto_reply(&bot, &uid, &text)
 		}
 	}
 }
 
-func private_default_reply(bot int, uid int, text string) bool {
+func private_default_reply(bot *int, uid *int, text *string) bool {
 	default_reply := BotDefaultReplyModel.Api_select()
 	for _, auto_reply := range default_reply {
 		if auto_reply["key"] == nil {
 			continue
 		}
-		if strings.Contains(text, auto_reply["key"].(string)) {
+		if strings.Contains(*text, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
+			api.Sendprivatemsg(*bot, *uid, auto_reply["value"].(string))
 			return true
 		}
 	}
 	return false
 }
 
-func private_auto_reply(bot int, uid int, text string) {
-	auto_replys := PrivateAutoReplyModel.Api_select_semi(bot)
+func private_auto_reply(bot *int, uid *int, text *string) {
+	auto_replys := PrivateAutoReplyModel.Api_select_semi(*bot)
 	for _, auto_reply := range auto_replys {
 		if auto_reply["key"] == nil {
 			continue
 		}
-		if strings.Contains(text, auto_reply["key"].(string)) {
+		if strings.Contains(*text, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
+			api.Sendprivatemsg(*bot, *uid, auto_reply["value"].(string))
 			break
 		}
 	}
@@ -129,14 +129,14 @@ const private_function_number = 1
 
 var private_function_type = []string{"unknow", "password"}
 
-func privateHandle_acfur(bot *int, uid *int, text *string) {
-	switch *text {
+func privateHandle_acfur(bot *int, uid *int, text string) {
+	switch text {
 	case "help":
-		api.Sendprivatemsg(bot, uid, app_default.Default_private_help)
+		api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help)
 		break
 
 	case "登录", "登陆", "login":
-		Private.App_userLogin(*bot, *uid, *text)
+		Private.App_userLogin(*bot, *uid, text)
 		break
 
 	case "清除登录":
@@ -144,7 +144,7 @@ func privateHandle_acfur(bot *int, uid *int, text *string) {
 		break
 
 	default:
-		privateHandle_acfur_middle(bot, uid, text)
+		privateHandle_acfur_middle(bot, uid, &text)
 		break
 	}
 }

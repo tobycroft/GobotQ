@@ -146,7 +146,7 @@ func privateHandle_acfur(bot int, uid int, text string) {
 
 		go func(idx int) {
 			service.Serv_text_match(text, []string{"密码", "password"})
-		}(0)
+		}(1)
 
 		function_route := 0
 		for i := range function {
@@ -157,7 +157,6 @@ func privateHandle_acfur(bot int, uid int, text string) {
 
 		privateHandle_acfur_other(private_function_type[function_route], bot, uid, text)
 
-		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
 		break
 	}
 }
@@ -169,6 +168,7 @@ func privateHandle_acfur_other(Type string, bot int, uid int, text string) {
 		break
 
 	default:
+		api.Sendprivatemsg(bot, uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
 		break
 	}
 }

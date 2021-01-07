@@ -107,3 +107,23 @@ func Api_update_password(qq, password interface{}) bool {
 		return true
 	}
 }
+
+func Api_update_all(qq, uname, password interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"qq": qq,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"uname":    uname,
+		"password": password,
+	}
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

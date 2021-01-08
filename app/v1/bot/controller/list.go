@@ -29,6 +29,7 @@ func ListController(route *gin.RouterGroup) {
 	})
 	route.Any("unbind", list_unbind)
 	route.Any("owned", list_yours_own)
+	route.Any("admin", list_your_admin)
 }
 
 func list_unbind(c *gin.Context) {
@@ -42,7 +43,7 @@ func list_yours_own(c *gin.Context) {
 	RET.Success(c, 0, bots, nil)
 }
 
-func list_your_control(c *gin.Context) {
+func list_your_admin(c *gin.Context) {
 	uid := c.PostForm("uid")
 	bots := BotAdminModel.Api_select(uid)
 	RET.Success(c, 0, bots, nil)

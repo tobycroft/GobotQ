@@ -65,3 +65,20 @@ func Api_select_byOwner(owner interface{}) []gorose.Data {
 		return ret
 	}
 }
+
+func Api_update_img(owner, bot, img interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"owner": owner,
+		"bot":   bot,
+		"img":   img,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

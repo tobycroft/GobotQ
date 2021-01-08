@@ -15,3 +15,7 @@ func request_join(c *gin.Context) {
 func request_out(c *gin.Context) {
 
 }
+
+func request_allow(c *gin.Context) {
+
+}

@@ -12,7 +12,7 @@ func Api_insert(bot, qq, end_time interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"bot":      bot,
-		"qq":       qq,
+		"admin":    qq,
 		"end_time": end_time,
 	}
 	db.Data(data)
@@ -28,8 +28,8 @@ func Api_insert(bot, qq, end_time interface{}) bool {
 func Api_delete(bot, qq interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"qq":  qq,
+		"bot":   bot,
+		"admin": qq,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -44,8 +44,8 @@ func Api_delete(bot, qq interface{}) bool {
 func Api_inc_endTime(bot, qq interface{}, endTime_incr int) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"qq":  qq,
+		"bot":   bot,
+		"admin": qq,
 	}
 	db.Where(where)
 	_, err := db.Increment("endTime_incr", endTime_incr)
@@ -60,10 +60,11 @@ func Api_inc_endTime(bot, qq interface{}, endTime_incr int) bool {
 func Api_select(bot, qq interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"qq":  qq,
+		"bot":   bot,
+		"admin": qq,
 	}
 	db.Where(where)
+	db.Join("bot")
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

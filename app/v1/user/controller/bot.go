@@ -11,7 +11,7 @@ func BotController(route *gin.RouterGroup) {
 
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-	route.Any("bot_list", bot_list)
+	//route.Any("bot_list", bot_list)
 }
 
 func bot_list(c *gin.Context) {

@@ -10,8 +10,8 @@ import (
 func ListController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-	route.Any("list_unbind", list_unbind)
-	route.Any("list_yours", list_yours)
+	route.Any("unbind", list_unbind)
+	route.Any("owned", list_yours_own)
 }
 
 func list_unbind(c *gin.Context) {
@@ -19,8 +19,13 @@ func list_unbind(c *gin.Context) {
 	RET.Success(c, 0, unbinds, nil)
 }
 
-func list_yours(c *gin.Context) {
+func list_yours_own(c *gin.Context) {
 	uid := c.PostForm("uid")
 	bots := BotModel.Api_select_byOwner(uid)
 	RET.Success(c, 0, bots, nil)
+}
+
+func list_your_control(c *gin.Context) {
+	uid := c.PostForm("uid")
+
 }

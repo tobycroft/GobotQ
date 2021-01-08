@@ -64,7 +64,7 @@ func Api_select(bot, qq interface{}) []gorose.Data {
 		"admin": qq,
 	}
 	db.Where(where)
-	db.Join("bot")
+	db.Join("bot", "bot.bot=bot_admin.bot")
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

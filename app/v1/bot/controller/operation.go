@@ -12,6 +12,22 @@ import (
 func OperationController(route *gin.RouterGroup) {
 
 	route.Use(BaseController.LoginedController(), gin.Recovery())
+	route.Use(func(c *gin.Context) {
+		uid := c.PostForm("uid")
+		bot, ok := Input.PostInt("bot", c)
+		if !ok {
+			return
+		}
+		data := BotModel.Api_find_byOwnerandBot(uid, bot)
+		if len(data) > 0 {
+			c.Next()
+			return
+		} else {
+			RET.Fail(c, 403, nil, "你并不拥有这个机器人")
+			c.Abort()
+			return
+		}
+	})
 
 	route.Any("online", operation_online)
 	route.Any("offline", operation_offline)
@@ -19,45 +35,25 @@ func OperationController(route *gin.RouterGroup) {
 }
 
 func operation_online(c *gin.Context) {
-	uid := c.PostForm("uid")
-	bot, ok := Input.PostInt("bot", c)
-	if !ok {
-		return
-	}
-	data := BotModel.Api_find_byOwnerandBot(uid, bot)
-	if len(data) > 0 {
-		ok, err := api.Logoutqq(bot)
-		if err != nil {
-			RET.Fail(c, 300, err.Error(), err.Error())
-		} else if ok {
-			RET.Success(c, 0, nil, nil)
-		} else {
-			RET.Fail(c, 300, nil, "下线失败，机器人可能本来就没有在线？")
-		}
-
+	bot := c.PostForm("bot")
+	ok, err := api.Logoutqq(bot)
+	if err != nil {
+		RET.Fail(c, 300, err.Error(), err.Error())
+	} else if ok {
+		RET.Success(c, 0, nil, nil)
 	} else {
-		RET.Fail(c, 403, nil, "你并不拥有这个机器人")
+		RET.Fail(c, 300, nil, "下线失败，机器人可能本来就没有在线？")
 	}
 }
 
 func operation_offline(c *gin.Context) {
-	uid := c.PostForm("uid")
-	bot, ok := Input.PostInt("bot", c)
-	if !ok {
-		return
-	}
-	data := BotModel.Api_find_byOwnerandBot(uid, bot)
-	if len(data) > 0 {
-		ok, err := api.Loginqq(bot)
-		if err != nil {
-			RET.Fail(c, 300, err.Error(), err.Error())
-		} else if ok {
-			RET.Success(c, 0, nil, nil)
-		} else {
-			RET.Fail(c, 300, nil, "上线失败，机器人的密码可能已经被修改了？")
-		}
-
+	bot := c.PostForm("bot")
+	ok, err := api.Logoutqq(bot)
+	if err != nil {
+		RET.Fail(c, 300, err.Error(), err.Error())
+	} else if ok {
+		RET.Success(c, 0, nil, nil)
 	} else {
-		RET.Fail(c, 403, nil, "你并不拥有这个机器人")
+		RET.Fail(c, 300, nil, "下线失败，机器人可能本来就没有在线？")
 	}
 }

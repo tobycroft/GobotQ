@@ -11,6 +11,7 @@ func ListController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
 	route.Any("list_unbind", list_unbind)
+	route.Any("list_yours", list_yours)
 }
 
 func list_unbind(c *gin.Context) {

@@ -15,5 +15,14 @@ func ListController(route *gin.RouterGroup) {
 
 func list_unbind(c *gin.Context) {
 	unbinds := BotModel.Api_select_byOwner(0)
+	delete(unbinds, "password")
+	delete(unbinds, "secret")
+
 	RET.Success(c, 0, unbinds, nil)
+}
+
+func list_yours(c *gin.Context) {
+	uid := c.PostForm("uid")
+	bots := BotModel.Api_select_byOwner(uid)
+	RET.Success(c, 0, bots, nil)
 }

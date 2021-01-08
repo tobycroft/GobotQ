@@ -8,6 +8,7 @@ import (
 func RequestController(route *gin.RouterGroup) {
 
 	route.Use(BaseController.LoginedController(), gin.Recovery())
+
 	route.Any("join", request_join)
 	route.Any("out", request_out)
 	route.Any("allow", request_allow)

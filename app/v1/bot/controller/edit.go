@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Input"
+	"main.go/tuuz/RET"
 )
 
 func EditController(route *gin.RouterGroup) {
@@ -18,5 +19,9 @@ func change_img(c *gin.Context) {
 	if !ok {
 		return
 	}
-	BotModel.Api_update_img(uid, bot, img)
+	if BotModel.Api_update_img(uid, bot, img) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 0, nil, nil)
+	}
 }

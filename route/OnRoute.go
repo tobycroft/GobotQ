@@ -31,5 +31,9 @@ func OnRoute(router *gin.Engine) {
 		{
 			v1.BotRouter(bot)
 		}
+		group := version1.Group("group")
+		{
+			v1.GroupRouter(group)
+		}
 	}
 }

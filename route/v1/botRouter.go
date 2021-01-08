@@ -15,4 +15,5 @@ func BotRouter(route *gin.RouterGroup) {
 	controller.OperationController(route.Group("operation"))
 	controller.RequestController(route.Group("request"))
 	controller.ShareController(route.Group("share"))
+	controller.ListController(route.Group("list"))
 }

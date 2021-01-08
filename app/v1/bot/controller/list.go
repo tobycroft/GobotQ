@@ -44,6 +44,6 @@ func list_yours_own(c *gin.Context) {
 
 func list_your_control(c *gin.Context) {
 	uid := c.PostForm("uid")
-	bot := c.PostForm("bot")
-	BotAdminModel.Api_select(bot, uid)
+	bots := BotAdminModel.Api_select(uid)
+	RET.Success(c, 0, bot, nil)
 }

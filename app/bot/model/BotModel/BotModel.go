@@ -34,6 +34,22 @@ func Api_find(bot interface{}) gorose.Data {
 	}
 }
 
+func Api_find_byOwnerandBot(owner, bot interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"owner": owner,
+		"bot":   bot,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_select_byOwner(owner interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Fields("bot,cname,img,type,owner,end_time,active,date")

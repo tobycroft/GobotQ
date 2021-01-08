@@ -57,7 +57,7 @@ func Api_inc_endTime(bot, qq interface{}, endTime_incr int) bool {
 	}
 }
 
-func Api_select(bot, qq interface{}) []gorose.Data {
+func Api_select(qq interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Fields("id,cname,img,owner,admin,type,active,end_time")
 	where := map[string]interface{}{

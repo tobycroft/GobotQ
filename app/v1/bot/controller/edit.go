@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Input"
 )
 
@@ -12,9 +13,10 @@ func EditController(route *gin.RouterGroup) {
 
 func change_img(c *gin.Context) {
 	uid := c.PostForm("uid")
+	bot := c.PostForm("bot")
 	img, ok := Input.Post("img", c, true)
 	if !ok {
 		return
 	}
-
+	BotModel.Api_update_img(uid, bot, img)
 }

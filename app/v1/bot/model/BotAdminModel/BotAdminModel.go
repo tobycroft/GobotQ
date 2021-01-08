@@ -1,6 +1,7 @@
 package BotAdminModel
 
 import (
+	"github.com/gohouse/gorose/v2"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )
@@ -53,5 +54,21 @@ func Api_inc_endTime(bot, qq interface{}, endTime_incr int) bool {
 		return false
 	} else {
 		return true
+	}
+}
+
+func Api_select(bot, qq interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"qq":  qq,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
 	}
 }

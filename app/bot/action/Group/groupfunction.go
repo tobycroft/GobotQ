@@ -13,6 +13,10 @@ func App_group_function(bot *int, gid *int, uid *int) {
 
 func group_function_attach(gid interface{}) gorose.Data {
 	group_setting := GroupFunctionModel.Api_find(gid)
+	if len(group_setting) < 1 {
+		GroupFunctionModel.Api_insert(gid)
+		return group_function_attach(gid)
+	}
 	function := GroupFunctionDetailModel.Api_select_kv()
 	for k, v := range group_setting {
 		function[k].(gorose.Data)["value"] = v

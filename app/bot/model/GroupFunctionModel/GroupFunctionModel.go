@@ -44,11 +44,11 @@ func Api_update(gid, key, value interface{}) {
 		"gid": gid,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[interface{}]interface{}{
 		key: value,
 	}
 	db.Data(data)
-	ret, err := db.First()
+	ret, err := db.Update()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil

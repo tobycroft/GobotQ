@@ -120,7 +120,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 			break
 		}
 	}
-	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route])
+	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random)
 }
 
 func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int) {

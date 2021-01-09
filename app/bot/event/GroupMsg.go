@@ -98,7 +98,7 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 		groupHandle_acfur(&bot, &gid, &uid, new_text)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		groupHandle_acfur_middle(&bot, &gid, &uid, text)
+		groupHandle_acfur_middle(&bot, &gid, &uid, &text)
 	}
 }
 

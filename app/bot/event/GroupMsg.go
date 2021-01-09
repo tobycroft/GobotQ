@@ -109,7 +109,6 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string) {
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match_all(*text, []string{"签到"})
-		//fmt.Println(str, ok)
 		new_text[idx] = str
 		function[idx] = ok
 	}(1, &wg)

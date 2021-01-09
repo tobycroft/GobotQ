@@ -74,7 +74,7 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
-		groupHandle_acfur(&bot, &gid, &uid, new_text)
+		groupHandle_acfur(&bot, &gid, &uid, new_text, req, random)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
 		groupHandle_acfur_middle(&bot, &gid, &uid, &text)
@@ -85,23 +85,23 @@ const group_function_number = 1
 
 var group_function_type = []string{"unknow", "sign"}
 
-func groupHandle_acfur(bot *int, gid *int, uid *int, text string) {
+func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int) {
 	switch text {
 	case "help":
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_private_help)
 		break
 
 	case "设定":
-		Group.App_group_function(bot, gid, uid)
+		Group.App_group_function_get_all(bot, gid, uid, &text)
 		break
 
 	default:
-		groupHandle_acfur_middle(bot, gid, uid, &text)
+		groupHandle_acfur_middle(bot, gid, uid, &text, req, random)
 		break
 	}
 }
 
-func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string) {
+func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
@@ -123,7 +123,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string) {
 	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route])
 }
 
-func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string) {
+func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int) {
 	switch Type {
 
 	case "sign":

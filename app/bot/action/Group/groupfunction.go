@@ -19,8 +19,10 @@ func group_function_attach(gid interface{}) gorose.Data {
 	}
 	function := GroupFunctionDetailModel.Api_select_kv()
 	for k, v := range group_setting {
-		function[k].(gorose.Data)["value"] = v
-		group_setting[k] = function[k]
+		if function[k] != nil {
+			function[k].(gorose.Data)["value"] = v
+			group_setting[k] = function[k]
+		}
 	}
 	return group_setting
 }

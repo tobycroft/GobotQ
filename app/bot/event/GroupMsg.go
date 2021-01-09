@@ -75,23 +75,6 @@ func GroupMsg(gm GM) {
 
 func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	reg := regexp.MustCompile("(?i)^acfur")
-	call_bot := reg.MatchString(text)
-	new_text := reg.ReplaceAllString(text, "")
-	if call_bot {
-		api.Sendgroupmsg(bot, uid, "Hi我是Acfur！"+new_text)
-		return
-	}
-	is_sign, _ := regexp.MatchString("^签到$", new_text)
-	if is_sign {
-		Group.App_group_sign(bot, gid, uid)
-		return
-	}
-	is_lunpan, _ := regexp.MatchString("^轮盘$", new_text)
-	if is_lunpan {
-
-	}
-
-	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {

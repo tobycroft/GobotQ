@@ -34,14 +34,14 @@ func Api_select() []gorose.Data {
 	}
 }
 
-func Api_select_kv() map[string]interface{} {
+func Api_select_kv() map[string]map[string]interface{} {
 	db := tuuz.Db().Table(table)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil
 	} else {
-		datas := map[string]interface{}{}
+		datas := map[string]map[string]interface{}{}
 		for _, data := range ret {
 			datas[data["key"].(string)] = map[string]interface{}{
 				"name": data["name"],

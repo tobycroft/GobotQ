@@ -50,7 +50,7 @@ func App_refresh_group_member_one(bot, gid interface{}) {
 			g.Uid = gmm.UIN
 			g.Remark = gmm.Remark
 			g.Nickname = gmm.NickName
-			g.Age = gmm.Age
+			//g.Age = gmm.Age
 			g.Card = gmm.Card
 			g.Grouplevel = gmm.GroupLevel
 			g.Jointime = gmm.AddGroupTime

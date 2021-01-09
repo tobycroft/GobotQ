@@ -36,6 +36,10 @@ func Api_select() []gorose.Data {
 
 func Api_select_kv() map[string]map[string]interface{} {
 	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"show": true,
+	}
+	db.Where(where)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

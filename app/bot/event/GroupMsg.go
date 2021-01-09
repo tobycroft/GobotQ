@@ -65,6 +65,8 @@ func GroupMsg(gm GM) {
 
 	if !is_self {
 		GroupHandle(bot, gid, uid, text, gm.Msg.Req, retract)
+	} else {
+
 	}
 }
 
@@ -91,11 +93,11 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string) {
 		break
 
 	case "签到":
-		Group.App_group_sign(bot, gid, uid)
+		Group.App_group_sign(*bot, *gid, *uid)
 		break
 
 	case "设定":
-		Group.App_group_sign(bot, gid, uid)
+		Group.App_group_function(bot, gid, uid)
 		break
 
 	default:

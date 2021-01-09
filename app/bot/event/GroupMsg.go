@@ -87,7 +87,7 @@ var group_function_type = []string{"unknow", "sign"}
 func groupHandle_acfur(bot *int, gid *int, uid *int, text string) {
 	switch text {
 	case "help":
-		api.Sendgroupmsg(*bot, *uid, app_default.Default_private_help)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_private_help)
 		break
 
 	case "签到":

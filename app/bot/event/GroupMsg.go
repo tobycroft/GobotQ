@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -74,10 +75,10 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
-		groupHandle_acfur(&bot, &gid, &uid, new_text, req, random)
+		groupHandle_acfur(&bot, &gid, &uid, new_text, &req, &random)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		groupHandle_acfur_middle(&bot, &gid, &uid, &text)
+		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random)
 	}
 }
 
@@ -86,12 +87,24 @@ const group_function_number = 1
 var group_function_type = []string{"unknow", "sign"}
 
 func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int) {
+	admin := false
+	groupmember := GroupMemberModel.Api_find(*bot, *gid, *uid)
+	if len(groupmember) > 0 {
+		if groupmember["grouplevel"].(int64) > 2 {
+			admin = true
+		}
+	}
+
 	switch text {
 	case "help":
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_private_help)
 		break
 
 	case "设定":
+		if !admin {
+			not_admin(bot, gid, uid)
+			return
+		}
 		Group.App_group_function_get_all(bot, gid, uid, &text)
 		break
 
@@ -99,6 +112,10 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		groupHandle_acfur_middle(bot, gid, uid, &text, req, random)
 		break
 	}
+}
+
+func not_admin(bot *int, gid *int, uid *int) {
+	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid))
 }
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int) {

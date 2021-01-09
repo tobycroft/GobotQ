@@ -12,7 +12,6 @@ type GroupMember struct {
 	Bot        interface{} `gorose:"uid"`
 	Gid        interface{} `gorose:"gid"`
 	Uid        interface{} `gorose:"uid"`
-	Age        int         `gorose:"age"`
 	Title      string      `gorose:"title"`
 	Nickname   string      `gorose:"nickname"`
 	Remark     string      `gorose:"remark"`

@@ -3,16 +3,11 @@ package event
 import (
 	"fmt"
 	"main.go/app/bot/action/Group"
-	"main.go/app/bot/action/group"
 	"main.go/app/bot/api"
-	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/GroupMsgModel"
-	"main.go/app/bot/model/PrivateAutoReplyModel"
-	"main.go/app/bot/model/groupAutoReplyModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"regexp"
-	"strings"
 	"sync"
 )
 

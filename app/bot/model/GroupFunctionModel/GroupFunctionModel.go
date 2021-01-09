@@ -32,8 +32,8 @@ func Api_find(gid interface{}) gorose.Data {
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
-		return false
+		return nil
 	} else {
-		return true
+		return ret
 	}
 }

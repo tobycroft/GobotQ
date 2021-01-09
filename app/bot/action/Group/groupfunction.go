@@ -8,6 +8,7 @@ import (
 )
 
 func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
+
 	settings := group_function_attach(*gid)
 	str := "您的群设定为：\r\n"
 	for _, v := range settings {

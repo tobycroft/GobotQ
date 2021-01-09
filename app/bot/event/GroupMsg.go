@@ -1,14 +1,11 @@
 package event
 
 import (
-	"fmt"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupMsgModel"
-	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"regexp"
-	"sync"
 )
 
 type GM struct {
@@ -107,27 +104,26 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string) {
 }
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string) {
-	function := make([]bool, group_function_number+1, group_function_number+1)
-	new_text := make([]string, group_function_number+1, group_function_number+1)
-	var wg sync.WaitGroup
-	wg.Add(group_function_number)
-
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(*text, []string{"密码", "password"})
-		fmt.Println(str, ok)
-		new_text[idx] = str
-		function[idx] = ok
-	}(1, &wg)
-	wg.Wait()
-	function_route := 0
-	for i := range function {
-		if function[i] == true {
-			function_route = i
-			break
-		}
-	}
-	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route])
+	//function := make([]bool, group_function_number+1, group_function_number+1)
+	//new_text := make([]string, group_function_number+1, group_function_number+1)
+	//var wg sync.WaitGroup
+	//wg.Add(group_function_number)
+	//go func(idx int, wg *sync.WaitGroup) {
+	//	defer wg.Done()
+	//	str, ok := service.Serv_text_match(*text, []string{"密码", "password"})
+	//	//fmt.Println(str, ok)
+	//	new_text[idx] = str
+	//	function[idx] = ok
+	//}(1, &wg)
+	//wg.Wait()
+	//function_route := 0
+	//for i := range function {
+	//	if function[i] == true {
+	//		function_route = i
+	//		break
+	//	}
+	//}
+	//groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route])
 }
 
 func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string) {

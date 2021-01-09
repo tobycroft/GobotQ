@@ -7,7 +7,7 @@ import (
 	"main.go/tuuz/Calc"
 )
 
-func App_group_function_get_all(bot *int, gid *int, uid *int) {
+func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
 	settings := group_function_attach(*gid)
 	str := "您的群设定为：\r\n"
 	for _, v := range settings {
@@ -38,6 +38,10 @@ func App_group_function_get_all(bot *int, gid *int, uid *int) {
 		str += "\r\n"
 	}
 	api.Sendgroupmsg(*bot, *gid, str)
+}
+
+func App_group_function_set(bot *int, gid *int, uid *int, text *string) {
+
 }
 
 func group_function_attach(gid interface{}) map[string]map[string]interface{} {

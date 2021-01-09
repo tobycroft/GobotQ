@@ -38,7 +38,7 @@ func Api_find(gid interface{}) gorose.Data {
 	}
 }
 
-func Api_update(gid, key, value interface{}) {
+func Api_update(gid, key, value interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
@@ -48,11 +48,11 @@ func Api_update(gid, key, value interface{}) {
 		key: value,
 	}
 	db.Data(data)
-	ret, err := db.Update()
+	_, err := db.Update()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
-		return nil
+		return false
 	} else {
-		return ret
+		return true
 	}
 }

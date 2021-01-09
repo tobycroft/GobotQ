@@ -44,8 +44,8 @@ func Api_select_kv() map[string]interface{} {
 		datas := map[string]interface{}{}
 		for _, data := range ret {
 			datas[data["key"].(string)] = map[string]interface{}{
-				"value": data["value"],
-				"type":  data["type"],
+				"name": data["name"],
+				"type": data["type"],
 			}
 		}
 		return datas

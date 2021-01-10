@@ -47,7 +47,7 @@ func Retract() {
 
 func retract_private() {
 	for r := range event.Retract_chan_private {
-		go func() {
+		go func(retract event.Retract_private) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
 			case event.Retract_chan_private_instant <- r:
@@ -55,13 +55,13 @@ func retract_private() {
 			case <-time.After(5 * time.Second):
 				return
 			}
-		}()
+		}(r)
 	}
 }
 
 func retract_group() {
 	for r := range event.Retract_chan_group {
-		go func() {
+		go func(retract event.Retract_group) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
 			case event.Retract_chan_group_instant <- r:
@@ -69,7 +69,7 @@ func retract_group() {
 			case <-time.After(5 * time.Second):
 				return
 			}
-		}()
+		}(r)
 	}
 }
 
@@ -87,7 +87,7 @@ func retract_group_instant() {
 
 func retract_private2() {
 	for r := range Retract_chan_private {
-		go func() {
+		go func(retract Retract_private) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
 			case Retract_chan_private_instant <- r:
@@ -95,13 +95,13 @@ func retract_private2() {
 			case <-time.After(5 * time.Second):
 				return
 			}
-		}()
+		}(r)
 	}
 }
 
 func retract_group2() {
 	for r := range Retract_chan_group {
-		go func() {
+		go func(retract Retract_group) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
 			case Retract_chan_group_instant <- r:
@@ -109,7 +109,7 @@ func retract_group2() {
 			case <-time.After(5 * time.Second):
 				return
 			}
-		}()
+		}(r)
 	}
 }
 
@@ -127,7 +127,7 @@ func retract_group_instant2() {
 
 func retract_private3() {
 	for r := range api.Retract_chan_private {
-		go func() {
+		go func(retract api.Retract_private) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
 			case api.Retract_chan_private_instant <- r:
@@ -135,16 +135,21 @@ func retract_private3() {
 			case <-time.After(5 * time.Second):
 				return
 			}
-		}()
+		}(r)
 	}
 }
 
 func retract_group3() {
 	for r := range api.Retract_chan_group {
-		//fmt.Println("activeretrtact", r)
 		go func(retract api.Retract_group) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
-			api.Retract_chan_group_instant <- retract
+
+			select {
+			case api.Retract_chan_group_instant <- retract:
+
+			case <-time.After(5 * time.Second):
+				return
+			}
 		}(r)
 	}
 }

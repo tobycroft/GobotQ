@@ -37,11 +37,12 @@ func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, 
 func Api_find(bot, gid, send interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot":  bot,
-		"gid":  gid,
-		"send": send,
+		"bot": bot,
+		"gid": gid,
 	}
 	db.Where(where)
+	db.Where("send", ">", send)
+	db.Order("id asc")
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

@@ -1,6 +1,6 @@
 package Input
 
-func Fliter_Ascii(json_string string) {
+func Fliter_Ascii(json_string string) string {
 	originStr := json_string
 
 	// 将字符串转换为rune数组

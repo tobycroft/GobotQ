@@ -123,7 +123,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "刷新":
-		api.Sendgroupmsg(*bot, *gid, "可以使用“刷新人数”以及“刷新群信息”来控制刷新")
+		api.Sendgroupmsg(*bot, *gid, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", true)
 		break
 
 	case "刷新人数":
@@ -144,7 +144,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		Group.App_refresh_groupinfo(bot, gid)
 		break
 
-	case "撤回测试":
+	case "测试撤回":
 		var ret Retract_group
 		ret.Group = *gid
 		ret.Fromqq = *bot
@@ -156,6 +156,15 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		Retract_chan_group_instant <- ret
 		break
 
+	case "测试拼音":
+		py, err := service.Serv_pinyin(text)
+		if err != nil {
+
+		} else {
+			api.Sendgroupmsg(*bot, *gid, py, false)
+		}
+		break
+
 	default:
 		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
 		break
@@ -163,7 +172,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 }
 
 func not_admin(bot *int, gid *int, uid *int) {
-	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid))
+	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid), true)
 }
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
@@ -197,7 +206,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		break
 
 	default:
-		api.Sendgroupmsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
+		api.Sendgroupmsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
 		break
 	}
 }

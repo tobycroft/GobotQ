@@ -155,7 +155,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	default:
-		groupHandle_acfur_middle(bot, gid, uid, &text, req, random)
+		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember)
 		break
 	}
 }

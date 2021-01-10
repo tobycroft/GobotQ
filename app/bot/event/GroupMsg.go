@@ -6,6 +6,7 @@ import (
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
+	"main.go/config/app_conf"
 	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Redis"
@@ -166,7 +167,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "测试自动撤回":
-		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计115秒后撤回", true)
+		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second)+"秒后撤回", true)
 		break
 
 	default:

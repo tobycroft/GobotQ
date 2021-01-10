@@ -1,11 +1,10 @@
 package api
 
 import (
-	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
+	"main.go/tuuz/Input"
 	"main.go/tuuz/Net"
-	"strings"
 )
 
 type Gls struct {
@@ -52,8 +51,8 @@ func Getgrouplist(bot interface{}) ([]GroupList, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(data)
-	data = strings.ReplaceAll(data, "\\'", "'")
+	data = Input.Fliter_Ascii(data)
+	data = Input.Fliter_error_encode(data)
 	var gls Gls
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gls)

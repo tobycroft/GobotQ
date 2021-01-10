@@ -5,11 +5,12 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
+	"strings"
 )
 
 type Gms struct {
-	Ret  string            `json:"ret"`
-	List []GroupMemberList `json:"List" bson:"List"`
+	Ret  string              `json:"ret"`
+	List jsoniter.RawMessage `json:"List" bson:"List"`
 }
 type GroupMemberList struct {
 	UIN              int    `json:"UIN"`
@@ -28,7 +29,7 @@ type GroupMemberList struct {
 	GroupLevel       int    `json:"GroupLevel"`
 }
 
-func Getgroupmemberlist(bot, group interface{}) (interface{}, error) {
+func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 	post := map[string]interface{}{
 		"logonqq": bot,
 		"group":   group,
@@ -37,12 +38,13 @@ func Getgroupmemberlist(bot, group interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(data)
+	data = strings.ReplaceAll(data, "\\'", "'")
 	var gms Gms
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gms)
+	fmt.Println(gms)
 	if err != nil {
 		return nil, err
 	}
-	return gms.List, nil
+	return nil, nil
 }

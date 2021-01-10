@@ -1,14 +1,12 @@
 package Group
 
 import (
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupListModel"
 )
 
 func App_refresh_groupinfo(bot *int, gid *int) {
 	gl, err := api.Getgrouplist(bot)
-	fmt.Println(gl, err)
 	if err != nil {
 
 	} else {

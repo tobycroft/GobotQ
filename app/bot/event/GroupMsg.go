@@ -86,11 +86,12 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
+	groupmember := GroupMemberModel.Api_find(bot, gid, uid)
 	if active {
-		groupHandle_acfur(&bot, &gid, &uid, new_text, &req, &random)
+		groupHandle_acfur(&bot, &gid, &uid, new_text, &req, &random, groupmember)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random)
+		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random, groupmember)
 	}
 }
 
@@ -98,9 +99,8 @@ const group_function_number = 1
 
 var group_function_type = []string{"unknow", "sign"}
 
-func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int) {
+func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}) {
 	admin := false
-	groupmember := GroupMemberModel.Api_find(*bot, *gid, *uid)
 	if len(groupmember) > 0 {
 		if groupmember["grouplevel"].(int64) >= 4 {
 			admin = true
@@ -164,7 +164,7 @@ func not_admin(bot *int, gid *int, uid *int) {
 	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid))
 }
 
-func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int) {
+func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup

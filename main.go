@@ -9,6 +9,8 @@ import (
 
 func main() {
 
+	go cron.BaseCron()
+
 	go Group.App_refresh_group_member_chan()
 
 	go cron.Retract()

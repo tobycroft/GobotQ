@@ -59,12 +59,12 @@ func PrivateMsg(pm PM) {
 	uid_string := Calc.Int2String(uid)
 	text := pm.Msg.Text
 
-	text_exists := Redis.CheckExists("PrivateMsg_" + uid_string)
+	text_exists := Redis.CheckExists("PrivateMsg:" + uid_string)
 	if text_exists {
 		return
 	}
 
-	Redis.SetRaw("PrivateMsg_"+uid_string, Calc.Md5(text), 3)
+	Redis.SetRaw("PrivateMsg:"+uid_string, Calc.Md5(text), 3)
 
 	PrivateHandle(bot, uid, text)
 }

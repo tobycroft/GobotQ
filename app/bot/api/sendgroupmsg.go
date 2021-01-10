@@ -56,7 +56,9 @@ func Send_group() {
 		if err != nil {
 
 		} else {
-			go send_retract(gss.Fromqq, gss.Togroup, gmr.Time)
+			if gss.AutoRetract {
+				go send_retract(gss.Fromqq, gss.Togroup, gmr.Time)
+			}
 		}
 	}
 }

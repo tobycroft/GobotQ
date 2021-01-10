@@ -14,6 +14,11 @@ import (
 
 func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
+	private_mode := false
+	if Calc.Any2String(groupfunction["sign_send_private"]) == "1" {
+		private_mode = true
+	}
+
 	auto_retract := false
 	if Calc.Any2String(groupfunction["sign_send_retract"]) == "1" {
 		auto_retract = true
@@ -25,8 +30,12 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 		api.Retract_chan_group <- ret
 	}
 	if len(sign) > 0 {
-		at := service.Serv_at(uid)
-		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
+		if private_mode {
+			api.Sendprivatemsg(bot, gid, "你今天已经签到过了")
+		} else {
+			at := service.Serv_at(uid)
+			api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
+		}
 	} else {
 		group_model := GroupBalanceModel.Api_find(gid, uid)
 		db := tuuz.Db()

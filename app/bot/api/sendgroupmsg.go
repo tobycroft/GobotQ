@@ -63,7 +63,7 @@ func Send_group() {
 }
 
 func send_retract(bot, gid, send_time interface{}) {
-	time.Sleep(2 * time.Second)
+	time.Sleep(5 * time.Second)
 	msg := GroupMsgModel.Api_find(bot, gid, send_time)
 	if len(msg) > 0 {
 		var rc Retract_group

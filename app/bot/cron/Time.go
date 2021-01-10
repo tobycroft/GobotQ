@@ -11,7 +11,6 @@ import (
 
 func BaseCron() {
 	for {
-		time.Sleep(3600 * time.Second)
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
 			gl, err := api.Getgrouplist(bot["bot"])
@@ -40,5 +39,6 @@ func BaseCron() {
 				GroupListModel.Api_insert_more(gss)
 			}
 		}
+		time.Sleep(3600 * time.Second)
 	}
 }

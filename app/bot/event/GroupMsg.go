@@ -167,15 +167,6 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "测试自动撤回":
-		var ret Retract_group
-		ret.Group = *gid
-		ret.Fromqq = *bot
-		ret.Random = *random
-		ret.Req = *req
-		if !admin {
-			return
-		}
-		Retract_chan_group <- ret
 		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+5)+"秒后撤回", true)
 		break
 

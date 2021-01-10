@@ -135,6 +135,10 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "刷新群信息":
+		if !admin {
+			not_admin(bot, gid, uid)
+			return
+		}
 		Group.App_refresh_groupinfo(bot, gid)
 		break
 

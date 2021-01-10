@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -10,7 +11,6 @@ type Gms struct {
 	Ret  string            `json:"ret"`
 	List []GroupMemberList `json:"List"`
 }
-
 type GroupMemberList struct {
 	UIN              int    `json:"UIN"`
 	Age              int    `json:"Age"`
@@ -37,6 +37,7 @@ func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(data)
 	var gms Gms
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gms)

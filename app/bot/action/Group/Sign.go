@@ -31,7 +31,7 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 	}
 	if len(sign) > 0 {
 		if private_mode {
-			api.Sendprivatemsg(bot, gid, "你今天已经签到过了")
+			api.Sendprivatemsg(bot, uid, "你今天已经签到过了")
 		} else {
 			at := service.Serv_at(uid)
 			api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
@@ -67,7 +67,7 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 				at := service.Serv_at(uid)
 				api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
 			} else {
-				api.Sendprivatemsg(bot, gid, "签到成功")
+				api.Sendprivatemsg(bot, uid, "签到成功")
 			}
 		}
 	}

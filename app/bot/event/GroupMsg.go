@@ -202,8 +202,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random, groupmember, groupfunction)
 }
 
-func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int,
-	groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	switch Type {
 
 	case "sign":

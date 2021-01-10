@@ -14,6 +14,7 @@ func main() {
 	go cron.Retract()
 	go cron.Send_private()
 	go cron.Send_group()
+	go cron.Send_temp()
 
 	go cron.GroupMsgRecv()
 	go cron.PrivateMsgRecv()

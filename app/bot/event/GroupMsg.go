@@ -128,8 +128,8 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		if !admin {
 			if len(groupmember) > 0 {
 				not_admin(bot, gid, uid)
+				return
 			}
-			return
 		}
 		Group.App_refreshmember(bot, gid, uid)
 		break

@@ -26,5 +26,6 @@ func App_refresh_groupinfo(bot *int, gid *int) {
 			gss = append(gss, gs)
 		}
 		GroupListModel.Api_insert_more(gss)
+		api.Sendgroupmsg(*bot, *gid, "群信息刷新完成")
 	}
 }

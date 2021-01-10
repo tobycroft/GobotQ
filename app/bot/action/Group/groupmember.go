@@ -1,7 +1,6 @@
 package Group
 
 import (
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -39,7 +38,7 @@ func App_refresh_group_member() {
 
 func App_refresh_group_member_one(bot, gid interface{}) {
 	gm, err := api.Getgroupmemberlist(bot, gid)
-	fmt.Println(gm, err)
+	//fmt.Println(gm, err)
 	if err != nil {
 
 	} else {

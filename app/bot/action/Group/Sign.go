@@ -63,8 +63,12 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 			return
 		} else {
 			db.Commit()
-			at := service.Serv_at(uid)
-			api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
+			if private_mode {
+				at := service.Serv_at(uid)
+				api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
+			} else {
+				api.Sendprivatemsg(bot, gid, "签到成功")
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/config/app_conf"
@@ -65,6 +66,7 @@ func Send_group() {
 func send_retract(bot, gid, send_time interface{}) {
 	time.Sleep(2 * time.Second)
 	msg := GroupMsgModel.Api_find(bot, gid, send_time)
+	fmt.Println("撤回", msg)
 	if len(msg) > 0 {
 		var rc Retract_group
 		rc.Fromqq = bot

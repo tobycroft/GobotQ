@@ -32,7 +32,17 @@ func Retract() {
 	go retract_private()
 	go retract_group()
 	go retract_private_instant()
-	retract_group_instant()
+	go retract_group_instant()
+
+	go retract_private2()
+	go retract_group2()
+	go retract_private_instant2()
+	go retract_group_instant2()
+
+	go retract_private3()
+	go retract_group3()
+	go retract_private_instant3()
+	go retract_group_instant3()
 }
 
 func retract_private() {
@@ -111,6 +121,46 @@ func retract_private_instant2() {
 
 func retract_group_instant2() {
 	for r := range Retract_chan_group_instant {
+		api.Deletegroupmsg(r.Fromqq, r.Group, r.Random, r.Req)
+	}
+}
+
+func retract_private3() {
+	for r := range api.Retract_chan_private {
+		go func() {
+			time.Sleep(app_conf.Retract_time_second * time.Second)
+			select {
+			case api.Retract_chan_private_instant <- r:
+
+			case <-time.After(5 * time.Second):
+				return
+			}
+		}()
+	}
+}
+
+func retract_group3() {
+	for r := range api.Retract_chan_group {
+		go func() {
+			time.Sleep(app_conf.Retract_time_second * time.Second)
+			select {
+			case api.Retract_chan_group_instant <- r:
+
+			case <-time.After(5 * time.Second):
+				return
+			}
+		}()
+	}
+}
+
+func retract_private_instant3() {
+	for r := range api.Retract_chan_private_instant {
+		api.Deleteprivatemsg(r.Fromqq, r.Toqq, r.Random, r.Req, r.Time)
+	}
+}
+
+func retract_group_instant3() {
+	for r := range api.Retract_chan_group_instant {
 		api.Deletegroupmsg(r.Fromqq, r.Group, r.Random, r.Req)
 	}
 }

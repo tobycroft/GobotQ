@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -87,11 +88,12 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	groupmember := GroupMemberModel.Api_find(bot, gid, uid)
+	groupfunction := GroupFunctionModel.Api_find(gid)
 	if active {
-		groupHandle_acfur(&bot, &gid, &uid, new_text, &req, &random, groupmember)
+		groupHandle_acfur(&bot, &gid, &uid, new_text, &req, &random, groupmember, groupfunction)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random, groupmember)
+		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random, groupmember, groupfunction)
 	}
 }
 
@@ -99,7 +101,7 @@ const group_function_number = 1
 
 var group_function_type = []string{"unknow", "sign"}
 
-func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}) {
+func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	admin := false
 	if len(groupmember) > 0 {
 		if groupmember["grouplevel"].(int64) >= 4 {
@@ -155,7 +157,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	default:
-		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember)
+		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
 		break
 	}
 }
@@ -164,7 +166,7 @@ func not_admin(bot *int, gid *int, uid *int) {
 	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid))
 }
 
-func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}) {
+func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
@@ -183,10 +185,11 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 			break
 		}
 	}
-	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random)
+	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random, groupmember, groupfunction)
 }
 
-func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int) {
+func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int,
+	groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	switch Type {
 
 	case "sign":

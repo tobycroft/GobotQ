@@ -28,12 +28,36 @@ type SendGroupTempMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendgrouptempmsg(fromqq, togroup, toqq interface{}, text string) (SendGroupTempMsg, SendGroupTempMsgRet, error) {
+func Sendgrouptempmsg(fromqq, togroup, toqq interface{}, text string) {
+	var gst GroupSendTempStruct
+	gst.Fromqq = fromqq
+	gst.Togroup = togroup
+	gst.Toqq = toqq
+	gst.Text = text
+	Group_send_temp_chan <- gst
+}
+
+var Group_send_temp_chan = make(chan GroupSendTempStruct, 20)
+
+type GroupSendTempStruct struct {
+	Fromqq  interface{}
+	Togroup interface{}
+	Toqq    interface{}
+	Text    string
+}
+
+func Send_GroupTempMsg() {
+	for gst := range Group_send_temp_chan {
+		sendgrouptempmsg(gst)
+	}
+}
+
+func sendgrouptempmsg(gst GroupSendTempStruct) (SendGroupTempMsg, SendGroupTempMsgRet, error) {
 	post := map[string]interface{}{
-		"fromqq":  fromqq,
-		"togroup": togroup,
-		"toqq":    toqq,
-		"text":    url.QueryEscape(text),
+		"fromqq":  gst.Fromqq,
+		"togroup": gst.Togroup,
+		"toqq":    gst.Toqq,
+		"text":    url.QueryEscape(gst.Text),
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/sendgrouptempmsg", nil, post, nil, nil)
 	if err != nil {

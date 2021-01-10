@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
@@ -42,7 +41,6 @@ func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 	var gms Gms
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gms)
-	fmt.Println(gms)
 	if err != nil {
 		return nil, err
 	}

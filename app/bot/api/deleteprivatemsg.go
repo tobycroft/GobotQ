@@ -6,6 +6,17 @@ import (
 	"main.go/tuuz/Net"
 )
 
+type Retract_private struct {
+	Fromqq interface{}
+	Toqq   interface{}
+	Random interface{}
+	Req    interface{}
+	Time   interface{}
+}
+
+var Retract_chan_private = make(chan Retract_private, 20)
+var Retract_chan_private_instant = make(chan Retract_private, 20)
+
 type DeletePrivateMsgRet struct {
 	Ret string `json:"ret"`
 }

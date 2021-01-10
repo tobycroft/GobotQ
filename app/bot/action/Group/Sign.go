@@ -15,7 +15,7 @@ func App_group_sign(bot, gid, uid interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
 	if len(sign) > 0 {
 		at := service.Serv_at(uid)
-		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at)
+		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, true)
 	} else {
 		group_model := GroupBalanceModel.Api_find(gid, uid)
 		db := tuuz.Db()
@@ -44,7 +44,7 @@ func App_group_sign(bot, gid, uid interface{}) {
 		} else {
 			db.Commit()
 			at := service.Serv_at(uid)
-			api.Sendgroupmsg(bot, gid, "签到成功"+at)
+			api.Sendgroupmsg(bot, gid, "签到成功"+at, true)
 		}
 	}
 }

@@ -38,7 +38,7 @@ func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
 
 		str += "\r\n"
 	}
-	api.Sendgroupmsg(*bot, *gid, str)
+	api.Sendgroupmsg(*bot, *gid, str, true)
 }
 
 func App_group_function_set(bot *int, gid *int, uid *int, text *string) {

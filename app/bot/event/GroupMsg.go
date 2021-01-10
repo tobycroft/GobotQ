@@ -149,6 +149,9 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		ret.Fromqq = *bot
 		ret.Random = *random
 		ret.Req = *req
+		if !admin {
+			return
+		}
 		cron.Retract_chan_group_instant <- ret
 		break
 

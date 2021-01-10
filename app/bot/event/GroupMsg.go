@@ -134,6 +134,10 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		Group.App_refreshmember(bot, gid, uid)
 		break
 
+	case "刷新群信息":
+		Group.App_refresh_groupinfo(bot, gid)
+		break
+
 	default:
 		groupHandle_acfur_middle(bot, gid, uid, &text, req, random)
 		break

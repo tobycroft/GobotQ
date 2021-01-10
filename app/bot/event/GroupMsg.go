@@ -3,7 +3,6 @@ package event
 import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
-	"main.go/app/bot/cron"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -144,7 +143,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "撤回测试":
-		var ret cron.Retract_group
+		var ret Retract_group
 		ret.Group = *gid
 		ret.Fromqq = *bot
 		ret.Random = *random
@@ -152,7 +151,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		if !admin {
 			return
 		}
-		cron.Retract_chan_group_instant <- ret
+		Retract_chan_group_instant <- ret
 		break
 
 	default:

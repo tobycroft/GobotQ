@@ -143,12 +143,7 @@ func retract_group3() {
 	for r := range api.Retract_chan_group {
 		go func() {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
-			select {
-			case api.Retract_chan_group_instant <- r:
-
-			case <-time.After(5 * time.Second):
-				return
-			}
+			api.Retract_chan_group_instant <- r
 		}()
 	}
 }

@@ -131,7 +131,6 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 			}
 			return
 		}
-
 		Group.App_refreshmember(bot, gid, uid)
 		break
 

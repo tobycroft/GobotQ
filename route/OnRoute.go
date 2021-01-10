@@ -4,12 +4,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/event"
 	v1 "main.go/route/v1"
+	"main.go/tuuz/Input"
 )
 
 func OnRoute(router *gin.Engine) {
 	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
-		event.EventRouter(string(data))
+		json := Input.Fliter_Ascii(string(data))
+		json = Input.Fliter_error_encode(json)
+		event.EventRouter(json)
 		context.String(200, "ok")
 	})
 	version1 := router.Group("/v1")

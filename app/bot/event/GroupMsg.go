@@ -4,7 +4,6 @@ import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupMemberModel"
-	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
@@ -50,9 +49,10 @@ type GM struct {
 	} `json:"File"`
 }
 
+var GroupMsgChan = make(chan GM, 99)
+
 func GroupMsg(gm GM) {
-	GroupMsgModel.Api_insert(gm.LogonQQ, gm.FromQQ.UIN, gm.FromGroup.GIN, gm.Msg.Text, gm.Msg.Req, gm.Msg.Random, gm.File.ID, gm.File.MD5,
-		gm.File.Name, gm.File.Size)
+	GroupMsgChan <- gm
 	is_self := false
 
 	text := gm.Msg.Text

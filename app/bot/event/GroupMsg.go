@@ -102,7 +102,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 	admin := false
 	groupmember := GroupMemberModel.Api_find(*bot, *gid, *uid)
 	if len(groupmember) > 0 {
-		if groupmember["grouplevel"].(int64) > 2 {
+		if groupmember["grouplevel"].(int64) >= 4 {
 			admin = true
 		}
 	}

@@ -3,6 +3,8 @@ package api
 import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
+	"main.go/app/bot/event"
+	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
 	"net/url"
@@ -50,7 +52,25 @@ type GroupSendStruct struct {
 
 func Send_group() {
 	for gss := range Group_send_chan {
-		sendgroupmsg(gss)
+		_, gmr, err := sendgroupmsg(gss)
+		if err != nil {
+
+		} else {
+			go send_retract(gss.Fromqq, gss.Togroup, gmr.Time)
+		}
+	}
+}
+
+func send_retract(bot, gid, send_time interface{}) {
+	time.Sleep(2 * time.Second)
+	msg := GroupMsgModel.Api_find(bot, gid, send_time)
+	if len(msg) > 0 {
+		var rc event.Retract_group
+		rc.Fromqq = bot
+		rc.Req = msg["req"]
+		rc.Random = msg["random"]
+		rc.Group = gid
+		event.Retract_chan_group <- rc
 	}
 }
 

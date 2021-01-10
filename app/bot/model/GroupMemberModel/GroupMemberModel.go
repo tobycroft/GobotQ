@@ -9,7 +9,7 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	Bot        interface{} `gorose:"uid"`
+	Bot        interface{} `gorose:"bot"`
 	Gid        interface{} `gorose:"gid"`
 	Uid        interface{} `gorose:"uid"`
 	Title      string      `gorose:"title"`

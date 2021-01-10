@@ -18,7 +18,6 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 	if Calc.Any2String(groupfunction["sign_send_private"]) == "1" {
 		private_mode = true
 	}
-
 	auto_retract := false
 	if Calc.Any2String(groupfunction["sign_send_retract"]) == "1" {
 		auto_retract = true
@@ -31,7 +30,7 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 	}
 	if len(sign) > 0 {
 		if private_mode {
-			api.Sendprivatemsg(bot, uid, "你今天已经签到过了")
+			api.Sendgrouptempmsg(bot, gid, uid, "你今天已经签到过了")
 		} else {
 			at := service.Serv_at(uid)
 			api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
@@ -67,7 +66,7 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 				at := service.Serv_at(uid)
 				api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
 			} else {
-				api.Sendprivatemsg(bot, uid, "签到成功")
+				api.Sendgrouptempmsg(bot, gid, uid, "签到成功")
 			}
 		}
 	}

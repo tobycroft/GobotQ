@@ -165,6 +165,10 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		}
 		break
 
+	case "测试自动撤回":
+		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计115秒后撤回", true)
+		break
+
 	default:
 		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
 		break

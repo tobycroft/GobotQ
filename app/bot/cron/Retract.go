@@ -1,6 +1,7 @@
 package cron
 
 import (
+	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/event"
 	"main.go/config/app_conf"
@@ -141,10 +142,11 @@ func retract_private3() {
 
 func retract_group3() {
 	for r := range api.Retract_chan_group {
-		go func() {
+		fmt.Println("activeretrtact", r)
+		go func(retract api.Retract_group) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
-			api.Retract_chan_group_instant <- r
-		}()
+			api.Retract_chan_group_instant <- retract
+		}(r)
 	}
 }
 

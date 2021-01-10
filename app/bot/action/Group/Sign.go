@@ -8,14 +8,20 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/tuuz"
+	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 )
 
 func App_group_sign(bot, gid, uid interface{}, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
+	auto_retract := false
+	if Calc.Any2String(groupfunction["sign_send_retract"]) == "1" {
+		auto_retract = true
+	}
 	if len(sign) > 0 {
 		at := service.Serv_at(uid)
-		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, true)
+
+		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
 	} else {
 		group_model := GroupBalanceModel.Api_find(gid, uid)
 		db := tuuz.Db()
@@ -44,7 +50,7 @@ func App_group_sign(bot, gid, uid interface{}, groupmember map[string]interface{
 		} else {
 			db.Commit()
 			at := service.Serv_at(uid)
-			api.Sendgroupmsg(bot, gid, "签到成功"+at, true)
+			api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
 		}
 	}
 }

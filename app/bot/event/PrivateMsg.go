@@ -50,9 +50,9 @@ type PM struct {
 	} `json:"File"`
 }
 
+var PrivateMsgChan = make(chan PM, 99)
+
 func PrivateMsg(pm PM) {
-	PrivateMsgModel.Api_insert(pm.LogonQQ, pm.FromQQ.UIN, pm.Msg.Text, pm.Msg.Req, pm.Msg.Seq, pm.Msg.Type, pm.Msg.SubType, pm.File.ID,
-		pm.File.MD5, pm.File.Name, pm.File.Size)
 
 	bot := pm.LogonQQ
 	uid := pm.FromQQ.UIN

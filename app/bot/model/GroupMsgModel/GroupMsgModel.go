@@ -7,7 +7,7 @@ import (
 
 const table = "group_msg"
 
-func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, file_size interface{}) bool {
+func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, file_size, send, recv interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"bot":       bot,
@@ -20,6 +20,8 @@ func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, 
 		"file_md5":  file_md5,
 		"file_name": file_name,
 		"file_size": file_size,
+		"send":      send,
+		"recv":      recv,
 	}
 	db.Data(data)
 	_, err := db.Insert()

@@ -42,7 +42,7 @@ func Retract() {
 	go retract_private3()
 	go retract_group3()
 	go retract_private_instant3()
-	go retract_group_instant3()
+	retract_group_instant3()
 }
 
 func retract_private() {

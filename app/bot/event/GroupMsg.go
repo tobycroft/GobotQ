@@ -7,6 +7,8 @@ import (
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Redis"
 	"regexp"
 	"sync"
 )
@@ -63,6 +65,16 @@ func GroupMsg(gm GM) {
 		is_self = true
 	}
 
+	uid_string := Calc.Int2String(uid)
+	gid_string := Calc.Int2String(gid)
+
+	text_exists := Redis.CheckExists("GroupMsg:" + gid_string + ":" + uid_string)
+	if text_exists {
+		return
+	}
+
+	Redis.SetRaw("GroupMsg:"+gid_string+":"+uid_string, Calc.Md5(text), 3)
+
 	if !is_self {
 		GroupHandle(bot, gid, uid, text, gm.Msg.Req, retract)
 	} else {
@@ -113,6 +125,13 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "刷新人数":
+		if !admin {
+			if len(groupmember) > 0 {
+				not_admin(bot, gid, uid)
+			}
+			return
+		}
+
 		Group.App_refreshmember(bot, gid, uid)
 		break
 

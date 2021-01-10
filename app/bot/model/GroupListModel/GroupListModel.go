@@ -86,3 +86,18 @@ func Api_delete(bot interface{}) bool {
 		return true
 	}
 }
+
+func Api_delete_byGid(gid interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

@@ -20,7 +20,6 @@ func App_group_sign(bot, gid, uid interface{}, groupmember map[string]interface{
 	}
 	if len(sign) > 0 {
 		at := service.Serv_at(uid)
-
 		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
 	} else {
 		group_model := GroupBalanceModel.Api_find(gid, uid)

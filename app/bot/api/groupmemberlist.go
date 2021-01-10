@@ -7,11 +7,11 @@ import (
 )
 
 type Gms struct {
-	Ret  string          `json:"ret"`
-	List GroupMemberList `json:"List"`
+	Ret  string            `json:"ret"`
+	List []GroupMemberList `json:"List"`
 }
 
-type GroupMemberList []struct {
+type GroupMemberList struct {
 	UIN              int    `json:"UIN"`
 	Age              int    `json:"Age"`
 	Sex              int    `json:"Sex"`
@@ -28,7 +28,7 @@ type GroupMemberList []struct {
 	GroupLevel       int    `json:"GroupLevel"`
 }
 
-func Getgroupmemberlist(bot, group interface{}) (GroupMemberList, error) {
+func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 	post := map[string]interface{}{
 		"logonqq": bot,
 		"group":   group,

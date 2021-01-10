@@ -6,7 +6,6 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
-	"main.go/app/bot/model/PrivateMsgModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
@@ -53,6 +52,7 @@ type PM struct {
 var PrivateMsgChan = make(chan PM, 99)
 
 func PrivateMsg(pm PM) {
+	PrivateMsgChan <- pm
 
 	bot := pm.LogonQQ
 	uid := pm.FromQQ.UIN

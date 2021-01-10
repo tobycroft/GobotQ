@@ -41,7 +41,7 @@ func Api_find(bot, gid, send interface{}) gorose.Data {
 		"gid": gid,
 	}
 	db.Where(where)
-	db.Where("send", ">", send)
+	db.Where("send", ">=", send)
 	db.Order("id asc")
 	ret, err := db.First()
 	if err != nil {

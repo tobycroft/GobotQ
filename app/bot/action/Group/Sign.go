@@ -12,11 +12,17 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func App_group_sign(bot, gid, uid interface{}, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
 	auto_retract := false
 	if Calc.Any2String(groupfunction["sign_send_retract"]) == "1" {
 		auto_retract = true
+		var ret api.Retract_group
+		ret.Group = gid
+		ret.Fromqq = bot
+		ret.Random = random
+		ret.Req = req
+		api.Retract_chan_group <- ret
 	}
 	if len(sign) > 0 {
 		at := service.Serv_at(uid)

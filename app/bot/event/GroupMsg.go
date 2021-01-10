@@ -108,6 +108,10 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		Group.App_group_function_get_all(bot, gid, uid, &text)
 		break
 
+	case "刷新人数":
+		Group.App_refreshmember(bot, gid, uid)
+		break
+
 	default:
 		groupHandle_acfur_middle(bot, gid, uid, &text, req, random)
 		break

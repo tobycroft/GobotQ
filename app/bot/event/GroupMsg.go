@@ -207,7 +207,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 	switch Type {
 
 	case "sign":
-		Group.App_group_sign(*bot, *gid, *uid)
+		Group.App_group_sign(*bot, *gid, *uid, *req, *random, groupmember, groupfunction)
 		break
 
 	default:

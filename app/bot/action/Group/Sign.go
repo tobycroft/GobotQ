@@ -11,7 +11,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func App_group_sign(bot, gid, uid interface{}) {
+func App_group_sign(bot, gid, uid interface{}, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
 	if len(sign) > 0 {
 		at := service.Serv_at(uid)

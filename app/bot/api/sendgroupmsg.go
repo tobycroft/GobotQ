@@ -26,11 +26,12 @@ type GroupMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendgroupmsg(fromqq, togroup interface{}, text string) {
+func Sendgroupmsg(fromqq, togroup interface{}, text string, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.Fromqq = fromqq
 	gss.Togroup = togroup
 	gss.Text = text
+	gss.AutoRetract = AutoRetract
 
 	select {
 	case Group_send_chan <- gss:
@@ -41,9 +42,10 @@ func Sendgroupmsg(fromqq, togroup interface{}, text string) {
 }
 
 type GroupSendStruct struct {
-	Fromqq  interface{}
-	Togroup interface{}
-	Text    string
+	Fromqq      interface{}
+	Togroup     interface{}
+	Text        string
+	AutoRetract bool
 }
 
 func Send_group() {

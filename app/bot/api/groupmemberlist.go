@@ -4,7 +4,6 @@ import (
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
-	"main.go/tuuz/Jsong"
 	"main.go/tuuz/Net"
 )
 
@@ -41,10 +40,9 @@ func Getgroupmemberlist(bot, group interface{}) (interface{}, error) {
 	fmt.Println(data)
 	var gms Gms
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	Jsong.JArray()
 	err = jsr.UnmarshalFromString(data, &gms)
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return gms.List, nil
 }

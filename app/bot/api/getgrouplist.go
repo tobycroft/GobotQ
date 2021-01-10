@@ -1,17 +1,19 @@
 package api
 
 import (
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
+	"strings"
 )
 
 type Gls struct {
-	Ret  string    `json:"ret"`
-	List GroupList `json:"List"`
+	Ret  string      `json:"ret"`
+	List []GroupList `json:"List"`
 }
 
-type GroupList []struct {
+type GroupList struct {
 	GroupID                int    `json:"GroupID"`
 	GIN                    int    `json:"GIN"`
 	CFlag                  int    `json:"cFlag"`
@@ -42,7 +44,7 @@ type GroupList []struct {
 	StrGroupMemo           string `json:"strGroupMemo"`
 }
 
-func Getgrouplist(bot interface{}) (GroupList, error) {
+func Getgrouplist(bot interface{}) ([]GroupList, error) {
 	post := map[string]interface{}{
 		"logonqq": bot,
 	}
@@ -50,6 +52,8 @@ func Getgrouplist(bot interface{}) (GroupList, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(data)
+	data = strings.ReplaceAll(data, "\\'", "'")
 	var gls Gls
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gls)

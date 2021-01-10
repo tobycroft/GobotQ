@@ -1,6 +1,7 @@
 package GroupMsgModel
 
 import (
+	"github.com/gohouse/gorose/v2"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )
@@ -30,5 +31,21 @@ func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, 
 		return false
 	} else {
 		return true
+	}
+}
+
+func Api_find(bot, send interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot":  bot,
+		"send": send,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
 	}
 }

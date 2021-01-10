@@ -29,7 +29,7 @@ func init() {
 	}
 }
 
-func Rpc(url string, postData map[string]interface{}, username, password string) (string, error) {
+func Rpc(url string, postData interface{}, username, password string) (string, error) {
 	req := Request()
 	header := map[string]string{"Content-type": "application/json"}
 	req.SetHeaders(header)

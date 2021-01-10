@@ -8,8 +8,8 @@ import (
 )
 
 type Gms struct {
-	Ret  string              `json:"ret"`
-	List jsoniter.RawMessage `json:"List" bson:"List"`
+	Ret  string            `json:"ret"`
+	List []GroupMemberList `json:"List" bson:"List"`
 }
 type GroupMemberList struct {
 	UIN              int    `json:"UIN"`
@@ -44,5 +44,5 @@ func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return gms.List, nil
 }

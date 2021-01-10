@@ -1,6 +1,7 @@
 package Group
 
 import (
+	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -38,6 +39,7 @@ func App_refresh_group_member() {
 
 func App_refresh_group_member_one(bot, gid interface{}) {
 	gm, err := api.Getgroupmemberlist(bot, gid)
+	fmt.Println(gm, err)
 	if err != nil {
 
 	} else {
@@ -48,13 +50,13 @@ func App_refresh_group_member_one(bot, gid interface{}) {
 			g.Bot = bot
 			g.Gid = gid
 			g.Uid = gmm.UIN
-			g.Remark = gmm.Remark
-			g.Nickname = gmm.NickName
+			g.Remark = (gmm.Remark)
+			g.Nickname = (gmm.NickName)
 			//g.Age = gmm.Age
-			g.Card = gmm.Card
+			g.Card = (gmm.Card)
 			g.Grouplevel = gmm.GroupLevel
 			g.Jointime = gmm.AddGroupTime
-			g.Title = gmm.SpecTitle
+			g.Title = (gmm.SpecTitle)
 			g.Lastsend = gmm.LastMsgTime
 			gms = append(gms, g)
 		}

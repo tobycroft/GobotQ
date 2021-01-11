@@ -1,12 +1,5 @@
 package main
 
-import (
-	"github.com/gin-gonic/gin"
-	"main.go/app/bot/action/Group"
-	"main.go/app/bot/cron"
-	"main.go/route"
-)
-
 func main() {
 
 	go cron.BaseCron()

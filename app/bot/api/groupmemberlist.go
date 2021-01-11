@@ -3,8 +3,8 @@ package api
 import (
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
+	"main.go/tuuz/Input"
 	"main.go/tuuz/Net"
-	"strings"
 )
 
 type Gms struct {
@@ -37,7 +37,8 @@ func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = strings.ReplaceAll(data, "\\'", "'")
+	data = Input.Fliter_Ascii(data)
+	data = Input.Fliter_error_encode(data)
 	var gms Gms
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gms)

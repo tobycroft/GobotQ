@@ -175,6 +175,18 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", true)
 		break
 
+	case "屏蔽":
+		break
+
+	case "屏蔽词":
+		break
+
+	case "T出词":
+		break
+
+	case "撤回词":
+		break
+
 	default:
 		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
 		break
@@ -209,7 +221,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	}(2, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(*text, []string{"acfur屏蔽词"})
+		str, ok := service.Serv_text_match(*text, []string{"acfur屏蔽"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(3, &wg)
@@ -233,6 +245,10 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "setting":
 		Group.App_group_function_set(*bot, *gid, *uid, text, *req, *random, groupmember, groupfunction)
+		break
+
+	case "ban_word":
+
 		break
 
 	default:

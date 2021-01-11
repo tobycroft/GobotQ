@@ -44,7 +44,7 @@ func App_refresh_group_member_one(bot, gid, owner interface{}) {
 	gm, err := api.Getgroupmemberlist(bot, gid)
 	//fmt.Println(gm, err)
 	if err != nil {
-
+		fmt.Println(tuuz.FUNCTION_ALL(), err)
 	} else {
 		admins, err := api.Getgroupmgrlist(bot)
 		if err != nil {

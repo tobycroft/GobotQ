@@ -180,15 +180,15 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		break
 
 	case "屏蔽词":
-		Group.App_group_ban_word_list(*bot, *gid, *uid, 1, groupmember, groupfunction)
+		Group.App_group_ban_word_list(*bot, *gid, *uid, new_text, 1, groupmember, groupfunction)
 		break
 
 	case "T出词":
-		Group.App_group_ban_word_list(*bot, *gid, *uid, 2, groupmember, groupfunction)
+		Group.App_group_ban_word_list(*bot, *gid, *uid, new_text, 2, groupmember, groupfunction)
 		break
 
 	case "撤回词":
-		Group.App_group_ban_word_list(*bot, *gid, *uid, 3, groupmember, groupfunction)
+		Group.App_group_ban_word_list(*bot, *gid, *uid, new_text, 3, groupmember, groupfunction)
 		break
 
 	default:

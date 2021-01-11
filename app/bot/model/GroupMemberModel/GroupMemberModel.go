@@ -19,6 +19,7 @@ type GroupMember struct {
 	Jointime   int         `gorose:"jointime"`
 	Lastsend   int         `gorose:"lastsend"`
 	Grouplevel int         `gorose:"grouplevel"`
+	Type       string      `gorose:"type"`
 }
 
 func Api_insert(gm GroupMember) bool {

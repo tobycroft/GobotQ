@@ -91,7 +91,11 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 			break
 
 		case "string":
-			value = set
+			if len(set) > 0 {
+				value = set
+			} else {
+				api.Sendgroupmsg(bot, gid, name+"的设定有误，例子：acfur设定"+name+":"+"你要设定的文字", true)
+			}
 			break
 
 		default:

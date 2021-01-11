@@ -1,9 +1,11 @@
 package Group
 
 import (
+	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 )
 
@@ -46,7 +48,7 @@ func App_refresh_group_member_one(bot, gid, owner interface{}) {
 	} else {
 		admins, err := api.Getgroupmgrlist(bot)
 		if err != nil {
-
+			fmt.Println(tuuz.FUNCTION_ALL(), err)
 		} else {
 			GroupMemberModel.Api_delete_byGid(bot, gid)
 			var gms []GroupMemberModel.GroupMember

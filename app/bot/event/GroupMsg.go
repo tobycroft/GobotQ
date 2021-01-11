@@ -181,9 +181,9 @@ func not_admin(bot *int, gid *int, uid *int) {
 	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid), true)
 }
 
-const group_function_number = 2
+const group_function_number = 3
 
-var group_function_type = []string{"unknow", "sign", "setting"}
+var group_function_type = []string{"unknow", "sign", "setting", "ban_word"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -203,6 +203,12 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 		new_text[idx] = str
 		function[idx] = ok
 	}(2, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(*text, []string{"acfur屏蔽词"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(3, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {

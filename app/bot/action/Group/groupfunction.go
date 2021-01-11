@@ -55,16 +55,44 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 		strs = strings.Split(text, "：")
 	}
 	name := ""
-	value := ""
+	set := ""
 	for k, v := range strs {
 		if k == 0 {
 			name = v
 		} else {
-			value += v
+			set += v
 		}
 	}
 	detail := GroupFunctionDetailModel.Api_find_byName(name)
 	if len(detail) > 0 {
+		var value interface{}
+		switch detail["type"].(string) {
+		case "bool":
+			if set == "开" || set == "是" || set == "on" || set == "1" || set == "true" {
+				value = "开"
+			} else {
+				value = "关"
+			}
+			break
+
+		case "int":
+			i, err := Calc.Any2Int_2(set)
+			if err != nil {
+				api.Sendgroupmsg(bot, gid, name+"只能设定为数字整数,请调整为数字整数", true)
+				return
+			} else {
+				value = i
+			}
+			break
+
+		case "string":
+			value = set
+			break
+
+		default:
+			value = 0
+			break
+		}
 		if GroupFunctionModel.Api_update(gid, name, value) {
 			api.Sendgroupmsg(bot, gid, "设定成功", true)
 		} else {

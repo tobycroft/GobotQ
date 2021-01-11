@@ -122,7 +122,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 	case "设定":
 		if !admin && !owner {
-			not_admin(bot, gid, uid)
+			service.Not_admin(bot, gid, uid)
 			return
 		}
 		Group.App_group_function_get_all(bot, gid, uid, &new_text)
@@ -135,7 +135,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 	case "刷新人数":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
-				not_admin(bot, gid, uid)
+				service.Not_admin(bot, gid, uid)
 				return
 			}
 		}
@@ -144,7 +144,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 	case "刷新群信息":
 		if !admin && !owner {
-			not_admin(bot, gid, uid)
+			service.Not_admin(bot, gid, uid)
 			return
 		}
 		Group.App_refresh_groupinfo(bot, gid)
@@ -197,10 +197,6 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 	}
 }
 
-func not_admin(bot *int, gid *int, uid *int) {
-	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid), true)
-}
-
 const group_function_number = 3
 
 var group_function_type = []string{"unknow", "sign", "setting", "ban_word"}
@@ -241,17 +237,39 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 }
 
 func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	admin := false
+	owner := false
+	if len(groupmember) > 0 {
+		if groupmember["type"].(string) == "admin" {
+			admin = true
+		}
+		if groupmember["type"].(string) == "owner" {
+			admin = true
+			owner = true
+		}
+	}
 	switch Type {
-
 	case "sign":
 		Group.App_group_sign(*bot, *gid, *uid, *req, *random, groupmember, groupfunction)
 		break
 
 	case "setting":
+		if !admin && !owner {
+			if len(groupmember) > 0 {
+				service.Not_admin(bot, gid, uid)
+				return
+			}
+		}
 		Group.App_group_function_set(*bot, *gid, *uid, text, *req, *random, groupmember, groupfunction)
 		break
 
 	case "ban_word":
+		if !admin && !owner {
+			if len(groupmember) > 0 {
+				service.Not_admin(bot, gid, uid)
+				return
+			}
+		}
 		Group.App_group_ban_word_set(*bot, *gid, *uid, text, groupmember, groupfunction)
 		break
 

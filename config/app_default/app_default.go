@@ -30,3 +30,5 @@ const Default_str_login_text = "如果忘记密码或需要修改密码，再次
 	"请输入:\r\nacfur密码+要设定的密码\r\n例如:\"acfur密码123456\"\r\n密码长度允许1-16位,没有复杂度限制，可设定中文密码"
 
 const Default_error_alert = "系统故障，向机器人小组反馈：\r\n542749156\r\n谢谢！"
+
+const Default_app_download_url = "下载地址还没有准备好，请年后再试"

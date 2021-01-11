@@ -8,15 +8,16 @@ import (
 )
 
 type App_group_member struct {
-	Bot interface{}
-	Gid interface{}
+	Bot   interface{}
+	Gid   interface{}
+	Owner interface{}
 }
 
 var Chan_refresh_group_member = make(chan App_group_member, 99)
 
 func App_refresh_group_member_chan() {
 	for gm := range Chan_refresh_group_member {
-		App_refresh_group_member_one(gm.Bot, gm.Gid)
+		App_refresh_group_member_one(gm.Bot, gm.Gid, gm.Owner)
 	}
 }
 
@@ -43,31 +44,35 @@ func App_refresh_group_member_one(bot, gid, owner interface{}) {
 	if err != nil {
 
 	} else {
-		admins := api.Getgroupmgrlist(bot["bot"])
-		GroupMemberModel.Api_delete_byGid(bot, gid)
-		var gms []GroupMemberModel.GroupMember
-		for _, gmm := range gm {
-			var g GroupMemberModel.GroupMember
-			g.Bot = bot
-			g.Gid = gid
-			g.Uid = gmm.UIN
-			g.Remark = (gmm.Remark)
-			g.Nickname = (gmm.NickName)
-			//g.Age = gmm.Age
-			g.Card = (gmm.Card)
-			g.Grouplevel = gmm.GroupLevel
-			g.Jointime = gmm.AddGroupTime
-			g.Title = (gmm.SpecTitle)
-			g.Lastsend = gmm.LastMsgTime
-			if admins[Calc.Int2String(gmm.UIN)] == true {
-				g.Type = "admin"
-			} else if owner == gmm.UIN {
-				g.Type = "owner"
-			} else {
-				g.Type = "member"
+		admins, err := api.Getgroupmgrlist(bot)
+		if err != nil {
+
+		} else {
+			GroupMemberModel.Api_delete_byGid(bot, gid)
+			var gms []GroupMemberModel.GroupMember
+			for _, gmm := range gm {
+				var g GroupMemberModel.GroupMember
+				g.Bot = bot
+				g.Gid = gid
+				g.Uid = gmm.UIN
+				g.Remark = (gmm.Remark)
+				g.Nickname = (gmm.NickName)
+				//g.Age = gmm.Age
+				g.Card = (gmm.Card)
+				g.Grouplevel = gmm.GroupLevel
+				g.Jointime = gmm.AddGroupTime
+				g.Title = (gmm.SpecTitle)
+				g.Lastsend = gmm.LastMsgTime
+				if admins[Calc.Int2String(gmm.UIN)] == true {
+					g.Type = "admin"
+				} else if owner == gmm.UIN {
+					g.Type = "owner"
+				} else {
+					g.Type = "member"
+				}
+				gms = append(gms, g)
 			}
-			gms = append(gms, g)
+			GroupMemberModel.Api_insert_more(gms)
 		}
-		GroupMemberModel.Api_insert_more(gms)
 	}
 }

@@ -61,3 +61,25 @@ func Api_delete(gid, word interface{}) bool {
 		return true
 	}
 }
+
+func Api_update(gid, word, is_kick, is_ban, is_retract interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid":  gid,
+		"word": word,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"is_kick":    is_kick,
+		"is_ban":     is_ban,
+		"is_retract": is_retract,
+	}
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

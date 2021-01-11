@@ -69,9 +69,9 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 		switch detail["type"].(string) {
 		case "bool":
 			if set == "开" || set == "是" || set == "on" || set == "1" || set == "true" {
-				value = "开"
+				value = true
 			} else {
-				value = "关"
+				value = false
 			}
 			break
 

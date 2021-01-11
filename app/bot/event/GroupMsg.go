@@ -176,6 +176,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		break
 
 	case "屏蔽":
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_str_ban_word, false)
 		break
 
 	case "屏蔽词":

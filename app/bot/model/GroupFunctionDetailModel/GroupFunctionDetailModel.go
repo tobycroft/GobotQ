@@ -38,6 +38,21 @@ func Api_find_type_byName(name interface{}) interface{} {
 	}
 }
 
+func Api_find_byName(name interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"name": name,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
 	ret, err := db.Get()

@@ -183,7 +183,7 @@ func not_admin(bot *int, gid *int, uid *int) {
 
 const group_function_number = 2
 
-var group_function_type = []string{"unknow", "sign"}
+var group_function_type = []string{"unknow", "sign", "setting"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)

@@ -12,9 +12,10 @@ type GroupAdminList struct {
 	Ret string `json:"ret"`
 }
 
-func Getgroupmgrlist(bot interface{}) (map[string]interface{}, error) {
+func Getgroupmgrlist(bot, group interface{}) (map[string]interface{}, error) {
 	post := map[string]interface{}{
-		"logonqq": bot,
+		"fromqq": bot,
+		"group":  group,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/getgrouplist", nil, post, nil, nil)
 	if err != nil {

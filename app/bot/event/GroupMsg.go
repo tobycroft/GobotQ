@@ -91,14 +91,14 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	groupmember := GroupMemberModel.Api_find(bot, gid, uid)
 	groupfunction := GroupFunctionModel.Api_find(gid)
 	if active {
-		groupHandle_acfur(&bot, &gid, &uid, new_text, &req, &random, groupmember, groupfunction)
+		groupHandle_acfur(&bot, &gid, &uid, text, new_text, &req, &random, groupmember, groupfunction)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
 		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random, groupmember, groupfunction)
 	}
 }
 
-func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -111,7 +111,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		}
 	}
 
-	switch text {
+	switch new_text {
 	case "help":
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_private_help, false)
 		break
@@ -121,7 +121,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 			not_admin(bot, gid, uid)
 			return
 		}
-		Group.App_group_function_get_all(bot, gid, uid, &text)
+		Group.App_group_function_get_all(bot, gid, uid, &new_text)
 		break
 
 	case "刷新":
@@ -159,7 +159,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "测试拼音":
-		py, err := service.Serv_pinyin(text)
+		py, err := service.Serv_pinyin(new_text)
 		if err != nil {
 
 		} else {
@@ -172,7 +172,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	default:
-		//groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
+		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
 		break
 	}
 }
@@ -199,7 +199,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	}(1, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(*text, []string{"acfur设定"})
+		str, ok := service.Serv_text_match(*text, []string{"设定"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(2, &wg)

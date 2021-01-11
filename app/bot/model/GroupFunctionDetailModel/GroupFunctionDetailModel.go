@@ -23,10 +23,10 @@ func Api_find_byK(key interface{}) interface{} {
 	}
 }
 
-func Api_find_byType(key interface{}) interface{} {
+func Api_find_type_byName(name interface{}) interface{} {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"key": key,
+		"name": name,
 	}
 	db.Where(where)
 	ret, err := db.Value("type")

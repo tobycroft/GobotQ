@@ -31,7 +31,7 @@ func Api_insert(bot, gid, uid, word, mode, is_kick, is_ban, is_retract, share in
 	}
 }
 
-func Api_select_byKickbanretract(gid interface{}, key string, value interface{}) []gorose.Data {
+func Api_select_byKV(gid interface{}, key string, value interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,

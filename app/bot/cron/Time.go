@@ -31,6 +31,7 @@ func BaseCron() {
 					var gm Group.App_group_member
 					gm.Gid = gll.GIN
 					gm.Bot = bot["bot"]
+					gm.Owner = gll.DwGroupOwnerUin
 					Group.Chan_refresh_group_member <- gm
 					if len(GroupFunctionModel.Api_find(gll.GIN)) < 1 {
 						GroupFunctionModel.Api_insert(gll.GIN)

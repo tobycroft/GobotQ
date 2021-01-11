@@ -100,9 +100,14 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 
 func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	admin := false
+	owner := false
 	if len(groupmember) > 0 {
-		if groupmember["grouplevel"].(int64) >= 4 {
+		if groupmember["type"].(string) == "admin" {
 			admin = true
+		}
+		if groupmember["type"].(string) == "owner" {
+			admin = true
+			owner = true
 		}
 	}
 

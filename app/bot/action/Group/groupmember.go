@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/tuuz/Calc"
 )
 
 type App_group_member struct {
@@ -36,12 +37,13 @@ func App_refresh_group_member() {
 	}
 }
 
-func App_refresh_group_member_one(bot, gid interface{}) {
+func App_refresh_group_member_one(bot, gid, owner interface{}) {
 	gm, err := api.Getgroupmemberlist(bot, gid)
 	//fmt.Println(gm, err)
 	if err != nil {
 
 	} else {
+		admins := api.Getgroupmgrlist(bot["bot"])
 		GroupMemberModel.Api_delete_byGid(bot, gid)
 		var gms []GroupMemberModel.GroupMember
 		for _, gmm := range gm {
@@ -57,6 +59,13 @@ func App_refresh_group_member_one(bot, gid interface{}) {
 			g.Jointime = gmm.AddGroupTime
 			g.Title = (gmm.SpecTitle)
 			g.Lastsend = gmm.LastMsgTime
+			if admins[Calc.Int2String(gmm.UIN)] == true {
+				g.Type = "admin"
+			} else if owner == gmm.UIN {
+				g.Type = "owner"
+			} else {
+				g.Type = "member"
+			}
 			gms = append(gms, g)
 		}
 		GroupMemberModel.Api_insert_more(gms)

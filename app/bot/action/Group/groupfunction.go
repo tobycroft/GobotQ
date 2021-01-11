@@ -4,7 +4,6 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
-	"main.go/app/bot/service"
 	"main.go/tuuz/Calc"
 	"strings"
 )
@@ -43,23 +42,6 @@ func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
 }
 
 func App_group_function_set(bot, gid, uid interface{}, text string, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	admin := false
-	owner := false
-	if len(groupmember) > 0 {
-		if groupmember["type"].(string) == "admin" {
-			admin = true
-		}
-		if groupmember["type"].(string) == "owner" {
-			admin = true
-			owner = true
-		}
-	}
-	if !admin && !owner {
-		if len(groupmember) > 0 {
-			service.Not_admin(bot, gid, uid)
-			return
-		}
-	}
 	i1 := strings.Index(text, ":")
 	i2 := strings.Index(text, "：")
 	if i1 == i2 {

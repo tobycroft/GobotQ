@@ -76,12 +76,17 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 			break
 
 		case "int":
-			i, err := Calc.Any2Int_2(set)
-			if err != nil {
-				api.Sendgroupmsg(bot, gid, name+"只能设定为数字整数,请调整为数字整数", true)
-				return
+			if len(set) > 0 {
+				i, err := Calc.Any2Int_2(set)
+				if err != nil {
+					api.Sendgroupmsg(bot, gid, name+"只能设定为数字整数,请调整为数字整数", true)
+					return
+				} else {
+					value = i
+				}
 			} else {
-				value = i
+				api.Sendgroupmsg(bot, gid, name+"的设定有误，例子：acfur设定"+name+":"+"数字", true)
+				return
 			}
 			break
 

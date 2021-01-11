@@ -5,6 +5,7 @@ import (
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/tuuz/Calc"
+	"strings"
 )
 
 func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
@@ -40,8 +41,38 @@ func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
 	api.Sendgroupmsg(*bot, *gid, str, true)
 }
 
-func App_group_function_set(bot *int, gid *int, uid *int, text *string) {
-
+func App_group_function_set(bot, gid, uid interface{}, text string, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	i1 := strings.Index(text, ":")
+	i2 := strings.Index(text, "：")
+	if i1 == i2 {
+		api.Sendgroupmsg(bot, gid, "如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开", true)
+		return
+	}
+	strs := []string{}
+	if i1 < i2 {
+		strs = strings.Split(text, ":")
+	} else {
+		strs = strings.Split(text, "：")
+	}
+	name := ""
+	value := ""
+	for k, v := range strs {
+		if k == 0 {
+			name = v
+		} else {
+			value += v
+		}
+	}
+	detail := GroupFunctionDetailModel.Api_find_byName(name)
+	if len(detail) > 0 {
+		if GroupFunctionModel.Api_update(gid, name, value) {
+			api.Sendgroupmsg(bot, gid, "设定成功", true)
+		} else {
+			api.Sendgroupmsg(bot, gid, "设定失败", true)
+		}
+	} else {
+		api.Sendgroupmsg(bot, gid, "没有找到对应的设定项目，\r\n如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开", true)
+	}
 }
 
 func group_function_attach(gid interface{}) map[string]map[string]interface{} {

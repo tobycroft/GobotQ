@@ -98,10 +98,6 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	}
 }
 
-const group_function_number = 1
-
-var group_function_type = []string{"unknow", "sign"}
-
 func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	admin := false
 	if len(groupmember) > 0 {
@@ -180,14 +176,25 @@ func not_admin(bot *int, gid *int, uid *int) {
 	api.Sendgroupmsg(*bot, *gid, "你不是本群的管理员，无法使用本功能"+service.Serv_at(*uid), true)
 }
 
+const group_function_number = 2
+
+var group_function_type = []string{"unknow", "sign"}
+
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
 	wg.Add(group_function_number)
+	//签到(直接)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match_all(*text, []string{"签到"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(1, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(*text, []string{"acfur设定"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(1, &wg)

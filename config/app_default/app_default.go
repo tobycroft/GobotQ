@@ -27,8 +27,7 @@ const Default_group_help = "这里是群帮助信息：\r\n" +
 	"群员开放功能：\r\n" +
 	"	1.签到：群签到（奖励威望）\r\n"
 
-const Default_str_ban_word = "" +
-	"acfur屏蔽：查看屏蔽词/T出词/撤回词添加方法\r\n" +
+const Default_str_ban_word = "acfur屏蔽：查看屏蔽词/T出词/撤回词添加方法\r\n" +
 	"	1.简单添加屏蔽词（禁言+撤回）：acfur屏蔽1(+)屏蔽词\r\n" +
 	"	2.简单添加T出词（禁言+撤回）：acfur屏蔽2(+)屏蔽词\r\n" +
 	"	3.简单添加撤回（仅撤回）：acfur屏蔽3(+)屏蔽词\r\n" +

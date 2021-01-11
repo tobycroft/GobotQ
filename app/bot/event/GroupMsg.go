@@ -117,7 +117,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "设定":
-		if !admin {
+		if !admin && !owner {
 			not_admin(bot, gid, uid)
 			return
 		}
@@ -129,7 +129,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "刷新人数":
-		if !admin {
+		if !admin && !owner {
 			if len(groupmember) > 0 {
 				not_admin(bot, gid, uid)
 				return
@@ -139,7 +139,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	case "刷新群信息":
-		if !admin {
+		if !admin && !owner {
 			not_admin(bot, gid, uid)
 			return
 		}

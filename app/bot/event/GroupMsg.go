@@ -116,6 +116,10 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_group_help, false)
 		break
 
+	case "app":
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_app_download_url, false)
+		break
+
 	case "设定":
 		if !admin && !owner {
 			not_admin(bot, gid, uid)

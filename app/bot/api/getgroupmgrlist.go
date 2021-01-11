@@ -12,7 +12,7 @@ type GroupAdminList struct {
 	Ret string `json:"ret"`
 }
 
-func Getgroupmgrlist(bot interface{}) ([]string, error) {
+func Getgroupmgrlist(bot interface{}) (map[string]bool, error) {
 	post := map[string]interface{}{
 		"logonqq": bot,
 	}
@@ -29,5 +29,9 @@ func Getgroupmgrlist(bot interface{}) ([]string, error) {
 		return nil, err
 	}
 	strs := strings.Split(ret.Ret, "\r\n")
-	return strs, nil
+	arr := make(map[string]bool)
+	for _, v := range strs {
+		arr[v] = true
+	}
+	return arr, nil
 }

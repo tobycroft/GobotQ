@@ -35,7 +35,5 @@ func App_group_ban_word_list(bot, gid, uid int, text string, Type int, groupmemb
 		api.Sendgroupmsg(bot, gid, text+"列表为："+strings.Join(word, ","), true)
 	} else {
 		api.Sendgroupmsg(bot, gid, text+"列表为空，可以使用“acfur屏蔽”来查看设定方法", true)
-
 	}
-
 }

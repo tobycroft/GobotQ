@@ -202,7 +202,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 		str, ok := service.Serv_text_match(*text, []string{"设定"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(1, &wg)
+	}(2, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {

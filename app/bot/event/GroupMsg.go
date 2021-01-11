@@ -113,7 +113,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 	switch new_text {
 	case "help":
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_private_help, false)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_group_help, false)
 		break
 
 	case "设定":

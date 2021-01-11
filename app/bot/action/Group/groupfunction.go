@@ -90,8 +90,8 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 			break
 
 		default:
-			value = 0
-			break
+			api.Sendgroupmsg(bot, gid, name+"需要有设定项，你可以使用acfur设定"+name+":"+"设定值，对该功能进行设定", true)
+			return
 		}
 		if GroupFunctionModel.Api_update(gid, name, value) {
 			api.Sendgroupmsg(bot, gid, "设定成功", true)

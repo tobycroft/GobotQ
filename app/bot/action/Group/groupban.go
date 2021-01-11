@@ -100,10 +100,10 @@ func App_group_ban_word_set(bot, gid, uid int, text string, groupmember map[stri
 			break
 
 		default:
-			api.Sendgroupmsg(bot, gid, "屏蔽词命令有误，请发送acfur屏蔽查看如何使用屏蔽词", true)
+			api.Sendgroupmsg(bot, gid, "屏蔽词缺少模式，请发送acfur屏蔽查看如何使用屏蔽词", true)
 			break
 		}
 	} else {
-
+		api.Sendgroupmsg(bot, gid, "屏蔽词命令有误，请发送acfur屏蔽查看如何使用屏蔽词", true)
 	}
 }

@@ -172,7 +172,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text string, req *int, rand
 		break
 
 	default:
-		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
+		//groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
 		break
 	}
 }
@@ -199,7 +199,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	}(1, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(*text, []string{"设定"})
+		str, ok := service.Serv_text_match(*text, []string{"acfur设定"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(2, &wg)

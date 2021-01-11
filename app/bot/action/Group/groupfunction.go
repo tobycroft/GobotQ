@@ -1,6 +1,7 @@
 package Group
 
 import (
+	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
@@ -49,7 +50,7 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 		return
 	}
 	strs := []string{}
-	if i1 < i2 {
+	if i1 < i2 || i2 == -1 {
 		strs = strings.Split(text, ":")
 	} else {
 		strs = strings.Split(text, "：")
@@ -57,6 +58,7 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 	name := ""
 	set := ""
 	for k, v := range strs {
+		fmt.Println(k, v)
 		if k == 0 {
 			name = v
 		} else {

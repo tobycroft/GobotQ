@@ -65,7 +65,7 @@ func App_refresh_group_member_one(bot, gid, owner interface{}) {
 				g.Jointime = gmm.AddGroupTime
 				g.Title = (gmm.SpecTitle)
 				g.Lastsend = gmm.LastMsgTime
-				if admins[Calc.Int2String(gmm.UIN)] == nil {
+				if admins[Calc.Int2String(gmm.UIN)] != nil {
 					g.Type = "admin"
 				} else if owner == gmm.UIN {
 					g.Type = "owner"

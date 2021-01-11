@@ -96,7 +96,7 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 		if GroupFunctionModel.Api_update(gid, name, value) {
 			api.Sendgroupmsg(bot, gid, name+"设定成功为"+":"+set, true)
 		} else {
-			api.Sendgroupmsg(bot, gid, name+"设定失败"+":"+set, true)
+			api.Sendgroupmsg(bot, gid, name+"设定失败", true)
 		}
 	} else {
 		api.Sendgroupmsg(bot, gid, "没有找到对应的设定项目，\r\n如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开", true)

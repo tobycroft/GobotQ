@@ -49,7 +49,7 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 		return
 	}
 	strs := []string{}
-	if i1 < i2 || i2 == -1 {
+	if (i1 < i2 || i2 == -1) && i1 != -1 {
 		strs = strings.Split(text, ":")
 	} else {
 		strs = strings.Split(text, "：")

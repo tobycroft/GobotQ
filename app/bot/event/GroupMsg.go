@@ -252,7 +252,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		break
 
 	case "ban_word":
-
+		Group.App_group_ban_word_set(*bot, *gid, *uid, text, groupmember, groupfunction)
 		break
 
 	default:

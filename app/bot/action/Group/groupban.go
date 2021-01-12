@@ -1,7 +1,6 @@
 package Group
 
 import (
-	"fmt"
 	"github.com/gohouse/gorose/v2"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanWordModel"
@@ -43,7 +42,6 @@ func App_group_ban_word_set(bot, gid, uid int, text string, groupmember map[stri
 	if len(text) > 2 {
 		text_slice := strings.Split(text, "")
 		Type := text_slice[0]
-		fmt.Println(text_slice)
 		new_str := ""
 		for i := 1; i < len(text_slice); i++ {
 			new_str += text_slice[i]

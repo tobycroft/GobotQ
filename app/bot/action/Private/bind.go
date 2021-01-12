@@ -12,7 +12,8 @@ import (
 func App_bind_robot(bot int, uid int, text string) {
 	strs := strings.Split(text, ":")
 	if len(strs) < 2 {
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人")
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人", false)
+		return
 	}
 	data := BotRequestModel.Api_find(bot, text)
 	if len(data) > 0 {
@@ -24,8 +25,9 @@ func App_bind_robot(bot int, uid int, text string) {
 			db.Rollback()
 			return
 		}
-		if data["secret"] {
-
+		if data["secret"] != strs[1] {
+			api.Sendprivatemsg(bot, uid, "绑定密码不正确", false)
+			return
 		}
 		if BotModel.Api_insert(bot, bot, "private", uid, data["secret"], data["password"], time.Now().Unix()+data["time"].(int64)) {
 			db.Commit()

@@ -5,10 +5,15 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
 	"main.go/tuuz"
+	"strings"
 	"time"
 )
 
 func App_bind_robot(bot int, uid int, text string) {
+	strs := strings.Split(text, ":")
+	if len(strs) < 2 {
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人")
+	}
 	data := BotRequestModel.Api_find(bot, text)
 	if len(data) > 0 {
 		db := tuuz.Db()
@@ -19,7 +24,7 @@ func App_bind_robot(bot int, uid int, text string) {
 			db.Rollback()
 			return
 		}
-		if data {
+		if data["secret"] {
 
 		}
 		if BotModel.Api_insert(bot, bot, "private", uid, data["secret"], data["password"], time.Now().Unix()+data["time"].(int64)) {

@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
+	"main.go/config/app_default"
 	"main.go/tuuz"
 	"strings"
 	"time"
@@ -34,7 +35,7 @@ func App_bind_robot(bot int, uid int, text string) {
 			api.Sendprivatemsg(bot, uid, "你已经成功绑定这个机器人咯！", false)
 		} else {
 			db.Rollback()
-			api.Sendprivatemsg(bot, uid)
+			api.Sendprivatemsg(bot, uid, "机器人绑定失败"+app_default.Default_error_alert, false)
 		}
 	} else {
 		api.Sendprivatemsg(bot, uid, "未找到这个机器人", true)

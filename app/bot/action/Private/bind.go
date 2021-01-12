@@ -14,8 +14,12 @@ func App_bind_robot(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人", false)
 		return
 	}
-	data := BotRequestModel.Api_find(bot, text)
+	data := BotModel.Api_find(bot)
 	if len(data) > 0 {
+		if data["owner"].(int64) != 0 {
+			api.Sendprivatemsg(bot, uid, "本机器人已经被绑定，如果需要清除绑定，请让号主解除本机器人的绑定", true)
+			return
+		}
 		db := tuuz.Db()
 		db.Begin()
 		var botreq BotRequestModel.Interface

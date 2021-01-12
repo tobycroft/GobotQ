@@ -125,9 +125,9 @@ func App_group_ban_word_set(bot, gid, uid int, text string, groupmember map[stri
 				data := GroupBanWordModel.Api_find(gid, strs[0])
 				if len(data) > 0 {
 					if GroupBanWordModel.Api_update(gid, strs[0], strings.Contains(strs[1], "T出"), strings.Contains(strs[1], "屏蔽"), strings.Contains(strs[1], "撤回")) {
-						api.Sendgroupmsg(bot, gid, "屏蔽词被成功", true)
+						api.Sendgroupmsg(bot, gid, "屏蔽词更新成功", true)
 					} else {
-						api.Sendgroupmsg(bot, gid, "屏蔽词修改失败", true)
+						api.Sendgroupmsg(bot, gid, "屏蔽词更新失败", true)
 					}
 				} else {
 					if GroupBanWordModel.Api_insert(bot, gid, uid, strs[0], 0, strings.Contains(strs[1], "T出"),

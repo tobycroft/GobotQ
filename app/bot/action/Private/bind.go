@@ -68,3 +68,29 @@ func App_unbind_bot(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "取消绑定失败", false)
 	}
 }
+
+func Api_change_bot_password(bot int, uid int, text string) {
+	if len(text) < 2 {
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur修改机器人密码(+)密码\"来修改您机器人的绑定密码", false)
+		return
+	}
+	data := BotModel.Api_find(bot)
+	if len(data) < 1 {
+		api.Sendprivatemsg(bot, uid, "未找到当前机器人的信息，请稍后再试"+app_default.Default_error_alert, false)
+		return
+	}
+	if data["owner"] != uid {
+		api.Sendprivatemsg(bot, uid, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
+		return
+	}
+	if data["secret"] != text {
+		api.Sendprivatemsg(bot, uid, "机器人密码错误，请重新输入", true)
+		return
+	}
+
+	if BotModel.Api_update_owner(bot, 0) {
+		api.Sendprivatemsg(bot, uid, "修改机器人密码成功", false)
+	} else {
+		api.Sendprivatemsg(bot, uid, "修改机器人密码失败", false)
+	}
+}

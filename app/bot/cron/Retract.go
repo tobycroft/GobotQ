@@ -54,7 +54,7 @@ func retract_private() {
 		go func(retract event.Retract_private) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
-			case event.Retract_chan_private_instant <- r:
+			case event.Retract_chan_private_instant <- retract:
 
 			case <-time.After(5 * time.Second):
 				return
@@ -68,7 +68,7 @@ func retract_group() {
 		go func(retract event.Retract_group) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
-			case event.Retract_chan_group_instant <- r:
+			case event.Retract_chan_group_instant <- retract:
 
 			case <-time.After(5 * time.Second):
 				Log.Errs(errors.New("retract_group失败"), tuuz.FUNCTION_ALL())
@@ -95,7 +95,7 @@ func retract_private2() {
 		go func(retract Retract_private) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
-			case Retract_chan_private_instant <- r:
+			case Retract_chan_private_instant <- retract:
 
 			case <-time.After(5 * time.Second):
 				return
@@ -109,7 +109,7 @@ func retract_group2() {
 		go func(retract Retract_group) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
-			case Retract_chan_group_instant <- r:
+			case Retract_chan_group_instant <- retract:
 
 			case <-time.After(5 * time.Second):
 				Log.Errs(errors.New("retract_group2失败"), tuuz.FUNCTION_ALL())
@@ -136,7 +136,7 @@ func retract_private3() {
 		go func(retract api.Retract_private) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
-			case api.Retract_chan_private_instant <- r:
+			case api.Retract_chan_private_instant <- retract:
 
 			case <-time.After(5 * time.Second):
 				return
@@ -148,9 +148,9 @@ func retract_private3() {
 func retract_group3() {
 	for r := range api.Retract_chan_group {
 		go func(retract api.Retract_group) {
-			fmt.Println("retract_group3:countdown", r)
+			fmt.Println("retract_group3:countdown", retract)
 			time.Sleep(app_conf.Retract_time_second * time.Second)
-			fmt.Println("retract_group3:sendto_chan", r)
+			fmt.Println("retract_group3:sendto_chan", retract)
 
 			select {
 			case api.Retract_chan_group_instant <- retract:

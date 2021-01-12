@@ -1,13 +1,21 @@
 package api
 
 import (
+	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
+	"strings"
 )
 
 type SendPrivatePicRet struct {
 	Ret string `json:"ret"`
+}
+
+type SendPrivatePic struct {
+	Retcode int    `json:"retcode"`
+	Retmsg  string `json:"retmsg"`
+	Time    string `json:"time"`
 }
 
 func sendprivatepic_file(fromqq, toqq, path interface{}) (string, error) {
@@ -32,7 +40,17 @@ func sendprivatepic_file(fromqq, toqq, path interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return ret.Ret, nil
+	if strings.Contains(ret.Ret, "pic,hash") {
+		return ret.Ret, nil
+	} else {
+		var ret2 SendPrivatePic
+		err = jsr.UnmarshalFromString(ret.Ret, &ret2)
+		if err != nil {
+			return "", err
+		} else {
+			return "", errors.New(ret2.Retmsg)
+		}
+	}
 }
 
 func sendprivatepic_base64(fromqq, toqq, pic interface{}) (string, error) {
@@ -57,7 +75,17 @@ func sendprivatepic_base64(fromqq, toqq, pic interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return ret.Ret, nil
+	if strings.Contains(ret.Ret, "pic,hash") {
+		return ret.Ret, nil
+	} else {
+		var ret2 SendPrivatePic
+		err = jsr.UnmarshalFromString(ret.Ret, &ret2)
+		if err != nil {
+			return "", err
+		} else {
+			return "", errors.New(ret2.Retmsg)
+		}
+	}
 }
 
 func sendprivatepic_remote(fromqq, toqq, url interface{}) (string, error) {
@@ -82,5 +110,15 @@ func sendprivatepic_remote(fromqq, toqq, url interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return ret.Ret, nil
+	if strings.Contains(ret.Ret, "pic,hash") {
+		return ret.Ret, nil
+	} else {
+		var ret2 SendPrivatePic
+		err = jsr.UnmarshalFromString(ret.Ret, &ret2)
+		if err != nil {
+			return "", err
+		} else {
+			return "", errors.New(ret2.Retmsg)
+		}
+	}
 }

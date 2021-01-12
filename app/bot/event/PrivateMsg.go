@@ -184,11 +184,11 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 		break
 
 	case "bind":
-		Private.App_bind_robot(bot, uid, text)
+		Private.App_bind_robot(*bot, *uid, text)
 		break
 
 	default:
-		api.Sendprivatemsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp")
+		api.Sendprivatemsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
 		break
 	}
 }

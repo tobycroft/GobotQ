@@ -55,7 +55,20 @@ type PrivateSendStruct struct {
 
 func Send_private() {
 	for pss := range Private_send_chan {
-		sendprivatemsg(pss)
+		pm, pmr, err := sendprivatemsg(pss)
+		if err != nil {
+
+		} else {
+			if pss.AutoRetract {
+				var r Retract_private
+				r.Toqq = pss.Toqq
+				r.Fromqq = pss.Fromqq
+				r.Random = pm.Random
+				r.Req = pm.Req
+				r.Time = pmr.Time
+				Retract_chan_private <- r
+			}
+		}
 	}
 }
 

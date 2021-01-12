@@ -85,7 +85,7 @@ func App_change_bot_secret(bot int, uid int, text string) {
 	}
 
 	if BotModel.Api_update_password(bot, text) {
-		api.Sendprivatemsg(bot, uid, "修改机器人密码成功", false)
+		api.Sendprivatemsg(bot, uid, "修改机器人密码成功，机器人当前的密码为："+text, false)
 	} else {
 		api.Sendprivatemsg(bot, uid, "修改机器人密码失败", false)
 	}

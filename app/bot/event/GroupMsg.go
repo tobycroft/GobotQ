@@ -197,7 +197,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 	}
 }
 
-const group_function_number = 3
+const group_function_number = 4
 
 var group_function_type = []string{"unknow", "sign", "setting", "ban_word", "url_detect"}
 
@@ -254,6 +254,11 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			owner = true
 		}
 	}
+	var ret Retract_group
+	ret.Group = *gid
+	ret.Fromqq = *bot
+	ret.Random = *random
+	ret.Req = *req
 	switch Type {
 	case "sign":
 		Group.App_group_sign(*bot, *gid, *uid, *req, *random, groupmember, groupfunction)
@@ -280,6 +285,20 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		break
 
 	case "url_detect":
+		Retract_chan_group_instant <- ret
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
+		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		break
+
+	case "ban_group":
+		Retract_chan_group_instant <- ret
+		api.Sendgroupmsg(*bot, *gid, "", true)
+		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		break
+
+	case "ban_weixin":
+		Retract_chan_group_instant <- ret
+		api.Sendgroupmsg(*bot, *gid, "", true)
 		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 		break
 

@@ -138,6 +138,10 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 		Private.App_userClearLogin(*bot, *uid)
 		break
 
+	case "解绑":
+		Private.App_unbind_bot(*bot, *uid, text)
+		break
+
 	default:
 		privateHandle_acfur_middle(bot, uid, text, origin_text)
 		break
@@ -146,7 +150,7 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 
 const private_function_number = 4
 
-var private_function_type = []string{"unknow", "password", "bind", "unbind", "change_secret"}
+var private_function_type = []string{"unknow", "password", "bind", "change_secret"}
 
 func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)
@@ -166,12 +170,6 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 		new_text[idx] = str
 		function[idx] = ok
 	}(2, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"解绑", "unbind"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(3, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match(text, []string{"修改机器人密码", "change_secret"})
@@ -197,10 +195,6 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 
 	case "bind":
 		Private.App_bind_robot(*bot, *uid, text)
-		break
-
-	case "unbind":
-		Private.App_unbind_bot(*bot, *uid, text)
 		break
 
 	case "change_secret":

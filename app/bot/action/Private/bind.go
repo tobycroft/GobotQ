@@ -50,7 +50,7 @@ func App_unbind_bot(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "未找到当前机器人的信息，请稍后再试"+app_default.Default_error_alert, false)
 		return
 	}
-	if data["owner"] != uid {
+	if data["owner"].(int64) != int64(uid) {
 		api.Sendprivatemsg(bot, uid, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
 		return
 	}

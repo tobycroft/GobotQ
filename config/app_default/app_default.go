@@ -4,7 +4,10 @@ const Default_private_help = "这里是帮助信息,如下内容括号中的不�
 	"acfur私聊功能表：\r\n" +
 	"	1.acfur登录：登录acfur软件\r\n" +
 	"	2.acfur清除登录：T出所有已经登录APP的设备\r\n" +
-	"	3.acfur绑定(+):本机器人密码：绑定当前机器人\r\n"
+	"	3.acfur绑定(+):本机器人密码：绑定当前机器人\r\n" +
+	"	4.acfur解绑(+):本机器人密码：解绑当前机器人（仅限号主）\r\n" +
+	"	5.acfur修改机器人密码(+):新密码：修改当前机器人密码（仅限号主）\r\n" +
+	""
 const Default_group_help = "这里是群帮助信息：\r\n" +
 	"acfur功能表：\r\n" +
 	"	1.acfur设定：查看设定\r\n" +

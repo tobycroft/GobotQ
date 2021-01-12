@@ -148,7 +148,9 @@ func retract_private3() {
 func retract_group3() {
 	for r := range api.Retract_chan_group {
 		go func(retract api.Retract_group) {
+			fmt.Println("retract_group3:countdown", r)
 			time.Sleep(app_conf.Retract_time_second * time.Second)
+			fmt.Println("retract_group3:sendto_chan", r)
 
 			select {
 			case api.Retract_chan_group_instant <- retract:

@@ -6,7 +6,7 @@ import (
 	"main.go/app/bot/model/BotRequestModel"
 	"main.go/config/app_default"
 	"main.go/tuuz"
-	"time"
+	"main.go/tuuz/Calc"
 )
 
 func App_bind_robot(bot int, uid int, text string) {
@@ -28,11 +28,12 @@ func App_bind_robot(bot int, uid int, text string) {
 			db.Rollback()
 			return
 		}
-		if data["secret"] != text {
+		if data["secret"].(string) != text {
+			db.Rollback()
 			api.Sendprivatemsg(bot, uid, "绑定密码不正确", false)
 			return
 		}
-		if BotModel.Api_insert(bot, bot, "private", uid, data["secret"], data["password"], time.Now().Unix()+data["time"].(int64)) {
+		if BotModel.Api_update_owner(bot, uid) {
 			db.Commit()
 			api.Sendprivatemsg(bot, uid, "你已经成功绑定这个机器人咯！", false)
 		} else {
@@ -71,11 +72,11 @@ func App_change_bot_secret(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "请使用\"acfur修改密码(+)密码\"来修改您机器人的绑定密码", false)
 		return
 	}
-	if data["owner"] != uid {
+	if data["owner"].(int64) != int64(uid) {
 		api.Sendprivatemsg(bot, uid, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
 		return
 	}
-	if data["secret"] != text {
+	if Calc.Any2String(data["secret"]) != text {
 		api.Sendprivatemsg(bot, uid, "机器人密码错误，请重新输入", true)
 		return
 	}

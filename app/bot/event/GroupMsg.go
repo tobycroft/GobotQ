@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -10,6 +11,7 @@ import (
 	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Redis"
+	"math"
 	"regexp"
 	"sync"
 )
@@ -302,7 +304,10 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		if groupfunction["ban_url"].(int64) == 1 {
 			Retract_chan_group_instant <- ret
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
-			//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+			time := GroupBanModel.Api_count(*gid, *uid)
+			GroupBanModel.Api_insert(*gid, *uid)
+			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+
 		}
 		break
 
@@ -310,7 +315,9 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		if groupfunction["ban_group"].(int64) == 1 {
 			Retract_chan_group_instant <- ret
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, true)
-			//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+			time := GroupBanModel.Api_count(*gid, *uid)
+			GroupBanModel.Api_insert(*gid, *uid)
+			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 		}
 		break
 
@@ -318,7 +325,9 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		if groupfunction["ban_wx"].(int64) == 1 {
 			Retract_chan_group_instant <- ret
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, true)
-			//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+			time := GroupBanModel.Api_count(*gid, *uid)
+			GroupBanModel.Api_insert(*gid, *uid)
+			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 		}
 		break
 

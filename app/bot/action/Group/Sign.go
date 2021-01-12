@@ -75,7 +75,7 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 				api.Sendgrouptempmsg(bot, gid, uid, "签到成功,您是第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount))
 			} else {
 				at := service.Serv_at(uid)
-				api.Sendgroupmsg(bot, gid, "签到成功"+at+",您是第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount), auto_retract)
+				api.Sendgroupmsg(bot, gid, "签到成功"+at+",您是今日第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount), auto_retract)
 			}
 		}
 	}

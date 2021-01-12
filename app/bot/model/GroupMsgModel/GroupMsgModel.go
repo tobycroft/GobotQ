@@ -34,7 +34,7 @@ func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, 
 	}
 }
 
-func Api_find(bot, gid, send interface{}) gorose.Data {
+func Api_find(bot, gid, uid, send interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"bot": bot,

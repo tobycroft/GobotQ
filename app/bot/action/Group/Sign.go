@@ -8,18 +8,17 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 )
 
 func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
 	private_mode := false
-	if Calc.Any2String(groupfunction["sign_send_private"]) == "1" {
+	if groupfunction["sign_send_private"].(int64) == 1 {
 		private_mode = true
 	}
 	auto_retract := false
-	if Calc.Any2String(groupfunction["sign_send_retract"]) == "1" {
+	if groupfunction["sign_send_private"].(int64) == 1 {
 		auto_retract = true
 		var ret api.Retract_group
 		ret.Group = gid
@@ -63,10 +62,10 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 		} else {
 			db.Commit()
 			if private_mode {
+				api.Sendgrouptempmsg(bot, gid, uid, "签到成功")
+			} else {
 				at := service.Serv_at(uid)
 				api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
-			} else {
-				api.Sendgrouptempmsg(bot, gid, uid, "签到成功")
 			}
 		}
 	}

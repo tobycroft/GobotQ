@@ -2,7 +2,6 @@ package cron
 
 import (
 	"errors"
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/event"
 	"main.go/config/app_conf"
@@ -148,9 +147,9 @@ func retract_private3() {
 func retract_group3() {
 	for r := range api.Retract_chan_group {
 		go func(retract api.Retract_group) {
-			fmt.Println("retract_group3:countdown", retract)
+			//fmt.Println("retract_group3:countdown", retract)
 			time.Sleep(app_conf.Retract_time_second * time.Second)
-			fmt.Println("retract_group3:sendto_chan", retract)
+			//fmt.Println("retract_group3:sendto_chan", retract)
 
 			select {
 			case api.Retract_chan_group_instant <- retract:
@@ -171,7 +170,7 @@ func retract_private_instant3() {
 
 func retract_group_instant3() {
 	for r := range api.Retract_chan_group_instant {
-		fmt.Println("retract_group_instant3:", r)
+		//fmt.Println("retract_group_instant3:", r)
 		api.Deletegroupmsg(r.Fromqq, r.Group, r.Random, r.Req)
 	}
 }

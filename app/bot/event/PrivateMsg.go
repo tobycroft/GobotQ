@@ -146,7 +146,7 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 
 const private_function_number = 2
 
-var private_function_type = []string{"unknow", "password", "bind"}
+var private_function_type = []string{"unknow", "password", "bind", "unbind", "change_secret"}
 
 func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)
@@ -166,6 +166,18 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 		new_text[idx] = str
 		function[idx] = ok
 	}(2, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(text, []string{"解绑", "unbind"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(3, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(text, []string{"修改机器人密码", "change_secret"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(3, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -185,6 +197,14 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 
 	case "bind":
 		Private.App_bind_robot(*bot, *uid, text)
+		break
+
+	case "unbind":
+		Private.App_unbind_bot(*bot, *uid, text)
+		break
+
+	case "change_secret":
+		Private.App_change_bot_secret(*bot, *uid, text)
 		break
 
 	default:

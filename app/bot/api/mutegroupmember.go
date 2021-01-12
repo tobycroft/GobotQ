@@ -10,7 +10,7 @@ type MuteGroupmeMberRet struct {
 	Ret string `json:"ret"`
 }
 
-func Mutegroupmember(fromqq, group, toqq interface{}, time int) (bool, error) {
+func Mutegroupmember(fromqq, group, toqq interface{}, time float64) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"group":  group,

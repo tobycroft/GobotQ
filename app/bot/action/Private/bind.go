@@ -16,7 +16,7 @@ func App_bind_robot(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人", false)
 		return
 	}
-	data := BotRequestModel.Api_find(bot, text)
+	data := BotRequestModel.Api_find(bot, strs[0])
 	if len(data) > 0 {
 		db := tuuz.Db()
 		db.Begin()
@@ -38,6 +38,6 @@ func App_bind_robot(bot int, uid int, text string) {
 			api.Sendprivatemsg(bot, uid, "机器人绑定失败"+app_default.Default_error_alert, false)
 		}
 	} else {
-		api.Sendprivatemsg(bot, uid, "未找到这个机器人", true)
+		api.Sendprivatemsg(bot, uid, "未找到这个机器人，也许机器人的密码有错？", true)
 	}
 }

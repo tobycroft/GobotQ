@@ -39,6 +39,7 @@ func Api_find(bot, gid, uid, send interface{}) gorose.Data {
 	where := map[string]interface{}{
 		"bot": bot,
 		"gid": gid,
+		"uid": uid,
 	}
 	db.Where(where)
 	db.Where("send", ">=", send)

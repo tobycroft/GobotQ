@@ -40,8 +40,12 @@ func App_group_ban_word_list(bot, gid, uid int, text string, Type int, groupmemb
 
 func App_group_ban_word_set(bot, gid, uid int, text string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	if len(text) > 2 {
-		Type := text[0:1]
-		new_str := text[1 : len(text)-1]
+		text_slice := strings.Split(text, "")
+		Type := text_slice[0]
+		new_str := ""
+		for i := 1; i < len(text_slice); i++ {
+			new_str += text_slice[i]
+		}
 		if len(new_str) < 1 {
 			api.Sendgroupmsg(bot, gid, "屏蔽词设定需要大于1位", true)
 			return

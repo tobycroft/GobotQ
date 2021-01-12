@@ -199,7 +199,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 const group_function_number = 5
 
-var group_function_type = []string{"unknow", "ban_group", "sign", "setting", "ban_word", "url_detect"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "sign", "setting", "ban_word"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -213,32 +213,38 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 		new_text[idx] = *text
 		function[idx] = ok
 	}(1, &wg)
-
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(*text, []string{"acfur设定"})
-		new_text[idx] = str
+		ok := service.Serv_url_detect(*text)
+		new_text[idx] = *text
 		function[idx] = ok
 	}(2, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		ok := service.Serv_ban_weixin(*text)
+		new_text[idx] = *text
+		function[idx] = ok
+	}(3, &wg)
+
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match(*text, []string{"acfur屏蔽"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(3, &wg)
+	}(4, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_url_detect(*text)
+		str, ok := service.Serv_text_match(*text, []string{"acfur设定"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(4, &wg)
+	}(5, &wg)
 	//签到(直接)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match_all(*text, []string{"签到"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(5, &wg)
+	}(6, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -293,22 +299,27 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		break
 
 	case "url_detect":
-		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
-		//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
-
+		if groupfunction["ban_url"].(int64) == 1 {
+			Retract_chan_group_instant <- ret
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
+			//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		}
 		break
 
 	case "ban_group":
-		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, true)
-		//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		if groupfunction["ban_group"].(int64) == 1 {
+			Retract_chan_group_instant <- ret
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, true)
+			//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		}
 		break
 
 	case "ban_weixin":
-		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, true)
-		//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		if groupfunction["ban_wx"].(int64) == 1 {
+			Retract_chan_group_instant <- ret
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, true)
+			//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		}
 		break
 
 	default:

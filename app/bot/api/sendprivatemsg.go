@@ -31,11 +31,12 @@ type PrivateMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendprivatemsg(fromqq, toqq interface{}, text string) {
+func Sendprivatemsg(fromqq, toqq interface{}, text string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.Fromqq = fromqq
 	pss.Toqq = toqq
 	pss.Text = text
+	pss.AutoRetract = AutoRetract
 
 	select {
 	case Private_send_chan <- pss:
@@ -46,9 +47,10 @@ func Sendprivatemsg(fromqq, toqq interface{}, text string) {
 }
 
 type PrivateSendStruct struct {
-	Fromqq interface{}
-	Toqq   interface{}
-	Text   string
+	Fromqq      interface{}
+	Toqq        interface{}
+	Text        string
+	AutoRetract bool
 }
 
 func Send_private() {

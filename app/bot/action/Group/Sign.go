@@ -19,7 +19,7 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 		private_mode = true
 	}
 	auto_retract := false
-	if groupfunction["sign_send_private"].(int64) == 1 {
+	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
 		var ret api.Retract_group
 		ret.Group = gid

@@ -142,13 +142,17 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 		Private.App_unbind_bot(*bot, *uid, text)
 		break
 
+	case "绑定":
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
+		break
+
 	default:
 		privateHandle_acfur_middle(bot, uid, text, origin_text)
 		break
 	}
 }
 
-const private_function_number = 4
+const private_function_number = 3
 
 var private_function_type = []string{"unknow", "password", "bind", "change_secret"}
 
@@ -172,10 +176,10 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	}(2, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"修改机器人密码", "change_secret"})
+		str, ok := service.Serv_text_match(text, []string{"修改密码", "change_secret"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(4, &wg)
+	}(3, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {

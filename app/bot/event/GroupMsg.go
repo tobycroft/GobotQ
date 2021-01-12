@@ -307,7 +307,6 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
 			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
-
 		}
 		break
 

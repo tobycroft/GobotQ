@@ -11,7 +11,7 @@ import (
 
 func App_bind_robot(bot int, uid int, text string) {
 	if len(text) < 2 {
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人", false)
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
 		return
 	}
 	data := BotModel.Api_find(bot)
@@ -41,5 +41,30 @@ func App_bind_robot(bot int, uid int, text string) {
 		}
 	} else {
 		api.Sendprivatemsg(bot, uid, "未找到这个机器人，也许机器人的密码有错？", true)
+	}
+}
+
+func App_unbind_bot(bot int, uid int, text string) {
+	if len(text) < 2 {
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur解除绑定机器人(+)密码\"来绑定您的机器人", false)
+		return
+	}
+	data := BotModel.Api_find(bot)
+	if len(data) < 1 {
+		api.Sendprivatemsg(bot, uid, "未找到当前机器人的信息，请稍后再试"+app_default.Default_error_alert, false)
+		return
+	}
+	if data["secret"] != text {
+		api.Sendprivatemsg(bot, uid, "机器人密码错误，请重新输入", true)
+		return
+	}
+	if data["owner"] != uid {
+		api.Sendprivatemsg(bot, uid, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
+		return
+	}
+	if BotModel.Api_update_owner(bot, 0) {
+		api.Sendprivatemsg(bot, uid, "取消绑定成功", false)
+	} else {
+		api.Sendprivatemsg(bot, uid, "取消绑定失败", false)
 	}
 }

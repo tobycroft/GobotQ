@@ -2,6 +2,7 @@ package cron
 
 import (
 	"errors"
+	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/event"
 	"main.go/config/app_conf"
@@ -168,6 +169,7 @@ func retract_private_instant3() {
 
 func retract_group_instant3() {
 	for r := range api.Retract_chan_group_instant {
+		fmt.Println("retract_group_instant3:", r)
 		api.Deletegroupmsg(r.Fromqq, r.Group, r.Random, r.Req)
 	}
 }

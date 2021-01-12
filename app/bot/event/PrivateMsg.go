@@ -84,7 +84,7 @@ func PrivateHandle(bot int, uid int, text string) {
 			if auto_reply["value"] == nil {
 				return
 			}
-			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string))
+			api.Sendprivatemsg(bot, uid, auto_reply["value"].(string), false)
 		} else {
 			private_auto_reply(&bot, &uid, &text)
 		}
@@ -101,7 +101,7 @@ func private_default_reply(bot *int, uid *int, text *string) bool {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(*bot, *uid, auto_reply["value"].(string))
+			api.Sendprivatemsg(*bot, *uid, auto_reply["value"].(string), false)
 			return true
 		}
 	}
@@ -118,7 +118,7 @@ func private_auto_reply(bot *int, uid *int, text *string) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(*bot, *uid, auto_reply["value"].(string))
+			api.Sendprivatemsg(*bot, *uid, auto_reply["value"].(string), false)
 			break
 		}
 	}
@@ -127,7 +127,7 @@ func private_auto_reply(bot *int, uid *int, text *string) {
 func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 	switch text {
 	case "help":
-		api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help)
+		api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help, false)
 		break
 
 	case "登录", "登陆", "login":

@@ -62,14 +62,14 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(gid, word interface{}) []gorose.Data {
+func Api_find(gid, word interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid":  gid,
 		"word": word,
 	}
 	db.Where(where)
-	ret, err := db.Get()
+	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil
@@ -85,7 +85,7 @@ func Api_delete(gid, word interface{}) bool {
 		"word": word,
 	}
 	db.Where(where)
-	_, err := db.Get()
+	_, err := db.Delete()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return false

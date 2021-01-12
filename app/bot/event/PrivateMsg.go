@@ -1,7 +1,6 @@
 package event
 
 import (
-	"fmt"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
@@ -125,10 +124,6 @@ func private_auto_reply(bot *int, uid *int, text *string) {
 	}
 }
 
-const private_function_number = 1
-
-var private_function_type = []string{"unknow", "password"}
-
 func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 	switch text {
 	case "help":
@@ -144,12 +139,16 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 		break
 
 	default:
-		privateHandle_acfur_middle(bot, uid, &text)
+		privateHandle_acfur_middle(bot, uid, text, origin_text)
 		break
 	}
 }
 
-func privateHandle_acfur_middle(bot *int, uid *int, text *string) {
+const private_function_number = 2
+
+var private_function_type = []string{"unknow", "password", "bind"}
+
+func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)
 	new_text := make([]string, private_function_number+1, private_function_number+1)
 	var wg sync.WaitGroup
@@ -157,11 +156,16 @@ func privateHandle_acfur_middle(bot *int, uid *int, text *string) {
 
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(*text, []string{"密码", "password"})
-		fmt.Println(str, ok)
+		str, ok := service.Serv_text_match(text, []string{"密码", "password"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(1, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(text, []string{"绑定", "bind"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(2, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -177,6 +181,9 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 	switch Type {
 	case "password":
 		Private.App_userChangePassword(*bot, *uid, text)
+		break
+
+	case "bind":
 		break
 
 	default:

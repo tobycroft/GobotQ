@@ -1,6 +1,9 @@
 package app_default
 
-const Default_private_help = "这里是帮助信息"
+const Default_private_help = "这里是帮助信息:\r\n" +
+	"acfur私聊功能表：\r\n" +
+	"	1.acfur登录：登录acfur软件\r\n" +
+	"	2.acfur绑定：输入绑定密码"
 const Default_group_help = "这里是群帮助信息：\r\n" +
 	"acfur功能表：\r\n" +
 	"	1.acfur设定：查看设定\r\n" +

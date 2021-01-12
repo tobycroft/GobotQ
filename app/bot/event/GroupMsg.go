@@ -292,13 +292,13 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "ban_group":
 		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, "", true)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_word, true)
 		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 		break
 
 	case "ban_weixin":
 		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, "", true)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_kick_word, true)
 		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 		break
 

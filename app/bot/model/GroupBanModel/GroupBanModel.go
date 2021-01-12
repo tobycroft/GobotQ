@@ -1,6 +1,7 @@
 package GroupBanModel
 
 import (
+	"github.com/gohouse/gorose/v2"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )

@@ -65,7 +65,7 @@ func App_unbind_bot(bot int, uid int, text string) {
 	}
 }
 
-func Api_change_bot_password(bot int, uid int, text string) {
+func App_change_bot_secret(bot int, uid int, text string) {
 	data := BotModel.Api_find(bot)
 	if len(data) < 1 {
 		api.Sendprivatemsg(bot, uid, "未找到当前机器人的信息，请稍后再试"+app_default.Default_error_alert, false)

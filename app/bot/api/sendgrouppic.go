@@ -1,9 +1,11 @@
 package api
 
 import (
+	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Net"
+	"strings"
 )
 
 type SendGroupPicRet struct {
@@ -32,7 +34,17 @@ func sendgrouppic_file(fromqq, togroup, path interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return ret.Ret, nil
+	if strings.Contains(ret.Ret, "pic,hash") {
+		return ret.Ret, nil
+	} else {
+		var ret2 SendPrivatePic
+		err = jsr.UnmarshalFromString(ret.Ret, &ret2)
+		if err != nil {
+			return "", err
+		} else {
+			return "", errors.New(ret2.Retmsg)
+		}
+	}
 }
 
 func sendgrouppic_base64(fromqq, togroup, pic interface{}) (string, error) {
@@ -57,7 +69,17 @@ func sendgrouppic_base64(fromqq, togroup, pic interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return ret.Ret, nil
+	if strings.Contains(ret.Ret, "pic,hash") {
+		return ret.Ret, nil
+	} else {
+		var ret2 SendPrivatePic
+		err = jsr.UnmarshalFromString(ret.Ret, &ret2)
+		if err != nil {
+			return "", err
+		} else {
+			return "", errors.New(ret2.Retmsg)
+		}
+	}
 }
 
 func sendgrouppic_remote(fromqq, togroup, url interface{}) (string, error) {
@@ -82,5 +104,15 @@ func sendgrouppic_remote(fromqq, togroup, url interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return ret.Ret, nil
+	if strings.Contains(ret.Ret, "pic,hash") {
+		return ret.Ret, nil
+	} else {
+		var ret2 SendPrivatePic
+		err = jsr.UnmarshalFromString(ret.Ret, &ret2)
+		if err != nil {
+			return "", err
+		} else {
+			return "", errors.New(ret2.Retmsg)
+		}
+	}
 }

@@ -6,7 +6,6 @@ import (
 	"main.go/app/bot/model/BotRequestModel"
 	"main.go/config/app_default"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
 )
 
 func App_bind_robot(bot int, uid int, text string) {
@@ -76,11 +75,6 @@ func App_change_bot_secret(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
 		return
 	}
-	if Calc.Any2String(data["secret"]) != text {
-		api.Sendprivatemsg(bot, uid, "机器人密码错误，请重新输入", true)
-		return
-	}
-
 	if BotModel.Api_update_password(bot, text) {
 		api.Sendprivatemsg(bot, uid, "修改机器人密码成功，机器人当前的密码为："+text, false)
 	} else {

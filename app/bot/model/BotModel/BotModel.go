@@ -136,3 +136,22 @@ func Api_update_owner(bot, owner interface{}) bool {
 		return true
 	}
 }
+
+func Api_update_password(bot, secret interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"secret": secret,
+	}
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

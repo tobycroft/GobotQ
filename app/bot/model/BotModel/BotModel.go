@@ -117,3 +117,22 @@ func Api_update_img(owner, bot, img interface{}) bool {
 		return true
 	}
 }
+
+func Api_update_owner(bot, owner interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"owner": owner,
+	}
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

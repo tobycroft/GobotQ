@@ -8,8 +8,12 @@ import (
 
 const table = "bot_request"
 
-func Api_insert(uid, bot, password, owner, secret interface{}) bool {
-	db := tuuz.Db().Table(table)
+type Interface struct {
+	Db gorose.IOrm
+}
+
+func (self *Interface) Api_insert(uid, bot, password, owner, secret interface{}) bool {
+	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"uid":      uid,
 		"bot":      bot,
@@ -54,8 +58,8 @@ func Api_select() []gorose.Data {
 	}
 }
 
-func Api_delete(bot interface{}) bool {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_delete(bot interface{}) bool {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"bot": bot,
 	}

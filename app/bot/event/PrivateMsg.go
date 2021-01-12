@@ -64,7 +64,7 @@ func PrivateMsg(pm PM) {
 		return
 	}
 
-	Redis.SetRaw("PrivateMsg:"+uid_string, Calc.Md5(text), 3)
+	Redis.SetRaw("PrivateMsg:"+uid_string, Calc.Md5(text), 1)
 
 	PrivateHandle(bot, uid, text)
 }
@@ -74,7 +74,7 @@ func PrivateHandle(bot int, uid int, text string) {
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
 	if active {
-		privateHandle_acfur(&bot, &uid, new_text)
+		privateHandle_acfur(&bot, &uid, new_text, text)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
 		if private_default_reply(&bot, &uid, &text) {
@@ -129,7 +129,7 @@ const private_function_number = 1
 
 var private_function_type = []string{"unknow", "password"}
 
-func privateHandle_acfur(bot *int, uid *int, text string) {
+func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 	switch text {
 	case "help":
 		api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help)

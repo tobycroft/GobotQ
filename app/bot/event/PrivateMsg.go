@@ -144,7 +144,7 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 	}
 }
 
-const private_function_number = 2
+const private_function_number = 4
 
 var private_function_type = []string{"unknow", "password", "bind", "unbind", "change_secret"}
 
@@ -177,7 +177,7 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 		str, ok := service.Serv_text_match(text, []string{"修改机器人密码", "change_secret"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(3, &wg)
+	}(4, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {

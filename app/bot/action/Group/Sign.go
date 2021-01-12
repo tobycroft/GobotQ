@@ -8,10 +8,11 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/tuuz"
+	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 )
 
-func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
 	private_mode := false
 	if groupfunction["sign_send_private"].(int64) == 1 {
@@ -35,6 +36,12 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 			api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
 		}
 	} else {
+		rank := GroupSignModel.Api_count(gid)
+		order := rank + 1
+		amount := app_conf.Group_Sign_incr - rank
+		if amount < 0 {
+			amount = 1
+		}
 		group_model := GroupBalanceModel.Api_find(gid, uid)
 		db := tuuz.Db()
 		db.Begin()
@@ -47,7 +54,10 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 				return
 			}
 		}
-		if !gbp.Api_incr(gid, uid, app_conf.Group_Sign_incr) {
+
+		//加分模式
+
+		if !gbp.Api_incr(gid, uid, amount) {
 			db.Rollback()
 			Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 			return
@@ -62,10 +72,10 @@ func App_group_sign(bot, gid, uid interface{}, req int, random int, groupmember 
 		} else {
 			db.Commit()
 			if private_mode {
-				api.Sendgrouptempmsg(bot, gid, uid, "签到成功")
+				api.Sendgrouptempmsg(bot, gid, uid, "签到成功,您是第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount))
 			} else {
 				at := service.Serv_at(uid)
-				api.Sendgroupmsg(bot, gid, "签到成功"+at, auto_retract)
+				api.Sendgroupmsg(bot, gid, "签到成功"+at+",您是第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount), auto_retract)
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package Group
 
 import (
+	"fmt"
 	"github.com/gohouse/gorose/v2"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanWordModel"
@@ -42,6 +43,7 @@ func App_group_ban_word_set(bot, gid, uid int, text string, groupmember map[stri
 	if len(text) > 2 {
 		text_slice := strings.Split(text, "")
 		Type := text_slice[0]
+		fmt.Println(text_slice)
 		new_str := ""
 		for i := 1; i < len(text_slice); i++ {
 			new_str += text_slice[i]
@@ -104,7 +106,7 @@ func App_group_ban_word_set(bot, gid, uid int, text string, groupmember map[stri
 			break
 
 		default:
-			api.Sendgroupmsg(bot, gid, "屏蔽词缺少模式，请发送acfur屏蔽查看如何使用屏蔽词", true)
+			api.Sendgroupmsg(bot, gid, "如需添加，请使用acfur屏蔽(+)1/2/3/+/-/=(+)屏蔽词即可，如需其他帮助，请发送acfur屏蔽来查看添加方法", true)
 			break
 		}
 	} else {

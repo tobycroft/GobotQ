@@ -54,10 +54,6 @@ func App_unbind_bot(bot int, uid int, text string) {
 		api.Sendprivatemsg(bot, uid, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
 		return
 	}
-	if len(text) < 2 {
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur解除绑定机器人(+)密码\"来绑定您的机器人", false)
-		return
-	}
 	if BotModel.Api_update_owner(bot, 0) {
 		api.Sendprivatemsg(bot, uid, "取消绑定成功", false)
 	} else {

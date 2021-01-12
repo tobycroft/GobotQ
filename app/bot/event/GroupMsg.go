@@ -75,7 +75,7 @@ func GroupMsg(gm GM) {
 		return
 	}
 
-	Redis.SetRaw("GroupMsg:"+gid_string+":"+uid_string, Calc.Md5(text), 3)
+	Redis.SetRaw("GroupMsg:"+gid_string+":"+uid_string, Calc.Md5(text), 1)
 
 	if !is_self {
 		GroupHandle(bot, gid, uid, text, gm.Msg.Req, retract)

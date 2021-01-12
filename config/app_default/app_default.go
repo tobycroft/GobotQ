@@ -3,8 +3,8 @@ package app_default
 const Default_private_help = "这里是帮助信息,如下内容括号中的不要输入:\r\n" +
 	"acfur私聊功能表：\r\n" +
 	"	1.acfur登录：登录acfur软件\r\n" +
-	"	2.acfur清除登录：T出所有已经登录APP的设备" +
-	"	3.绑定机器人：acfur绑定(+)机器人qq(+):机器人密码，例如acfur绑定123456:123456"
+	"	2.acfur清除登录：T出所有已经登录APP的设备\r\n" +
+	"	3.绑定机器人：acfur绑定(+)机器人qq(+):机器人密码，例如acfur绑定123456:123456\r\n"
 const Default_group_help = "这里是群帮助信息：\r\n" +
 	"acfur功能表：\r\n" +
 	"	1.acfur设定：查看设定\r\n" +

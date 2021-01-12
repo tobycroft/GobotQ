@@ -199,14 +199,14 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 const group_function_number = 5
 
-var group_function_type = []string{"unknow", "sign", "setting", "ban_word", "url_detect"}
+var group_function_type = []string{"unknow", "ban_group", "sign", "setting", "ban_word", "url_detect"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
 	wg.Add(group_function_number)
-	//签到(直接)
+
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		ok := service.Serv_ban_group(*text)
@@ -232,6 +232,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 		new_text[idx] = str
 		function[idx] = ok
 	}(4, &wg)
+	//签到(直接)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match_all(*text, []string{"签到"})

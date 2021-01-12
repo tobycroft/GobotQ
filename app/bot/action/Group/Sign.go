@@ -39,7 +39,7 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 		rank := GroupSignModel.Api_count(gid)
 		order := rank + 1
 		amount := app_conf.Group_Sign_incr - rank
-		if amount < 0 {
+		if amount <= 0 {
 			amount = 1
 		}
 		group_model := GroupBalanceModel.Api_find(gid, uid)

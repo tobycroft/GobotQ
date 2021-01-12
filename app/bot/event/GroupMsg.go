@@ -295,20 +295,20 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 	case "url_detect":
 		Retract_chan_group_instant <- ret
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
-		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 
 		break
 
 	case "ban_group":
 		Retract_chan_group_instant <- ret
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, true)
-		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 		break
 
 	case "ban_weixin":
 		Retract_chan_group_instant <- ret
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, true)
-		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
+		//api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 		break
 
 	default:

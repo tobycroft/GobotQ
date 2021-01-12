@@ -8,8 +8,19 @@ import (
 
 const table = "bot"
 
+type Interface struct {
+	Db gorose.IOrm
+}
+
 func Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) bool {
-	db := tuuz.Db().Table(table)
+	db := tuuz.Db()
+	var self Interface
+	self.Db = db
+	return self.Api_insert(bot, cname, Type, owner, secret, password, end_time)
+}
+
+func (self *Interface) Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) bool {
+	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"bot":      bot,
 		"cname":    cname,

@@ -1,24 +1,20 @@
 package Private
 
 import (
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
 	"main.go/config/app_default"
 	"main.go/tuuz"
-	"strings"
 	"time"
 )
 
 func App_bind_robot(bot int, uid int, text string) {
-	strs := strings.Split(text, ":")
-	if len(strs) < 2 {
+	if len(text) < 2 {
 		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定账号:密码\"来绑定您的机器人", false)
 		return
 	}
-	fmt.Println(strs)
-	data := BotRequestModel.Api_find(bot, strs[0])
+	data := BotRequestModel.Api_find(bot, text)
 	if len(data) > 0 {
 		db := tuuz.Db()
 		db.Begin()
@@ -28,7 +24,7 @@ func App_bind_robot(bot int, uid int, text string) {
 			db.Rollback()
 			return
 		}
-		if data["secret"] != strs[1] {
+		if data["secret"] != text {
 			api.Sendprivatemsg(bot, uid, "绑定密码不正确", false)
 			return
 		}

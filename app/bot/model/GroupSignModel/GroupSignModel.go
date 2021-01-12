@@ -63,13 +63,13 @@ func Api_count(gid, uid interface{}) int64 {
 
 }
 
-func Api_select(gid, uid interface{}) []gorose.Data {
+func Api_select(gid interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
-		"uid": uid,
 	}
 	db.Where(where)
+	db.Where("date", ">", Date.Today())
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

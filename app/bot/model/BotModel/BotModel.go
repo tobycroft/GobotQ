@@ -8,7 +8,7 @@ import (
 
 const table = "bot"
 
-func Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) {
+func Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"bot":      bot,
@@ -18,6 +18,14 @@ func Api_insert(bot, cname, Type, owner, secret, password, end_time interface{})
 		"secret":   secret,
 		"password": password,
 		"end_time": end_time,
+	}
+	db.Data(data)
+	_, err := db.Insert()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
 	}
 }
 

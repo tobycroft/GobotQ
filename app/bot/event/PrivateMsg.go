@@ -184,7 +184,7 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 		break
 
 	case "bind":
-
+		Private.App_bind_robot(bot, uid, text)
 		break
 
 	default:

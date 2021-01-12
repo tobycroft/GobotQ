@@ -8,6 +8,19 @@ import (
 
 const table = "bot"
 
+func Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) {
+	db := tuuz.Db().Table(table)
+	data := map[string]interface{}{
+		"bot":      bot,
+		"cname":    cname,
+		"Type":     Type,
+		"owner":    owner,
+		"secret":   secret,
+		"password": password,
+		"end_time": end_time,
+	}
+}
+
 func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
 	ret, err := db.Get()

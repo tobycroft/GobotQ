@@ -1,9 +1,12 @@
 package cron
 
 import (
+	"errors"
 	"main.go/app/bot/api"
 	"main.go/app/bot/event"
 	"main.go/config/app_conf"
+	"main.go/tuuz"
+	"main.go/tuuz/Log"
 	"time"
 )
 
@@ -67,6 +70,7 @@ func retract_group() {
 			case event.Retract_chan_group_instant <- r:
 
 			case <-time.After(5 * time.Second):
+				Log.Errs(errors.New("retract_group失败"), tuuz.FUNCTION_ALL())
 				return
 			}
 		}(r)
@@ -107,6 +111,7 @@ func retract_group2() {
 			case Retract_chan_group_instant <- r:
 
 			case <-time.After(5 * time.Second):
+				Log.Errs(errors.New("retract_group2失败"), tuuz.FUNCTION_ALL())
 				return
 			}
 		}(r)
@@ -148,6 +153,7 @@ func retract_group3() {
 			case api.Retract_chan_group_instant <- retract:
 
 			case <-time.After(5 * time.Second):
+				Log.Errs(errors.New("retract_group3失败"), tuuz.FUNCTION_ALL())
 				return
 			}
 		}(r)

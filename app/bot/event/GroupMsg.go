@@ -199,7 +199,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 const group_function_number = 3
 
-var group_function_type = []string{"unknow", "sign", "setting", "ban_word"}
+var group_function_type = []string{"unknow", "sign", "setting", "ban_word", "url_detect"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -225,6 +225,12 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 		new_text[idx] = str
 		function[idx] = ok
 	}(3, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_url_detect(*text)
+		new_text[idx] = str
+		function[idx] = ok
+	}(4, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -271,6 +277,10 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			}
 		}
 		Group.App_group_ban_word_set(*bot, *gid, *uid, text, groupmember, groupfunction)
+		break
+
+	case "url_detect":
+		api.Mutegroupmember(*bot, *gid, *uid, int(groupfunction["ban_time"].(int64)))
 		break
 
 	default:

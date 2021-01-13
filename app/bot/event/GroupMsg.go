@@ -201,7 +201,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 const group_function_number = 6
 
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "setting", "ban_word", "sign"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_word", "setting", "sign"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)

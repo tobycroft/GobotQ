@@ -199,7 +199,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 	}
 }
 
-const group_function_number = 5
+const group_function_number = 6
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "sign", "setting", "ban_word"}
 

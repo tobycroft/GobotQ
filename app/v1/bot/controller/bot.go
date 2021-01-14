@@ -13,6 +13,7 @@ func BotController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
 	route.Any("add", bot_add)
+	route.Any("list", bot_list)
 }
 
 func bot_add(c *gin.Context) {
@@ -56,5 +57,6 @@ func bot_add(c *gin.Context) {
 
 func bot_list(c *gin.Context) {
 	uid := c.PostForm("uid")
-
+	data := BotRequestModel.Api_select_byUid(uid)
+	RET.Success(c, 0, data, nil)
 }

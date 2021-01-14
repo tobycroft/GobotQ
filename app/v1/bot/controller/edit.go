@@ -76,3 +76,25 @@ func clear_owner(c *gin.Context) {
 		RET.Fail(c, 0, nil, nil)
 	}
 }
+
+func change_secret(c *gin.Context) {
+	bot := c.PostForm("bot")
+	if BotModel.Api_update_secret(bot, 0) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 0, nil, nil)
+	}
+}
+
+func change_password(c *gin.Context) {
+	bot := c.PostForm("bot")
+	password, ok := Input.Post("password", c, false)
+	if ok {
+		return
+	}
+	if BotModel.Api_update_password(bot, password) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 0, nil, nil)
+	}
+}

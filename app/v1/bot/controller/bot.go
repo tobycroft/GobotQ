@@ -37,6 +37,10 @@ func add(c *gin.Context) {
 		RET.Fail(c, 406, nil, "本账号已经被提交过了")
 		return
 	}
+	if len(BotRequestModel.Api_select_byUid(uid)) > 3 {
+		RET.Fail(c, 406, nil, "你的待通过列表已经有3个账号了，请先等待通过后才可以继续使用")
+		return
+	}
 	var br BotRequestModel.Interface
 	br.Db = tuuz.Db()
 	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {

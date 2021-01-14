@@ -38,7 +38,7 @@ func add(c *gin.Context) {
 		return
 	}
 	if len(BotRequestModel.Api_select_byUid(uid)) > 3 {
-		RET.Fail(c, 406, nil, "你的待通过列表已经有3个账号了，请先等待通过后才可以继续使用")
+		RET.Fail(c, 406, nil, "你的待通过列表已经有3个账号了，请先等待通过后才可以继续提交")
 		return
 	}
 	var br BotRequestModel.Interface

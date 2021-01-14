@@ -87,3 +87,19 @@ func (self *Interface) Api_delete(bot interface{}) bool {
 		return true
 	}
 }
+
+func (self *Interface) Api_delete_byUid(uid, bot interface{}) bool {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"uid": uid,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

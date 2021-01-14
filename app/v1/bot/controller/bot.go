@@ -12,6 +12,7 @@ import (
 func BotController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
+	route.Any("add", add)
 }
 
 func add(c *gin.Context) {

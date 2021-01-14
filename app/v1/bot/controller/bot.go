@@ -12,10 +12,10 @@ import (
 func BotController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-	route.Any("add", add)
+	route.Any("add", bot_add)
 }
 
-func add(c *gin.Context) {
+func bot_add(c *gin.Context) {
 	uid := c.PostForm("uid")
 	bot, ok := Input.PostInt("bot", c)
 	if !ok {
@@ -52,4 +52,9 @@ func add(c *gin.Context) {
 	} else {
 		RET.Fail(c, 500, nil, nil)
 	}
+}
+
+func bot_list(c *gin.Context) {
+	uid := c.PostForm("uid")
+
 }

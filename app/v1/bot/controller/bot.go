@@ -14,6 +14,7 @@ func BotController(route *gin.RouterGroup) {
 
 	route.Any("add", bot_add)
 	route.Any("list", bot_list)
+	route.Any("del", bot_delete)
 }
 
 func bot_add(c *gin.Context) {
@@ -61,7 +62,7 @@ func bot_list(c *gin.Context) {
 	RET.Success(c, 0, data, nil)
 }
 
-func bot_update(c *gin.Context) {
+func bot_delete(c *gin.Context) {
 	uid := c.PostForm("uid")
 	bot, ok := Input.PostInt("bot", c)
 	if !ok {

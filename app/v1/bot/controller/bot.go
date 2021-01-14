@@ -60,3 +60,18 @@ func bot_list(c *gin.Context) {
 	data := BotRequestModel.Api_select_byUid(uid)
 	RET.Success(c, 0, data, nil)
 }
+
+func bot_update(c *gin.Context) {
+	uid := c.PostForm("uid")
+	bot, ok := Input.PostInt("bot", c)
+	if !ok {
+		return
+	}
+	var br BotRequestModel.Interface
+	br.Db = tuuz.Db()
+	if br.Api_delete(bot) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
+}

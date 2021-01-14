@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
@@ -27,6 +28,7 @@ func EditController(route *gin.RouterGroup) {
 		}
 	})
 	route.Any("change_img", change_img)
+	route.Any("change_name", change_name)
 }
 
 func change_img(c *gin.Context) {
@@ -44,5 +46,23 @@ func change_img(c *gin.Context) {
 }
 
 func change_name(c *gin.Context) {
-	uid := c.PostForm("uid")
+	bot := c.PostForm("bot")
+	nickname, ok := Input.Post("nickname", c, false)
+	if !ok {
+		return
+	}
+	os, err := api.Setnickname(bot, nickname)
+	if err != nil {
+		RET.Fail(c, 300, err, err.Error())
+		return
+	}
+	if !os {
+		RET.Fail(c, 400, nil, "api修改昵称失败")
+		return
+	}
+	if BotModel.Api_update_cname(bot, nickname) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
 }

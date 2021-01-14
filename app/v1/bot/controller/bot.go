@@ -34,6 +34,10 @@ func add(c *gin.Context) {
 		return
 	}
 	if len(BotRequestModel.Api_find(bot)) > 0 {
+		RET.Fail(c, 406, nil, "本账号已经启用了，您对您的机器人发送acfur绑定+绑定密码来获取机器人的控制权")
+		return
+	}
+	if len(BotRequestModel.Api_find(bot)) > 0 {
 		RET.Fail(c, 406, nil, "本账号已经被提交过了")
 		return
 	}

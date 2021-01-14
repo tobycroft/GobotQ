@@ -32,6 +32,10 @@ func add(c *gin.Context) {
 	if !ok {
 		return
 	}
+	if len(BotRequestModel.Api_find(bot)) > 0 {
+		RET.Fail(c, 406, nil, "本账号已经被提交过了")
+		return
+	}
 	var br BotRequestModel.Interface
 	br.Db = tuuz.Db()
 	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {

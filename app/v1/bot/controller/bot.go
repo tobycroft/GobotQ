@@ -69,7 +69,7 @@ func bot_update(c *gin.Context) {
 	}
 	var br BotRequestModel.Interface
 	br.Db = tuuz.Db()
-	if br.Api_delete(bot) {
+	if br.Api_delete_byUid(uid, bot) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

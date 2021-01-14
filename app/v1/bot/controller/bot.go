@@ -6,6 +6,7 @@ import (
 	"main.go/common/BaseController"
 	"main.go/tuuz"
 	"main.go/tuuz/Input"
+	"main.go/tuuz/RET"
 )
 
 func BotController(route *gin.RouterGroup) {
@@ -31,10 +32,11 @@ func add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	time, ok := Input.PostInt("time", c)
 	var br BotRequestModel.Interface
 	br.Db = tuuz.Db()
-	if br.Api_insert(uid, bot, password, uid, secret, time*3600*30) {
-
+	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
 	}
 }

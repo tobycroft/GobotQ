@@ -32,11 +32,10 @@ func (self *Interface) Api_insert(uid, bot, password, owner, secret, time interf
 	}
 }
 
-func Api_find(bot, secret interface{}) gorose.Data {
+func Api_find(bot interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot":    bot,
-		"secret": secret,
+		"bot": bot,
 	}
 	db.Where(where)
 	ret, err := db.First()

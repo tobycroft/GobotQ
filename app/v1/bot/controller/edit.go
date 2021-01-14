@@ -66,3 +66,12 @@ func change_name(c *gin.Context) {
 		RET.Fail(c, 500, nil, nil)
 	}
 }
+
+func clear_owner(c *gin.Context) {
+	bot := c.PostForm("bot")
+	if BotModel.Api_update_owner(bot, 0) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 0, nil, nil)
+	}
+}

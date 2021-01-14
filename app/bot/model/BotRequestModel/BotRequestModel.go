@@ -58,6 +58,21 @@ func Api_select() []gorose.Data {
 	}
 }
 
+func Api_select_byUid(uid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"uid": uid,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func (self *Interface) Api_delete(bot interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{

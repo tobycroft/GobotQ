@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -90,7 +91,7 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
-	groupmember := GroupMemberModel.Api_find(bot, gid, uid)
+	groupmember := GroupMemberModel.Api_find(gid, uid)
 	groupfunction := GroupFunctionModel.Api_find(gid)
 	if active {
 		groupHandle_acfur(&bot, &gid, &uid, text, new_text, &req, &random, groupmember, groupfunction)
@@ -327,6 +328,36 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
 			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+		}
+		break
+
+	case "积分查询":
+		gbl := GroupBalanceModel.Api_find(*gid, *uid)
+		if len(gbl) > 0 {
+			gt := GroupBalanceModel.Api_select_gt(*gid, gbl["balance"])
+			lt := GroupBalanceModel.Api_select_lt(*gid, gbl["balance"])
+			if len(gt) > 9 {
+
+			}
+		} else {
+
+		}
+
+		break
+
+	case "积分排行":
+		gbl := GroupBalanceModel.Api_select(*gid, 10)
+		str := ""
+		for i1, i2 := range gbl {
+			user := GroupMemberModel.Api_find(*gid, i2["uid"].(int64))
+			if len(user) > 0 {
+				if len(user["card"]) > 2 {
+					str += "第" + Calc.Int2String(i1+1) + "名：" + user["card"].(string) + "\r\n"
+				} else {
+					str += "第" + Calc.Int2String(i1+1) + "名：" + user["nickname"].(string) + "\r\n"
+				}
+
+			}
 		}
 		break
 

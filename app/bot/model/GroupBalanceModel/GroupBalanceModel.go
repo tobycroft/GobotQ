@@ -51,6 +51,7 @@ func Api_select_gt(gid, balance interface{}) []gorose.Data {
 		"gid": gid,
 	}
 	db.Where(where)
+	db.Where("balance", ">", balance)
 	db.Limit(app_conf.Db_default_load_limit)
 	ret, err := db.Get()
 	if err != nil {
@@ -67,6 +68,7 @@ func Api_select_lt(gid, balance interface{}) []gorose.Data {
 		"gid": gid,
 	}
 	db.Where(where)
+	db.Where("balance", "<", balance)
 	db.Limit(app_conf.Db_default_load_limit)
 	ret, err := db.Get()
 	if err != nil {

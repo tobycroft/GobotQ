@@ -53,7 +53,7 @@ func Api_select_gt(gid, balance interface{}) []gorose.Data {
 	db.Where(where)
 	db.Where("balance", ">", balance)
 	db.Order("balance asc")
-	db.Limit(10)
+	db.Limit(9)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -71,7 +71,7 @@ func Api_select_lt(gid, balance interface{}) []gorose.Data {
 	db.Where(where)
 	db.Where("balance", "<", balance)
 	db.Order("balance desc")
-	db.Limit(10)
+	db.Limit(9)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

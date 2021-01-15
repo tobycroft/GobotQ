@@ -356,9 +356,9 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			user := GroupMemberModel.Api_find(*gid, i2["uid"].(int64))
 			if len(user) > 0 {
 				if len(Calc.Any2String(user["card"])) > 2 && Calc.Any2String(user["card"]) != "null" {
-					str += "第" + Calc.Int2String(i1+1) + "名：" + user["card"].(string) + "，" + Calc.Any2String(user["balance"]) + "分" + "\r\n"
+					str += "第" + Calc.Int2String(i1+1) + "名：" + user["card"].(string) + "，" + Calc.Any2String(i2["balance"]) + "分" + "\r\n"
 				} else {
-					str += "第" + Calc.Int2String(i1+1) + "名：" + user["nickname"].(string) + "，" + Calc.Any2String(user["balance"]) + "分" + "\r\n"
+					str += "第" + Calc.Int2String(i1+1) + "名：" + user["nickname"].(string) + "，" + Calc.Any2String(i2["balance"]) + "分" + "\r\n"
 				}
 			}
 		}

@@ -358,6 +358,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 				}
 			}
 		}
+		api.Sendgroupmsg(*bot, *gid, str, true)
 		break
 
 	default:

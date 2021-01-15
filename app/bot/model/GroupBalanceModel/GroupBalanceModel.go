@@ -45,6 +45,38 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
+func Api_select_gt(gid, balance interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+	}
+	db.Where(where)
+	db.Limit(app_conf.Db_default_load_limit)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_lt(gid, balance interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+	}
+	db.Where(where)
+	db.Limit(app_conf.Db_default_load_limit)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_select_uid(uid interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

@@ -333,16 +333,8 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "积分查询":
 		gbl := GroupBalanceModel.Api_find(*gid, *uid)
-		if len(gbl) > 0 {
-			gt := GroupBalanceModel.Api_select_gt(*gid, gbl["balance"])
-			lt := GroupBalanceModel.Api_select_lt(*gid, gbl["balance"])
-			if len(gt) > 9 {
-
-			}
-		} else {
-
-		}
-
+		str := "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
+		api.Sendgroupmsg(*bot, *gid, str, true)
 		break
 
 	case "积分排行":

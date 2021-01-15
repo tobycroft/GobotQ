@@ -35,6 +35,7 @@ func Api_select(gid interface{}) []gorose.Data {
 		"gid": gid,
 	}
 	db.Where(where)
+	db.Order("balance desc")
 	db.Limit(app_conf.Db_default_load_limit)
 	ret, err := db.Get()
 	if err != nil {

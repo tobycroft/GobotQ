@@ -29,14 +29,14 @@ func (self *Interface) Api_insert(gid, uid interface{}) bool {
 	}
 }
 
-func Api_select(gid interface{}) []gorose.Data {
+func Api_select(gid interface{}, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
 	}
 	db.Where(where)
 	db.Order("balance desc")
-	db.Limit(app_conf.Db_default_load_limit)
+	db.Limit(limit)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

@@ -2,7 +2,6 @@ package GroupBalanceModel
 
 import (
 	"github.com/gohouse/gorose/v2"
-	"main.go/config/app_conf"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )
@@ -54,7 +53,7 @@ func Api_select_gt(gid, balance interface{}) []gorose.Data {
 	db.Where(where)
 	db.Where("balance", ">", balance)
 	db.Order("balance asc")
-	db.Limit(app_conf.Db_default_load_limit)
+	db.Limit(10)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -72,7 +71,7 @@ func Api_select_lt(gid, balance interface{}) []gorose.Data {
 	db.Where(where)
 	db.Where("balance", "<", balance)
 	db.Order("balance desc")
-	db.Limit(app_conf.Db_default_load_limit)
+	db.Limit(10)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

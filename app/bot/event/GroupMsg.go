@@ -346,6 +346,16 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		}
 		break
 
+	case "ban_share":
+		if groupfunction["ban_wx"].(int64) == 1 {
+			Retract_chan_group_instant <- ret
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_share, true)
+			time := GroupBanModel.Api_count(*gid, *uid)
+			GroupBanModel.Api_insert(*gid, *uid)
+			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+		}
+		break
+
 	case "积分查询":
 		Group.App_check_balance(*bot, *gid, *uid, *req, *random, groupmember, groupfunction)
 		break

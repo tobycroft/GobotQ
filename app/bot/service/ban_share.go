@@ -1,9 +1,11 @@
 package service
 
-import "regexp"
+import (
+	"strings"
+)
 
 func Serv_ban_share(text string) bool {
-	c1, _ := regexp.MatchString("com.tencent.miniapp", text)
+	c1 := strings.Contains(text, "com.tencent.")
 	if c1 {
 		return c1
 	}

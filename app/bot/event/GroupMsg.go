@@ -275,6 +275,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	for i := range function {
 		if function[i] == true {
 			function_route = i
+			break
 		}
 	}
 	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random, groupmember, groupfunction)
@@ -324,7 +325,9 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "url_detect":
 		if groupfunction["ban_url"].(int64) == 1 {
-			Retract_chan_group_instant <- ret
+			if groupfunction["ban_retract"].(int64) == 1 {
+				Retract_chan_group_instant <- ret
+			}
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
@@ -334,7 +337,9 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "ban_group":
 		if groupfunction["ban_group"].(int64) == 1 {
-			Retract_chan_group_instant <- ret
+			if groupfunction["ban_retract"].(int64) == 1 {
+				Retract_chan_group_instant <- ret
+			}
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, true)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
@@ -344,7 +349,9 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "ban_weixin":
 		if groupfunction["ban_wx"].(int64) == 1 {
-			Retract_chan_group_instant <- ret
+			if groupfunction["ban_retract"].(int64) == 1 {
+				Retract_chan_group_instant <- ret
+			}
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, true)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
@@ -353,8 +360,10 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		break
 
 	case "ban_share":
-		if groupfunction["ban_wx"].(int64) == 1 {
-			Retract_chan_group_instant <- ret
+		if groupfunction["ban_share"].(int64) == 1 {
+			if groupfunction["ban_retract"].(int64) == 1 {
+				Retract_chan_group_instant <- ret
+			}
 			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_share, true)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)

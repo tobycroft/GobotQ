@@ -275,7 +275,6 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	for i := range function {
 		if function[i] == true {
 			function_route = i
-			break
 		}
 	}
 	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random, groupmember, groupfunction)

@@ -52,6 +52,7 @@ const Default_ban_word = "你已经触发了屏蔽词，现在将对你屏蔽"
 const Default_ban_group = "请不要分享群"
 const Default_ban_weixin = "请不要分享微信"
 const Default_ban_share = "请勿发送分享"
+const Default_length_limit = "请勿发送长文本"
 
 const Default_kick_word = "用户触发T出词，和他说再见吧？哦不过他好像已经收不到了hhh"
 

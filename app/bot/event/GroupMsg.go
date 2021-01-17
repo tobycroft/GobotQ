@@ -265,7 +265,7 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	}(9, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		if len(*text) > groupfunction["word_limit"].(int) {
+		if int64(len(*text)) > groupfunction["word_limit"].(int64) {
 			new_text[idx] = *text
 			function[idx] = true
 		}
@@ -373,7 +373,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "长度限制":
 		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int2String(groupfunction["word_limit"].(int)), true)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)), true)
 		time := GroupBanModel.Api_count(*gid, *uid)
 		GroupBanModel.Api_insert(*gid, *uid)
 		api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))

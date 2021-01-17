@@ -200,7 +200,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 
 const group_function_number = 9
 
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "积分查询", "积分排行"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "积分查询", "积分排行", "长度限制"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -263,6 +263,13 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 		new_text[idx] = str
 		function[idx] = ok
 	}(9, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		if len(*text) > groupfunction["word_limit"].(int) {
+			new_text[idx] = *text
+			function[idx] = true
+		}
+	}(10, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {

@@ -198,7 +198,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 	}
 }
 
-const group_function_number = 9
+const group_function_number = 10
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "积分查询", "积分排行", "长度限制"}
 

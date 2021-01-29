@@ -9,10 +9,5 @@ func Serv_ban_share(text string) bool {
 	if c1 {
 		return c1
 	}
-	if strings.Contains(text, "<?xml") {
-		if strings.Contains(text, "web") {
-			return true
-		}
-	}
-	return false
+	return strings.Contains(text, "<?xml")
 }

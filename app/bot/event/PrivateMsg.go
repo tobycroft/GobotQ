@@ -163,7 +163,7 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 		for _, groupbind := range groupbinds {
 			groups = append(groups, Calc.Any2String(groupbind["gid"]))
 		}
-		api.Sendprivatemsg(*bot, *uid, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ","), false)
+		api.Sendprivatemsg(*bot, *uid, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+"\r\n您可以使用：acfur绑定群:群号，来绑定新群", false)
 		break
 
 	default:

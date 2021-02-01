@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/bot/service"
 )
 
 type EM struct {
@@ -57,9 +58,12 @@ func EventMsg(em EM) {
 			} else {
 				api.Sendgroupmsg(bot, gid, "Acfur-Off，权限已回收，数据故障", auto_retract)
 			}
-
 		} else {
-
+			if GroupMemberModel.Api_update_type(gid, uid, "member") {
+				api.Sendgroupmsg(bot, gid, "管理员列表更新", auto_retract)
+			} else {
+				api.Sendgroupmsg(bot, gid, "管理员权限变动失败", auto_retract)
+			}
 		}
 		break
 
@@ -71,9 +75,12 @@ func EventMsg(em EM) {
 			} else {
 				api.Sendgroupmsg(bot, gid, "Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息", auto_retract)
 			}
-
 		} else {
-
+			if GroupMemberModel.Api_update_type(gid, uid, "admin") {
+				api.Sendgroupmsg(bot, gid, "恭喜上位"+service.Serv_at(uid), auto_retract)
+			} else {
+				api.Sendgroupmsg(bot, gid, "恭喜上位,但是权限变动失败", auto_retract)
+			}
 		}
 		break
 

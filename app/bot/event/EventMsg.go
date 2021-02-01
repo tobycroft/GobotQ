@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupKickModel"
@@ -155,6 +156,19 @@ func EventMsg(em EM) {
 			}()
 		} else {
 			api.Setfriendaddrequest(bot, uid, seq, api.Request_friend_denide)
+		}
+		break
+
+	//机器人被T出
+	case 30:
+		break
+
+	//机器人被邀请进群
+	case 1:
+		if len(BotGroupAllowModel.Api_find(bot, gid)) > 0 {
+			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_approve, api.Request_group_type_invite, nil)
+		} else {
+			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_denide, api.Request_group_type_invite, "不在群列表中")
 		}
 		break
 

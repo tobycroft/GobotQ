@@ -108,8 +108,33 @@ func EventMsg(em EM) {
 		}
 		break
 
+	//申请加群信息
 	case 3:
-		//GroupMemberModel.Api_insert()
+		auto_join := true
+		if groupfunction["auto_join"].(int64) == 0 {
+			auto_join = false
+		}
+		auto_verify := true
+		if groupfunction["auto_verify"].(int64) == 0 {
+			auto_verify = false
+		}
+		auto_hold := true
+		if groupfunction["auto_hold"].(int64) == 0 {
+			auto_hold = false
+		}
+		break
+
+	//退群信息
+	case 5:
+		if groupfunction["exit_alert"].(int64) == 1 {
+			api.Sendgroupmsg(bot, gid, "成员-1", auto_retract)
+		}
+		break
+
+	case 8:
+		if groupfunction["join_alert"].(int64) == 1 {
+			api.Sendgroupmsg(bot, gid, "成员+1", auto_retract)
+		}
 		break
 
 	default:

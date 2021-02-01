@@ -116,7 +116,7 @@ func EventMsg(em EM) {
 	//申请加群信息
 	case 3:
 		if groupfunction["auto_join"].(int64) == 1 {
-			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_approve, api.Request_group_type_join, nil)
+			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_approve, api.Request_group_type_join, "")
 		}
 		//auto_verify := true
 		//if groupfunction["auto_verify"].(int64) == 0 {
@@ -166,7 +166,7 @@ func EventMsg(em EM) {
 	//机器人被邀请进群
 	case 1:
 		if len(BotGroupAllowModel.Api_find(bot, gid)) > 0 {
-			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_approve, api.Request_group_type_invite, nil)
+			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_approve, api.Request_group_type_invite, "")
 		} else {
 			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_denide, api.Request_group_type_invite, "不在群列表中")
 		}

@@ -228,10 +228,10 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 	botinfo := BotModel.Api_find(*bot)
 	switch Type {
 	case "密码":
-		if *uid == botinfo["owner"] {
+		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_userChangePassword(*bot, *uid, text)
 		} else {
-			api.Sendprivatemsg(*bot, *uid, "您为拥有这个机器人的权限，请先绑定机器人", true)
+			api.Sendprivatemsg(*bot, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -240,26 +240,26 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 		break
 
 	case "修改密码":
-		if *uid == botinfo["owner"] {
+		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_change_bot_secret(*bot, *uid, text)
 		} else {
-			api.Sendprivatemsg(*bot, *uid, "您为拥有这个机器人的权限，请先绑定机器人", true)
+			api.Sendprivatemsg(*bot, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
 	case "绑定群":
-		if *uid == botinfo["owner"] {
+		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_bind_group(*bot, *uid, text)
 		} else {
-			api.Sendprivatemsg(*bot, *uid, "您为拥有这个机器人的权限，请先绑定机器人", true)
+			api.Sendprivatemsg(*bot, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
 	case "解绑群":
-		if *uid == botinfo["owner"] {
+		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_unbind_group(*bot, *uid, text)
 		} else {
-			api.Sendprivatemsg(*bot, *uid, "您为拥有这个机器人的权限，请先绑定机器人", true)
+			api.Sendprivatemsg(*bot, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 

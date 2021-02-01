@@ -160,6 +160,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 			return
 		}
 		Group.App_refresh_groupinfo(*bot, *gid)
+		api.Sendgroupmsg(bot, gid, "群信息刷新完成", true)
 		break
 
 	case "测试撤回":

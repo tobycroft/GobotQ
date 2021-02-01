@@ -16,7 +16,7 @@ const Request_group_approve = 11
 const Request_group_type_invite = 1
 const Request_group_type_join = 3
 
-func Setgroupaddrequest(fromqq, group, qq, seq, Request_group_, Request_group_type_, reason interface{}) (bool, error) {
+func Setgroupaddrequest(fromqq, group, qq, seq, Request_group_, Request_group_type_ interface{}, reason string) (bool, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
 		"group":  group,

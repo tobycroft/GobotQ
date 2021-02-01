@@ -140,7 +140,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 				return
 			}
 		}
-		Group.App_refreshmember(bot, gid, uid)
+		Group.App_refreshmember(bot, gid)
 		break
 
 	case "刷新群信息":

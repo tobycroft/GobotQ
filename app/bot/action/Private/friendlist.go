@@ -6,25 +6,29 @@ import (
 	"main.go/app/bot/model/FriendListModel"
 )
 
-func App_refresh_friend_list() {
+func App_refresh_friend_list_all() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		fl, err := api.Getfriendlist(bot["bot"])
-		if err != nil {
+		App_refresh_friend_list(bot["bot"])
+	}
+}
 
-		} else {
-			FriendListModel.Api_delete(bot["bot"])
-			var fss []FriendListModel.FriendList
-			for _, fll := range fl {
-				var fs FriendListModel.FriendList
-				fs.Bot = bot["bot"]
-				fs.Uid = fll.UIN
-				fs.Nickname = fll.NickName
-				fs.Email = fll.Email
-				fs.Remark = fll.Remark
-				fss = append(fss, fs)
-			}
-			FriendListModel.Api_insert_more(fss)
+func App_refresh_friend_list(bot interface{}) {
+	fl, err := api.Getfriendlist(bot)
+	if err != nil {
+
+	} else {
+		FriendListModel.Api_delete(bot)
+		var fss []FriendListModel.FriendList
+		for _, fll := range fl {
+			var fs FriendListModel.FriendList
+			fs.Bot = bot
+			fs.Uid = fll.UIN
+			fs.Nickname = fll.NickName
+			fs.Email = fll.Email
+			fs.Remark = fll.Remark
+			fss = append(fss, fs)
 		}
+		FriendListModel.Api_insert_more(fss)
 	}
 }

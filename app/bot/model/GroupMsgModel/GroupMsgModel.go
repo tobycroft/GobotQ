@@ -52,3 +52,21 @@ func Api_find(bot, gid, uid, send interface{}) gorose.Data {
 		return ret
 	}
 }
+
+func Api_select(gid, uid interface{}, limit int) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+		"uid": uid,
+	}
+	db.Where(where)
+	db.Order("id desc")
+	db.Limit(limit)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

@@ -9,7 +9,6 @@ import (
 	"main.go/app/bot/service"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Jsong"
-	"testing"
 )
 
 type EM struct {
@@ -103,7 +102,7 @@ func EventMsg(em EM) {
 		}
 		jsonmsg, _ := Jsong.Encode(last_msg)
 		GroupKickModel.Api_insert(bot, gid, uid, jsonmsg)
-		api.Sendgroupmsg(bot, gid, "群成员已经被T出，正在生成群成员报告……", auto_retract)
+		api.Sendgroupmsg(bot, gid, "群成员T出报告已经生成，请在APP中查看", auto_retract)
 		break
 
 	default:

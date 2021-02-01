@@ -38,6 +38,7 @@ type EM struct {
 func EventMsg(em EM) {
 	//operator := em.OperateQQ.UIN
 	//text := em.Msg.Text
+	seq := em.Msg.Seq
 	bot := em.LogonQQ
 	uid := em.FromQQ.UIN
 	gid := em.FromGroup.GIN
@@ -110,18 +111,17 @@ func EventMsg(em EM) {
 
 	//申请加群信息
 	case 3:
-		auto_join := true
-		if groupfunction["auto_join"].(int64) == 0 {
-			auto_join = false
+		if groupfunction["auto_join"].(int64) == 1 {
+			api.Setgroupaddrequest(bot, gid, uid, seq, api.Request_group_approve, api.Request_group_type_join, nil)
 		}
-		auto_verify := true
-		if groupfunction["auto_verify"].(int64) == 0 {
-			auto_verify = false
-		}
-		auto_hold := true
-		if groupfunction["auto_hold"].(int64) == 0 {
-			auto_hold = false
-		}
+		//auto_verify := true
+		//if groupfunction["auto_verify"].(int64) == 0 {
+		//	auto_verify = false
+		//}
+		//auto_hold := true
+		//if groupfunction["auto_hold"].(int64) == 0 {
+		//	auto_hold = false
+		//}
 		break
 
 	//退群信息

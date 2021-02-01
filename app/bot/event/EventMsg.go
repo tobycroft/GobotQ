@@ -43,14 +43,19 @@ func EventMsg(em EM) {
 		GroupFunctionModel.Api_insert(gid)
 		groupfunction = GroupFunctionModel.Api_find(gid)
 	}
+
+	auto_retract := true
+	if groupfunction["auto_retract"].(int64) == 0 {
+		auto_retract = false
+	}
 	switch Type {
 	//取消管理
 	case 9:
 		if uid == bot {
 			if GroupMemberModel.Api_update_type(gid, uid, "member") {
-				api.Sendgroupmsg(bot, gid, "Acfur-Off，权限已回收，将在2小时内退群", true)
+				api.Sendgroupmsg(bot, gid, "Acfur-Off，权限已回收，将在2小时内退群", auto_retract)
 			} else {
-				api.Sendgroupmsg(bot, gid, "Acfur-Off，权限已回收，数据故障", true)
+				api.Sendgroupmsg(bot, gid, "Acfur-Off，权限已回收，数据故障", auto_retract)
 			}
 
 		} else {
@@ -62,9 +67,9 @@ func EventMsg(em EM) {
 	case 10:
 		if uid == bot {
 			if GroupMemberModel.Api_update_type(gid, uid, "admin") {
-				api.Sendgroupmsg(bot, gid, "Acfur-On，已获取权限，可使用acfurhelp查看功能", true)
+				api.Sendgroupmsg(bot, gid, "Acfur-On，已获取权限，可使用acfurhelp查看功能", auto_retract)
 			} else {
-				api.Sendgroupmsg(bot, gid, "Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息", true)
+				api.Sendgroupmsg(bot, gid, "Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息", auto_retract)
 			}
 
 		} else {

@@ -1,6 +1,7 @@
 package event
 
 import (
+	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupFunctionModel"
@@ -147,6 +148,7 @@ func EventMsg(em EM) {
 		botinfo := BotModel.Api_find_byOwnerandBot(uid, bot)
 		if len(botinfo) > 0 {
 			api.Setfriendaddrequest(bot, uid, seq, api.Request_friend_approve)
+			Private.App_refresh_friend_list(bot)
 		} else {
 			api.Setfriendaddrequest(bot, uid, seq, api.Request_friend_denide)
 		}

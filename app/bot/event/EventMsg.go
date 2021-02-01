@@ -11,6 +11,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Jsong"
+	"time"
 )
 
 type EM struct {
@@ -148,7 +149,10 @@ func EventMsg(em EM) {
 		botinfo := BotModel.Api_find_byOwnerandBot(uid, bot)
 		if len(botinfo) > 0 {
 			api.Setfriendaddrequest(bot, uid, seq, api.Request_friend_approve)
-			Private.App_refresh_friend_list(bot)
+			go func() {
+				time.Sleep(5 * time.Second)
+				Private.App_refresh_friend_list(bot)
+			}()
 		} else {
 			api.Setfriendaddrequest(bot, uid, seq, api.Request_friend_denide)
 		}

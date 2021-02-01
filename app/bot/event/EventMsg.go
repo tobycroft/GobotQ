@@ -101,8 +101,11 @@ func EventMsg(em EM) {
 			last_msg = append(last_msg, Calc.Any2String(data["text"]))
 		}
 		jsonmsg, _ := Jsong.Encode(last_msg)
-		GroupKickModel.Api_insert(bot, gid, uid, jsonmsg)
-		api.Sendgroupmsg(bot, gid, "群成员T出报告已经生成，请在APP中查看", auto_retract)
+		if GroupKickModel.Api_insert(bot, gid, uid, jsonmsg) {
+			api.Sendgroupmsg(bot, gid, "群成员T出报告已经生成，请在APP中查看", auto_retract)
+		} else {
+			api.Sendgroupmsg(bot, gid, "群成员T出报告生成失败", auto_retract)
+		}
 		break
 
 	default:

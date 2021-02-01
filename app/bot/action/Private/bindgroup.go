@@ -23,8 +23,8 @@ func App_unbind_group(bot int, uid int, text string) {
 		return
 	}
 	if BotGroupAllowModel.Api_insert(bot, text) {
-		api.Sendprivatemsg(bot, uid, "绑定群已经增加："+text, false)
+		api.Sendprivatemsg(bot, uid, "绑定群已经删除："+text, false)
 	} else {
-		api.Sendprivatemsg(bot, uid, "绑定群增加失败："+text, false)
+		api.Sendprivatemsg(bot, uid, "绑定群删除失败："+text, false)
 	}
 }

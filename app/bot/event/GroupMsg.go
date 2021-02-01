@@ -15,6 +15,14 @@ import (
 	"sync"
 )
 
+type RefreshGroupStruct struct {
+	Uid int
+	Bot int
+	Gid int
+}
+
+var RefreshGroupChan = make(chan RefreshGroupStruct, 20)
+
 type GM struct {
 	Type   string `json:"Type"`
 	FromQQ struct {
@@ -69,6 +77,11 @@ func GroupMsg(gm GM) {
 	}
 
 	if !is_self {
+		var group RefreshGroupStruct
+		group.Gid = gid
+		group.Bot = bot
+		group.Uid = uid
+		RefreshGroupChan <- group
 		GroupHandle(bot, gid, uid, text, gm.Msg.Req, retract)
 	} else {
 
@@ -81,6 +94,9 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	new_text := reg.ReplaceAllString(text, "")
 	groupmember := GroupMemberModel.Api_find(gid, uid)
 	groupfunction := GroupFunctionModel.Api_find(gid)
+	if len(groupfunction) < 1 {
+		GroupFunctionModel.Api_insert(gid)
+	}
 	if active {
 		groupHandle_acfur(&bot, &gid, &uid, text, new_text, &req, &random, groupmember, groupfunction)
 	} else {
@@ -249,8 +265,8 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 	}(8, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(*text, []string{"积分排行"})
-		new_text[idx] = str
+		_, ok := service.Serv_text_match_all(*text, []string{"积分排行"})
+		new_text[idx] = ""
 		function[idx] = ok
 	}(9, &wg)
 	go func(idx int, wg *sync.WaitGroup) {

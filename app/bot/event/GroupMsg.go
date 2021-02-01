@@ -96,6 +96,7 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 	groupfunction := GroupFunctionModel.Api_find(gid)
 	if len(groupfunction) < 1 {
 		GroupFunctionModel.Api_insert(gid)
+		groupfunction = GroupFunctionModel.Api_find(gid)
 	}
 	if active {
 		groupHandle_acfur(&bot, &gid, &uid, text, new_text, &req, &random, groupmember, groupfunction)
@@ -117,14 +118,17 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 			owner = true
 		}
 	}
-
+	auto_retract := true
+	if groupfunction["auto_retract"].(int64) == 0 {
+		auto_retract = false
+	}
 	switch new_text {
 	case "help":
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_group_help, false)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_group_help, auto_retract)
 		break
 
 	case "app":
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_app_download_url, false)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_app_download_url, auto_retract)
 		break
 
 	case "设定":
@@ -136,7 +140,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		break
 
 	case "刷新":
-		api.Sendgroupmsg(*bot, *gid, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", true)
+		api.Sendgroupmsg(*bot, *gid, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", auto_retract)
 		break
 
 	case "刷新人数":
@@ -147,6 +151,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 			}
 		}
 		Group.App_refreshmember(bot, gid)
+		api.Sendgroupmsg(*bot, *gid, "群用户已经刷新", auto_retract)
 		break
 
 	case "刷新群信息":
@@ -174,16 +179,16 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		if err != nil {
 
 		} else {
-			api.Sendgroupmsg(*bot, *gid, py, false)
+			api.Sendgroupmsg(*bot, *gid, py, auto_retract)
 		}
 		break
 
 	case "测试自动撤回":
-		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", true)
+		api.Sendgroupmsg(*bot, *gid, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", auto_retract)
 		break
 
 	case "屏蔽":
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_str_ban_word, true)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_str_ban_word, auto_retract)
 		break
 
 	case "屏蔽词":
@@ -299,6 +304,10 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			owner = true
 		}
 	}
+	auto_retract := true
+	if groupfunction["auto_retract"].(int64) == 0 {
+		auto_retract = false
+	}
 	var ret Retract_group
 	ret.Group = *gid
 	ret.Fromqq = *bot
@@ -334,7 +343,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			if groupfunction["ban_retract"].(int64) == 1 {
 				Retract_chan_group_instant <- ret
 			}
-			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, true)
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_url, auto_retract)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
 			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
@@ -346,7 +355,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			if groupfunction["ban_retract"].(int64) == 1 {
 				Retract_chan_group_instant <- ret
 			}
-			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, true)
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_group, auto_retract)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
 			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
@@ -358,7 +367,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			if groupfunction["ban_retract"].(int64) == 1 {
 				Retract_chan_group_instant <- ret
 			}
-			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, true)
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_weixin, auto_retract)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
 			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
@@ -370,7 +379,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 			if groupfunction["ban_retract"].(int64) == 1 {
 				Retract_chan_group_instant <- ret
 			}
-			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_share, true)
+			api.Sendgroupmsg(*bot, *gid, app_default.Default_ban_share, auto_retract)
 			time := GroupBanModel.Api_count(*gid, *uid)
 			GroupBanModel.Api_insert(*gid, *uid)
 			api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
@@ -387,14 +396,14 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	case "长度限制":
 		Retract_chan_group_instant <- ret
-		api.Sendgroupmsg(*bot, *gid, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)), true)
+		api.Sendgroupmsg(*bot, *gid, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)), auto_retract)
 		time := GroupBanModel.Api_count(*gid, *uid)
 		GroupBanModel.Api_insert(*gid, *uid)
 		api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 		break
 
 	default:
-		api.Sendgroupmsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
+		api.Sendgroupmsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", auto_retract)
 		break
 	}
 }

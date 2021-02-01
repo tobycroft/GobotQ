@@ -108,6 +108,10 @@ func EventMsg(em EM) {
 		}
 		break
 
+	case 3:
+		//GroupMemberModel.Api_insert()
+		break
+
 	default:
 		break
 	}

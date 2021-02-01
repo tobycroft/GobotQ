@@ -172,9 +172,9 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 	}
 }
 
-const private_function_number = 3
+const private_function_number = 4
 
-var private_function_type = []string{"unknow", "password", "bind", "change_secret"}
+var private_function_type = []string{"unknow", "password", "bind", "change_secret", "绑定群"}
 
 func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)
@@ -200,6 +200,12 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 		new_text[idx] = str
 		function[idx] = ok
 	}(3, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(text, []string{"绑定群", "bind"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(4, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -223,6 +229,9 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 
 	case "change_secret":
 		Private.App_change_bot_secret(*bot, *uid, text)
+		break
+
+	case "绑定群":
 		break
 
 	default:

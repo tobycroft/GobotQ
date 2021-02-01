@@ -137,11 +137,15 @@ func EventMsg(em EM) {
 
 	//加群消息
 	case 8:
-		if groupfunction["join_alert"].(int64) == 1 {
-			api.Sendgroupmsg(bot, gid, "成员+1", auto_retract)
-		}
-		if groupfunction["auto_welcome"].(int64) == 1 {
-			api.Sendgroupmsg(bot, gid, service.Serv_at(uid)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+		if uid == bot {
+
+		} else {
+			if groupfunction["join_alert"].(int64) == 1 {
+				api.Sendgroupmsg(bot, gid, "成员+1", auto_retract)
+			}
+			if groupfunction["auto_welcome"].(int64) == 1 {
+				api.Sendgroupmsg(bot, gid, service.Serv_at(uid)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+			}
 		}
 		break
 

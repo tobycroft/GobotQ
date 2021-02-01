@@ -68,16 +68,6 @@ func GroupMsg(gm GM) {
 		is_self = true
 	}
 
-	//uid_string := Calc.Int2String(uid)
-	//gid_string := Calc.Int2String(gid)
-
-	//text_exists := Redis.CheckExists("GroupMsg:" + gid_string + ":" + uid_string)
-	//if text_exists {
-	//	return
-	//}
-	//
-	//Redis.SetRaw("GroupMsg:"+gid_string+":"+uid_string, Calc.Md5(text), 1)
-
 	if !is_self {
 		GroupHandle(bot, gid, uid, text, gm.Msg.Req, retract)
 	} else {

@@ -5,7 +5,7 @@ import (
 	"main.go/app/bot/model/GroupListModel"
 )
 
-func App_refresh_groupinfo(bot *int, gid *int) {
+func App_refresh_groupinfo(bot int, gid int) {
 	gl, err := api.Getgrouplist(bot)
 	if err != nil {
 
@@ -14,7 +14,7 @@ func App_refresh_groupinfo(bot *int, gid *int) {
 		var gss []GroupListModel.GroupList
 		for _, gll := range gl {
 			var gs GroupListModel.GroupList
-			if gll.GIN != *gid {
+			if gll.GIN != gid {
 				continue
 			}
 			gs.Bot = bot
@@ -26,6 +26,6 @@ func App_refresh_groupinfo(bot *int, gid *int) {
 			gss = append(gss, gs)
 		}
 		GroupListModel.Api_insert_more(gss)
-		api.Sendgroupmsg(*bot, *gid, "群信息刷新完成", true)
+		api.Sendgroupmsg(bot, gid, "群信息刷新完成", true)
 	}
 }

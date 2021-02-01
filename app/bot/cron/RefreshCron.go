@@ -18,7 +18,7 @@ func Refresh_group_chan() {
 func group_check(uid, bot, gid int) {
 	groupinfo := GroupListModel.Api_find(bot, gid)
 	if len(groupinfo) < 1 {
-		Group.App_refresh_groupinfo(&bot, &gid)
+		Group.App_refresh_groupinfo(bot, gid)
 	}
 	userinfo := GroupMemberModel.Api_find(gid, uid)
 	if len(userinfo) < 1 {

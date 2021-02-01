@@ -159,7 +159,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 			service.Not_admin(bot, gid, uid)
 			return
 		}
-		Group.App_refresh_groupinfo(bot, gid)
+		Group.App_refresh_groupinfo(*bot, *gid)
 		break
 
 	case "测试撤回":

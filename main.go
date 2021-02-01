@@ -10,6 +10,7 @@ import (
 func main() {
 
 	go cron.BaseCron()
+	go cron.Refresh_friend_list()
 
 	go Group.App_refresh_group_member_chan()
 

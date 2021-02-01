@@ -2,9 +2,11 @@ package cron
 
 import (
 	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/Private"
 	"main.go/app/bot/event"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"time"
 )
 
 func Refresh_group_chan() {
@@ -21,5 +23,12 @@ func group_check(uid, bot, gid int) {
 	userinfo := GroupMemberModel.Api_find(gid, uid)
 	if len(userinfo) < 1 {
 		Group.App_refreshmember(&bot, &gid)
+	}
+}
+
+func Refresh_friend_list() {
+	for {
+		Private.App_refresh_friend_list()
+		time.Sleep(3600 * time.Second)
 	}
 }

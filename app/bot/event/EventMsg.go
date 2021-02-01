@@ -135,6 +135,9 @@ func EventMsg(em EM) {
 		if groupfunction["join_alert"].(int64) == 1 {
 			api.Sendgroupmsg(bot, gid, "成员+1", auto_retract)
 		}
+		if groupfunction["auto_welcome"].(int64) == 1 {
+			api.Sendgroupmsg(bot, gid, Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+		}
 		break
 
 	default:

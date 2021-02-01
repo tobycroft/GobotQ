@@ -2,20 +2,13 @@ package cron
 
 import (
 	"main.go/app/bot/action/Group"
+	"main.go/app/bot/event"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
 )
 
-type RefreshGroupStruct struct {
-	Uid int
-	Bot int
-	Gid int
-}
-
-var RefreshGroupChan = make(chan RefreshGroupStruct, 20)
-
 func Refresh_group_chan() {
-	for data := range RefreshGroupChan {
+	for data := range event.RefreshGroupChan {
 		group_check(data.Uid, data.Bot, data.Gid)
 	}
 }

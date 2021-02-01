@@ -229,7 +229,11 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 	botinfo := BotModel.Api_find(*bot)
 	switch Type {
 	case "密码":
-		Private.App_userChangePassword(*bot, *uid, text)
+		if *uid == botinfo["owner"] {
+			Private.App_userChangePassword(*bot, *uid, text)
+		} else {
+			api.Sendprivatemsg(*bot, *uid, "您为拥有这个机器人的权限，请先绑定机器人", true)
+		}
 		break
 
 	case "绑定":
@@ -237,7 +241,11 @@ func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 		break
 
 	case "修改密码":
-		Private.App_change_bot_secret(*bot, *uid, text)
+		if *uid == botinfo["owner"] {
+			Private.App_change_bot_secret(*bot, *uid, text)
+		} else {
+			api.Sendprivatemsg(*bot, *uid, "您为拥有这个机器人的权限，请先绑定机器人", true)
+		}
 		break
 
 	case "绑定群":

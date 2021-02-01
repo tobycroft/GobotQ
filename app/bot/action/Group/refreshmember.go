@@ -2,7 +2,7 @@ package Group
 
 import "main.go/app/bot/api"
 
-func App_refreshmember(bot *int, gid *int, uid *int) {
+func App_refreshmember(bot *int, gid *int) {
 	var apm App_group_member
 	apm.Bot = *bot
 	apm.Gid = *gid

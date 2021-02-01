@@ -175,7 +175,7 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 
 const private_function_number = 5
 
-var private_function_type = []string{"unknow", "password", "bind", "change_secret", "绑定群", "解绑群"}
+var private_function_type = []string{"unknow", "密码", "修改密码", "绑定群", "解绑群", "绑定"}
 
 func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)
@@ -189,27 +189,29 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 		new_text[idx] = str
 		function[idx] = ok
 	}(1, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"绑定", "bind"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(2, &wg)
+
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match(text, []string{"修改密码", "change_secret"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(3, &wg)
+	}(2, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match(text, []string{"绑定群", "bindgroup"})
 		new_text[idx] = str
 		function[idx] = ok
-	}(4, &wg)
+	}(3, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match(text, []string{"解绑群", "unbindgroup"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(4, &wg)
+
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(text, []string{"绑定", "bind"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(5, &wg)
@@ -226,15 +228,15 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 
 func privateHandle_acfur_other(Type string, bot *int, uid *int, text string) {
 	switch Type {
-	case "password":
+	case "密码":
 		Private.App_userChangePassword(*bot, *uid, text)
 		break
 
-	case "bind":
+	case "绑定":
 		Private.App_bind_robot(*bot, *uid, text)
 		break
 
-	case "change_secret":
+	case "修改密码":
 		Private.App_change_bot_secret(*bot, *uid, text)
 		break
 

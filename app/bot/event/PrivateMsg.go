@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
+	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/service"
@@ -153,11 +154,16 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 		break
 
 	case "绑定":
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
+		api.Sendprivatemsg(*bot, *uid, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
 		break
 
 	case "绑定群":
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定(+)群号\"来绑定您的机器人", false)
+		groupbinds := BotGroupAllowModel.Api_select(*bot)
+		groups := []string{}
+		for _, groupbind := range groupbinds {
+			groups = append(groups, Calc.Any2String(groupbind["gid"]))
+		}
+		api.Sendprivatemsg(*bot, *uid, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ","), false)
 		break
 
 	default:

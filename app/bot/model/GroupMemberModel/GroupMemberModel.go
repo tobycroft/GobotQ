@@ -109,6 +109,26 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
+func Api_update_type(gid, uid, Type interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+		"uid": uid,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"type": Type,
+	}
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_find_owner(bot, gid interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

@@ -3,8 +3,13 @@ package event
 import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupFunctionModel"
+	"main.go/app/bot/model/GroupKickModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/service"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Jsong"
+	"testing"
 )
 
 type EM struct {
@@ -39,6 +44,11 @@ func EventMsg(em EM) {
 	gid := em.FromGroup.GIN
 	Type := em.Msg.Type
 
+	var group RefreshGroupStruct
+	group.Gid = gid
+	group.Bot = bot
+	group.Uid = uid
+	RefreshGroupChan <- group
 	groupfunction := GroupFunctionModel.Api_find(gid)
 	if len(groupfunction) < 1 {
 		GroupFunctionModel.Api_insert(gid)
@@ -84,6 +94,20 @@ func EventMsg(em EM) {
 		}
 		break
 
+	//T出某个人
+	case 6:
+		groupmsg := GroupMsgModel.Api_select(gid, uid, 10)
+		last_msg := []string{}
+		for _, data := range groupmsg {
+			last_msg = append(last_msg, Calc.Any2String(data["text"]))
+		}
+		jsonmsg, _ := Jsong.Encode(last_msg)
+		GroupKickModel.Api_insert(bot, gid, uid, jsonmsg)
+		api.Sendgroupmsg(bot, gid, "群成员已经被T出，正在生成群成员报告……", auto_retract)
+		break
+
+	default:
+		break
 	}
 
 }

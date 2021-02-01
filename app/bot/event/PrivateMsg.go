@@ -202,7 +202,7 @@ func privateHandle_acfur_middle(bot *int, uid *int, text, origin_text string) {
 	}(3, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"绑定群", "bind"})
+		str, ok := service.Serv_text_match(text, []string{"绑定群", "bindgroup"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(4, &wg)

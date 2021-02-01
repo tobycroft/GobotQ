@@ -28,7 +28,7 @@ func group_check(uid, bot, gid int) {
 
 func Refresh_friend_list() {
 	for {
-		Private.App_refresh_friend_list()
+		Private.App_refresh_friend_list_all()
 		time.Sleep(3600 * time.Second)
 	}
 }

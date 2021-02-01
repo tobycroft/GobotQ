@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
+	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -127,7 +128,16 @@ func private_auto_reply(bot *int, uid *int, text *string) {
 func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 	switch text {
 	case "help":
-		api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help, false)
+		botinfo := BotModel.Api_find(*bot)
+		if len(botinfo) > 0 {
+			if botinfo["owner"].(int64) == int64(*uid) {
+				api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
+			} else {
+				api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help, false)
+			}
+		} else {
+			api.Sendprivatemsg(*bot, *uid, app_default.Default_private_help, false)
+		}
 		break
 
 	case "登录", "登陆", "login":
@@ -144,6 +154,10 @@ func privateHandle_acfur(bot *int, uid *int, text, origin_text string) {
 
 	case "绑定":
 		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
+		break
+
+	case "绑定群":
+		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定(+)群号\"来绑定您的机器人", false)
 		break
 
 	default:

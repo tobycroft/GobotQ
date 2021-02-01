@@ -10,10 +10,11 @@ const Default_private_help = "这里是帮助信息,如下内容括号中的不�
 	"	2.acfur修改密码(+):新密码：修改当前机器人密码（仅限号主）\r\n" +
 	"\r\n"
 
-const Default_private_help_for_RobotOwner = "机器人主功能：\r\n" +
+const Default_private_help_for_RobotOwner = "机器人主功能（仅拥有人可见）：\r\n" +
 	"	1.acfur绑定群：展示本机器人允许使用的群\r\n" +
-	"	2.acfur绑定群(+):群号：增加一个机器人允许使用的群" +
-	"	3.acfur解绑群(+):群号：删除一个机器人允许使用的群"
+	"	2.acfur绑定群(+):群号：增加一个机器人允许使用的群\r\n" +
+	"	3.acfur解绑群(+):群号：删除一个机器人允许使用的群\r\n" +
+	""
 
 const Default_group_help = "这里是群帮助信息：\r\n" +
 	"acfur功能表：\r\n" +

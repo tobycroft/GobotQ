@@ -9,7 +9,10 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
+	"main.go/tuuz"
 	"main.go/tuuz/Calc"
+	"main.go/tuuz/Log"
+	"main.go/tuuz/Redis"
 	"math"
 	"regexp"
 	"sync"
@@ -404,7 +407,22 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 		break
 
 	default:
-		api.Sendgroupmsg(*bot, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", auto_retract)
+		if groupfunction["ban_repeat"].(int64) == 1 {
+			num, err := Redis.GetInt(Calc.Md5(text))
+			if err != nil {
+				Log.Crrs(err, tuuz.FUNCTION_ALL())
+			}
+			Redis.Set(Calc.Md5(text), num+1, int(groupfunction["repeat_time"].(int64)))
+			if int64(num) > groupfunction["repeat_count"].(int64) {
+				gb := GroupBanModel.Api_count(*gid, *uid)
+				GroupBanModel.Api_insert(*gid, *uid)
+				api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(gb)))
+				api.Sendgroupmsg(*bot, *gid, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容", auto_retract)
+			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
+				api.Sendgroupmsg(*bot, *gid, "请勿发送相同的内容", auto_retract)
+			}
+		}
+
 		break
 	}
 }

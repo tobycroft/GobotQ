@@ -193,19 +193,43 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		break
 
 	case "屏蔽":
+		if !admin && !owner {
+			service.Not_admin(bot, gid, uid)
+			return
+		}
 		api.Sendgroupmsg(*bot, *gid, app_default.Default_str_ban_word, auto_retract)
 		break
 
 	case "屏蔽词":
+		if !admin && !owner {
+			service.Not_admin(bot, gid, uid)
+			return
+		}
 		Group.App_group_ban_word_list(*bot, *gid, *uid, new_text, 1, groupmember, groupfunction)
 		break
 
 	case "T出词":
+		if !admin && !owner {
+			service.Not_admin(*bot, *gid, *uid)
+			return
+		}
 		Group.App_group_ban_word_list(*bot, *gid, *uid, new_text, 2, groupmember, groupfunction)
 		break
 
 	case "撤回词":
+		if !admin && !owner {
+			service.Not_admin(*bot, *gid, *uid)
+			return
+		}
 		Group.App_group_ban_word_list(*bot, *gid, *uid, new_text, 3, groupmember, groupfunction)
+		break
+
+	case "清除小黑屋":
+		if !admin && !owner {
+			service.Not_admin(*bot, *gid, *uid)
+			return
+		}
+		GroupBanModel.Api_delete(*gid)
 		break
 
 	default:

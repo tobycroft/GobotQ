@@ -136,18 +136,18 @@ func EventMsg(em EM) {
 		break
 
 	//加群消息
-	case 8:
-		if uid == bot {
-
-		} else {
-			if groupfunction["join_alert"].(int64) == 1 {
-				api.Sendgroupmsg(bot, gid, "成员+1", auto_retract)
-			}
-			if groupfunction["auto_welcome"].(int64) == 1 {
-				api.Sendgroupmsg(bot, gid, service.Serv_at(uid)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
-			}
-		}
-		break
+	//case 8:
+	//	if uid == bot {
+	//
+	//	} else {
+	//		if groupfunction["join_alert"].(int64) == 1 {
+	//			api.Sendgroupmsg(bot, gid, "成员+1", auto_retract)
+	//		}
+	//		if groupfunction["auto_welcome"].(int64) == 1 {
+	//			api.Sendgroupmsg(bot, gid, service.Serv_at(uid)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+	//		}
+	//	}
+	//	break
 
 	//私人加好友
 	case 105:

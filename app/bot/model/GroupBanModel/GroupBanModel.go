@@ -54,7 +54,6 @@ func Api_count(gid, uid interface{}) int64 {
 	} else {
 		return ret
 	}
-
 }
 
 func Api_select(gid, uid interface{}) []gorose.Data {
@@ -68,6 +67,21 @@ func Api_select(gid, uid interface{}) []gorose.Data {
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_delete(gid, uid interface{}) int64 {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+	}
+	db.Where(where)
+	ret, err := db.Count()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return 0
 	} else {
 		return ret
 	}

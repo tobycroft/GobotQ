@@ -72,7 +72,7 @@ func Api_select(gid, uid interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(gid, uid interface{}) int64 {
+func Api_delete(gid interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,

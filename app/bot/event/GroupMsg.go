@@ -419,7 +419,7 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 				api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(gb)))
 				api.Sendgroupmsg(*bot, *gid, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容", auto_retract)
 			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
-				api.Sendgroupmsg(*bot, *gid, "请勿发送相同的内容", auto_retract)
+				api.Sendgroupmsg(*bot, *gid, Calc.Any2String(groupfunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
 			}
 		}
 

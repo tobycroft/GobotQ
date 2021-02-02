@@ -92,6 +92,7 @@ func GroupMsg(gm GM) {
 }
 
 func GroupHandle(bot, gid, uid int, text string, req int, random int) {
+	origntext := text
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
@@ -105,7 +106,7 @@ func GroupHandle(bot, gid, uid int, text string, req int, random int) {
 		groupHandle_acfur(&bot, &gid, &uid, text, new_text, &req, &random, groupmember, groupfunction)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		groupHandle_acfur_middle(&bot, &gid, &uid, &text, &req, &random, groupmember, groupfunction)
+		groupHandle_acfur_middle(&bot, &gid, &uid, &origntext, &text, &req, &random, groupmember, groupfunction)
 	}
 }
 
@@ -208,7 +209,7 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, text, new_text string, req 
 		break
 
 	default:
-		groupHandle_acfur_middle(bot, gid, uid, &text, req, random, groupmember, groupfunction)
+		groupHandle_acfur_middle(bot, gid, uid, &text, &text, req, random, groupmember, groupfunction)
 		break
 	}
 }
@@ -217,7 +218,7 @@ const group_function_number = 10
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "积分查询", "积分排行", "长度限制"}
 
-func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur_middle(bot *int, gid *int, uid *int, origntext, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
@@ -293,10 +294,10 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, text *string, req *i
 			break
 		}
 	}
-	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, new_text[function_route], req, random, groupmember, groupfunction)
+	groupHandle_acfur_other(group_function_type[function_route], bot, gid, uid, *origntext, new_text[function_route], req, random, groupmember, groupfunction)
 }
 
-func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, origntext, text string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -408,16 +409,21 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, text str
 
 	default:
 		if groupfunction["ban_repeat"].(int64) == 1 {
-			num, err := Redis.GetInt(Calc.Md5(text))
+			num, err := Redis.GetInt(Calc.Md5(Calc.Any2String(*uid) + "_" + origntext))
 			if err != nil {
 				Log.Crrs(err, tuuz.FUNCTION_ALL())
+
 			}
-			Redis.Set(Calc.Md5(text), num+1, int(groupfunction["repeat_time"].(int64)))
+			Redis.SetRaw(Calc.Md5(Calc.Any2String(*uid)+"_"+origntext), num+1, int(groupfunction["repeat_time"].(int64)))
 			if int64(num) > groupfunction["repeat_count"].(int64) {
 				gb := GroupBanModel.Api_count(*gid, *uid)
 				GroupBanModel.Api_insert(*gid, *uid)
 				api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(gb)))
 				api.Sendgroupmsg(*bot, *gid, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容", auto_retract)
+				//gms := GroupMsgModel.Api_select(*gid, *uid, int(groupfunction["repeat_count"].(int64))+2)
+				//for _, gm := range gms {
+				//
+				//}
 			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
 				api.Sendgroupmsg(*bot, *gid, service.Serv_at(*uid)+Calc.Any2String(groupfunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
 			}

@@ -4,13 +4,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/UserMemberModel"
 	"main.go/app/v1/user/model/UserBalanceModel"
+	"main.go/app/v1/user/model/UserBalanceRecordModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/RET"
 )
 
 func UserController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Any("user_info", user_info)
+	route.Any("info", user_info)
+	route.Any("balance", user_balance)
+	route.Any("balance_record", user_balance_record)
 }
 
 func user_info(c *gin.Context) {
@@ -40,5 +43,7 @@ func user_balance(c *gin.Context) {
 }
 
 func user_balance_record(c *gin.Context) {
-
+	uid := c.PostForm("uid")
+	balances := UserBalanceRecordModel.Api_select(uid)
+	RET.Success(c, 0, balances, nil)
 }

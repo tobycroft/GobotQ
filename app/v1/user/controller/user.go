@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/UserMemberModel"
+	"main.go/app/v1/user/model/UserBalanceModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/RET"
 )
@@ -21,4 +22,23 @@ func user_info(c *gin.Context) {
 	} else {
 		RET.Fail(c, 404, user, "没有找到数据")
 	}
+}
+
+func user_balance(c *gin.Context) {
+	uid := c.PostForm("uid")
+	ub := UserBalanceModel.Api_find(uid)
+	if len(ub) > 0 {
+		RET.Success(c, 0, ub, nil)
+	} else {
+		if UserBalanceModel.Api_insert(uid, 0) {
+			ub = UserBalanceModel.Api_find(uid)
+			RET.Success(c, 0, ub, nil)
+		} else {
+			RET.Fail(c, 500, nil, "数据错误")
+		}
+	}
+}
+
+func user_balance_record(c *gin.Context) {
+
 }

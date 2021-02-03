@@ -72,10 +72,10 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 		} else {
 			db.Commit()
 			if private_mode {
-				api.Sendgrouptempmsg(bot, gid, uid, "签到成功,您是第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount)+",现有积分："+Calc.Any2String(group_model["balance"]))
+				api.Sendgrouptempmsg(bot, gid, uid, "签到成功,您是第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]))
 			} else {
 				at := service.Serv_at(uid)
-				api.Sendgroupmsg(bot, gid, at+",您是今日第"+Calc.Int642String(order)+"个签到,积分奖励"+Calc.Int642String(amount)+",现有积分："+Calc.Any2String(group_model["balance"]), auto_retract)
+				api.Sendgroupmsg(bot, gid, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), auto_retract)
 			}
 		}
 	}

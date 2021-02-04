@@ -125,6 +125,21 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
+func Api_find_byUid(uid interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"uid": uid,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_update_type(gid, uid, Type interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

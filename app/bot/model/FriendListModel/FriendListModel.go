@@ -1,6 +1,7 @@
 package FriendListModel
 
 import (
+	"github.com/gohouse/gorose/v2"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )
@@ -19,6 +20,21 @@ func Api_delete(bot interface{}) bool {
 		return false
 	} else {
 		return true
+	}
+}
+
+func Api_find(uid interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"uid": uid,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
 	}
 }
 

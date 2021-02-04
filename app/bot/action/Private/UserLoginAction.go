@@ -2,6 +2,7 @@ package Private
 
 import (
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/FriendListModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/UserMemberModel"
 	"main.go/config/app_default"
@@ -18,8 +19,9 @@ func App_userLogin(bot int, uid int, text string) {
 		uname = nickname.Ret
 	}
 	usermember := UserMemberModel.Api_find(uid)
+	userfriend := FriendListModel.Api_find(uid)
 	groupmember := GroupMemberModel.Api_find_byUid(uid)
-	if len(groupmember) > 0 {
+	if len(userfriend) > 0 {
 		gid := groupmember["gid"]
 		if len(usermember) > 0 {
 			if UserMemberModel.Api_update_all(uid, uname, rand) {
@@ -34,7 +36,7 @@ func App_userLogin(bot int, uid int, text string) {
 				api.Sendgrouptempmsg(bot, gid, uid, app_default.Default_error_alert)
 			}
 		}
-	} else {
+	} else if len(groupmember) > 0 {
 		if len(usermember) > 0 {
 			if UserMemberModel.Api_update_all(uid, uname, rand) {
 				api.Sendprivatemsg(bot, uid, "您的登录密码：\r\n"+Calc.Int2String(rand), false)

@@ -20,7 +20,6 @@ func EditController(route *gin.RouterGroup) {
 		data := GroupMemberModel.Api_find(gid, uid)
 		if len(data) > 0 {
 			if data["type"].(string) == "admin" || data["type"].(string) == "owner" {
-				RET.Success(c, 0, data, nil)
 				c.Next()
 				return
 			} else {

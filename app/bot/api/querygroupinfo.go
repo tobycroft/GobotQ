@@ -32,10 +32,10 @@ type QueryGroupInfo struct {
 	Introduction string `json:"Introduction"`
 }
 
-func Querygroupinfo(logonqq, qq interface{}) (QueryGroupInfo, error) {
+func Querygroupinfo(logonqq, group interface{}) (QueryGroupInfo, error) {
 	post := map[string]interface{}{
 		"logonqq": logonqq,
-		"qq":      qq,
+		"group":   group,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/querygroupinfo", nil, post, nil, nil)
 	if err != nil {

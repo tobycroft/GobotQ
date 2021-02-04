@@ -62,13 +62,13 @@ func Api_select(bot, gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_byUid(uid interface{}, Type interface{}) []gorose.Data {
+func Api_select_byUid(uid interface{}, Type []interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"uid":  uid,
-		"type": Type,
+		"uid": uid,
 	}
 	db.Where(where)
+	db.WhereIn("type", Type)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

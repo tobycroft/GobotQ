@@ -28,27 +28,43 @@ type SendGroupTempMsgRet struct {
 	Time    string `json:"time"`
 }
 
-func Sendgrouptempmsg(fromqq, togroup, toqq interface{}, text string) {
+func Sendgrouptempmsg(fromqq, togroup, toqq interface{}, text string, AutoRetract bool) {
 	var gst GroupSendTempStruct
 	gst.Fromqq = fromqq
 	gst.Togroup = togroup
 	gst.Toqq = toqq
 	gst.Text = text
+	gst.AutoRetract = AutoRetract
+
 	Group_send_temp_chan <- gst
 }
 
 var Group_send_temp_chan = make(chan GroupSendTempStruct, 20)
 
 type GroupSendTempStruct struct {
-	Fromqq  interface{}
-	Togroup interface{}
-	Toqq    interface{}
-	Text    string
+	Fromqq      interface{}
+	Togroup     interface{}
+	Toqq        interface{}
+	Text        string
+	AutoRetract bool
 }
 
 func Send_GroupTempMsg() {
 	for gst := range Group_send_temp_chan {
-		sendgrouptempmsg(gst)
+		pm, pmr, err := sendgrouptempmsg(gst)
+		if err != nil {
+
+		} else {
+			if gst.AutoRetract {
+				var r Retract_private
+				r.Toqq = gst.Toqq
+				r.Fromqq = gst.Fromqq
+				r.Random = pm.Random
+				r.Req = pm.Req
+				r.Time = pmr.Time
+				Retract_chan_private <- r
+			}
+		}
 	}
 }
 

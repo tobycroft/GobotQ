@@ -8,7 +8,17 @@ import (
 
 const table = "user_balance_record"
 
+type Interface struct {
+	Db gorose.IOrm
+}
+
 func Api_insert(qq, before_balance, amount, after_balance, remark interface{}) bool {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_insert(qq, before_balance, amount, after_balance, remark)
+}
+
+func (self *Interface) Api_insert(qq, before_balance, amount, after_balance, remark interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"qq":             qq,
@@ -18,6 +28,7 @@ func Api_insert(qq, before_balance, amount, after_balance, remark interface{}) b
 		"remark":         remark,
 	}
 	db.Data(data)
+	db.LockForUpdate()
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -42,12 +53,20 @@ func Api_select(qq interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(qq, id interface{}) gorose.Data {
+func Api_find(qq interface{}) gorose.Data {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_find(qq)
+}
+
+func (self *Interface) Api_find(qq interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"qq": qq,
 	}
 	db.Where(where)
+	db.LockForUpdate()
+	db.Order("id desc")
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

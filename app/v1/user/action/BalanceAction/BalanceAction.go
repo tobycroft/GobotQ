@@ -42,7 +42,9 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 		}
 		return errors.New("余额不足1")
 	}
-	if !UserBalanceModel.Api_inc_balance(uid, amount) {
+	var ub UserBalanceModel.Interface
+	ub.Db = self.Db
+	if !ub.Api_inc_balance(uid, amount) {
 		if self_create {
 			self.Db.Rollback()
 		}

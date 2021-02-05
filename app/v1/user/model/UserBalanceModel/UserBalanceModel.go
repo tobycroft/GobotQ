@@ -21,12 +21,35 @@ func (self *Interface) Api_insert(qq, balance interface{}) bool {
 		"balance": balance,
 	}
 	db.Data(data)
+	db.LockForUpdate()
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return false
 	} else {
 		return true
+	}
+}
+
+func Api_find_balance(qq interface{}) interface{} {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_find_balance(qq)
+}
+
+func (self *Interface) Api_find_balance(qq interface{}) float64 {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"qq": qq,
+	}
+	db.Where(where)
+	db.LockForUpdate()
+	ret, err := db.Value("balance")
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return 0
+	} else {
+		return ret.(float64)
 	}
 }
 
@@ -42,6 +65,7 @@ func (self *Interface) Api_find(qq interface{}) gorose.Data {
 		"qq": qq,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -67,6 +91,7 @@ func (self *Interface) Api_dec_balance(qq interface{}, balance_dec float64) bool
 		"qq": qq,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	_, err := db.Decrement("balance", balance_dec)
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

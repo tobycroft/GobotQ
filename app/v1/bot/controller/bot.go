@@ -4,8 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
+	"main.go/app/bot/model/SystemParamModel"
+	"main.go/app/v1/user/action/BalanceAction"
 	"main.go/common/BaseController"
 	"main.go/tuuz"
+	"main.go/tuuz/Calc"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
 )
@@ -63,12 +66,24 @@ func bot_add(c *gin.Context) {
 		RET.Fail(c, 406, nil, "你的待通过列表已经有3个账号了，请先等待通过后才可以继续提交")
 		return
 	}
-
+	price := SystemParamModel.Api_value("price")
 	var br BotRequestModel.Interface
-	br.Db = tuuz.Db()
+	db := tuuz.Db()
+	db.Begin()
+	br.Db = db
 	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {
-		RET.Success(c, 0, nil, nil)
+		var ba BalanceAction.Interface
+		ba.Db = db
+		err := ba.App_single_balance(uid, nil, float64(month)*Calc.Any2Float64(price), "预定了"+Calc.Any2String("month")+"月的服务")
+		if err != nil {
+			db.Rollback()
+			RET.Fail(c, 400, err.Error(), err.Error())
+		} else {
+			db.Commit()
+			RET.Success(c, 0, nil, nil)
+		}
 	} else {
+		db.Rollback()
 		RET.Fail(c, 500, nil, nil)
 	}
 }

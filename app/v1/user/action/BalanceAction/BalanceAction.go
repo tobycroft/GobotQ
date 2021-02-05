@@ -14,6 +14,12 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
+func App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.App_single_balance(uid, order_id, amount, remark)
+}
+
 func (self *Interface) App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
 	self_create := false
 	if self.Db == nil {

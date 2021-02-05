@@ -40,7 +40,7 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 		if self_create {
 			self.Db.Rollback()
 		}
-		return errors.New("余额不足")
+		return errors.New("余额不足1")
 	}
 	if !UserBalanceModel.Api_inc_balance(uid, amount) {
 		if self_create {
@@ -57,7 +57,7 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 			if self_create {
 				self.Db.Rollback()
 			}
-			return errors.New("余额不足")
+			return errors.New("余额不足2")
 		}
 		if !ubr.Api_insert(uid, one_balancerecord["after_balance"], amount, after_balancerecord, remark) {
 			if self_create {

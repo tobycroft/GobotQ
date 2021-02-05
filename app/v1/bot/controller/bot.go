@@ -74,7 +74,7 @@ func bot_add(c *gin.Context) {
 	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {
 		var ba BalanceAction.Interface
 		ba.Db = db
-		err := ba.App_single_balance(uid, nil, float64(month)*Calc.Any2Float64(price), "预定了"+Calc.Any2String("month")+"月的服务")
+		err := ba.App_single_balance(uid, nil, -float64(month)*Calc.Any2Float64(price), "预定了"+Calc.Any2String("month")+"月的服务")
 		if err != nil {
 			db.Rollback()
 			RET.Fail(c, 400, err.Error(), err.Error())

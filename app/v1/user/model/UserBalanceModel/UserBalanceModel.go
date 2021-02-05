@@ -101,10 +101,10 @@ func (self *Interface) Api_dec_balance(qq interface{}, balance_dec float64) bool
 	}
 }
 
-func Api_inc_balance(qq interface{}, balance_dec float64) bool {
+func Api_inc_balance(qq interface{}, balance_inc float64) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_inc_balance(qq, balance_dec)
+	return self.Api_inc_balance(qq, balance_inc)
 }
 
 func (self *Interface) Api_inc_balance(qq interface{}, balance_inc float64) bool {

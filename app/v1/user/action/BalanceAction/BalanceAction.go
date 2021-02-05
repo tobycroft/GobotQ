@@ -40,7 +40,7 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 		if self_create {
 			self.Db.Rollback()
 		}
-		return errors.New("余额不足1")
+		return errors.New("余额还差" + Calc.Float642String(after_userbalance))
 	}
 	var ub UserBalanceModel.Interface
 	ub.Db = self.Db
@@ -54,12 +54,12 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 	ubr.Db = self.Db
 	one_balancerecord := ubr.Api_find(uid)
 	if len(one_balancerecord) > 0 {
-		after_balancerecord := Calc.Bc_add(one_balancerecord["after_balance"], amount)
+		after_balancerecord, _ := Calc.Bc_add(one_balancerecord["after_balance"], amount).Float64()
 		if after_userbalance < 0 {
 			if self_create {
 				self.Db.Rollback()
 			}
-			return errors.New("余额不足2")
+			return errors.New("余额不足,仍需" + Calc.Float642String(after_balancerecord))
 		}
 		if !ubr.Api_insert(uid, one_balancerecord["after_balance"], amount, after_balancerecord, remark) {
 			if self_create {

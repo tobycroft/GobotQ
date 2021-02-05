@@ -43,7 +43,7 @@ func bot_add(c *gin.Context) {
 		RET.Fail(c, 406, nil, "本账号已经被提交过了")
 		return
 	}
-	if len(BotRequestModel.Api_select_byUid(uid)) > 3 {
+	if len(BotRequestModel.Api_select_byUid(uid)) >= 3 {
 		RET.Fail(c, 406, nil, "你的待通过列表已经有3个账号了，请先等待通过后才可以继续提交")
 		return
 	}

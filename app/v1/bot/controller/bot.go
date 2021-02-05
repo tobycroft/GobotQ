@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz"
@@ -12,9 +13,24 @@ import (
 func BotController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
+	route.Any("info", bot_info)
 	route.Any("add", bot_add)
 	route.Any("list", bot_list)
 	route.Any("del", bot_delete)
+}
+
+func bot_info(c *gin.Context) {
+	uid := c.PostForm("uid")
+	bot, ok := Input.PostInt64("bot", c)
+	if !ok {
+		return
+	}
+	botinfo := BotModel.Api_find_byOwnerandBot(uid, bot)
+	if len(botinfo) > 0 {
+		RET.Success(c, 0, botinfo, nil)
+	} else {
+		RET.Fail(c, 404, nil, nil)
+	}
 }
 
 func bot_add(c *gin.Context) {
@@ -47,6 +63,7 @@ func bot_add(c *gin.Context) {
 		RET.Fail(c, 406, nil, "你的待通过列表已经有3个账号了，请先等待通过后才可以继续提交")
 		return
 	}
+
 	var br BotRequestModel.Interface
 	br.Db = tuuz.Db()
 	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {

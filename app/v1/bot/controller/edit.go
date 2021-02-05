@@ -27,11 +27,11 @@ func EditController(route *gin.RouterGroup) {
 			return
 		}
 	})
-	route.Any("change_img", change_img)
-	route.Any("change_name", change_name)
+	route.Any("img", change_img)
+	route.Any("name", change_name)
 	route.Any("clear_owner", clear_owner)
-	route.Any("change_secret", change_secret)
-	route.Any("change_password", change_password)
+	route.Any("secret", change_secret)
+	route.Any("password", change_password)
 }
 
 func change_img(c *gin.Context) {

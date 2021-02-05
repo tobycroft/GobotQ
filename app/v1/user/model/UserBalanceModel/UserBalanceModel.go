@@ -9,7 +9,13 @@ import (
 const table = "user_balance"
 
 func Api_insert(qq, balance interface{}) bool {
-	db := tuuz.Db().Table(table)
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_insert(qq, balance)
+}
+
+func (self *Interface) Api_insert(qq, balance interface{}) bool {
+	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"qq":      qq,
 		"balance": balance,
@@ -25,7 +31,13 @@ func Api_insert(qq, balance interface{}) bool {
 }
 
 func Api_find(qq interface{}) gorose.Data {
-	db := tuuz.Db().Table(table)
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_find(qq)
+}
+
+func (self *Interface) Api_find(qq interface{}) gorose.Data {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"qq": qq,
 	}

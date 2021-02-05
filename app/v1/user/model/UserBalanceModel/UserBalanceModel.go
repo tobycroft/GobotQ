@@ -100,3 +100,25 @@ func (self *Interface) Api_dec_balance(qq interface{}, balance_dec float64) bool
 		return true
 	}
 }
+
+func Api_inc_balance(qq interface{}, balance_dec float64) bool {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_inc_balance(qq, balance_dec)
+}
+
+func (self *Interface) Api_inc_balance(qq interface{}, balance_inc float64) bool {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"qq": qq,
+	}
+	db.Where(where)
+	db.LockForUpdate()
+	_, err := db.Increment("balance", balance_inc)
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

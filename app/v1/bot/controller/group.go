@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
@@ -27,4 +28,31 @@ func GroupController(route *gin.RouterGroup) {
 		}
 	})
 
+	route.Any("white_list", bot_white_group_list)
+	route.Any("white_add", bot_white_group_add)
+	route.Any("white_delete", bot_white_group_delete)
+
+	route.Any("group_list", bot_group_list)
+	route.Any("group_add", bot_group_add)
+	route.Any("group_exit", bot_group_exit)
 }
+
+func bot_white_group_list(c *gin.Context) {
+	bot := c.PostForm("bot")
+	data := BotGroupAllowModel.Api_select(bot)
+	RET.Success(c, 0, data, nil)
+}
+
+func bot_white_group_add(c *gin.Context) {
+
+}
+
+func bot_white_group_delete(c *gin.Context) {
+
+}
+
+func bot_group_list(c *gin.Context) {}
+
+func bot_group_add(c *gin.Context) {}
+
+func bot_group_exit(c *gin.Context) {}

@@ -68,10 +68,9 @@ func Api_select_InGid(gid []interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(bot, gid interface{}) gorose.Data {
+func Api_find(gid interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
 		"gid": gid,
 	}
 	db.Where(where)

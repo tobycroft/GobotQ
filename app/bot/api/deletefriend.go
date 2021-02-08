@@ -17,10 +17,10 @@ type DeleteFriendRet struct {
 	Time    string `json:"time"`
 }
 
-func Deletefriend(fromqq, togroup interface{}) (DeleteFriend, DeleteFriendRet, error) {
+func Deletefriend(fromqq, toqq interface{}) (DeleteFriend, DeleteFriendRet, error) {
 	post := map[string]interface{}{
 		"fromqq": fromqq,
-		"toqq":   togroup,
+		"toqq":   toqq,
 	}
 	data, err := Net.Post(app_conf.Http_Api+"/deleteFriend", nil, post, nil, nil)
 	if err != nil {

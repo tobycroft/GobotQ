@@ -42,10 +42,19 @@ func FriendController(route *gin.RouterGroup) {
 func bot_white_friend_list(c *gin.Context) {
 	bot := c.PostForm("bot")
 	data := BotFriendAllowModel.Api_select(bot)
+
 	for k, v := range data {
 		user_info := FriendListModel.Api_find(v["uid"])
 		if len(user_info) > 0 {
 			data[k]["user_info"] = user_info
+		} else {
+			ui, err := api.Queryuserinfo(bot, v["uid"])
+			if err != nil {
+
+			} else {
+				FriendListModel.Api_insert(bot, v["uid"], ui.NickName, ui.Remark, ui.Email)
+				data[k]["user_info"] = FriendListModel.Api_find(v["uid"])
+			}
 		}
 	}
 	RET.Success(c, 0, data, nil)
@@ -95,11 +104,7 @@ func bot_friend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	remark, ok := Input.Post("remark", c, false)
-	if !ok {
-		return
-	}
-	_, ret, err := api.Addfriend(bot, qq, text, remark)
+	_, ret, err := api.Addfriend(bot, qq, text, nil)
 	if err != nil {
 		RET.Fail(c, 200, nil, err.Error())
 	} else {
@@ -113,10 +118,10 @@ func bot_friend_delete(c *gin.Context) {
 	if !ok {
 		return
 	}
-	ret, err := api.Exitgroup(bot, qq)
-	if ret {
+	_, ret, err := api.Deletefriend(bot, qq)
+	if ret.Retcode == 0 {
 		if FriendListModel.Api_delete_byUid(bot, qq) {
-			RET.Success(c, 0, nil, nil)
+			RET.Success(c, 0, ret.Retmsg, ret.Retmsg)
 		} else {
 			RET.Fail(c, 500, nil, nil)
 		}

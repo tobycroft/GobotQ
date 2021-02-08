@@ -3,9 +3,9 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/api"
-	"main.go/app/bot/model/BotGroupAllowModel"
+	"main.go/app/bot/model/BotFriendAllowModel"
 	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupListModel"
+	"main.go/app/bot/model/FriendListModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
@@ -34,18 +34,18 @@ func FriendController(route *gin.RouterGroup) {
 	route.Any("white_add", bot_white_friend_add)
 	route.Any("white_delete", bot_white_friend_delete)
 
-	route.Any("group_list", bot_friend_list)
-	route.Any("group_add", bot_friend_add)
-	route.Any("group_exit", bot_friend_exit)
+	route.Any("friend_list", bot_friend_list)
+	route.Any("friend_add", bot_friend_add)
+	route.Any("friend_delete", bot_friend_delete)
 }
 
 func bot_white_friend_list(c *gin.Context) {
 	bot := c.PostForm("bot")
-	data := BotGroupAllowModel.Api_select(bot)
+	data := BotFriendAllowModel.Api_select(bot)
 	for k, v := range data {
-		groupinfo := GroupListModel.Api_find(v["gid"])
-		if len(groupinfo) > 0 {
-			data[k]["group_info"] = GroupListModel.Api_find(v["gid"])
+		user_info := FriendListModel.Api_find(v["uid"])
+		if len(user_info) > 0 {
+			data[k]["user_info"] = user_info
 		}
 	}
 	RET.Success(c, 0, data, nil)
@@ -53,11 +53,11 @@ func bot_white_friend_list(c *gin.Context) {
 
 func bot_white_friend_add(c *gin.Context) {
 	bot := c.PostForm("bot")
-	gid, ok := Input.PostInt64("gid", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
-	data := BotGroupAllowModel.Api_insert(bot, gid)
+	data := BotFriendAllowModel.Api_insert(bot, uid)
 	if data {
 		RET.Success(c, 0, data, nil)
 	} else {
@@ -67,11 +67,11 @@ func bot_white_friend_add(c *gin.Context) {
 
 func bot_white_friend_delete(c *gin.Context) {
 	bot := c.PostForm("bot")
-	gid, ok := Input.PostInt64("gid", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
-	data := BotGroupAllowModel.Api_delete(bot, gid)
+	data := BotFriendAllowModel.Api_delete(bot, uid)
 	if data {
 		RET.Success(c, 0, data, nil)
 	} else {
@@ -81,13 +81,13 @@ func bot_white_friend_delete(c *gin.Context) {
 
 func bot_friend_list(c *gin.Context) {
 	bot := c.PostForm("bot")
-	data := GroupListModel.Api_select(bot)
+	data := FriendListModel.Api_select(bot)
 	RET.Success(c, 0, data, nil)
 }
 
 func bot_friend_add(c *gin.Context) {
 	bot := c.PostForm("bot")
-	gid, ok := Input.PostInt64("gid", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
@@ -95,7 +95,11 @@ func bot_friend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	_, ret, err := api.Addgroup(bot, gid, text)
+	remark, ok := Input.Post("remark", c, false)
+	if !ok {
+		return
+	}
+	_, ret, err := api.Addfriend(bot, uid, text, remark)
 	if err != nil {
 		RET.Fail(c, 200, nil, err.Error())
 	} else {
@@ -103,15 +107,15 @@ func bot_friend_add(c *gin.Context) {
 	}
 }
 
-func bot_friend_exit(c *gin.Context) {
+func bot_friend_delete(c *gin.Context) {
 	bot := c.PostForm("bot")
-	gid, ok := Input.PostInt64("gid", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
-	ret, err := api.Exitgroup(bot, gid)
+	ret, err := api.Exitgroup(bot, uid)
 	if ret {
-		if GroupListModel.Api_delete_byBotandGid(bot, gid) {
+		if FriendListModel.Api_delete_byUid(bot, uid) {
 			RET.Success(c, 0, nil, nil)
 		} else {
 			RET.Fail(c, 500, nil, nil)

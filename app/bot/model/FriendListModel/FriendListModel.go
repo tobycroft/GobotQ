@@ -23,6 +23,22 @@ func Api_delete(bot interface{}) bool {
 	}
 }
 
+func Api_delete_byUid(bot, uid interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"uid": uid,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_find(uid interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
@@ -30,6 +46,21 @@ func Api_find(uid interface{}) gorose.Data {
 	}
 	db.Where(where)
 	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select(bot interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+	}
+	db.Where(where)
+	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil

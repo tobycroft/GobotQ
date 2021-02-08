@@ -45,7 +45,7 @@ func bot_white_group_list(c *gin.Context) {
 	for k, v := range data {
 		groupinfo := GroupListModel.Api_find(v["gid"])
 		if len(groupinfo) > 0 {
-			data[k]["group_info"] = GroupListModel.Api_find(v["gid"])
+			data[k]["group_info"] = groupinfo
 		}
 	}
 	RET.Success(c, 0, data, nil)

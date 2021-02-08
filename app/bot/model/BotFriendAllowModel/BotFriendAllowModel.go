@@ -6,7 +6,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-const table = "bot_friend_alloow"
+const table = "bot_friend_allow"
 
 func Api_insert(bot, uid interface{}) bool {
 	db := tuuz.Db().Table(table)

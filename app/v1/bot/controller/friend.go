@@ -53,11 +53,11 @@ func bot_white_friend_list(c *gin.Context) {
 
 func bot_white_friend_add(c *gin.Context) {
 	bot := c.PostForm("bot")
-	uid, ok := Input.PostInt64("uid", c)
+	qq, ok := Input.PostInt64("qq", c)
 	if !ok {
 		return
 	}
-	data := BotFriendAllowModel.Api_insert(bot, uid)
+	data := BotFriendAllowModel.Api_insert(bot, qq)
 	if data {
 		RET.Success(c, 0, data, nil)
 	} else {
@@ -67,11 +67,11 @@ func bot_white_friend_add(c *gin.Context) {
 
 func bot_white_friend_delete(c *gin.Context) {
 	bot := c.PostForm("bot")
-	uid, ok := Input.PostInt64("uid", c)
+	qq, ok := Input.PostInt64("qq", c)
 	if !ok {
 		return
 	}
-	data := BotFriendAllowModel.Api_delete(bot, uid)
+	data := BotFriendAllowModel.Api_delete(bot, qq)
 	if data {
 		RET.Success(c, 0, data, nil)
 	} else {
@@ -87,7 +87,7 @@ func bot_friend_list(c *gin.Context) {
 
 func bot_friend_add(c *gin.Context) {
 	bot := c.PostForm("bot")
-	uid, ok := Input.PostInt64("uid", c)
+	qq, ok := Input.PostInt64("qq", c)
 	if !ok {
 		return
 	}
@@ -99,7 +99,7 @@ func bot_friend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	_, ret, err := api.Addfriend(bot, uid, text, remark)
+	_, ret, err := api.Addfriend(bot, qq, text, remark)
 	if err != nil {
 		RET.Fail(c, 200, nil, err.Error())
 	} else {
@@ -109,13 +109,13 @@ func bot_friend_add(c *gin.Context) {
 
 func bot_friend_delete(c *gin.Context) {
 	bot := c.PostForm("bot")
-	uid, ok := Input.PostInt64("uid", c)
+	qq, ok := Input.PostInt64("qq", c)
 	if !ok {
 		return
 	}
-	ret, err := api.Exitgroup(bot, uid)
+	ret, err := api.Exitgroup(bot, qq)
 	if ret {
-		if FriendListModel.Api_delete_byUid(bot, uid) {
+		if FriendListModel.Api_delete_byUid(bot, qq) {
 			RET.Success(c, 0, nil, nil)
 		} else {
 			RET.Fail(c, 500, nil, nil)

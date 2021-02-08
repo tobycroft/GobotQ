@@ -1,4 +1,4 @@
-package BotGroupAllowModel
+package BotFriendAllowModel
 
 import (
 	"github.com/gohouse/gorose/v2"
@@ -6,13 +6,13 @@ import (
 	"main.go/tuuz/Log"
 )
 
-const table = "bot_group_allow"
+const table = "bot_friend_alloow"
 
-func Api_insert(bot, gid interface{}) bool {
+func Api_insert(bot, uid interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"bot": bot,
-		"gid": gid,
+		"uid": uid,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -24,11 +24,11 @@ func Api_insert(bot, gid interface{}) bool {
 	}
 }
 
-func Api_find(bot, gid interface{}) gorose.Data {
+func Api_find(bot, uid interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"bot": bot,
-		"gid": gid,
+		"uid": uid,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -40,11 +40,11 @@ func Api_find(bot, gid interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(bot, gid interface{}) bool {
+func Api_delete(bot, uid interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"bot": bot,
-		"gid": gid,
+		"uid": uid,
 	}
 	db.Where(where)
 	_, err := db.Delete()

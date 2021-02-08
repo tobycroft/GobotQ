@@ -112,3 +112,19 @@ func Api_delete_byGid(gid interface{}) bool {
 		return true
 	}
 }
+
+func Api_delete_byBotandGid(bot, gid interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"bot": bot,
+		"gid": gid,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

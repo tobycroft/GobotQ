@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupListModel"
@@ -65,11 +66,57 @@ func bot_white_group_add(c *gin.Context) {
 }
 
 func bot_white_group_delete(c *gin.Context) {
-
+	bot := c.PostForm("bot")
+	gid, ok := Input.PostInt64("gid", c)
+	if !ok {
+		return
+	}
+	data := BotGroupAllowModel.Api_delete(bot, gid)
+	if data {
+		RET.Success(c, 0, data, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
 }
 
-func bot_group_list(c *gin.Context) {}
+func bot_group_list(c *gin.Context) {
+	bot := c.PostForm("bot")
+	data := GroupListModel.Api_select(bot)
+	RET.Success(c, 0, data, nil)
+}
 
-func bot_group_add(c *gin.Context) {}
+func bot_group_add(c *gin.Context) {
+	bot := c.PostForm("bot")
+	gid, ok := Input.PostInt64("gid", c)
+	if !ok {
+		return
+	}
+	text, ok := Input.Post("text", c, false)
+	if !ok {
+		return
+	}
+	_, ret, err := api.Addgroup(bot, gid, text)
+	if err != nil {
+		RET.Fail(c, 200, nil, err.Error())
+	} else {
+		RET.Success(c, 0, ret.Retmsg, ret.Retmsg)
+	}
+}
 
-func bot_group_exit(c *gin.Context) {}
+func bot_group_exit(c *gin.Context) {
+	bot := c.PostForm("bot")
+	gid, ok := Input.PostInt64("gid", c)
+	if !ok {
+		return
+	}
+	ret, err := api.Exitgroup(bot, gid)
+	if ret {
+		if GroupListModel.Api_delete_byBotandGid(bot, gid) {
+			RET.Success(c, 0, nil, nil)
+		} else {
+			RET.Fail(c, 500, nil, nil)
+		}
+	} else {
+		RET.Fail(c, 200, err.Error(), err.Error())
+	}
+}

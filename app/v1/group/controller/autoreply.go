@@ -8,13 +8,20 @@ import (
 func AutoreplyController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-}
+	route.Any("list", autoreply_list)
+	route.Any("add", autoreply_add)
+	route.Any("delete", autoreply_delete)
 
-func autoreply_add(c *gin.Context) {
-
+	route.Any("full_list", autoreply_full_list)
+	route.Any("full_add", autoreply_full_add)
+	route.Any("full_delete", autoreply_full_delete)
 }
 
 func autoreply_list(c *gin.Context) {
+
+}
+
+func autoreply_add(c *gin.Context) {
 
 }
 
@@ -22,6 +29,14 @@ func autoreply_delete(c *gin.Context) {
 
 }
 
-func autoreply_add_full(c *gin.Context) {
+func autoreply_full_list(c *gin.Context) {
+
+}
+
+func autoreply_full_add(c *gin.Context) {
+
+}
+
+func autoreply_full_delete(c *gin.Context) {
 
 }

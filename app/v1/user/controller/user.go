@@ -3,9 +3,11 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/UserMemberModel"
+	"main.go/app/bot/model/UserTokenModel"
 	"main.go/app/v1/user/model/UserBalanceModel"
 	"main.go/app/v1/user/model/UserBalanceRecordModel"
 	"main.go/common/BaseController"
+	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
 )
 
@@ -14,6 +16,8 @@ func UserController(route *gin.RouterGroup) {
 	route.Any("info", user_info)
 	route.Any("balance", user_balance)
 	route.Any("balance_record", user_balance_record)
+	route.Any("login_record", login_record)
+	route.Any("login_delete", login_delete)
 }
 
 func user_info(c *gin.Context) {
@@ -46,4 +50,23 @@ func user_balance_record(c *gin.Context) {
 	uid := c.PostForm("uid")
 	balances := UserBalanceRecordModel.Api_select(uid)
 	RET.Success(c, 0, balances, nil)
+}
+
+func login_record(c *gin.Context) {
+	uid := c.PostForm("uid")
+	data := UserTokenModel.Api_select(uid)
+	RET.Success(c, 0, data, nil)
+}
+
+func login_delete(c *gin.Context) {
+	uid := c.PostForm("uid")
+	id, ok := Input.PostInt64("id", c)
+	if !ok {
+		return
+	}
+	if UserTokenModel.Api_delete_byId(uid, id) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
 }

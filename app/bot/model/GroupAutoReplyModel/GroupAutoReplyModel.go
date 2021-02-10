@@ -1,4 +1,4 @@
-package GroupAutoreplyModel
+package GroupAutoReplyModel
 
 import (
 	"github.com/gohouse/gorose/v2"
@@ -6,7 +6,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-const table = "group_autoreply"
+const table = "group_auto_reply"
 
 func Api_insert(gid, uid, key, value, percent interface{}) bool {
 	db := tuuz.Db().Table(table)
@@ -27,15 +27,47 @@ func Api_insert(gid, uid, key, value, percent interface{}) bool {
 	}
 }
 
-func Api_select(gid, Type, percent interface{}) []gorose.Data {
+func Api_select(gid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_semi(gid, percent interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid":  gid,
-		"type": Type,
+		"type": "semi",
 	}
 	db.Where(where)
 	db.Where("percent", ">", percent)
 	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_find(gid, key, percent interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid":     gid,
+		"key":     key,
+		"percent": percent,
+	}
+	db.Where(where)
+	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil

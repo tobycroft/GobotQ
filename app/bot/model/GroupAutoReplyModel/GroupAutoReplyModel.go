@@ -8,9 +8,10 @@ import (
 
 const table = "group_auto_reply"
 
-func Api_insert(gid, uid, key, value, percent interface{}) bool {
+func Api_insert(Type, gid, uid, key, value, percent interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
+		"type":    Type,
 		"gid":     gid,
 		"uid":     uid,
 		"key":     key,

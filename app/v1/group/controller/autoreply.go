@@ -38,19 +38,21 @@ func AutoreplyController(route *gin.RouterGroup) {
 	route.Any("delete", autoreply_delete)
 
 	route.Any("full_list", autoreply_full_list)
-	route.Any("full_add", autoreply_full_add)
-	route.Any("full_delete", autoreply_full_delete)
 }
 
 func autoreply_list(c *gin.Context) {
 	gid := c.PostForm("gid")
-	data := GroupAutoReplyModel.Api_select(gid)
+	data := GroupAutoReplyModel.Api_select_semi(gid)
 	RET.Success(c, 0, data, nil)
 }
 
 func autoreply_add(c *gin.Context) {
 	gid := c.PostForm("gid")
 	uid := c.PostForm("uid")
+	Type, ok := Input.Post("type", c, false)
+	if !ok {
+		return
+	}
 	key, ok := Input.Post("key", c, false)
 	if !ok {
 		return
@@ -63,7 +65,16 @@ func autoreply_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	if GroupAutoReplyModel.Api_insert(gid, uid, key, value, percent) {
+	switch Type {
+	case "semi":
+		break
+	case "full":
+		break
+	default:
+		RET.Fail(c, 400, nil, "模式不正确")
+		return
+	}
+	if GroupAutoReplyModel.Api_insert(Type, gid, uid, key, value, percent) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -84,13 +95,7 @@ func autoreply_delete(c *gin.Context) {
 }
 
 func autoreply_full_list(c *gin.Context) {
-
-}
-
-func autoreply_full_add(c *gin.Context) {
-
-}
-
-func autoreply_full_delete(c *gin.Context) {
-
+	gid := c.PostForm("gid")
+	data := GroupAutoReplyModel.Api_select_full(gid)
+	RET.Success(c, 0, data, nil)
 }

@@ -8,11 +8,12 @@ import (
 
 const table = "group_black_list"
 
-func Api_insert(gid, uid interface{}) bool {
+func Api_insert(gid, uid, operator interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"gid":      gid,
+		"uid":      uid,
+		"operator": operator,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -57,11 +58,10 @@ func Api_count(gid, uid interface{}) int64 {
 
 }
 
-func Api_select(gid, uid interface{}) []gorose.Data {
+func Api_select(gid interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid": gid,
-		"uid": uid,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -70,5 +70,21 @@ func Api_select(gid, uid interface{}) []gorose.Data {
 		return nil
 	} else {
 		return ret
+	}
+}
+
+func Api_delete(gid, uid interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid": gid,
+		"uid": uid,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
 	}
 }

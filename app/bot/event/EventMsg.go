@@ -48,7 +48,7 @@ func EventMsg(em EM) {
 	uid := em.FromQQ.UIN
 	gid := em.FromGroup.GIN
 	Type := em.Msg.Type
-
+	operator := em.OperateQQ.UIN
 	var group RefreshGroupStruct
 	group.Gid = gid
 	group.Bot = bot
@@ -113,7 +113,7 @@ func EventMsg(em EM) {
 			api.Sendgroupmsg(bot, gid, "群成员T出报告生成失败", auto_retract)
 		}
 		if groupfunction["kick_to_black"].(int64) == 1 {
-			GroupBlackListModel.Api_insert(gid, uid)
+			GroupBlackListModel.Api_insert(gid, uid, operator)
 		}
 		break
 
@@ -138,7 +138,7 @@ func EventMsg(em EM) {
 			api.Sendgroupmsg(bot, gid, "成员-1", auto_retract)
 		}
 		if groupfunction["exit_to_black"].(int64) == 1 {
-			GroupBlackListModel.Api_insert(gid, uid)
+			GroupBlackListModel.Api_insert(gid, uid, operator)
 		}
 		break
 

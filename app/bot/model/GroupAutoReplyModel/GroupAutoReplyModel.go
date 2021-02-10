@@ -42,7 +42,23 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_semi(gid, percent interface{}) []gorose.Data {
+func Api_select_semi(gid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid":  gid,
+		"type": "semi",
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_semi_byPercent(gid, percent interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"gid":  gid,
@@ -50,6 +66,22 @@ func Api_select_semi(gid, percent interface{}) []gorose.Data {
 	}
 	db.Where(where)
 	db.Where("percent", ">", percent)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_full(gid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"gid":  gid,
+		"type": "full",
+	}
+	db.Where(where)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

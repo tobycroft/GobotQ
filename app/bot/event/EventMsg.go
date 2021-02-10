@@ -5,6 +5,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupKickModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -111,6 +112,9 @@ func EventMsg(em EM) {
 		} else {
 			api.Sendgroupmsg(bot, gid, "群成员T出报告生成失败", auto_retract)
 		}
+		if groupfunction["kick_to_black"].(int64) == 1 {
+			GroupBlackListModel.Api_insert(gid, uid)
+		}
 		break
 
 	//申请加群信息
@@ -132,6 +136,9 @@ func EventMsg(em EM) {
 	case 5:
 		if groupfunction["exit_alert"].(int64) == 1 {
 			api.Sendgroupmsg(bot, gid, "成员-1", auto_retract)
+		}
+		if groupfunction["exit_to_black"].(int64) == 1 {
+			GroupBlackListModel.Api_insert(gid, uid)
 		}
 		break
 

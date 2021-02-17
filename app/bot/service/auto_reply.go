@@ -12,7 +12,7 @@ func Serv_auto_reply(gid interface{}, text string) (string, bool) {
 	if len(data) > 0 {
 		return Calc.Any2String(data["value"]), true
 	} else {
-		datas := GroupAutoReplyModel.Api_select_semi(gid)
+		datas := GroupAutoReplyModel.Api_select_semi_byPercent(gid, rand)
 		for _, data := range datas {
 			if strings.Contains(text, Calc.Any2String(data["key"])) {
 				return Calc.Any2String(data["value"]), true

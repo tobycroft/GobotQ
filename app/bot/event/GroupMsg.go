@@ -314,8 +314,8 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, msg _Msg, text *stri
 	}(10, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		_, ok := service.Serv_auto_reply(*gid, *text)
-		new_text[idx] = ""
+		str, ok := service.Serv_auto_reply(*gid, *text)
+		new_text[idx] = str
 		function[idx] = ok
 	}(11, &wg)
 	wg.Wait()

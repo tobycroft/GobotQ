@@ -240,9 +240,9 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, msg _Msg, new_text string, 
 	}
 }
 
-const group_function_number = 10
+const group_function_number = 11
 
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "威望查询", "威望排行", "长度限制"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "威望查询", "威望排行", "长度限制", "自动回复"}
 
 func groupHandle_acfur_middle(bot *int, gid *int, uid *int, msg _Msg, text *string, req *int, random *int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -312,6 +312,12 @@ func groupHandle_acfur_middle(bot *int, gid *int, uid *int, msg _Msg, text *stri
 			function[idx] = true
 		}
 	}(10, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		_, ok := service.Serv_auto_reply(*gid, *text)
+		new_text[idx] = ""
+		function[idx] = ok
+	}(11, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -431,6 +437,10 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, msg _Msg
 		time := GroupBanModel.Api_count(*gid, *uid)
 		GroupBanModel.Api_insert(*gid, *uid)
 		api.Mutegroupmember(*bot, *gid, *uid, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+		break
+
+	case "自动回复":
+		api.Sendgroupmsg(*bot, *gid, text, auto_retract)
 		break
 
 	default:

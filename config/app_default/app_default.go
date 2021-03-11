@@ -64,3 +64,5 @@ const Default_length_limit = "请勿发送长文本"
 const Default_kick_word = "用户触发T出词，和他说再见吧？哦不过他好像已经收不到了hhh"
 
 const Default_retract_word = "用户触发了撤回"
+
+const Default_over_time = "您的服务已经到期，如需增加时间请加入反馈：542749156"

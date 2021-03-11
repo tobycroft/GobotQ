@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 )
 
 type PM struct {
@@ -74,6 +75,17 @@ func PrivateHandle(bot int, uid, gid int, text string) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")
+
+	botinfo := BotModel.Api_find(bot)
+	if botinfo["end_time"].(int64) < time.Now().Unix() {
+		if gid != 0 {
+			api.Sendgrouptempmsg(bot, gid, uid, app_default.Default_over_time, false)
+		} else {
+			api.Sendprivatemsg(bot, uid, app_default.Default_over_time, false)
+		}
+		return
+	}
+
 	if active {
 		privateHandle_acfur(&bot, &uid, &gid, new_text, text)
 	} else {

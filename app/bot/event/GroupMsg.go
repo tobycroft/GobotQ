@@ -3,6 +3,7 @@ package event
 import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -16,6 +17,7 @@ import (
 	"math"
 	"regexp"
 	"sync"
+	"time"
 )
 
 type RefreshGroupStruct struct {
@@ -104,9 +106,18 @@ func GroupHandle(bot, gid, uid int, msg _Msg, req int, random int) {
 		GroupFunctionModel.Api_insert(gid)
 		groupfunction = GroupFunctionModel.Api_find(gid)
 	}
+	botinfo := BotModel.Api_find(bot)
+
 	if active {
+		if botinfo["end_time"].(int64) < time.Now().Unix() {
+			api.Sendgroupmsg(bot, gid, app_default.Default_over_time, true)
+			return
+		}
 		groupHandle_acfur(&bot, &gid, &uid, msg, new_text, &req, &random, groupmember, groupfunction)
 	} else {
+		if botinfo["end_time"].(int64) < time.Now().Unix() {
+			return
+		}
 		//在未激活acfur的情况下应该对原始内容进行还原
 		groupHandle_acfur_middle(&bot, &gid, &uid, msg, &text, &req, &random, groupmember, groupfunction)
 	}

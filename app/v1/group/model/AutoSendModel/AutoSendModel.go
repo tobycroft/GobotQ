@@ -6,7 +6,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-const table = "user_balance"
+const table = "group_auto_send"
 
 func Api_insert(qq, balance interface{}) bool {
 	var self Interface

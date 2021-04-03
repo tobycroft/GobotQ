@@ -14,4 +14,5 @@ func GroupRouter(route *gin.RouterGroup) {
 	controller.ListController(route.Group("list"))
 	controller.BlackController(route.Group("black"))
 	controller.AutoreplyController(route.Group("autoreply"))
+	controller.AutosendController(route.Group("autosend"))
 }

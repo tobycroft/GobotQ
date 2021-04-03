@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/GroupAutoReplyModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
@@ -32,9 +33,11 @@ func AutosendController(route *gin.RouterGroup) {
 			return
 		}
 	})
-	route.Any("list", autoreply_list)
-	route.Any("add", autoreply_add)
-	route.Any("delete", autoreply_delete)
 
-	route.Any("full_list", autoreply_full_list)
+}
+
+func autosend_list(c *gin.Context) {
+	gid := c.PostForm("gid")
+	data := GroupAutoReplyModel.Api_select_semi(gid)
+	RET.Success(c, 0, data, nil)
 }

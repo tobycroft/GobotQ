@@ -8,7 +8,6 @@ import (
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
-	"math"
 	"time"
 )
 
@@ -120,6 +119,7 @@ func autosend_add(c *gin.Context) {
 
 func autosend_update(c *gin.Context) {
 	gid := c.PostForm("gid")
+	uid := c.PostForm("uid")
 	id, ok := Input.PostInt("id", c)
 	if !ok {
 		return
@@ -136,12 +136,39 @@ func autosend_update(c *gin.Context) {
 	if !ok {
 		return
 	}
-	sep, ok := Input.PostInt("sep", c)
+	sep, ok := Input.PostInt64("sep", c)
 	if !ok {
 		return
 	}
 	count, ok := Input.PostInt("count", c)
 	if !ok {
 		return
+	}
+	retract, ok := Input.PostBool("retract", c)
+	if !ok {
+		return
+	}
+	next_time := int64(0)
+	switch Type {
+	case "sep":
+		next_time = sep + time.Now().Unix()
+		break
+
+	case "fix":
+		count = 1
+		next_time = sep
+		break
+
+	default:
+		Type = "sep"
+		count = 1
+		sep = 60
+		break
+	}
+
+	if AutoSendModel.Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
 	}
 }

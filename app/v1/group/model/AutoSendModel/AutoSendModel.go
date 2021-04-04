@@ -39,13 +39,13 @@ func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_t
 	}
 }
 
-func Api_update(gid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
+func Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update(gid, id, ident, msg, Type, sep, count, next_time, retract)
+	return self.Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract)
 }
 
-func (self *Interface) Api_update(gid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
+func (self *Interface) Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"id": id,
@@ -53,6 +53,7 @@ func (self *Interface) Api_update(gid, id, ident, msg, Type, sep, count, next_ti
 	db.Where(where)
 	data := map[string]interface{}{
 		"gid":       gid,
+		"uid":       uid,
 		"ident":     ident,
 		"msg":       msg,
 		"type":      Type,

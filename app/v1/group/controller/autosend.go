@@ -9,6 +9,7 @@ import (
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
 	"math"
+	"time"
 )
 
 func AutosendController(route *gin.RouterGroup) {
@@ -76,7 +77,7 @@ func autosend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	sep, ok := Input.PostInt("sep", c)
+	sep, ok := Input.PostInt64("sep", c)
 	if !ok {
 		return
 	}
@@ -92,13 +93,15 @@ func autosend_add(c *gin.Context) {
 	if err != nil {
 		RET.Fail(c, 400, err.Error(), err.Error())
 	}
-
+	next_time := int64(0)
 	switch Type {
 	case "sep":
-
+		next_time = sep + time.Now().Unix()
 		break
 
 	case "fix":
+		count = 1
+		next_time = sep
 		break
 
 	default:
@@ -107,7 +110,7 @@ func autosend_add(c *gin.Context) {
 		sep = 60
 		break
 	}
-	next_time := ""
+
 	if AutoSendModel.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract) {
 		RET.Success(c, 0, nil, nil)
 	} else {

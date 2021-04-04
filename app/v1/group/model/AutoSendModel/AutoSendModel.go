@@ -38,6 +38,38 @@ func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_t
 	}
 }
 
+func Api_update(gid, id, ident, msg, Type, sep, count, next_time interface{}) bool {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_update(gid, id, ident, msg, Type, sep, count, next_time)
+}
+
+func (self *Interface) Api_update(gid, id, ident, msg, Type, sep, count, next_time interface{}) bool {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"id": id,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
+		"gid":       gid,
+		"ident":     ident,
+		"msg":       msg,
+		"type":      Type,
+		"sep":       sep,
+		"count":     count,
+		"next_time": next_time,
+	}
+	db.Data(data)
+	db.LockForUpdate()
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_select_next_time_up() []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Where("next_time", "<", time.Now().Unix())

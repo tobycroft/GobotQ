@@ -131,6 +131,7 @@ func autosend_update(c *gin.Context) {
 	}
 	sep, ok := Input.PostInt("sep", c)
 	if !ok {
+
 		return
 	}
 	count, ok := Input.PostInt("count", c)

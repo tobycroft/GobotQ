@@ -124,16 +124,17 @@ func (self *Interface) Api_dec_count(id interface{}) bool {
 	}
 }
 
-func Api_update_next_time(id, next_time interface{}) bool {
+func Api_update_next_time(gid, id, next_time interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update_next_time(id, next_time)
+	return self.Api_update_next_time(gid, id, next_time)
 }
 
-func (self *Interface) Api_update_next_time(id, next_time interface{}) bool {
+func (self *Interface) Api_update_next_time(gid, id, next_time interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"id": id,
+		"gid": gid,
+		"id":  id,
 	}
 	db.Where(where)
 	db.Data(map[string]interface{}{
@@ -165,16 +166,17 @@ func Api_delete(gid, id interface{}) bool {
 	}
 }
 
-func Api_update_active(id, active interface{}) bool {
+func Api_update_active(gid, id, active interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update_next_time(id, active)
+	return self.Api_update_active(gid, id, active)
 }
 
-func (self *Interface) Api_update_active(id, active interface{}) bool {
+func (self *Interface) Api_update_active(gid, id, active interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"id": id,
+		"gid": gid,
+		"id":  id,
 	}
 	db.Where(where)
 	db.Data(map[string]interface{}{

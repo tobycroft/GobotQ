@@ -91,6 +91,7 @@ func autosend_add(c *gin.Context) {
 	err := AutoSendAction.App_autosend_verify(sep, count, Type)
 	if err != nil {
 		RET.Fail(c, 400, err.Error(), err.Error())
+		return
 	}
 	next_time := int64(0)
 	switch Type {

@@ -23,23 +23,28 @@ func auto_send() {
 		db.Begin()
 		var ass AutoSendModel.Interface
 		ass.Db = db
+
+		timer := data["sep"].(int64)
+		next_time := time.Now().Unix() + timer
+		ass.Api_update_next_time(data["gid"], data["id"], next_time)
+
 		switch data["type"].(string) {
 		case "sep":
-			timer := data["sep"].(int64)
-			next_time := time.Now().Unix() + timer
-			ass.Api_update_next_time(data["gid"], data["id"], next_time)
+			//如果是采用间隔模式，则需要测算下次时间，并count-1
 			break
 
 		case "fix":
-			timer := data["sep"].(int64)
-			next_time := time.Now().Unix() + timer
-			ass.Api_update_next_time(data["gid"], data["id"], next_time)
+			//如果采用一次性模式，则直接关闭这个定时
 			ass.Api_update_active(data["gid"], data["id"], 0)
 			break
 
 		default:
 			break
 		}
+		ass.Api_dec_count(data["id"])
+		db.Commit()
+
+		//发送部分
 		var gss api.GroupSendStruct
 		if data["retract"].(int64) == 1 {
 			gss.AutoRetract = true
@@ -50,19 +55,9 @@ func auto_send() {
 		if len(group) < 1 {
 			return
 		}
-		ass.Api_dec_count(data["id"])
-		db.Commit()
 		gss.Fromqq = group["bot"]
 		gss.Text = Calc.Any2String(data["msg"])
 		gss.Togroup = data["group"]
 		api.Group_send_chan <- gss
 	}
-}
-
-func auto_send_sep() {
-
-}
-
-func auto_send_fix() {
-
 }

@@ -24,6 +24,8 @@ func main() {
 	go cron.GroupMsgRecv()
 	go cron.PrivateMsgRecv()
 
+	go cron.Cron_auto_send()
+
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard

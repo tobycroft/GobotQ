@@ -84,6 +84,10 @@ func autosend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
+	retract, ok := Input.PostBool("retract", c)
+	if !ok {
+		return
+	}
 	err := AutoSendAction.App_autosend_verify(sep, count)
 	if err != nil {
 		RET.Fail(c, 400, err.Error(), err.Error())
@@ -104,7 +108,7 @@ func autosend_add(c *gin.Context) {
 		break
 	}
 	next_time := ""
-	if AutoSendModel.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time) {
+	if AutoSendModel.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

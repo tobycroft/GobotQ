@@ -76,6 +76,7 @@ func Api_select_next_time_up() []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Where("next_time", "<", time.Now().Unix())
 	db.Where("count", ">", 0)
+	db.Where("active", "=", 1)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

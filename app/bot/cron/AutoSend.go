@@ -2,8 +2,10 @@ package cron
 
 import (
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/v1/group/model/AutoSendModel"
 	"main.go/tuuz"
+	"main.go/tuuz/Calc"
 	"time"
 )
 
@@ -18,14 +20,22 @@ func Cron_auto_send() {
 			next_time := time.Now().Unix() + timer
 			var ass AutoSendModel.Interface
 			ass.Db = db
-			ass.Api_update_next_time(data["id"], next_time)
+			ass.Api_update_next_time(data["gid"], data["id"], next_time)
 			var gss api.GroupSendStruct
 			if data["retract"].(int64) == 1 {
 				gss.AutoRetract = true
 			} else {
 				gss.AutoRetract = false
 			}
-
+			group := GroupListModel.Api_find(data["gid"])
+			if len(group) < 1 {
+				return
+			}
+			ass.Api_dec_count(data["id"])
+			db.Commit()
+			gss.Fromqq = group["bot"]
+			gss.Text = Calc.Any2String(data["msg"])
+			gss.Togroup = data["group"]
 			api.Group_send_chan <- gss
 			break
 
@@ -36,7 +46,6 @@ func Cron_auto_send() {
 		default:
 			break
 		}
-		db.Commit()
 
 	}
 }

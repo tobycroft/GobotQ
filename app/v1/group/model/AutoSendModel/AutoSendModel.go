@@ -100,6 +100,19 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
+func Api_find(gid, id interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	db.Where("gid", "=", gid)
+	db.Where("id", "=", id)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 type Interface struct {
 	Db gorose.IOrm
 }

@@ -37,6 +37,7 @@ func AutosendController(route *gin.RouterGroup) {
 	})
 
 	route.Any("list", autosend_list)
+	route.Any("get", autosend_get)
 	route.Any("add", autosend_add)
 	route.Any("update", autosend_update)
 	route.Any("delete", autosend_delete)
@@ -46,6 +47,20 @@ func autosend_list(c *gin.Context) {
 	gid := c.PostForm("gid")
 	data := AutoSendModel.Api_select(gid)
 	RET.Success(c, 0, data, nil)
+}
+
+func autosend_get(c *gin.Context) {
+	gid := c.PostForm("gid")
+	id, ok := Input.PostInt("id", c)
+	if !ok {
+		return
+	}
+	data := AutoSendModel.Api_find(gid, id)
+	if len(data) > 0 {
+		RET.Success(c, 0, data, nil)
+	} else {
+		RET.Fail(c, 404, nil, nil)
+	}
 }
 
 func autosend_delete(c *gin.Context) {

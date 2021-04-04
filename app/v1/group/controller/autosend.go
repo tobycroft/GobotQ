@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/v1/group/action/AutoSendAction"
 	"main.go/app/v1/group/model/AutoSendModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
@@ -36,6 +37,8 @@ func AutosendController(route *gin.RouterGroup) {
 	})
 
 	route.Any("list", autosend_list)
+	route.Any("add", autosend_add)
+	route.Any("update", autosend_update)
 	route.Any("delete", autosend_delete)
 }
 
@@ -69,7 +72,7 @@ func autosend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	Type, ok := Input.Post("type", c, false)
+	Type, ok := Input.Post("type", c, true)
 	if !ok {
 		return
 	}
@@ -81,7 +84,31 @@ func autosend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	AutoSendModel.Api_insert(gid, uid, ident, msg, Type, sep, count)
+	err := AutoSendAction.App_autosend_verify(sep, count)
+	if err != nil {
+		RET.Fail(c, 400, err.Error(), err.Error())
+	}
+
+	switch Type {
+	case "sep":
+
+		break
+
+	case "fix":
+		break
+
+	default:
+		Type = "sep"
+		count = 1
+		sep = 60
+		break
+	}
+	next_time := ""
+	if AutoSendModel.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
 
 }
 

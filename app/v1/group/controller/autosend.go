@@ -109,7 +109,6 @@ func autosend_add(c *gin.Context) {
 	} else {
 		RET.Fail(c, 500, nil, nil)
 	}
-
 }
 
 func autosend_update(c *gin.Context) {
@@ -118,5 +117,24 @@ func autosend_update(c *gin.Context) {
 	if !ok {
 		return
 	}
-
+	ident, ok := Input.Post("ident", c, true)
+	if !ok {
+		return
+	}
+	msg, ok := Input.Post("msg", c, false)
+	if !ok {
+		return
+	}
+	Type, ok := Input.Post("type", c, true)
+	if !ok {
+		return
+	}
+	sep, ok := Input.PostInt("sep", c)
+	if !ok {
+		return
+	}
+	count, ok := Input.PostInt("count", c)
+	if !ok {
+		return
+	}
 }

@@ -2,11 +2,12 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/bot/model/GroupAutoReplyModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/v1/group/model/AutoSendModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
+	"math"
 )
 
 func AutosendController(route *gin.RouterGroup) {
@@ -34,10 +35,61 @@ func AutosendController(route *gin.RouterGroup) {
 		}
 	})
 
+	route.Any("list", autosend_list)
+	route.Any("delete", autosend_delete)
 }
 
 func autosend_list(c *gin.Context) {
 	gid := c.PostForm("gid")
-	data := GroupAutoReplyModel.Api_select_semi(gid)
+	data := AutoSendModel.Api_select(gid)
 	RET.Success(c, 0, data, nil)
+}
+
+func autosend_delete(c *gin.Context) {
+	gid := c.PostForm("gid")
+	id, ok := Input.PostInt("id", c)
+	if !ok {
+		return
+	}
+	if AutoSendModel.Api_delete(gid, id) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
+}
+
+func autosend_add(c *gin.Context) {
+	gid := c.PostForm("gid")
+	uid := c.PostForm("uid")
+	ident, ok := Input.Post("ident", c, true)
+	if !ok {
+		return
+	}
+	msg, ok := Input.Post("msg", c, false)
+	if !ok {
+		return
+	}
+	Type, ok := Input.Post("type", c, false)
+	if !ok {
+		return
+	}
+	sep, ok := Input.PostInt("sep", c)
+	if !ok {
+		return
+	}
+	count, ok := Input.PostInt("count", c)
+	if !ok {
+		return
+	}
+	AutoSendModel.Api_insert(gid, uid, ident, msg, Type, sep, count)
+
+}
+
+func autosend_update(c *gin.Context) {
+	gid := c.PostForm("gid")
+	id, ok := Input.PostInt("id", c)
+	if !ok {
+		return
+	}
+
 }

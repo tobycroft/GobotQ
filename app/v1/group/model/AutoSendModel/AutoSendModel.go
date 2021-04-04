@@ -9,13 +9,13 @@ import (
 
 const table = "group_auto_send"
 
-func Api_insert(gid, uid, ident, msg, Type, sep, fix, next_time interface{}) bool {
+func Api_insert(gid, uid, ident, msg, Type, sep, count, next_time interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_insert(gid, uid, ident, msg, Type, sep, fix, next_time)
+	return self.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time)
 }
 
-func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, fix, next_time interface{}) bool {
+func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_time interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"gid":       gid,
@@ -24,7 +24,7 @@ func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, fix, next_tim
 		"msg":       msg,
 		"type":      Type,
 		"sep":       sep,
-		"fix":       fix,
+		"count":     count,
 		"next_time": next_time,
 	}
 	db.Data(data)
@@ -42,6 +42,19 @@ func Api_select_next_time_up() []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Where("next_time", "<", time.Now().Unix())
 	db.Where("count", ">", 0)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select(gid interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	db.Where("gid", "=", gid)
+	db.Order("id desc")
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

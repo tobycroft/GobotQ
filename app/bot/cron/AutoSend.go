@@ -10,6 +10,13 @@ import (
 )
 
 func Cron_auto_send() {
+	for {
+		auto_send()
+		time.Sleep(60 * time.Second)
+	}
+}
+
+func auto_send() {
 	datas := AutoSendModel.Api_select_next_time_up()
 	for _, data := range datas {
 		db := tuuz.Db()
@@ -20,9 +27,7 @@ func Cron_auto_send() {
 		case "sep":
 			timer := data["sep"].(int64)
 			next_time := time.Now().Unix() + timer
-
 			ass.Api_update_next_time(data["gid"], data["id"], next_time)
-
 			break
 
 		case "fix":

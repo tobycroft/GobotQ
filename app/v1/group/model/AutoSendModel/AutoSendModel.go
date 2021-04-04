@@ -9,13 +9,13 @@ import (
 
 const table = "group_auto_send"
 
-func Api_insert(gid, uid, ident, msg, Type, sep, count, next_time interface{}) bool {
+func Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time)
+	return self.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract)
 }
 
-func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_time interface{}) bool {
+func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"gid":       gid,
@@ -26,6 +26,7 @@ func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_t
 		"sep":       sep,
 		"count":     count,
 		"next_time": next_time,
+		"retract":   retract,
 	}
 	db.Data(data)
 	db.LockForUpdate()
@@ -38,13 +39,13 @@ func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_t
 	}
 }
 
-func Api_update(gid, id, ident, msg, Type, sep, count, next_time interface{}) bool {
+func Api_update(gid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update(gid, id, ident, msg, Type, sep, count, next_time)
+	return self.Api_update(gid, id, ident, msg, Type, sep, count, next_time, retract)
 }
 
-func (self *Interface) Api_update(gid, id, ident, msg, Type, sep, count, next_time interface{}) bool {
+func (self *Interface) Api_update(gid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"id": id,
@@ -58,6 +59,7 @@ func (self *Interface) Api_update(gid, id, ident, msg, Type, sep, count, next_ti
 		"sep":       sep,
 		"count":     count,
 		"next_time": next_time,
+		"retract":   retract,
 	}
 	db.Data(data)
 	db.LockForUpdate()
@@ -155,6 +157,31 @@ func Api_delete(gid, id interface{}) bool {
 	}
 	db.Where(where)
 	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func Api_update_active(id, active interface{}) bool {
+	var self Interface
+	self.Db = tuuz.Db()
+	return self.Api_update_next_time(id, active)
+}
+
+func (self *Interface) Api_update_active(id, active interface{}) bool {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"id": id,
+	}
+	db.Where(where)
+	db.Data(map[string]interface{}{
+		"active": active,
+	})
+	db.LockForUpdate()
+	_, err := db.Update()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return false

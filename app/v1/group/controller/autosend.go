@@ -88,7 +88,7 @@ func autosend_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	err := AutoSendAction.App_autosend_verify(sep, count)
+	err := AutoSendAction.App_autosend_verify(sep, count, Type)
 	if err != nil {
 		RET.Fail(c, 400, err.Error(), err.Error())
 	}

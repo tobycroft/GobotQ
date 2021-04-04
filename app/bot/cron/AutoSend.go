@@ -1,7 +1,6 @@
 package cron
 
 import (
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/v1/group/model/AutoSendModel"
@@ -45,20 +44,14 @@ func auto_send() {
 		ass.Api_dec_count(data["id"])
 		db.Commit()
 		//发送部分
-		var gss api.GroupSendStruct
+		auto_retract := false
 		if data["retract"].(int64) == 1 {
-			gss.AutoRetract = true
-		} else {
-			gss.AutoRetract = false
+			auto_retract = true
 		}
 		group := GroupListModel.Api_find(data["gid"])
-		fmt.Println(group)
 		if len(group) < 1 {
 			return
 		}
-		gss.Fromqq = group["bot"]
-		gss.Text = Calc.Any2String(data["msg"])
-		gss.Togroup = data["group"]
-		api.Group_send_chan <- gss
+		api.Sendgroupmsg(group["bot"], data["gid"], Calc.Any2String(data["msg"]), auto_retract)
 	}
 }

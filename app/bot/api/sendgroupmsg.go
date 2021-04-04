@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/config/app_conf"
@@ -83,6 +84,7 @@ func sendgroupmsg(gss GroupSendStruct) (GroupMsg, GroupMsgRet, error) {
 		"togroup": gss.Togroup,
 		"text":    url.QueryEscape(gss.Text),
 	}
+	fmt.Println(post)
 	data, err := Net.Post(app_conf.Http_Api+"/sendgroupmsg", nil, post, nil, nil)
 	if err != nil {
 		return GroupMsg{}, GroupMsgRet{}, err

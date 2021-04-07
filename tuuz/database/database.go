@@ -48,7 +48,7 @@ func dsn_local() string {
 }
 
 func dsn() string {
-	dbname := "GobotQ"
+	dbname := "GobotQ2"
 	dbuser := "GobotQ"
 	dbpass := "123456"
 	dbhost := "10.0.0.170"

@@ -17,12 +17,12 @@ func App_refresh_group_list() {
 			var gss []GroupListModel.GroupList
 			for _, gll := range gl {
 				var gs GroupListModel.GroupList
-				gs.Bot = bot["bot"]
-				gs.Gid = gll.GIN
-				gs.Group_name = gll.StrGroupName
-				gs.Group_memo = gll.StrGroupMemo
-				gs.Owner = gll.DwGroupOwnerUin
-				gs.Number = gll.DwMemberNum
+				gs.Self_id = bot["bot"]
+				gs.Group_id = gll.GroupID
+				gs.Group_name = gll.GroupName
+				gs.Group_memo = gll.GroupMemo
+				gs.Max_member_count = gll.MaxMemberCount
+				gs.Member_count = gll.MemberCount
 				gss = append(gss, gs)
 			}
 			GroupListModel.Api_insert_more(gss)

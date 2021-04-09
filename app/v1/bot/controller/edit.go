@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
@@ -45,28 +44,6 @@ func change_img(c *gin.Context) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 0, nil, nil)
-	}
-}
-
-func change_name(c *gin.Context) {
-	bot := c.PostForm("bot")
-	nickname, ok := Input.Post("nickname", c, false)
-	if !ok {
-		return
-	}
-	os, err := api.Setnickname(bot, nickname)
-	if err != nil {
-		RET.Fail(c, 300, err, err.Error())
-		return
-	}
-	if !os {
-		RET.Fail(c, 400, nil, "api修改昵称失败")
-		return
-	}
-	if BotModel.Api_update_cname(bot, nickname) {
-		RET.Success(c, 0, nil, nil)
-	} else {
-		RET.Fail(c, 500, nil, nil)
 	}
 }
 

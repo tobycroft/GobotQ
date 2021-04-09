@@ -85,31 +85,13 @@ func bot_group_list(c *gin.Context) {
 	RET.Success(c, 0, data, nil)
 }
 
-func bot_group_add(c *gin.Context) {
-	bot := c.PostForm("bot")
-	gid, ok := Input.PostInt64("gid", c)
-	if !ok {
-		return
-	}
-	text, ok := Input.Post("text", c, false)
-	if !ok {
-		return
-	}
-	_, ret, err := api.Addgroup(bot, gid, text)
-	if err != nil {
-		RET.Fail(c, 200, nil, err.Error())
-	} else {
-		RET.Success(c, 0, ret.Retmsg, ret.Retmsg)
-	}
-}
-
 func bot_group_exit(c *gin.Context) {
 	bot := c.PostForm("bot")
 	gid, ok := Input.PostInt64("gid", c)
 	if !ok {
 		return
 	}
-	ret, err := api.Exitgroup(bot, gid)
+	ret := api.SetGroupLeave(bot, gid)
 	if ret {
 		if GroupListModel.Api_delete_byBotandGid(bot, gid) {
 			RET.Success(c, 0, nil, nil)
@@ -117,6 +99,6 @@ func bot_group_exit(c *gin.Context) {
 			RET.Fail(c, 500, nil, nil)
 		}
 	} else {
-		RET.Fail(c, 200, err.Error(), err.Error())
+		RET.Fail(c, 200, nil, "故障")
 	}
 }

@@ -10,11 +10,11 @@ const table = "group_list"
 
 type GroupList struct {
 	Self_id          interface{} `gorose:"self_id"`
-	Group_id         int         `gorose:"group_id"`
+	Group_id         int64       `gorose:"group_id"`
 	Group_name       string      `gorose:"group_name"`
 	Group_memo       string      `gorose:"group_memo"`
-	Member_count     int         `gorose:"member_count"`
-	Max_member_count int         `gorose:"max_member_count"`
+	Member_count     int64       `gorose:"member_count"`
+	Max_member_count int64       `gorose:"max_member_count"`
 }
 
 func Api_insert(gl GroupList) bool {

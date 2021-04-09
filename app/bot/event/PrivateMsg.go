@@ -70,6 +70,9 @@ func PrivateHandle(selfId int64, uid, gid int64, message, rawMessage string) {
 	new_text := reg.ReplaceAllString(message, "")
 
 	botinfo := BotModel.Api_find(selfId)
+	if len(botinfo) < 1 {
+		return
+	}
 	if botinfo["end_time"].(int64) < time.Now().Unix() {
 		if gid != 0 {
 			api.Sendgrouptempmsg(selfId, gid, uid, app_default.Default_over_time, false)

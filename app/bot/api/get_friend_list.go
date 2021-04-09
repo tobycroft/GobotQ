@@ -13,7 +13,7 @@ type FriendListRet struct {
 	Status  string       `json:"status"`
 }
 
-type FriendList []struct {
+type FriendList struct {
 	Nickname string `json:"nickname"`
 	Remark   string `json:"remark"`
 	UserID   int64  `json:"user_id"`

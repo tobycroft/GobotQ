@@ -8,10 +8,10 @@ import (
 
 const table = "friend_list"
 
-func Api_delete(bot interface{}) bool {
+func Api_delete(self_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -23,11 +23,11 @@ func Api_delete(bot interface{}) bool {
 	}
 }
 
-func Api_delete_byUid(bot, uid interface{}) bool {
+func Api_delete_byUid(self_id, user_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"uid": uid,
+		"self_id": self_id,
+		"user_id": user_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -39,10 +39,10 @@ func Api_delete_byUid(bot, uid interface{}) bool {
 	}
 }
 
-func Api_find(uid interface{}) gorose.Data {
+func Api_find(user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"uid": uid,
+		"user_id": user_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -54,10 +54,10 @@ func Api_find(uid interface{}) gorose.Data {
 	}
 }
 
-func Api_select(bot interface{}) []gorose.Data {
+func Api_select(self_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -69,14 +69,13 @@ func Api_select(bot interface{}) []gorose.Data {
 	}
 }
 
-func Api_insert(bot, uid, nickname, remark, email interface{}) bool {
+func Api_insert(self_id, user_id, nickname, remark interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"bot":      bot,
-		"uid":      uid,
+		"self_id":  self_id,
+		"user_id":  user_id,
 		"nickname": nickname,
 		"remark":   remark,
-		"email":    email,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -89,11 +88,10 @@ func Api_insert(bot, uid, nickname, remark, email interface{}) bool {
 }
 
 type FriendList struct {
-	Bot      interface{} `gorose:"bot"`
-	Uid      interface{} `gorose:"uid"`
+	SelfId   interface{} `gorose:"self_id"`
+	UserId   interface{} `gorose:"user_id"`
 	Nickname string      `gorose:"nickname"`
 	Remark   string      `gorose:"remark"`
-	Email    string      `gorose:"email"`
 }
 
 func Api_insert_more(fl []FriendList) bool {

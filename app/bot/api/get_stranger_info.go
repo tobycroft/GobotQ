@@ -23,10 +23,10 @@ type UserInfo struct {
 	UserID    int    `json:"user_id"`
 }
 
-func Queryuserinfo(self_id, user_id interface{}) (UserInfo, error) {
+func GetStrangerInfo(self_id, user_id interface{}, no_cache bool) (UserInfo, error) {
 	post := map[string]interface{}{
 		"user_id":  user_id,
-		"no_cache": false,
+		"no_cache": no_cache,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {

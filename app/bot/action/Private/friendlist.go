@@ -9,23 +9,22 @@ import (
 func App_refresh_friend_list_all() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		App_refresh_friend_list(bot["bot"])
+		App_refresh_friend_list(bot["self_id"])
 	}
 }
 
-func App_refresh_friend_list(bot interface{}) {
-	fl, err := api.Getfriendlist(bot)
+func App_refresh_friend_list(self_id interface{}) {
+	fl, err := api.Getfriendlist(self_id)
 	if err != nil {
 
 	} else {
-		FriendListModel.Api_delete(bot)
+		FriendListModel.Api_delete(self_id)
 		var fss []FriendListModel.FriendList
 		for _, fll := range fl {
 			var fs FriendListModel.FriendList
-			fs.Bot = bot
-			fs.Uid = fll.UIN
-			fs.Nickname = fll.NickName
-			fs.Email = fll.Email
+			fs.SelfId = self_id
+			fs.UserId = fll.UserID
+			fs.Nickname = fll.Nickname
 			fs.Remark = fll.Remark
 			fss = append(fss, fs)
 		}

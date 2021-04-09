@@ -12,14 +12,14 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func Api_insert(self_id, cname, Type, owner, secret, password, end_time interface{}) bool {
+func Api_insert(self_id, cname, Type, owner, secret, password, end_time, url interface{}) bool {
 	db := tuuz.Db()
 	var self Interface
 	self.Db = db
-	return self.Api_insert(self_id, cname, Type, owner, secret, password, end_time)
+	return self.Api_insert(self_id, cname, Type, owner, secret, password, end_time, url)
 }
 
-func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password, end_time interface{}) bool {
+func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password, end_time, url interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"self_id":  self_id,
@@ -29,6 +29,7 @@ func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password,
 		"secret":   secret,
 		"password": password,
 		"end_time": end_time,
+		"url":      url,
 	}
 	db.Data(data)
 	_, err := db.Insert()

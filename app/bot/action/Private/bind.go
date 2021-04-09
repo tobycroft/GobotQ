@@ -8,7 +8,7 @@ import (
 	"main.go/tuuz"
 )
 
-func App_bind_robot(bot int, uid, gid int, text string) {
+func App_bind_robot(bot int64, uid, gid int64, text string) {
 	if len(text) < 2 {
 		if gid != 0 {
 			api.Sendgrouptempmsg(bot, gid, uid, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
@@ -68,7 +68,7 @@ func App_bind_robot(bot int, uid, gid int, text string) {
 	}
 }
 
-func App_unbind_bot(bot int, uid, gid int, text string) {
+func App_unbind_bot(bot int64, uid, gid int64, text string) {
 	data := BotModel.Api_find(bot)
 	if len(data) < 1 {
 		if gid != 0 {
@@ -101,7 +101,7 @@ func App_unbind_bot(bot int, uid, gid int, text string) {
 	}
 }
 
-func App_change_bot_secret(bot int, uid, gid int, text string) {
+func App_change_bot_secret(bot int64, uid, gid int64, text string) {
 	data := BotModel.Api_find(bot)
 	if len(data) < 1 {
 		if gid != 0 {

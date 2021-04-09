@@ -52,22 +52,23 @@ func PrivateMsg(pm PM) {
 	uid := pm.UserID
 	gid := pm.Sender.GroupID
 	uid_string := Calc.Int642String(uid)
-	text := pm.RawMessage
+	message := pm.Message
+	raw_message := pm.RawMessage
 
 	text_exists := Redis.CheckExists("PrivateMsg:" + uid_string)
 	if text_exists {
 		return
 	}
 
-	Redis.SetRaw("PrivateMsg:"+uid_string, Calc.Md5(text), 1)
+	Redis.SetRaw("PrivateMsg:"+uid_string, Calc.Md5(message), 1)
 
-	PrivateHandle(bot, uid, gid, text)
+	PrivateHandle(bot, uid, gid, message, raw_message)
 }
 
-func PrivateHandle(bot int64, uid, gid int64, text string) {
+func PrivateHandle(bot int64, uid, gid int64, message, raw_message string) {
 	reg := regexp.MustCompile("(?i)^acfur")
-	active := reg.MatchString(text)
-	new_text := reg.ReplaceAllString(text, "")
+	active := reg.MatchString(message)
+	new_text := reg.ReplaceAllString(message, "")
 
 	botinfo := BotModel.Api_find(bot)
 	if botinfo["end_time"].(int64) < time.Now().Unix() {
@@ -80,13 +81,13 @@ func PrivateHandle(bot int64, uid, gid int64, text string) {
 	}
 
 	if active {
-		privateHandle_acfur(&bot, &uid, &gid, new_text, text)
+		privateHandle_acfur(&bot, &uid, &gid, new_text, message)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
-		if private_default_reply(&bot, &uid, &gid, &text) {
+		if private_default_reply(&bot, &uid, &gid, &message) {
 			return
 		}
-		auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
+		auto_reply := PrivateAutoReplyModel.Api_find_byKey(message)
 		if len(auto_reply) > 0 {
 			if auto_reply["value"] == nil {
 				return
@@ -98,18 +99,18 @@ func PrivateHandle(bot int64, uid, gid int64, text string) {
 			}
 
 		} else {
-			private_auto_reply(&bot, &uid, &gid, &text)
+			private_auto_reply(&bot, &uid, &gid, &message)
 		}
 	}
 }
 
-func private_default_reply(bot *int, uid, gid *int, text *string) bool {
+func private_default_reply(bot *int64, uid, gid *int64, message *string) bool {
 	default_reply := BotDefaultReplyModel.Api_select()
 	for _, auto_reply := range default_reply {
 		if auto_reply["key"] == nil {
 			continue
 		}
-		if strings.Contains(*text, auto_reply["key"].(string)) {
+		if strings.Contains(*message, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
 				continue
 			}
@@ -124,13 +125,13 @@ func private_default_reply(bot *int, uid, gid *int, text *string) bool {
 	return false
 }
 
-func private_auto_reply(bot *int, uid, gid *int, text *string) {
+func private_auto_reply(bot *int64, uid, gid *int64, message *string) {
 	auto_replys := PrivateAutoReplyModel.Api_select_semi(*bot)
 	for _, auto_reply := range auto_replys {
 		if auto_reply["key"] == nil {
 			continue
 		}
-		if strings.Contains(*text, auto_reply["key"].(string)) {
+		if strings.Contains(*message, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
 				continue
 			}
@@ -144,8 +145,8 @@ func private_auto_reply(bot *int, uid, gid *int, text *string) {
 	}
 }
 
-func privateHandle_acfur(bot *int, uid, gid *int, text, origin_text string) {
-	switch text {
+func privateHandle_acfur(bot *int64, uid, gid *int64, message, origin_text string) {
+	switch message {
 	case "help":
 		botinfo := BotModel.Api_find(*bot)
 		if len(botinfo) > 0 {
@@ -172,7 +173,7 @@ func privateHandle_acfur(bot *int, uid, gid *int, text, origin_text string) {
 		break
 
 	case "登录", "登陆", "login":
-		Private.App_userLogin(*bot, *uid, *gid, text)
+		Private.App_userLogin(*bot, *uid, *gid, message)
 		break
 
 	case "清除登录":
@@ -180,7 +181,7 @@ func privateHandle_acfur(bot *int, uid, gid *int, text, origin_text string) {
 		break
 
 	case "解绑":
-		Private.App_unbind_bot(*bot, *uid, *gid, text)
+		Private.App_unbind_bot(*bot, *uid, *gid, message)
 		break
 
 	case "绑定":
@@ -198,7 +199,7 @@ func privateHandle_acfur(bot *int, uid, gid *int, text, origin_text string) {
 		break
 
 	default:
-		privateHandle_acfur_middle(bot, uid, gid, text, origin_text)
+		privateHandle_acfur_middle(bot, uid, gid, message, origin_text)
 		break
 	}
 }
@@ -207,39 +208,39 @@ const private_function_number = 5
 
 var private_function_type = []string{"unknow", "密码", "修改密码", "绑定群", "解绑群", "绑定"}
 
-func privateHandle_acfur_middle(bot *int, uid, gid *int, text, origin_text string) {
+func privateHandle_acfur_middle(bot *int64, uid, gid *int64, message, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)
 	new_text := make([]string, private_function_number+1, private_function_number+1)
 	var wg sync.WaitGroup
 	wg.Add(private_function_number)
 
-	go func(idx int, wg *sync.WaitGroup) {
+	go func(idx int64, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"密码", "password"})
+		str, ok := service.Serv_text_match(message, []string{"密码", "password"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(1, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
+	go func(idx int64, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"修改密码", "change_secret"})
+		str, ok := service.Serv_text_match(message, []string{"修改密码", "change_secret"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(2, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
+	go func(idx int64, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"绑定群", "bindgroup"})
+		str, ok := service.Serv_text_match(message, []string{"绑定群", "bindgroup"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(3, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
+	go func(idx int64, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"解绑群", "unbindgroup"})
+		str, ok := service.Serv_text_match(message, []string{"解绑群", "unbindgroup"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(4, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
+	go func(idx int64, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(text, []string{"绑定", "bind"})
+		str, ok := service.Serv_text_match(message, []string{"绑定", "bind"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(5, &wg)
@@ -254,12 +255,12 @@ func privateHandle_acfur_middle(bot *int, uid, gid *int, text, origin_text strin
 	privateHandle_acfur_other(private_function_type[function_route], bot, uid, gid, new_text[function_route])
 }
 
-func privateHandle_acfur_other(Type string, bot *int, uid, gid *int, text string) {
+func privateHandle_acfur_other(Type string, bot *int64, uid, gid *int64, message string) {
 	botinfo := BotModel.Api_find(*bot)
 	switch Type {
 	case "密码":
 		if int64(*uid) == botinfo["owner"].(int64) {
-			Private.App_userChangePassword(*bot, *uid, text)
+			Private.App_userChangePassword(*bot, *uid, message)
 		} else {
 			if *gid != 0 {
 				api.Sendgrouptempmsg(*bot, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
@@ -270,12 +271,12 @@ func privateHandle_acfur_other(Type string, bot *int, uid, gid *int, text string
 		break
 
 	case "绑定":
-		Private.App_bind_robot(*bot, *uid, *gid, text)
+		Private.App_bind_robot(*bot, *uid, *gid, message)
 		break
 
 	case "修改密码":
 		if int64(*uid) == botinfo["owner"].(int64) {
-			Private.App_change_bot_secret(*bot, *uid, *gid, text)
+			Private.App_change_bot_secret(*bot, *uid, *gid, message)
 		} else {
 			if *gid != 0 {
 				api.Sendgrouptempmsg(*bot, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
@@ -287,7 +288,7 @@ func privateHandle_acfur_other(Type string, bot *int, uid, gid *int, text string
 
 	case "绑定群":
 		if int64(*uid) == botinfo["owner"].(int64) {
-			Private.App_bind_group(*bot, *uid, text)
+			Private.App_bind_group(*bot, *uid, message)
 		} else {
 			if *gid != 0 {
 				api.Sendgrouptempmsg(*bot, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
@@ -299,7 +300,7 @@ func privateHandle_acfur_other(Type string, bot *int, uid, gid *int, text string
 
 	case "解绑群":
 		if int64(*uid) == botinfo["owner"].(int64) {
-			Private.App_unbind_group(*bot, *uid, text)
+			Private.App_unbind_group(*bot, *uid, message)
 		} else {
 			if *gid != 0 {
 				api.Sendgrouptempmsg(*bot, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)

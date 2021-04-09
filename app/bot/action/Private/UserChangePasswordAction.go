@@ -8,7 +8,7 @@ import (
 	"main.go/tuuz"
 )
 
-func App_userChangePassword(bot int, uid int, text string) {
+func App_userChangePassword(bot int64, uid int64, text string) {
 	if len(text) < 1 {
 		api.Sendprivatemsg(bot, uid, "密码长度应该大于1位", true)
 		return

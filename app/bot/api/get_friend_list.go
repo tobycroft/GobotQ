@@ -16,7 +16,7 @@ type FriendListRet struct {
 type FriendList []struct {
 	Nickname string `json:"nickname"`
 	Remark   string `json:"remark"`
-	UserID   int    `json:"user_id"`
+	UserID   int64  `json:"user_id"`
 }
 
 func Getfriendlist(self_id interface{}) ([]FriendList, error) {

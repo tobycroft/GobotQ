@@ -14,13 +14,13 @@ type GroupListRet struct {
 }
 
 type GroupList struct {
-	GroupCreateTime int    `json:"group_create_time"`
-	GroupID         int    `json:"group_id"`
-	GroupLevel      int    `json:"group_level"`
+	GroupCreateTime int64  `json:"group_create_time"`
+	GroupID         int64  `json:"group_id"`
+	GroupLevel      int64  `json:"group_level"`
 	GroupMemo       string `json:"group_memo"`
 	GroupName       string `json:"group_name"`
-	MaxMemberCount  int    `json:"max_member_count"`
-	MemberCount     int    `json:"member_count"`
+	MaxMemberCount  int64  `json:"max_member_count"`
+	MemberCount     int64  `json:"member_count"`
 }
 
 func Getgrouplist(self_id interface{}) ([]GroupList, error) {

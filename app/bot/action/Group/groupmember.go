@@ -33,7 +33,7 @@ func App_refresh_group_member() {
 			for _, gll := range gl {
 				var apm App_group_member
 				apm.Bot = bot["bot"]
-				apm.Gid = gll.GIN
+				apm.Gid = gll.GroupID
 				Chan_refresh_group_member <- apm
 			}
 		}

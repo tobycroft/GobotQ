@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/cron"
 	"main.go/route"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	//go cron.Send_temp()
 	//
 	//go cron.GroupMsgRecv()
-	//go cron.PrivateMsgRecv()
+	go cron.PrivateMsgRecv()
 	//
 	//go cron.Cron_auto_send()
 

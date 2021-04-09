@@ -7,7 +7,6 @@ import (
 
 func PrivateMsgRecv() {
 	for pm := range event.PrivateMsgChan {
-		PrivateMsgModel.Api_insert(pm.LogonQQ, pm.FromQQ.UIN, pm.Msg.Text, pm.Msg.Req, pm.Msg.Seq, pm.Msg.Type, pm.Msg.SubType, pm.File.ID,
-			pm.File.MD5, pm.File.Name, pm.File.Size)
+		PrivateMsgModel.Api_insert(pm.SelfID, pm.UserID, pm.MessageID, pm.MessageType, pm.Message, pm.RawMessage, pm.PostType, pm.SubType, pm.Time)
 	}
 }

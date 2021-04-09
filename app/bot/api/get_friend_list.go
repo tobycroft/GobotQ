@@ -19,7 +19,7 @@ type FriendList []struct {
 	UserID   int    `json:"user_id"`
 }
 
-func Getfriendlist(self_id interface{}) (FriendList, error) {
+func Getfriendlist(self_id interface{}) ([]FriendList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		return nil, errors.New("botinfo_notfound")

@@ -48,12 +48,12 @@ func dsn_local() string {
 }
 
 func dsn() string {
-	dbname := "GobotQ"
+	dbname := "GobotQ2"
 	dbuser := "GobotQ"
 	dbpass := "123456"
-	dbhost := "10.0.0.170"
+	dbhost := "b.aerofsx.com"
 	conntype := "tcp"
-	dbport := "3306"
+	dbport := "17033"
 	charset := "utf8mb4"
 	return dbuser + ":" + dbpass + "@" + conntype + "(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=" + charset + "&parseTime=true"
 }

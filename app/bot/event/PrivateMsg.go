@@ -18,37 +18,24 @@ import (
 )
 
 type PM struct {
-	Type   string `json:"Type"`
-	FromQQ struct {
-		UIN      int    `json:"UIN"`
-		NickName string `json:"NickName"`
-	} `json:"FromQQ"`
-	LogonQQ   int `json:"LogonQQ"`
-	TimeStamp struct {
-		Recv int `json:"Recv"`
-		Send int `json:"Send"`
-	} `json:"TimeStamp"`
-	FromGroup struct {
-		GIN int `json:"GIN"`
-	} `json:"FromGroup"`
-	Msg struct {
-		Req         int    `json:"Req"`
-		Seq         int64  `json:"Seq"`
-		Type        int    `json:"Type"`
-		SubType     int    `json:"SubType"`
-		SubTempType int    `json:"SubTempType"`
-		Text        string `json:"Text"`
-		BubbleID    int    `json:"BubbleID"`
-	} `json:"Msg"`
-	Hb struct {
-		Type int `json:"Type"`
-	} `json:"Hb"`
-	File struct {
-		ID   string `json:"ID"`
-		MD5  string `json:"MD5"`
-		Name string `json:"Name"`
-		Size int    `json:"Size"`
-	} `json:"File"`
+	Font        int    `json:"font"`
+	Message     string `json:"message"`
+	MessageID   int64  `json:"message_id"`
+	MessageType string `json:"message_type"`
+	PostType    string `json:"post_type"`
+	RawMessage  string `json:"raw_message"`
+	SelfID      int64  `json:"self_id"`
+	Sender      struct {
+		Age      int    `json:"age"`
+		GroupID  int64  `json:"group_id"`
+		Nickname string `json:"nickname"`
+		Sex      string `json:"sex"`
+		UserID   int64  `json:"user_id"`
+	} `json:"sender"`
+	SubType    string `json:"sub_type"`
+	TempSource int    `json:"temp_source"`
+	Time       int64  `json:"time"`
+	UserID     int64  `json:"user_id"`
 }
 
 var PrivateMsgChan = make(chan PM, 99)
@@ -61,11 +48,11 @@ func PrivateMsg(pm PM) {
 		meta_event：元事件
 	*/
 	PrivateMsgChan <- pm
-	bot := pm.LogonQQ
-	uid := pm.FromQQ.UIN
-	gid := pm.FromGroup.GIN
-	uid_string := Calc.Int2String(uid)
-	text := pm.Msg.Text
+	bot := pm.SelfID
+	uid := pm.UserID
+	gid := pm.Sender.GroupID
+	uid_string := Calc.Int642String(uid)
+	text := pm.RawMessage
 
 	text_exists := Redis.CheckExists("PrivateMsg:" + uid_string)
 	if text_exists {
@@ -77,7 +64,7 @@ func PrivateMsg(pm PM) {
 	PrivateHandle(bot, uid, gid, text)
 }
 
-func PrivateHandle(bot int, uid, gid int, text string) {
+func PrivateHandle(bot int64, uid, gid int64, text string) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
 	new_text := reg.ReplaceAllString(text, "")

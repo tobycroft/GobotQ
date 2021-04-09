@@ -17,42 +17,51 @@ func EventRouter(json string) {
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {
-		Type := data["Type"]
-		if Type == nil {
+		post_type := data["post_type"]
+		if post_type == nil {
 			fmt.Println("typenot on", data)
 			return
 		}
 		jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 
-		switch Type {
-		case "PrivateMsg":
-			var pm PM
-			err = jsr.UnmarshalFromString(json, &pm)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				PrivateMsg(pm)
+		switch post_type {
+
+		case "message":
+			message_type := data["message_type"].(string)
+			switch message_type {
+			case "private":
+				var pm PM
+				err = jsr.UnmarshalFromString(json, &pm)
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					PrivateMsg(pm)
+				}
+				break
+
+			case "GroupMsg":
+				var gm GM
+				err = jsr.UnmarshalFromString(json, &gm)
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					GroupMsg(gm)
+				}
+				break
+
+			case "EventMsg":
+				var em EM
+				err = jsr.UnmarshalFromString(json, &em)
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					EventMsg(em)
+				}
+				break
 			}
 			break
 
-		case "GroupMsg":
-			var gm GM
-			err = jsr.UnmarshalFromString(json, &gm)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				GroupMsg(gm)
-			}
-			break
-
-		case "EventMsg":
-			var em EM
-			err = jsr.UnmarshalFromString(json, &em)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				EventMsg(em)
-			}
+		case "meta_event":
 			break
 
 		default:

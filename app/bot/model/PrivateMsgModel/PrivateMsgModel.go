@@ -8,20 +8,18 @@ import (
 
 const table = "private_msg"
 
-func Api_insert(bot, uid, text, req, seq, Type, subtype, file_id, file_md5, file_name, file_size interface{}) bool {
+func Api_insert(self_id, uid, message_id, message_type, message, raw_message, post_type, sub_type, time interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"bot":       bot,
-		"uid":       uid,
-		"text":      text,
-		"req":       req,
-		"seq":       seq,
-		"type":      Type,
-		"subtype":   subtype,
-		"file_id":   file_id,
-		"file_md5":  file_md5,
-		"file_name": file_name,
-		"file_size": file_size,
+		"self_id":      self_id,
+		"uid":          uid,
+		"message_id":   message_id,
+		"message_type": message_type,
+		"message":      message,
+		"raw_message":  raw_message,
+		"post_type":    post_type,
+		"sub_type":     sub_type,
+		"time":         time,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -33,10 +31,10 @@ func Api_insert(bot, uid, text, req, seq, Type, subtype, file_id, file_md5, file
 	}
 }
 
-func Api_select(bot interface{}) []gorose.Data {
+func Api_select(self_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	db.Limit(30)

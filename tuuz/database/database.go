@@ -51,9 +51,9 @@ func dsn() string {
 	dbname := "GobotQ2"
 	dbuser := "GobotQ"
 	dbpass := "123456"
-	dbhost := "b.aerofsx.com"
+	dbhost := "10.0.0.170"
 	conntype := "tcp"
-	dbport := "17033"
+	dbport := "3306"
 	charset := "utf8mb4"
 	return dbuser + ":" + dbpass + "@" + conntype + "(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=" + charset + "&parseTime=true"
 }

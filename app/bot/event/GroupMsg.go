@@ -29,42 +29,32 @@ type RefreshGroupStruct struct {
 var RefreshGroupChan = make(chan RefreshGroupStruct, 20)
 
 type GM struct {
-	Type   string `json:"Type"`
-	FromQQ struct {
-		UIN       int    `json:"UIN"`
-		Card      string `json:"Card"`
-		SpecTitle string `json:"SpecTitle"`
-		Pos       struct {
-			Lo int `json:"Lo"`
-			La int `json:"La"`
-		} `json:"Pos"`
-	} `json:"FromQQ"`
-	LogonQQ   int `json:"LogonQQ"`
-	TimeStamp struct {
-		Recv int `json:"Recv"`
-		Send int `json:"Send"`
-	} `json:"TimeStamp"`
-	FromGroup struct {
-		GIN  int    `json:"GIN"`
-		Name string `json:"name"`
-	} `json:"FromGroup"`
-	Msg  _Msg `json:"Msg"`
-	File struct {
-		ID   string `json:"ID"`
-		MD5  string `json:"MD5"`
-		Name string `json:"Name"`
-		Size int64  `json:"Size"`
-	} `json:"File"`
+	Anonymous   interface{} `json:"anonymous"`
+	Font        int         `json:"font"`
+	GroupID     int64       `json:"group_id"`
+	Message     string      `json:"message"`
+	MessageID   int64       `json:"message_id"`
+	MessageSeq  int64       `json:"message_seq"`
+	MessageType string      `json:"message_type"`
+	PostType    string      `json:"post_type"`
+	RawMessage  string      `json:"raw_message"`
+	SelfID      int64       `json:"self_id"`
+	Sender      _Sender     `json:"sender"`
+	SubType     string      `json:"sub_type"`
+	Time        int64       `json:"time"`
+	UserID      int64       `json:"user_id"`
 }
 
-type _Msg struct {
-	Req       int    `json:"Req"`
-	Random    int    `json:"Random"`
-	SubType   int    `json:"SubType"`
-	AppID     int    `json:"AppID"`
-	Text      string `json:"Text"`
-	TextReply string `json:"Text_Reply"`
-	BubbleID  int    `json:"BubbleID"`
+type _Sender struct {
+	Age      int    `json:"age"`
+	Area     string `json:"area"`
+	Card     string `json:"card"`
+	Level    string `json:"level"`
+	Nickname string `json:"nickname"`
+	Role     string `json:"role"`
+	Sex      string `json:"sex"`
+	Title    string `json:"title"`
+	UserID   int64  `json:"user_id"`
 }
 
 var GroupMsgChan = make(chan GM, 99)
@@ -181,15 +171,15 @@ func groupHandle_acfur(bot *int, gid *int, uid *int, msg _Msg, new_text string, 
 		break
 
 	case "测试撤回":
-		var ret Retract_group
-		ret.Group = *gid
-		ret.Fromqq = *bot
-		ret.Random = *random
-		ret.Req = *req
-		if !admin {
-			return
-		}
-		Retract_chan_group_instant <- ret
+		//var ret Retract_group
+		//ret.Group = *gid
+		//ret.Fromqq = *bot
+		//ret.Random = *random
+		//ret.Req = *req
+		//if !admin {
+		//	return
+		//}
+		//Retract_chan_group_instant <- ret
 		break
 
 	case "测试拼音":
@@ -356,11 +346,11 @@ func groupHandle_acfur_other(Type string, bot *int, gid *int, uid *int, msg _Msg
 	if groupfunction["auto_retract"].(int64) == 0 {
 		auto_retract = false
 	}
-	var ret Retract_group
-	ret.Group = *gid
-	ret.Fromqq = *bot
-	ret.Random = *random
-	ret.Req = *req
+	var ret Struct_retract
+	//ret.Group = *gid
+	//ret.Fromqq = *bot
+	//ret.Random = *random
+	//ret.Req = *req
 	switch Type {
 	case "sign":
 		Group.App_group_sign(*bot, *gid, *uid, *req, *random, groupmember, groupfunction)

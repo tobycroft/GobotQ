@@ -7,6 +7,6 @@ import (
 
 func PrivateMsgRecv() {
 	for pm := range event.PrivateMsgChan {
-		PrivateMsgModel.Api_insert(pm.SelfID, pm.UserID, pm.MessageID, pm.MessageType, pm.Message, pm.RawMessage, pm.PostType, pm.SubType, pm.Time)
+		PrivateMsgModel.Api_insert(pm.SelfID, pm.UserID, pm.MessageID, pm.Message, pm.RawMessage, pm.SubType, pm.Time)
 	}
 }

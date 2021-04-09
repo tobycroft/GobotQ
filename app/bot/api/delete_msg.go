@@ -6,13 +6,13 @@ import (
 	"main.go/tuuz/Net"
 )
 
-type Retract struct {
+type Struct_Retract struct {
 	Self_id   interface{}
 	MessageId interface{}
 }
 
-var Retract_chan = make(chan Retract, 20)
-var Retract_chan_instant = make(chan Retract, 20)
+var Retract_chan = make(chan Struct_Retract, 20)
+var Retract_chan_instant = make(chan Struct_Retract, 20)
 
 func DeleteMsg(self_id, message_id interface{}) (bool, error) {
 	post := map[string]interface{}{

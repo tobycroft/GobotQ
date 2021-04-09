@@ -74,11 +74,7 @@ func PrivateHandle(selfId int64, uid, gid int64, message, rawMessage string) {
 		return
 	}
 	if botinfo["end_time"].(int64) < time.Now().Unix() {
-		if gid != 0 {
-			api.Sendgrouptempmsg(selfId, gid, uid, app_default.Default_over_time, false)
-		} else {
-			api.Sendprivatemsg(selfId, uid, app_default.Default_over_time, false)
-		}
+		api.Sendprivatemsg(selfId, uid, app_default.Default_over_time, false)
 		return
 	}
 
@@ -94,12 +90,7 @@ func PrivateHandle(selfId int64, uid, gid int64, message, rawMessage string) {
 			if auto_reply["value"] == nil {
 				return
 			}
-			if gid != 0 {
-				api.Sendgrouptempmsg(selfId, gid, uid, auto_reply["value"].(string), false)
-			} else {
-				api.Sendprivatemsg(selfId, uid, auto_reply["value"].(string), false)
-			}
-
+			api.Sendprivatemsg(selfId, uid, auto_reply["value"].(string), false)
 		} else {
 			private_auto_reply(&selfId, &uid, &gid, &message)
 		}
@@ -116,11 +107,7 @@ func private_default_reply(selfId *int64, uid, gid *int64, message *string) bool
 			if auto_reply["value"] == nil {
 				continue
 			}
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, auto_reply["value"].(string), false)
-			} else {
-				api.Sendprivatemsg(*selfId, *uid, auto_reply["value"].(string), false)
-			}
+			api.Sendprivatemsg(*selfId, *uid, auto_reply["value"].(string), false)
 			return true
 		}
 	}
@@ -137,11 +124,7 @@ func private_auto_reply(selfId *int64, uid, gid *int64, message *string) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, auto_reply["value"].(string), false)
-			} else {
-				api.Sendprivatemsg(*selfId, *uid, auto_reply["value"].(string), false)
-			}
+			api.Sendprivatemsg(*selfId, *uid, auto_reply["value"].(string), false)
 			break
 		}
 	}
@@ -153,24 +136,12 @@ func privateHandle_acfur(selfId *int64, uid, gid *int64, message, origin_text st
 		botinfo := BotModel.Api_find(*selfId)
 		if len(botinfo) > 0 {
 			if botinfo["owner"].(int64) == int64(*uid) {
-				if *gid != 0 {
-					api.Sendgrouptempmsg(*selfId, *gid, *uid, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
-				} else {
-					api.Sendprivatemsg(*selfId, *uid, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
-				}
-			} else {
-				if *gid != 0 {
-					api.Sendgrouptempmsg(*selfId, *gid, *uid, app_default.Default_private_help, false)
-				} else {
-					api.Sendprivatemsg(*selfId, *uid, app_default.Default_private_help, false)
-				}
-			}
-		} else {
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, app_default.Default_private_help, false)
+				api.Sendprivatemsg(*selfId, *uid, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
 			} else {
 				api.Sendprivatemsg(*selfId, *uid, app_default.Default_private_help, false)
 			}
+		} else {
+			api.Sendprivatemsg(*selfId, *uid, app_default.Default_private_help, false)
 		}
 		break
 
@@ -264,11 +235,7 @@ func privateHandle_acfur_other(Type string, selfId *int64, uid, gid *int64, mess
 		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_userChangePassword(*selfId, *uid, message)
 		} else {
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			} else {
-				api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			}
+			api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -280,11 +247,7 @@ func privateHandle_acfur_other(Type string, selfId *int64, uid, gid *int64, mess
 		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_change_bot_secret(*selfId, *uid, *gid, message)
 		} else {
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			} else {
-				api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			}
+			api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -292,11 +255,7 @@ func privateHandle_acfur_other(Type string, selfId *int64, uid, gid *int64, mess
 		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_bind_group(*selfId, *uid, message)
 		} else {
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			} else {
-				api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			}
+			api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -304,20 +263,12 @@ func privateHandle_acfur_other(Type string, selfId *int64, uid, gid *int64, mess
 		if int64(*uid) == botinfo["owner"].(int64) {
 			Private.App_unbind_group(*selfId, *uid, message)
 		} else {
-			if *gid != 0 {
-				api.Sendgrouptempmsg(*selfId, *gid, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			} else {
-				api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
-			}
+			api.Sendprivatemsg(*selfId, *uid, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
 	default:
-		if *gid != 0 {
-			api.Sendgrouptempmsg(*selfId, *gid, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
-		} else {
-			api.Sendprivatemsg(*selfId, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
-		}
+		api.Sendprivatemsg(*selfId, *uid, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
 		break
 	}
 }

@@ -11,12 +11,12 @@ func App_check_balance(bot, gid, uid int, req int, random int, groupmember map[s
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
-		var ret api.Retract_group
-		ret.Group = gid
-		ret.Fromqq = bot
-		ret.Random = random
-		ret.Req = req
-		api.Retract_chan_group <- ret
+		//var ret api.Retract_group
+		//ret.Group = gid
+		//ret.Fromqq = bot
+		//ret.Random = random
+		//ret.Req = req
+		//api.Retract_chan_group <- ret
 	}
 	gbl := GroupBalanceModel.Api_find(gid, uid)
 	str := "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
@@ -27,12 +27,12 @@ func App_check_rank(bot, gid, uid int, req int, random int, groupmember map[stri
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
-		var ret api.Retract_group
-		ret.Group = gid
-		ret.Fromqq = bot
-		ret.Random = random
-		ret.Req = req
-		api.Retract_chan_group <- ret
+		//var ret api.Retract_group
+		//ret.Group = gid
+		//ret.Fromqq = bot
+		//ret.Random = random
+		//ret.Req = req
+		//api.Retract_chan_group <- ret
 	}
 	gbl := GroupBalanceModel.Api_select(gid, 10)
 	str := ""

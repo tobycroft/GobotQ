@@ -14,27 +14,23 @@ import (
 
 func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupSignModel.Api_find(gid, uid)
-	private_mode := false
-	if groupfunction["sign_send_private"].(int64) == 1 {
-		private_mode = true
-	}
+	//private_mode := false
+	//if groupfunction["sign_send_private"].(int64) == 1 {
+	//	private_mode = true
+	//}
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
-		var ret api.Retract_group
-		ret.Group = gid
-		ret.Fromqq = bot
-		ret.Random = random
-		ret.Req = req
-		api.Retract_chan_group <- ret
+		//var ret api.Retract_group
+		//ret.Group = gid
+		//ret.Fromqq = bot
+		//ret.Random = random
+		//ret.Req = req
+		//api.Retract_chan_group <- ret
 	}
 	if len(sign) > 0 {
-		if private_mode {
-			api.Sendgrouptempmsg(bot, gid, uid, "你今天已经签到过了", true)
-		} else {
-			at := service.Serv_at(uid)
-			api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
-		}
+		at := service.Serv_at(uid)
+		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
 	} else {
 		rank := GroupSignModel.Api_count(gid)
 		order := rank + 1
@@ -71,12 +67,8 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 			return
 		} else {
 			db.Commit()
-			if private_mode {
-				api.Sendgrouptempmsg(bot, gid, uid, "签到成功,您是第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), true)
-			} else {
-				at := service.Serv_at(uid)
-				api.Sendgroupmsg(bot, gid, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), auto_retract)
-			}
+			at := service.Serv_at(uid)
+			api.Sendgroupmsg(bot, gid, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), auto_retract)
 		}
 	}
 }

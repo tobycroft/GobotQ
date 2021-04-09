@@ -9,7 +9,3 @@ func Send_private() {
 func Send_group() {
 	api.Send_group()
 }
-
-func Send_temp() {
-	api.Send_GroupTempMsg()
-}

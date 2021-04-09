@@ -19,31 +19,15 @@ func App_userLogin(bot int64, uid, gid int64, text string) {
 	usermember := UserMemberModel.Api_find(uid)
 	if len(usermember) > 0 {
 		if UserMemberModel.Api_update_all(uid, uname, rand) {
-			if gid != 0 {
-				api.Sendgrouptempmsg(bot, gid, uid, "您的登录密码：\r\n"+Calc.Int2String(rand), false)
-			} else {
-				api.Sendprivatemsg(bot, uid, "您的登录密码：\r\n"+Calc.Int2String(rand), false)
-			}
+			api.Sendprivatemsg(bot, uid, "您的登录密码：\r\n"+Calc.Int2String(rand), false)
 		} else {
-			if gid != 0 {
-				api.Sendgrouptempmsg(bot, gid, uid, app_default.Default_error_alert, false)
-			} else {
-				api.Sendprivatemsg(bot, uid, app_default.Default_error_alert, false)
-			}
+			api.Sendprivatemsg(bot, uid, app_default.Default_error_alert, false)
 		}
 	} else {
 		if UserMemberModel.Api_insert(uid, uname, rand) {
-			if gid != 0 {
-				api.Sendgrouptempmsg(bot, gid, uid, "↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n"+Calc.Int2String(rand)+"\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n"+app_default.Default_str_login_text, false)
-			} else {
-				api.Sendprivatemsg(bot, uid, "↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n"+Calc.Int2String(rand)+"\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n"+app_default.Default_str_login_text, false)
-			}
+			api.Sendprivatemsg(bot, uid, "↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n"+Calc.Int2String(rand)+"\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n"+app_default.Default_str_login_text, false)
 		} else {
-			if gid != 0 {
-				api.Sendgrouptempmsg(bot, gid, uid, app_default.Default_error_alert, false)
-			} else {
-				api.Sendprivatemsg(bot, uid, app_default.Default_error_alert, false)
-			}
+			api.Sendprivatemsg(bot, uid, app_default.Default_error_alert, false)
 		}
 	}
 

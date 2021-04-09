@@ -8,18 +8,16 @@ import (
 
 const table = "private_msg"
 
-func Api_insert(self_id, uid, message_id, message_type, message, raw_message, post_type, sub_type, time interface{}) bool {
+func Api_insert(self_id, uid, message_id, message, raw_message, sub_type, time interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"self_id":      self_id,
-		"uid":          uid,
-		"message_id":   message_id,
-		"message_type": message_type,
-		"message":      message,
-		"raw_message":  raw_message,
-		"post_type":    post_type,
-		"sub_type":     sub_type,
-		"time":         time,
+		"self_id":     self_id,
+		"uid":         uid,
+		"message_id":  message_id,
+		"message":     message,
+		"raw_message": raw_message,
+		"sub_type":    sub_type,
+		"time":        time,
 	}
 	db.Data(data)
 	_, err := db.Insert()

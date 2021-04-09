@@ -8,21 +8,16 @@ import (
 
 const table = "group_msg"
 
-func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, file_size, send, recv interface{}) bool {
+func Api_insert(self_id, user_id, group_id, message, raw_message, message_id, sub_type interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"bot":       bot,
-		"uid":       uid,
-		"gid":       gid,
-		"text":      text,
-		"req":       req,
-		"random":    random,
-		"file_id":   file_id,
-		"file_md5":  file_md5,
-		"file_name": file_name,
-		"file_size": file_size,
-		"send":      send,
-		"recv":      recv,
+		"self_id":     self_id,
+		"user_id":     user_id,
+		"group_id":    group_id,
+		"message":     message,
+		"raw_message": raw_message,
+		"message_id":  message_id,
+		"sub_type":    sub_type,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -34,30 +29,11 @@ func Api_insert(bot, uid, gid, text, req, random, file_id, file_md5, file_name, 
 	}
 }
 
-func Api_find(bot, gid, uid, send interface{}) gorose.Data {
+func Api_select(group_id, user_id interface{}, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"gid": gid,
-		"uid": uid,
-	}
-	db.Where(where)
-	db.Where("send", ">=", send)
-	db.Order("id asc")
-	ret, err := db.First()
-	if err != nil {
-		Log.Dbrr(err, tuuz.FUNCTION_ALL())
-		return nil
-	} else {
-		return ret
-	}
-}
-
-func Api_select(gid, uid interface{}, limit int) []gorose.Data {
-	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	db.Order("id desc")

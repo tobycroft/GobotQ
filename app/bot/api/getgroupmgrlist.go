@@ -2,7 +2,6 @@ package api
 
 import (
 	jsoniter "github.com/json-iterator/go"
-	"main.go/config/app_conf"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/Net"
 	"strings"

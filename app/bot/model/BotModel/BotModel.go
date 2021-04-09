@@ -6,23 +6,23 @@ import (
 	"main.go/tuuz/Log"
 )
 
-const table = "bot"
+const table = "self_id"
 
 type Interface struct {
 	Db gorose.IOrm
 }
 
-func Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) bool {
+func Api_insert(self_id, cname, Type, owner, secret, password, end_time interface{}) bool {
 	db := tuuz.Db()
 	var self Interface
 	self.Db = db
-	return self.Api_insert(bot, cname, Type, owner, secret, password, end_time)
+	return self.Api_insert(self_id, cname, Type, owner, secret, password, end_time)
 }
 
-func (self *Interface) Api_insert(bot, cname, Type, owner, secret, password, end_time interface{}) bool {
+func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password, end_time interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
-		"bot":      bot,
+		"self_id":  self_id,
 		"cname":    cname,
 		"Type":     Type,
 		"owner":    owner,
@@ -51,10 +51,10 @@ func Api_select() []gorose.Data {
 	}
 }
 
-func Api_find(bot interface{}) gorose.Data {
+func Api_find(self_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -66,11 +66,11 @@ func Api_find(bot interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byOwnerandBot(owner, bot interface{}) gorose.Data {
+func Api_find_byOwnerandBot(owner, self_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"owner": owner,
-		"bot":   bot,
+		"owner":   owner,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -82,11 +82,11 @@ func Api_find_byOwnerandBot(owner, bot interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byBot_WithoutPassword(bot interface{}) []gorose.Data {
+func Api_find_byBot_WithoutPassword(self_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Fields("bot,cname,img,type,owner,end_time,active,date")
+	db.Fields("self_id,cname,img,type,owner,end_time,active,date")
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -100,7 +100,7 @@ func Api_find_byBot_WithoutPassword(bot interface{}) []gorose.Data {
 
 func Api_select_byOwner(owner interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Fields("bot,cname,img,type,owner,end_time,active,date")
+	db.Fields("self_id,cname,img,type,owner,end_time,active,date")
 	where := map[string]interface{}{
 		"owner": owner,
 	}
@@ -114,11 +114,11 @@ func Api_select_byOwner(owner interface{}) []gorose.Data {
 	}
 }
 
-func Api_update_img(owner, bot, img interface{}) bool {
+func Api_update_img(owner, self_id, img interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"owner": owner,
-		"bot":   bot,
+		"owner":   owner,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
@@ -134,10 +134,10 @@ func Api_update_img(owner, bot, img interface{}) bool {
 	}
 }
 
-func Api_update_owner(bot, owner interface{}) bool {
+func Api_update_owner(self_id, owner interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
@@ -153,10 +153,10 @@ func Api_update_owner(bot, owner interface{}) bool {
 	}
 }
 
-func Api_update_secret(bot, secret interface{}) bool {
+func Api_update_secret(self_id, secret interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
@@ -172,10 +172,10 @@ func Api_update_secret(bot, secret interface{}) bool {
 	}
 }
 
-func Api_update_password(bot, password interface{}) bool {
+func Api_update_password(self_id, password interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
@@ -191,10 +191,10 @@ func Api_update_password(bot, password interface{}) bool {
 	}
 }
 
-func Api_update_cname(bot, cname interface{}) bool {
+func Api_update_cname(self_id, cname interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{

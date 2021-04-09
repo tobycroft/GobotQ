@@ -16,7 +16,7 @@ func Getnickname(fromqq, toqq, fromcache interface{}) (GetNickNameRet, error) {
 		"toqq":      toqq,
 		"fromcache": fromcache,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getnickname", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/getnickname", nil, post, nil, nil)
 	if err != nil {
 		return GetNickNameRet{}, err
 	}

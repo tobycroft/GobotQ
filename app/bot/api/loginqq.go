@@ -14,7 +14,7 @@ func Loginqq(logonqq interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"logonqq": logonqq,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/loginqq", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/loginqq", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

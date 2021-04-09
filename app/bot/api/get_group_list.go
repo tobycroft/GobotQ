@@ -1,8 +1,9 @@
 package api
 
 import (
+	"errors"
 	jsoniter "github.com/json-iterator/go"
-	"main.go/config/app_conf"
+	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Net"
 )
 
@@ -22,11 +23,12 @@ type GroupList struct {
 	MemberCount     int    `json:"member_count"`
 }
 
-func Getgrouplist(bot interface{}) ([]GroupList, error) {
-	post := map[string]interface{}{
-		"logonqq": bot,
+func Getgrouplist(self_id interface{}) ([]GroupList, error) {
+	botinfo := BotModel.Api_find(self_id)
+	if len(botinfo) < 1 {
+		return nil, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getgrouplist", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/get_group_list", nil, nil, nil, nil)
 	if err != nil {
 		return nil, err
 	}

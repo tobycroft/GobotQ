@@ -18,7 +18,7 @@ package api
 //}
 //
 //func Getlogonqq() (){
-//	data, err := Net.Post(app_conf.Http_Api+"/getlogonqq", nil, nil, nil, nil)
+//	data, err := Net.Post(botinfo["url"].(string)+"/getlogonqq", nil, nil, nil, nil)
 //	if err != nil {
 //		return false, err
 //	}

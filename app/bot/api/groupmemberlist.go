@@ -33,7 +33,7 @@ func Getgroupmemberlist(bot, group interface{}) ([]GroupMemberList, error) {
 		"logonqq": bot,
 		"group":   group,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getgroupmemberlist", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/getgroupmemberlist", nil, post, nil, nil)
 	if err != nil {
 		return nil, err
 	}

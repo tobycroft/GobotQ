@@ -15,7 +15,7 @@ func Getqqonlinestate(logonqq, qq interface{}) (string, error) {
 		"logonqq": logonqq,
 		"qq":      qq,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getqqonlinestate", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/getqqonlinestate", nil, post, nil, nil)
 	if err != nil {
 		return "", err
 	}

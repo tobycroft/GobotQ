@@ -15,7 +15,7 @@ func Setsignat(fromqq, signature interface{}) (bool, error) {
 		"fromqq":    fromqq,
 		"signature": signature,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/setsignat", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/setsignat", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

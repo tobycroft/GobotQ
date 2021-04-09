@@ -17,7 +17,7 @@ func Getgroupmgrlist(bot, group interface{}) (map[string]interface{}, error) {
 		"fromqq": bot,
 		"group":  group,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getgroupmgrlist", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/getgroupmgrlist", nil, post, nil, nil)
 	if err != nil {
 		return nil, err
 	}

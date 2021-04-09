@@ -24,7 +24,7 @@ func Addfriend(fromqq, toqq, text, remark interface{}) (AddFriend, AddFriendRet,
 		"text":   text,
 		"remark": remark,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/addfriend", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/addfriend", nil, post, nil, nil)
 	if err != nil {
 		return AddFriend{}, AddFriendRet{}, err
 	}

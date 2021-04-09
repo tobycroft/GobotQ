@@ -37,7 +37,7 @@ func Querygroupinfo(logonqq, group interface{}) (QueryGroupInfo, error) {
 		"logonqq": logonqq,
 		"group":   group,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/querygroupinfo", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/querygroupinfo", nil, post, nil, nil)
 	if err != nil {
 		return QueryGroupInfo{}, err
 	}

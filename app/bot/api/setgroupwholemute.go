@@ -16,7 +16,7 @@ func Setgroupwholemute(fromqq, group interface{}, ismute bool) (bool, error) {
 		"group":  group,
 		"ismute": ismute,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/setgroupwholemute", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/setgroupwholemute", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

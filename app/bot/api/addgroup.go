@@ -23,7 +23,7 @@ func Addgroup(fromqq, togroup, text interface{}) (AddGroup, AddGroupRet, error) 
 		"togroup": togroup,
 		"text":    text,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/addgroup", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/addgroup", nil, post, nil, nil)
 	if err != nil {
 		return AddGroup{}, AddGroupRet{}, err
 	}

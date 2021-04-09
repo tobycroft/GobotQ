@@ -58,7 +58,7 @@ func Queryuserinfo(logonqq, qq interface{}) (QueryUserInfo, error) {
 		"logonqq": logonqq,
 		"qq":      qq,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/queryuserinfo", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/queryuserinfo", nil, post, nil, nil)
 	if err != nil {
 		return QueryUserInfo{}, err
 	}

@@ -30,7 +30,7 @@ func Setgroupcard(fromqq, togroup, toqq, card interface{}) (GroupCard, GroupCard
 		"toqq":    toqq,
 		"card":    card,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/setgroupcard", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/setgroupcard", nil, post, nil, nil)
 	if err != nil {
 		return GroupCard{}, GroupCardRet{}, err
 	}

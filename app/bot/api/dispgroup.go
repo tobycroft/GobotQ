@@ -15,7 +15,7 @@ func Dispgroup(fromqq, group interface{}) (bool, error) {
 		"fromqq": fromqq,
 		"group":  group,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/dispgroup", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/dispgroup", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

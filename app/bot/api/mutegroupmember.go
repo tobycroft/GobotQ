@@ -17,7 +17,7 @@ func Mutegroupmember(fromqq, group, toqq interface{}, time float64) (bool, error
 		"toqq":   toqq,
 		"time":   time,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/mutegroupmember", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/mutegroupmember", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

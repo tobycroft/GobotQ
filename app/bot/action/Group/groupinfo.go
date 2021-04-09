@@ -6,7 +6,7 @@ import (
 )
 
 func App_refresh_groupinfo(self_id int, gid int) {
-	gl, err := api.Getgrouplist(bot)
+	gl, err := api.Getgrouplist(self_id)
 	if err != nil {
 
 	} else {
@@ -14,18 +14,17 @@ func App_refresh_groupinfo(self_id int, gid int) {
 		var gss []GroupListModel.GroupList
 		for _, gll := range gl {
 			var gs GroupListModel.GroupList
-			if gll.GIN != gid {
+			if gll.GroupID != gid {
 				continue
 			}
-			gs.Bot = bot
-			gs.Gid = gll.GIN
-			gs.Group_name = gll.StrGroupName
-			gs.Group_memo = gll.StrGroupMemo
-			gs.Owner = gll.DwGroupOwnerUin
-			gs.Number = gll.DwMemberNum
+			gs.Self_id = self_id
+			gs.Group_id = gll.GroupID
+			gs.Group_name = gll.GroupName
+			gs.Group_memo = gll.GroupMemo
+			gs.Member_count = gll.MemberCount
+			gs.Max_member_count = gll.MaxMemberCount
 			gss = append(gss, gs)
 		}
 		GroupListModel.Api_insert_more(gss)
-		//api.Sendgroupmsg(bot, gid, "群信息刷新完成", true)
 	}
 }

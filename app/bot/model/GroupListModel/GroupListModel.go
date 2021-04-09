@@ -9,12 +9,12 @@ import (
 const table = "group_list"
 
 type GroupList struct {
-	Bot        interface{} `gorose:"bot"`
-	Gid        int         `gorose:"gid"`
-	Group_name string      `gorose:"group_name"`
-	Group_memo string      `gorose:"group_memo"`
-	Owner      int         `gorose:"owner"`
-	Number     int         `gorose:"number"`
+	Self_id          interface{} `gorose:"self_id"`
+	Group_id         int         `gorose:"group_id"`
+	Group_name       string      `gorose:"group_name"`
+	Group_memo       string      `gorose:"group_memo"`
+	Member_count     int         `gorose:"member_count"`
+	Max_member_count int         `gorose:"max_member_count"`
 }
 
 func Api_insert(gl GroupList) bool {
@@ -41,10 +41,10 @@ func Api_insert_more(gls []GroupList) bool {
 	}
 }
 
-func Api_select(bot interface{}) []gorose.Data {
+func Api_select(self_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -56,9 +56,9 @@ func Api_select(bot interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_InGid(gid []interface{}) []gorose.Data {
+func Api_select_InGid(group_id []interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.WhereIn("gid", gid)
+	db.WhereIn("group_id", group_id)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -68,10 +68,10 @@ func Api_select_InGid(gid []interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(gid interface{}) gorose.Data {
+func Api_find(group_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -83,10 +83,10 @@ func Api_find(gid interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(bot interface{}) bool {
+func Api_delete(self_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -98,10 +98,10 @@ func Api_delete(bot interface{}) bool {
 	}
 }
 
-func Api_delete_byGid(gid interface{}) bool {
+func Api_delete_byGid(group_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -113,11 +113,11 @@ func Api_delete_byGid(gid interface{}) bool {
 	}
 }
 
-func Api_delete_byBotandGid(bot, gid interface{}) bool {
+func Api_delete_byBotandGid(self_id, group_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"gid": gid,
+		"self_id":  self_id,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()

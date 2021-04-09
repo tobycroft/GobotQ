@@ -20,7 +20,7 @@ func Setfriendaddrequest(fromqq, qq, seq, Request_friend_ interface{}) (bool, er
 		"seq":    seq,
 		"op":     Request_friend_,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/setfriendaddrequest", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/setfriendaddrequest", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

@@ -17,7 +17,7 @@ func Kickgroupmember(fromqq, group, toqq interface{}, ignoreaddgrequest bool) (b
 		"toqq":              toqq,
 		"ignoreaddgrequest": ignoreaddgrequest,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/kickgroupmember", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/kickgroupmember", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

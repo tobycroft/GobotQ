@@ -15,7 +15,7 @@ func Setnickname(fromqq, nickname interface{}) (bool, error) {
 		"fromqq":   fromqq,
 		"nickname": nickname,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/setnickname", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/setnickname", nil, post, nil, nil)
 	if err != nil {
 		return false, err
 	}

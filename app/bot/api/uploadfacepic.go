@@ -23,7 +23,7 @@ func Uploadfacepic(fromqq, b64 interface{}) (UploadFacePic, UploadFacePicRet, er
 		"fromtype": 0,
 		"pic":      b64,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/UploadFacePic", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/UploadFacePic", nil, post, nil, nil)
 	if err != nil {
 		return UploadFacePic{}, UploadFacePicRet{}, err
 	}

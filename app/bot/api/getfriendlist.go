@@ -22,7 +22,7 @@ func Getfriendlist(bot interface{}) (FriendList, error) {
 	post := map[string]interface{}{
 		"logonqq": bot,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/getfriendlist", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/getfriendlist", nil, post, nil, nil)
 	if err != nil {
 		return nil, err
 	}

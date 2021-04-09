@@ -22,7 +22,7 @@ func Deletefriend(fromqq, toqq interface{}) (DeleteFriend, DeleteFriendRet, erro
 		"fromqq": fromqq,
 		"toqq":   toqq,
 	}
-	data, err := Net.Post(app_conf.Http_Api+"/deleteFriend", nil, post, nil, nil)
+	data, err := Net.Post(botinfo["url"].(string)+"/deleteFriend", nil, post, nil, nil)
 	if err != nil {
 		return DeleteFriend{}, DeleteFriendRet{}, err
 	}

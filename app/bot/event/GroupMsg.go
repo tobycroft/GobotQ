@@ -63,13 +63,14 @@ func GroupMsg(gm GM) {
 	GroupMsgChan <- gm
 	is_self := false
 
-	bot := gm.LogonQQ
-	uid := gm.FromQQ.UIN
-	gid := gm.FromGroup.GIN
-	retract := gm.Msg.Random
-	msg := gm.Msg
+	SelfID := gm.SelfID
+	UserID := gm.UserID
+	GroupID := gm.GroupID
+	MessageID := gm.MessageID
+	Message := gm.Message
+	RawMessage := gm.RawMessage
 
-	if gm.LogonQQ == gm.FromQQ.UIN {
+	if gm.LogonQQ == gm.SelfID {
 		is_self = true
 	}
 

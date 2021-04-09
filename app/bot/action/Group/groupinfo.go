@@ -5,7 +5,7 @@ import (
 	"main.go/app/bot/model/GroupListModel"
 )
 
-func App_refresh_groupinfo(bot int, gid int) {
+func App_refresh_groupinfo(self_id int, gid int) {
 	gl, err := api.Getgrouplist(bot)
 	if err != nil {
 

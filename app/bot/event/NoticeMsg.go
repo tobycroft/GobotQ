@@ -3,6 +3,7 @@ package event
 import (
 	"fmt"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupKickModel"
@@ -49,6 +50,8 @@ func NoticeMsg(em Notice) {
 	if groupfunction["auto_retract"].(int64) == 0 {
 		auto_retract = false
 	}
+
+	fmt.Println(em)
 	switch notice_type {
 	//取消管理
 	case "group_admin":
@@ -146,7 +149,12 @@ func NoticeMsg(em Notice) {
 			break
 
 		case "lift_ban":
+			if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
+				GroupBanPermenentModel.Api_delete(group_id, user_id)
+				api.sendgroupmsg
+			} else {
 
+			}
 			break
 		}
 		break

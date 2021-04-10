@@ -55,17 +55,18 @@ func Api_select_byGroupId(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(group_id interface{}) int64 {
+func Api_delete(group_id, user_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
-	ret, err := db.Count()
+	_, err := db.Delete()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
-		return 0
+		return false
 	} else {
-		return ret
+		return true
 	}
 }

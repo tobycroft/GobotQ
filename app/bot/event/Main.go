@@ -39,7 +39,7 @@ func EventRouter(json string) {
 				}
 				break
 
-			case "GroupMsg":
+			case "group":
 				var gm GM
 				err = jsr.UnmarshalFromString(json, &gm)
 				if err != nil {

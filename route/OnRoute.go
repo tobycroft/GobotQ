@@ -1,7 +1,6 @@
 package route
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/event"
 	v1 "main.go/route/v1"
@@ -10,7 +9,6 @@ import (
 func OnRoute(router *gin.Engine) {
 	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
-		fmt.Print(string(data))
 		event.EventRouter(string(data))
 		context.String(200, "ok")
 	})

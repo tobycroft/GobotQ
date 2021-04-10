@@ -39,6 +39,7 @@ func Crr(logs error) {
 }
 
 func Crrs(logs error, discript string) {
+	log.Println(logs, discript)
 	Write("Common", "", discript, logs.Error())
 }
 

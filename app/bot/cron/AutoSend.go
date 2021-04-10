@@ -26,7 +26,7 @@ func auto_send() {
 
 		timer := data["sep"].(int64)
 		next_time := time.Now().Unix() + timer
-		ass.Api_update_next_time(data["gid"], data["id"], next_time)
+		ass.Api_update_next_time(data["group_id"], data["id"], next_time)
 
 		switch data["type"].(string) {
 		case "sep":
@@ -35,7 +35,7 @@ func auto_send() {
 
 		case "fix":
 			//如果采用一次性模式，则直接关闭这个定时
-			ass.Api_update_active(data["gid"], data["id"], 0)
+			ass.Api_update_active(data["group_id"], data["id"], 0)
 			break
 
 		default:
@@ -48,10 +48,10 @@ func auto_send() {
 		if data["retract"].(int64) == 1 {
 			auto_retract = true
 		}
-		group := GroupListModel.Api_find(data["gid"])
+		group := GroupListModel.Api_find(data["group_id"])
 		if len(group) < 1 {
 			return
 		}
-		api.Sendgroupmsg(group["bot"], data["gid"], Calc.Any2String(data["msg"]), auto_retract)
+		api.Sendgroupmsg(group["self_id"], data["group_id"], Calc.Any2String(data["msg"]), auto_retract)
 	}
 }

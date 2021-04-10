@@ -9,17 +9,17 @@ import (
 
 const table = "group_auto_send"
 
-func Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
+func Api_insert(group_id, user_id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract)
+	return self.Api_insert(group_id, user_id, ident, msg, Type, sep, count, next_time, retract)
 }
 
-func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
-		"gid":       gid,
-		"uid":       uid,
+		"group_id":  group_id,
+		"user_id":   user_id,
 		"ident":     ident,
 		"msg":       msg,
 		"type":      Type,
@@ -39,21 +39,21 @@ func (self *Interface) Api_insert(gid, uid, ident, msg, Type, sep, count, next_t
 	}
 }
 
-func Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
+func Api_update(group_id, user_id, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract)
+	return self.Api_update(group_id, user_id, id, ident, msg, Type, sep, count, next_time, retract)
 }
 
-func (self *Interface) Api_update(gid, uid, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
+func (self *Interface) Api_update(group_id, user_id, id, ident, msg, Type, sep, count, next_time, retract interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"id": id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
-		"gid":       gid,
-		"uid":       uid,
+		"group_id":  group_id,
+		"user_id":   user_id,
 		"ident":     ident,
 		"msg":       msg,
 		"type":      Type,
@@ -87,9 +87,9 @@ func Api_select_next_time_up() []gorose.Data {
 	}
 }
 
-func Api_select(gid interface{}) []gorose.Data {
+func Api_select(group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Where("gid", "=", gid)
+	db.Where("group_id", "=", group_id)
 	db.Order("id desc")
 	ret, err := db.Get()
 	if err != nil {
@@ -100,9 +100,9 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(gid, id interface{}) gorose.Data {
+func Api_find(group_id, id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Where("gid", "=", gid)
+	db.Where("group_id", "=", group_id)
 	db.Where("id", "=", id)
 	ret, err := db.First()
 	if err != nil {
@@ -139,17 +139,17 @@ func (self *Interface) Api_dec_count(id interface{}) bool {
 	}
 }
 
-func Api_update_next_time(gid, id, next_time interface{}) bool {
+func Api_update_next_time(group_id, id, next_time interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update_next_time(gid, id, next_time)
+	return self.Api_update_next_time(group_id, id, next_time)
 }
 
-func (self *Interface) Api_update_next_time(gid, id, next_time interface{}) bool {
+func (self *Interface) Api_update_next_time(group_id, id, next_time interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"id":  id,
+		"group_id": group_id,
+		"id":       id,
 	}
 	db.Where(where)
 	db.Data(map[string]interface{}{
@@ -165,11 +165,11 @@ func (self *Interface) Api_update_next_time(gid, id, next_time interface{}) bool
 	}
 }
 
-func Api_delete(gid, id interface{}) bool {
+func Api_delete(group_id, id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"id":  id,
+		"group_id": group_id,
+		"id":       id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -181,17 +181,17 @@ func Api_delete(gid, id interface{}) bool {
 	}
 }
 
-func Api_update_active(gid, id, active interface{}) bool {
+func Api_update_active(group_id, id, active interface{}) bool {
 	var self Interface
 	self.Db = tuuz.Db()
-	return self.Api_update_active(gid, id, active)
+	return self.Api_update_active(group_id, id, active)
 }
 
-func (self *Interface) Api_update_active(gid, id, active interface{}) bool {
+func (self *Interface) Api_update_active(group_id, id, active interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"id":  id,
+		"group_id": group_id,
+		"id":       id,
 	}
 	db.Where(where)
 	db.Data(map[string]interface{}{

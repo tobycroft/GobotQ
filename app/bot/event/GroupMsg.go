@@ -438,7 +438,6 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			num, err := Redis.GetInt(Calc.Md5(Calc.Any2String(user_id) + "_" + raw_message))
 			if err != nil {
 				Log.Crrs(err, tuuz.FUNCTION_ALL())
-
 			}
 			Redis.SetRaw(Calc.Md5(Calc.Any2String(user_id)+"_"+raw_message), num+1, int(groupfunction["repeat_time"].(int64)))
 			if int64(num) > groupfunction["repeat_count"].(int64) {

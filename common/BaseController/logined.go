@@ -70,7 +70,7 @@ func CheckGroupAdmin() gin.HandlerFunc {
 		}
 		data := GroupMemberModel.Api_find(gid, uid)
 		if len(data) > 0 {
-			if data["type"].(string) == "admin" || data["type"].(string) == "owner" {
+			if data["role"].(string) == "admin" || data["role"].(string) == "owner" {
 				c.Next()
 				return
 			} else {

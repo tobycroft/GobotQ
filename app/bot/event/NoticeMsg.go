@@ -15,7 +15,7 @@ import (
 )
 
 type Notice struct {
-	Duration   int    `json:"duration"`
+	Duration   int64  `json:"duration"`
 	GroupID    int64  `json:"group_id"`
 	NoticeType string `json:"notice_type"`
 	OperatorID int64  `json:"operator_id"`
@@ -144,13 +144,20 @@ func NoticeMsg(em Notice) {
 	case "group_ban":
 		switch sub_type {
 		case "ban":
+			if em.Duration > 2505600 {
+				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
+				} else {
+					GroupBanPermenentModel.Api_insert(group_id, user_id)
+					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"哦豁你进永久小黑屋了！", auto_retract)
+				}
+			}
 			break
 
 		case "lift_ban":
 			if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 				GroupBanPermenentModel.Api_delete(group_id, user_id)
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了", auto_retract)
+				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了！", auto_retract)
 			}
 			break
 		}

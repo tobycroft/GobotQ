@@ -56,11 +56,10 @@ func Api_count(group_id, user_id interface{}) int64 {
 	}
 }
 
-func Api_select(group_id, user_id interface{}) []gorose.Data {
+func Api_select(group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
-		"user_id":  user_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()

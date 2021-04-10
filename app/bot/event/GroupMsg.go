@@ -1,6 +1,7 @@
 package event
 
 import (
+	"errors"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
@@ -80,6 +81,11 @@ func GroupMsg(gm GM) {
 		group.SelfId = self_id
 		group.UserId = user_id
 		RefreshGroupChan <- group
+		botinfo := BotModel.Api_find(self_id)
+		if len(botinfo) < 1 {
+			Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(self_id))
+			return
+		}
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 

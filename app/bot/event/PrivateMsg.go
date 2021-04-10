@@ -1,6 +1,7 @@
 package event
 
 import (
+	"errors"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
@@ -10,6 +11,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"main.go/tuuz/Calc"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
 	"strings"
@@ -60,7 +62,6 @@ func PrivateMsg(pm PM) {
 	}
 
 	Redis.SetRaw("PrivateMsg:"+user_idString, Calc.Md5(message), 1)
-
 	PrivateHandle(selfId, user_id, group_id, message, rawMessage)
 }
 
@@ -71,13 +72,13 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage string) 
 
 	botinfo := BotModel.Api_find(selfId)
 	if len(botinfo) < 1 {
+		Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(selfId))
 		return
 	}
 	if botinfo["end_time"].(int64) < time.Now().Unix() {
 		api.Sendprivatemsg(selfId, user_id, app_default.Default_over_time, false)
 		return
 	}
-
 	if active {
 		privateHandle_acfur(selfId, user_id, group_id, new_text, message)
 	} else {

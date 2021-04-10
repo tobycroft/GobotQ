@@ -9,22 +9,16 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	SelfId          int64  `json:"self_id"`
-	Age             int64  `json:"age"`
-	Area            string `json:"area"`
-	Card            string `json:"card"`
-	CardChangeable  bool   `json:"card_changeable"`
-	GroupID         int64  `json:"group_id"`
-	JoinTime        int64  `json:"join_time"`
-	LastSentTime    int64  `json:"last_sent_time"`
-	Level           string `json:"level"`
-	Nickname        string `json:"nickname"`
-	Role            string `json:"role"`
-	Sex             string `json:"sex"`
-	Title           string `json:"title"`
-	TitleExpireTime int64  `json:"title_expire_time"`
-	Unfriendly      bool   `json:"unfriendly"`
-	UserID          int64  `json:"user_id"`
+	SelfId       int64  `json:"self_id"`
+	Card         string `json:"card"`
+	GroupID      int64  `json:"group_id"`
+	JoinTime     int64  `json:"join_time"`
+	LastSentTime int64  `json:"last_sent_time"`
+	Level        string `json:"level"`
+	Nickname     string `json:"nickname"`
+	Role         string `json:"role"`
+	Title        string `json:"title"`
+	UserID       int64  `json:"user_id"`
 }
 
 func Api_insert(gm GroupMember) bool {

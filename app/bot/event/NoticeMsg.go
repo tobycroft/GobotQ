@@ -167,6 +167,10 @@ func NoticeMsg(em Notice) {
 		break
 
 	case "friend_recall":
+		fmt.Println(em)
+		break
+
+	case "group_recall":
 		break
 
 	case "notice":

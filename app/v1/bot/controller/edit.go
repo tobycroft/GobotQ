@@ -20,7 +20,7 @@ func EditController(route *gin.RouterGroup) {
 
 func change_img(c *gin.Context) {
 	uid := c.PostForm("uid")
-	bot := c.PostForm("bot")
+	bot := c.PostForm("self_id")
 	img, ok := Input.Post("img", c, true)
 	if !ok {
 		return
@@ -33,7 +33,7 @@ func change_img(c *gin.Context) {
 }
 
 func clear_owner(c *gin.Context) {
-	bot := c.PostForm("bot")
+	bot := c.PostForm("self_id")
 	if BotModel.Api_update_owner(bot, 0) {
 		RET.Success(c, 0, nil, nil)
 	} else {
@@ -42,7 +42,7 @@ func clear_owner(c *gin.Context) {
 }
 
 func change_secret(c *gin.Context) {
-	bot := c.PostForm("bot")
+	bot := c.PostForm("self_id")
 	if BotModel.Api_update_secret(bot, 0) {
 		RET.Success(c, 0, nil, nil)
 	} else {
@@ -51,7 +51,7 @@ func change_secret(c *gin.Context) {
 }
 
 func change_password(c *gin.Context) {
-	bot := c.PostForm("bot")
+	bot := c.PostForm("self_id")
 	password, ok := Input.Post("password", c, false)
 	if ok {
 		return

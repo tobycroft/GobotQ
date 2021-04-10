@@ -17,11 +17,11 @@ func BindController(route *gin.RouterGroup) {
 
 func bind_bot_add(c *gin.Context) {
 	uid := c.PostForm("uid")
-	bot, ok := Input.PostInt64("bot", c)
+	bot, ok := Input.PostInt64("self_id", c)
 	if !ok {
 		return
 	}
-	secret, ok := Input.Post("bot", c, false)
+	secret, ok := Input.Post("secret", c, false)
 	if !ok {
 		return
 	}

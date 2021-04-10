@@ -24,7 +24,7 @@ func BotController(route *gin.RouterGroup) {
 
 func bot_info(c *gin.Context) {
 	uid := c.PostForm("uid")
-	bot, ok := Input.PostInt64("bot", c)
+	bot, ok := Input.PostInt64("self_id", c)
 	if !ok {
 		return
 	}

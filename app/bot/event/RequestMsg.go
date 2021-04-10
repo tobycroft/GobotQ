@@ -6,6 +6,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"time"
 )
@@ -55,7 +56,11 @@ func RequestMsg(em Request) {
 		switch sub_type {
 		case "add":
 			if groupfunction["auto_join"].(int64) == 1 {
-				api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
+				if len(GroupBlackListModel.Api_find(group_id, user_id)) > 0 {
+					api.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
+				} else {
+					api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
+				}
 			}
 			//auto_verify := true
 			//if groupfunction["auto_verify"].(int64) == 0 {

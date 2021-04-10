@@ -90,7 +90,7 @@ func bot_group_exit(c *gin.Context) {
 	if !ok {
 		return
 	}
-	ret := api.SetGroupLeave(bot, gid)
+	ret, _ := api.SetGroupLeave(bot, gid)
 	if ret {
 		if GroupListModel.Api_delete_byBotandGid(bot, gid) {
 			RET.Success(c, 0, nil, nil)

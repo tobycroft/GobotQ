@@ -8,12 +8,12 @@ import (
 
 const table = "group_kick"
 
-func Api_insert(bot, gid, uid, last_msg interface{}) bool {
+func Api_insert(self_id, group_id, user_id, last_msg interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"bot":      bot,
-		"gid":      gid,
-		"uid":      uid,
+		"self_id":  self_id,
+		"group_id": group_id,
+		"user_id":  user_id,
 		"last_msg": last_msg,
 	}
 	db.Data(data)
@@ -26,10 +26,10 @@ func Api_insert(bot, gid, uid, last_msg interface{}) bool {
 	}
 }
 
-func Api_select(gid interface{}) []gorose.Data {
+func Api_select(group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()

@@ -22,7 +22,7 @@ func group_check(self_id, user_id, group_id int64) {
 	}
 	userinfo := GroupMemberModel.Api_find(group_id, user_id)
 	if len(userinfo) < 1 {
-		Group.App_refreshmember(&self_id, &group_id)
+		Group.App_refreshmember(self_id, group_id)
 	}
 }
 

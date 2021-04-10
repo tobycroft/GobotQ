@@ -8,14 +8,14 @@ import (
 
 const table = "private_auto_reply"
 
-func Api_insert(bot, qq, mode, key, value interface{}) bool {
+func Api_insert(self_id, qq, mode, key, value interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"bot":   bot,
-		"qq":    qq,
-		"mode":  mode,
-		"key":   key,
-		"value": value,
+		"self_id": self_id,
+		"qq":      qq,
+		"mode":    mode,
+		"key":     key,
+		"value":   value,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -57,11 +57,11 @@ func Api_select_byKey(key interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_semi(bot interface{}) []gorose.Data {
+func Api_select_semi(self_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot":  bot,
-		"mode": "semi",
+		"self_id": self_id,
+		"mode":    "semi",
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -73,11 +73,11 @@ func Api_select_semi(bot interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(bot, id interface{}) bool {
+func Api_delete(self_id, id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"id":  id,
+		"self_id": self_id,
+		"id":      id,
 	}
 	db.Where(where)
 	_, err := db.Delete()

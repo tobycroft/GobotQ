@@ -13,6 +13,7 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 		auto_retract = true
 		var ret api.Struct_Retract
 		ret.MessageId = message_id
+		ret.Self_id = self_id
 		api.Retract_chan <- ret
 	}
 	gbl := GroupBalanceModel.Api_find(group_id, user_id)
@@ -26,6 +27,7 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 		auto_retract = true
 		var ret api.Struct_Retract
 		ret.MessageId = message_id
+		ret.Self_id = self_id
 		api.Retract_chan <- ret
 	}
 	gbl := GroupBalanceModel.Api_select(group_id, 10)

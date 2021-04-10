@@ -69,13 +69,12 @@ func Api_select(self_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_insert(self_id, user_id, nickname, remark interface{}) bool {
+func Api_insert(self_id, user_id, nickname interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"self_id":  self_id,
 		"user_id":  user_id,
 		"nickname": nickname,
-		"remark":   remark,
 	}
 	db.Data(data)
 	_, err := db.Insert()

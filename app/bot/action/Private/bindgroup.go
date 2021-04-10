@@ -5,30 +5,30 @@ import (
 	"main.go/app/bot/model/BotGroupAllowModel"
 )
 
-func App_bind_group(bot int64, uid int64, text string) {
-	if len(text) < 2 {
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定群群号\"，来绑定新群", false)
+func App_bind_group(self_id, user_id int64, message string) {
+	if len(message) < 2 {
+		api.Sendprivatemsg(self_id, user_id, "请使用\"acfur绑定群群号\"，来绑定新群", false)
 		return
 	}
-	if len(BotGroupAllowModel.Api_find(bot, text)) > 0 {
-		api.Sendprivatemsg(bot, uid, "群号已经被绑定："+text, false)
+	if len(BotGroupAllowModel.Api_find(self_id, message)) > 0 {
+		api.Sendprivatemsg(self_id, user_id, "群号已经被绑定："+message, false)
 		return
 	}
-	if BotGroupAllowModel.Api_insert(bot, text) {
-		api.Sendprivatemsg(bot, uid, "绑定群已经增加："+text, false)
+	if BotGroupAllowModel.Api_insert(self_id, message) {
+		api.Sendprivatemsg(self_id, user_id, "绑定群已经增加："+message, false)
 	} else {
-		api.Sendprivatemsg(bot, uid, "绑定群增加失败："+text, false)
+		api.Sendprivatemsg(self_id, user_id, "绑定群增加失败："+message, false)
 	}
 }
 
-func App_unbind_group(bot int64, uid int64, text string) {
-	if len(text) < 2 {
-		api.Sendprivatemsg(bot, uid, "请使用\"acfur绑定群群号\"，来绑定新群", false)
+func App_unbind_group(self_id int64, user_id int64, message string) {
+	if len(message) < 2 {
+		api.Sendprivatemsg(self_id, user_id, "请使用\"acfur绑定群群号\"，来绑定新群", false)
 		return
 	}
-	if BotGroupAllowModel.Api_insert(bot, text) {
-		api.Sendprivatemsg(bot, uid, "绑定群已经删除："+text, false)
+	if BotGroupAllowModel.Api_insert(self_id, message) {
+		api.Sendprivatemsg(self_id, user_id, "绑定群已经删除："+message, false)
 	} else {
-		api.Sendprivatemsg(bot, uid, "绑定群删除失败："+text, false)
+		api.Sendprivatemsg(self_id, user_id, "绑定群删除失败："+message, false)
 	}
 }

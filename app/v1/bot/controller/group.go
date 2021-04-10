@@ -35,7 +35,6 @@ func GroupController(route *gin.RouterGroup) {
 	route.Any("white_delete", bot_white_group_delete)
 
 	route.Any("group_list", bot_group_list)
-	route.Any("group_add", bot_group_add)
 	route.Any("group_exit", bot_group_exit)
 }
 

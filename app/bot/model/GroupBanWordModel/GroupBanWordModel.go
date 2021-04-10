@@ -8,12 +8,12 @@ import (
 
 const table = "group_ban_word"
 
-func Api_insert(bot, gid, uid, word, mode, is_kick, is_ban, is_retract, share interface{}) bool {
+func Api_insert(self_id, group_id, user_id, word, mode, is_kick, is_ban, is_retract, share interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"bot":        bot,
-		"gid":        gid,
-		"uid":        uid,
+		"self_id":    self_id,
+		"group_id":   group_id,
+		"user_id":    user_id,
 		"word":       word,
 		"mode":       mode,
 		"is_kick":    is_kick,
@@ -31,11 +31,11 @@ func Api_insert(bot, gid, uid, word, mode, is_kick, is_ban, is_retract, share in
 	}
 }
 
-func Api_select_byKV(gid interface{}, key string, value interface{}) []gorose.Data {
+func Api_select_byKV(group_id interface{}, key string, value interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		key:   value,
+		"group_id": group_id,
+		key:        value,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -47,10 +47,10 @@ func Api_select_byKV(gid interface{}, key string, value interface{}) []gorose.Da
 	}
 }
 
-func Api_select(gid interface{}) []gorose.Data {
+func Api_select(group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -62,11 +62,11 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(gid, word interface{}) gorose.Data {
+func Api_find(group_id, word interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid":  gid,
-		"word": word,
+		"group_id": group_id,
+		"word":     word,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -78,11 +78,11 @@ func Api_find(gid, word interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(gid, word interface{}) bool {
+func Api_delete(group_id, word interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid":  gid,
-		"word": word,
+		"group_id": group_id,
+		"word":     word,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -94,11 +94,11 @@ func Api_delete(gid, word interface{}) bool {
 	}
 }
 
-func Api_update(gid, word, is_kick, is_ban, is_retract interface{}) bool {
+func Api_update(group_id, word, is_kick, is_ban, is_retract interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid":  gid,
-		"word": word,
+		"group_id": group_id,
+		"word":     word,
 	}
 	db.Where(where)
 	data := map[string]interface{}{

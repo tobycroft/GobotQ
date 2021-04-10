@@ -2,6 +2,7 @@ package BaseController
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/UserTokenModel"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Input"
@@ -34,6 +35,25 @@ func LoginedController() gin.HandlerFunc {
 			return
 		} else {
 			RET.Fail(c, -1, "Auth_fail", "未登录")
+			c.Abort()
+			return
+		}
+	}
+}
+
+func ChechBotPower() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uid := c.PostForm("uid")
+		bot, ok := Input.PostInt("self_id", c)
+		if !ok {
+			return
+		}
+		data := BotModel.Api_find_byOwnerandBot(uid, bot)
+		if len(data) > 0 {
+			c.Next()
+			return
+		} else {
+			RET.Fail(c, 403, nil, "你并不拥有这个机器人")
 			c.Abort()
 			return
 		}

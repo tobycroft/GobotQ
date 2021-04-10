@@ -12,11 +12,11 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(gid, uid interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -28,10 +28,10 @@ func (self *Interface) Api_insert(gid, uid interface{}) bool {
 	}
 }
 
-func Api_select(gid interface{}, limit int) []gorose.Data {
+func Api_select(group_id interface{}, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	db.Order("balance desc")
@@ -45,10 +45,10 @@ func Api_select(gid interface{}, limit int) []gorose.Data {
 	}
 }
 
-func Api_select_gt(gid, balance interface{}) []gorose.Data {
+func Api_select_gt(group_id, balance interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	db.Where("balance", ">", balance)
@@ -63,10 +63,10 @@ func Api_select_gt(gid, balance interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_lt(gid, balance interface{}) []gorose.Data {
+func Api_select_lt(group_id, balance interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	db.Where("balance", "<", balance)
@@ -81,10 +81,10 @@ func Api_select_lt(gid, balance interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_uid(uid interface{}) []gorose.Data {
+func Api_select_uid(user_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"uid": uid,
+		"user_id": user_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -96,11 +96,11 @@ func Api_select_uid(uid interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(gid, uid interface{}) gorose.Data {
+func Api_find(group_id, user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -112,11 +112,11 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
-func (self *Interface) Api_update(gid, uid, balance interface{}) bool {
+func (self *Interface) Api_update(group_id, user_id, balance interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
@@ -132,11 +132,11 @@ func (self *Interface) Api_update(gid, uid, balance interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_incr(gid, uid, balance_inc interface{}) bool {
+func (self *Interface) Api_incr(group_id, user_id, balance_inc interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	_, err := db.Increment("balance", balance_inc)
@@ -148,11 +148,11 @@ func (self *Interface) Api_incr(gid, uid, balance_inc interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_decr(gid, uid, balance_decr interface{}) bool {
+func (self *Interface) Api_decr(group_id, user_id, balance_decr interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	_, err := db.Decrement("balance", balance_decr)

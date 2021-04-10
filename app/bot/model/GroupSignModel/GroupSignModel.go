@@ -13,11 +13,11 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(gid, uid interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	db := self.Db.Table(table)
 	data := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -29,11 +29,11 @@ func (self *Interface) Api_insert(gid, uid interface{}) bool {
 	}
 }
 
-func Api_find(gid, uid interface{}) gorose.Data {
+func Api_find(group_id, user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	db.Where("date", ">", Date.Today())
@@ -46,10 +46,10 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
-func Api_count(gid interface{}) int64 {
+func Api_count(group_id interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	db.Where("date", ">", Date.Today())
@@ -63,10 +63,10 @@ func Api_count(gid interface{}) int64 {
 
 }
 
-func Api_select(gid interface{}) []gorose.Data {
+func Api_select(group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	db.Where("date", ">", Date.Today())

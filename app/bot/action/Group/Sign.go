@@ -12,8 +12,8 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	sign := GroupSignModel.Api_find(gid, uid)
+func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	sign := GroupSignModel.Api_find(group_id, user_id)
 	//private_mode := false
 	//if groupfunction["sign_send_private"].(int64) == 1 {
 	//	private_mode = true
@@ -21,30 +21,28 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
-		//var ret api.Retract_group
-		//ret.Group = gid
-		//ret.Fromqq = bot
-		//ret.Random = random
-		//ret.Req = req
-		//api.Retract_chan_group <- ret
+		var ret api.Struct_Retract
+		ret.MessageId = message_id
+		ret.Self_id = self_id
+		api.Retract_chan <- ret
 	}
 	if len(sign) > 0 {
-		at := service.Serv_at(uid)
-		api.Sendgroupmsg(bot, gid, "你今天已经签到过了"+at, auto_retract)
+		at := service.Serv_at(user_id)
+		api.Sendgroupmsg(self_id, group_id, "你今天已经签到过了"+at, auto_retract)
 	} else {
-		rank := GroupSignModel.Api_count(gid)
+		rank := GroupSignModel.Api_count(group_id)
 		order := rank + 1
 		amount := app_conf.Group_Sign_incr - rank
 		if amount <= 0 {
 			amount = 1
 		}
-		group_model := GroupBalanceModel.Api_find(gid, uid)
+		group_model := GroupBalanceModel.Api_find(group_id, user_id)
 		db := tuuz.Db()
 		db.Begin()
 		var gbp GroupBalanceModel.Interface
 		gbp.Db = db
 		if len(group_model) < 1 {
-			if !gbp.Api_insert(gid, uid) {
+			if !gbp.Api_insert(group_id, user_id) {
 				db.Rollback()
 				Log.Errs(errors.New("GroupBalanceModel,写入失败"), tuuz.FUNCTION_ALL())
 				return
@@ -53,7 +51,7 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 
 		//加分模式
 
-		if !gbp.Api_incr(gid, uid, amount) {
+		if !gbp.Api_incr(group_id, user_id, amount) {
 			db.Rollback()
 			Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 			return
@@ -61,14 +59,14 @@ func App_group_sign(bot, gid, uid int, req int, random int, groupmember map[stri
 
 		var gsp GroupSignModel.Interface
 		gsp.Db = db
-		if !gsp.Api_insert(gid, uid) {
+		if !gsp.Api_insert(group_id, user_id) {
 			db.Rollback()
 			Log.Errs(errors.New("GroupSignModel,插入失败"), tuuz.FUNCTION_ALL())
 			return
 		} else {
 			db.Commit()
-			at := service.Serv_at(uid)
-			api.Sendgroupmsg(bot, gid, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), auto_retract)
+			at := service.Serv_at(user_id)
+			api.Sendgroupmsg(self_id, group_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), auto_retract)
 		}
 	}
 }

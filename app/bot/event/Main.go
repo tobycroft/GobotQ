@@ -50,12 +50,14 @@ func EventRouter(json string) {
 				break
 
 			case "EventMsg":
-				var em EM
-				err = jsr.UnmarshalFromString(json, &em)
+				fmt.Println(json)
+
+				//var em EM
+				//err = jsr.UnmarshalFromString(json, &em)
 				if err != nil {
 					fmt.Println(err)
 				} else {
-					EventMsg(em)
+					//EventMsg(em)
 				}
 				break
 			}

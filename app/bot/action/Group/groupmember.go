@@ -9,8 +9,8 @@ import (
 )
 
 type App_group_member struct {
-	SelfId  int64
-	GroupId int64
+	SelfId  interface{}
+	GroupId interface{}
 }
 
 var Chan_refresh_group_member = make(chan App_group_member, 99)
@@ -38,7 +38,7 @@ func App_refresh_group_member() {
 	}
 }
 
-func App_refresh_group_member_one(self_id, group_id int64) {
+func App_refresh_group_member_one(self_id, group_id interface{}) {
 	gm, err := api.Getgroupmemberlist(self_id, group_id)
 	if err != nil {
 		fmt.Println(tuuz.FUNCTION_ALL(), err)

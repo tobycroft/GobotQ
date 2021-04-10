@@ -5,16 +5,16 @@ import (
 	"main.go/app/bot/model/GroupListModel"
 )
 
-func App_refresh_groupinfo(self_id, gid int64) {
+func App_refresh_groupinfo(self_id, group_id int64) {
 	gl, err := api.Getgrouplist(self_id)
 	if err != nil {
 
 	} else {
-		GroupListModel.Api_delete_byGid(gid)
+		GroupListModel.Api_delete_byGid(group_id)
 		var gss []GroupListModel.GroupList
 		for _, gll := range gl {
 			var gs GroupListModel.GroupList
-			if gll.GroupID != gid {
+			if gll.GroupID != group_id {
 				continue
 			}
 			gs.Self_id = self_id

@@ -8,11 +8,11 @@ import (
 
 const table = "group_black_list"
 
-func Api_insert(gid, uid, operator interface{}) bool {
+func Api_insert(group_id, user_id, operator interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"gid":      gid,
-		"uid":      uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 		"operator": operator,
 	}
 	db.Data(data)
@@ -25,11 +25,11 @@ func Api_insert(gid, uid, operator interface{}) bool {
 	}
 }
 
-func Api_find(gid, uid interface{}) gorose.Data {
+func Api_find(group_id, user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -41,11 +41,11 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
-func Api_count(gid, uid interface{}) int64 {
+func Api_count(group_id, user_id interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	ret, err := db.Count()
@@ -58,10 +58,10 @@ func Api_count(gid, uid interface{}) int64 {
 
 }
 
-func Api_select(gid interface{}) []gorose.Data {
+func Api_select(group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -73,11 +73,11 @@ func Api_select(gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(gid, uid interface{}) bool {
+func Api_delete(group_id, user_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()

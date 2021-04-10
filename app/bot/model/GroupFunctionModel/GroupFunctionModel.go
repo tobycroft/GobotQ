@@ -8,10 +8,10 @@ import (
 
 const table = "group_function"
 
-func Api_insert(gid interface{}) bool {
+func Api_insert(group_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -23,10 +23,10 @@ func Api_insert(gid interface{}) bool {
 	}
 }
 
-func Api_find(gid interface{}) gorose.Data {
+func Api_find(group_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -38,10 +38,10 @@ func Api_find(gid interface{}) gorose.Data {
 	}
 }
 
-func Api_update(gid, key, value interface{}) bool {
+func Api_update(group_id, key, value interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	data := map[interface{}]interface{}{

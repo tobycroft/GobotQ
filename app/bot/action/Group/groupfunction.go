@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
-	settings := group_function_attach(*gid)
+func App_group_function_get_all(self_id, group_id, user_id int64, message *string) {
+	settings := group_function_attach(group_id)
 	str := "您的群设定为：\r\n"
 	for _, v := range settings {
 		str += Calc.Any2String(v["name"]) + ":"
@@ -38,21 +38,21 @@ func App_group_function_get_all(bot *int, gid *int, uid *int, text *string) {
 
 		str += "\r\n"
 	}
-	api.Sendgroupmsg(*bot, *gid, str, true)
+	api.Sendgroupmsg(self_id, group_id, str, true)
 }
 
-func App_group_function_set(bot, gid, uid interface{}, text string, req int, random int, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	i1 := strings.Index(text, ":")
-	i2 := strings.Index(text, "：")
+func App_group_function_set(self_id, group_id, user_id interface{}, message string, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	i1 := strings.Index(message, ":")
+	i2 := strings.Index(message, "：")
 	if i1 == i2 {
-		api.Sendgroupmsg(bot, gid, "如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开", true)
+		api.Sendgroupmsg(self_id, group_id, "如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开", true)
 		return
 	}
 	strs := []string{}
 	if (i1 < i2 || i2 == -1) && i1 != -1 {
-		strs = strings.Split(text, ":")
+		strs = strings.Split(message, ":")
 	} else {
-		strs = strings.Split(text, "：")
+		strs = strings.Split(message, "：")
 	}
 	name := ""
 	set := ""
@@ -79,13 +79,13 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 			if len(set) > 0 {
 				i, err := Calc.Any2Int_2(set)
 				if err != nil {
-					api.Sendgroupmsg(bot, gid, name+"只能设定为数字整数,请调整为数字整数", true)
+					api.Sendgroupmsg(self_id, group_id, name+"只能设定为数字整数,请调整为数字整数", true)
 					return
 				} else {
 					value = i
 				}
 			} else {
-				api.Sendgroupmsg(bot, gid, name+"的设定有误，例子：acfur设定"+name+":"+"数字", true)
+				api.Sendgroupmsg(self_id, group_id, name+"的设定有误，例子：acfur设定"+name+":"+"数字", true)
 				return
 			}
 			break
@@ -94,29 +94,29 @@ func App_group_function_set(bot, gid, uid interface{}, text string, req int, ran
 			if len(set) > 0 {
 				value = set
 			} else {
-				api.Sendgroupmsg(bot, gid, name+"的设定有误，例子：acfur设定"+name+":"+"你要设定的文字", true)
+				api.Sendgroupmsg(self_id, group_id, name+"的设定有误，例子：acfur设定"+name+":"+"你要设定的文字", true)
 			}
 			break
 
 		default:
-			api.Sendgroupmsg(bot, gid, name+"需要有设定项，你可以使用acfur设定"+name+":"+"设定值，对该功能进行设定", true)
+			api.Sendgroupmsg(self_id, group_id, name+"需要有设定项，你可以使用acfur设定"+name+":"+"设定值，对该功能进行设定", true)
 			return
 		}
-		if GroupFunctionModel.Api_update(gid, detail["key"], value) {
-			api.Sendgroupmsg(bot, gid, name+"设定成功为"+":"+set, true)
+		if GroupFunctionModel.Api_update(group_id, detail["key"], value) {
+			api.Sendgroupmsg(self_id, group_id, name+"设定成功为"+":"+set, true)
 		} else {
-			api.Sendgroupmsg(bot, gid, name+"设定失败", true)
+			api.Sendgroupmsg(self_id, group_id, name+"设定失败", true)
 		}
 	} else {
-		api.Sendgroupmsg(bot, gid, name+"没有找到对应的设定项目，\r\n如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\nacfur设定入群欢迎：开", true)
+		api.Sendgroupmsg(self_id, group_id, name+"没有找到对应的设定项目，\r\n如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\nacfur设定入群欢迎：开", true)
 	}
 }
 
-func group_function_attach(gid interface{}) map[string]map[string]interface{} {
-	group_setting := GroupFunctionModel.Api_find(gid)
+func group_function_attach(group_id interface{}) map[string]map[string]interface{} {
+	group_setting := GroupFunctionModel.Api_find(group_id)
 	if len(group_setting) < 1 {
-		GroupFunctionModel.Api_insert(gid)
-		return group_function_attach(gid)
+		GroupFunctionModel.Api_insert(group_id)
+		return group_function_attach(group_id)
 	}
 	function := GroupFunctionDetailModel.Api_select_kv()
 	arr := make(map[string]map[string]interface{})

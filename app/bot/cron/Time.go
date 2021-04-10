@@ -13,28 +13,27 @@ func BaseCron() {
 	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
-			gl, err := api.Getgrouplist(bot["bot"])
+			gl, err := api.Getgrouplist(bot["self_id"])
 			if err != nil {
 
 			} else {
-				GroupListModel.Api_delete(bot["bot"])
+				GroupListModel.Api_delete(bot["self_id"])
 				var gss []GroupListModel.GroupList
 				for _, gll := range gl {
 					var gs GroupListModel.GroupList
-					gs.Bot = bot["bot"]
-					gs.Gid = gll.GIN
-					gs.Group_name = gll.StrGroupName
-					gs.Group_memo = gll.StrGroupMemo
-					gs.Owner = gll.DwGroupOwnerUin
-					gs.Number = gll.DwMemberNum
+					gs.Self_id = bot["self_id"]
+					gs.Group_id = gll.GroupID
+					gs.Group_name = gll.GroupName
+					gs.Group_memo = gll.GroupMemo
+					gs.Member_count = gll.MemberCount
+					gs.Max_member_count = gll.MaxMemberCount
 					gss = append(gss, gs)
 					var gm Group.App_group_member
-					gm.Gid = gll.GIN
-					gm.Bot = bot["bot"]
-					gm.Owner = gll.DwGroupOwnerUin
+					gm.GroupId = gll.GroupID
+					gm.SelfId = bot["self_id"]
 					Group.Chan_refresh_group_member <- gm
-					if len(GroupFunctionModel.Api_find(gll.GIN)) < 1 {
-						GroupFunctionModel.Api_insert(gll.GIN)
+					if len(GroupFunctionModel.Api_find(gll.GroupID)) < 1 {
+						GroupFunctionModel.Api_insert(gll.GroupID)
 					}
 				}
 				GroupListModel.Api_insert_more(gss)

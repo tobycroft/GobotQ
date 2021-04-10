@@ -56,6 +56,7 @@ func App_refresh_group_member_one(self_id, group_id interface{}) {
 			g.JoinTime = gmm.JoinTime
 			g.Title = gmm.Title
 			g.LastSentTime = gmm.LastSentTime
+			g.Role = gmm.Role
 			gms = append(gms, g)
 		}
 		GroupMemberModel.Api_insert_more(gms)

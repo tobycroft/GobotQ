@@ -15,7 +15,6 @@ import (
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
-	"math"
 	"regexp"
 	"sync"
 	"time"
@@ -385,10 +384,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupfunction["ban_retract"].(int64) == 1 {
 				api.Retract_chan_instant <- ret
 			}
-			api.Sendgroupmsg(self_id, group_id, app_default.Default_ban_url, auto_retract)
-			time := GroupBanModel.Api_count(group_id, user_id)
-			GroupBanModel.Api_insert(group_id, user_id)
-			api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
 		}
 		break
 
@@ -397,10 +393,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupfunction["ban_retract"].(int64) == 1 {
 				api.Retract_chan_instant <- ret
 			}
-			api.Sendgroupmsg(self_id, group_id, app_default.Default_ban_group, auto_retract)
-			time := GroupBanModel.Api_count(group_id, user_id)
-			GroupBanModel.Api_insert(group_id, user_id)
-			api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
 		}
 		break
 
@@ -409,10 +402,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupfunction["ban_retract"].(int64) == 1 {
 				api.Retract_chan_instant <- ret
 			}
-			api.Sendgroupmsg(self_id, group_id, app_default.Default_ban_weixin, auto_retract)
-			time := GroupBanModel.Api_count(group_id, user_id)
-			GroupBanModel.Api_insert(group_id, user_id)
-			api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
 		}
 		break
 
@@ -421,10 +411,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupfunction["ban_retract"].(int64) == 1 {
 				api.Retract_chan_instant <- ret
 			}
-			api.Sendgroupmsg(self_id, group_id, app_default.Default_ban_share, auto_retract)
-			time := GroupBanModel.Api_count(group_id, user_id)
-			GroupBanModel.Api_insert(group_id, user_id)
-			api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
 		}
 		break
 
@@ -438,11 +425,8 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 	case "长度限制":
 		api.Retract_chan_instant <- ret
-		api.Sendgroupmsg(self_id, group_id, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)), auto_retract)
-		time := GroupBanModel.Api_count(group_id, user_id)
-		GroupBanModel.Api_insert(group_id, user_id)
-		api.Sendgroupmsg(self_id, group_id, "这是你第"+Calc.Any2String(time+1)+"次接受惩罚了", auto_retract)
-		api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+		Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
+			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
 		break
 
 	case "自动回复":
@@ -458,14 +442,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			}
 			Redis.SetRaw(Calc.Md5(Calc.Any2String(user_id)+"_"+raw_message), num+1, int(groupfunction["repeat_time"].(int64)))
 			if int64(num) > groupfunction["repeat_count"].(int64) {
-				gb := GroupBanModel.Api_count(group_id, user_id)
-				GroupBanModel.Api_insert(group_id, user_id)
-				api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(gb)))
-				api.Sendgroupmsg(self_id, group_id, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容", auto_retract)
-				//gms := GroupMsgModel.Api_select(group_id, user_id, int(groupfunction["repeat_count"].(int64))+2)
-				//for _, gm := range gms {
-				//
-				//}
+				Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容")
 			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
 				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
 			}

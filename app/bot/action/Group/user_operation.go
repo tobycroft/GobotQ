@@ -3,6 +3,7 @@ package Group
 import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanModel"
+	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/app/v1/user/action/BalanceAction"
@@ -43,7 +44,14 @@ func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, gr
 			api.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"被T出，原因为："+reason, auto_retract)
 		}
 	} else {
+		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
+		} else {
+			if GroupBanPermenentModel.Api_insert(group_id, user_id) {
+				at := service.Serv_at(user_id)
+				api.Sendgroupmsg(self_id, group_id, at+"你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁", auto_retract)
+			}
+		}
 	}
 }
 

@@ -1,4 +1,4 @@
-package GroupBanModel
+package GroupBanPermenentModel
 
 import (
 	"github.com/gohouse/gorose/v2"

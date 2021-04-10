@@ -105,7 +105,7 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 	}
 	botinfo := BotModel.Api_find(self_id)
 
-	if active {
+	if active || service.Serv_is_at_me(self_id, message) {
 		if botinfo["end_time"].(int64) < time.Now().Unix() {
 			api.Sendgroupmsg(self_id, group_id, app_default.Default_over_time, true)
 			return

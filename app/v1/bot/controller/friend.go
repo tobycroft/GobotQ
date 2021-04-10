@@ -12,7 +12,7 @@ import (
 
 func FriendController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Use(BaseController.ChechBotPower(), gin.Recovery())
+	route.Use(BaseController.CheckBotPower(), gin.Recovery())
 
 	route.Any("white_list", bot_white_friend_list)
 	route.Any("white_add", bot_white_friend_add)

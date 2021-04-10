@@ -10,7 +10,7 @@ import (
 
 func EditController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Use(BaseController.ChechBotPower(), gin.Recovery())
+	route.Use(BaseController.CheckBotPower(), gin.Recovery())
 
 	route.Any("img", change_img)
 	route.Any("clear_owner", clear_owner)

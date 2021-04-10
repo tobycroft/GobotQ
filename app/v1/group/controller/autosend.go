@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/v1/group/action/AutoSendAction"
 	"main.go/app/v1/group/model/AutoSendModel"
 	"main.go/common/BaseController"
@@ -13,28 +12,7 @@ import (
 
 func AutosendController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Use(func(c *gin.Context) {
-		uid := c.PostForm("uid")
-		gid, ok := Input.PostInt64("gid", c)
-		if !ok {
-			return
-		}
-		data := GroupMemberModel.Api_find(gid, uid)
-		if len(data) > 0 {
-			if data["type"].(string) == "admin" || data["type"].(string) == "owner" {
-				c.Next()
-				return
-			} else {
-				RET.Fail(c, 403, nil, "你不是本群的管理员")
-				c.Abort()
-				return
-			}
-		} else {
-			RET.Fail(c, 403, nil, "未找到该群，请检查机器人是否有加入本群")
-			c.Abort()
-			return
-		}
-	})
+	route.Use(BaseController.CheckGroupAdmin(), gin.Recovery())
 
 	route.Any("list", autosend_list)
 	route.Any("get", autosend_get)

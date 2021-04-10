@@ -8,6 +8,6 @@ import (
 func OperationController(route *gin.RouterGroup) {
 
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Use(BaseController.ChechBotPower(), gin.Recovery())
+	route.Use(BaseController.CheckBotPower(), gin.Recovery())
 
 }

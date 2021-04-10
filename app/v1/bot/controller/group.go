@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotGroupAllowModel"
-	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
@@ -13,22 +12,7 @@ import (
 
 func GroupController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Use(func(c *gin.Context) {
-		uid := c.PostForm("uid")
-		bot, ok := Input.PostInt("bot", c)
-		if !ok {
-			return
-		}
-		data := BotModel.Api_find_byOwnerandBot(uid, bot)
-		if len(data) > 0 {
-			c.Next()
-			return
-		} else {
-			RET.Fail(c, 403, nil, "你并不拥有这个机器人")
-			c.Abort()
-			return
-		}
-	})
+	route.Use(BaseController.CheckBotPower(), gin.Recovery())
 
 	route.Any("white_list", bot_white_group_list)
 	route.Any("white_add", bot_white_group_add)

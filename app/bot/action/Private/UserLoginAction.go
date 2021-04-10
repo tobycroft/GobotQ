@@ -19,7 +19,7 @@ func App_userLogin(self_id int64, user_id, group_id int64, message string) {
 	usermember := UserMemberModel.Api_find(user_id)
 	if len(usermember) > 0 {
 		if UserMemberModel.Api_update_all(user_id, uname, rand) {
-			api.Sendprivatemsg(self_id, user_id, group_id, "您的登录密码：\r\n"+Calc.Int2String(rand), false)
+			api.Sendprivatemsg(self_id, user_id, group_id, "na您的登录密码：\r\n"+Calc.Int2String(rand), false)
 		} else {
 			api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_error_alert, false)
 		}

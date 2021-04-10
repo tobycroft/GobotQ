@@ -46,36 +46,31 @@ func App_refresh_group_member_one(bot, gid, owner interface{}) {
 	if err != nil {
 		fmt.Println(tuuz.FUNCTION_ALL(), err)
 	} else {
-		admins, err := api.Getgroupmgrlist(bot, gid)
-		if err != nil {
-			fmt.Println(tuuz.FUNCTION_ALL(), err)
-		} else {
-			GroupMemberModel.Api_delete_byGid(bot, gid)
-			var gms []GroupMemberModel.GroupMember
-			for _, gmm := range gm {
-				var g GroupMemberModel.GroupMember
-				g.Bot = bot
-				g.Gid = gid
-				g.Uid = gmm.UIN
-				g.Remark = (gmm.Remark)
-				g.Nickname = (gmm.NickName)
-				//g.Age = gmm.Age
-				g.Card = (gmm.Card)
-				g.Grouplevel = gmm.GroupLevel
-				g.Jointime = gmm.AddGroupTime
-				g.Title = (gmm.SpecTitle)
-				g.Lastsend = gmm.LastMsgTime
-				if admins[Calc.Int2String(gmm.UIN)] != nil {
-					g.Type = "admin"
-				} else {
-					g.Type = "member"
-				}
-				if owner == gmm.UIN {
-					g.Type = "owner"
-				}
-				gms = append(gms, g)
+		GroupMemberModel.Api_delete_byGid(bot, gid)
+		var gms []GroupMemberModel.GroupMember
+		for _, gmm := range gm {
+			var g GroupMemberModel.GroupMember
+			g.Bot = bot
+			g.Gid = gid
+			g.Uid = gmm.UIN
+			g.Remark = (gmm.Remark)
+			g.Nickname = (gmm.NickName)
+			//g.Age = gmm.Age
+			g.Card = (gmm.Card)
+			g.Grouplevel = gmm.GroupLevel
+			g.Jointime = gmm.AddGroupTime
+			g.Title = (gmm.SpecTitle)
+			g.Lastsend = gmm.LastMsgTime
+			if admins[Calc.Int2String(gmm.UIN)] != nil {
+				g.Type = "admin"
+			} else {
+				g.Type = "member"
 			}
-			GroupMemberModel.Api_insert_more(gms)
+			if owner == gmm.UIN {
+				g.Type = "owner"
+			}
+			gms = append(gms, g)
 		}
+		GroupMemberModel.Api_insert_more(gms)
 	}
 }

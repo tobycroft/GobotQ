@@ -9,17 +9,22 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	Bot        interface{} `gorose:"bot"`
-	Gid        interface{} `gorose:"gid"`
-	Uid        interface{} `gorose:"uid"`
-	Title      string      `gorose:"title"`
-	Nickname   string      `gorose:"nickname"`
-	Remark     string      `gorose:"remark"`
-	Card       string      `gorose:"card"`
-	Jointime   int         `gorose:"jointime"`
-	Lastsend   int         `gorose:"lastsend"`
-	Grouplevel int         `gorose:"grouplevel"`
-	Type       string      `gorose:"type"`
+	SelfId          int64  `json:"self_id"`
+	Age             int64  `json:"age"`
+	Area            string `json:"area"`
+	Card            string `json:"card"`
+	CardChangeable  bool   `json:"card_changeable"`
+	GroupID         int64  `json:"group_id"`
+	JoinTime        int64  `json:"join_time"`
+	LastSentTime    int64  `json:"last_sent_time"`
+	Level           string `json:"level"`
+	Nickname        string `json:"nickname"`
+	Role            string `json:"role"`
+	Sex             string `json:"sex"`
+	Title           string `json:"title"`
+	TitleExpireTime int64  `json:"title_expire_time"`
+	Unfriendly      bool   `json:"unfriendly"`
+	UserID          int64  `json:"user_id"`
 }
 
 func Api_insert(gm GroupMember) bool {
@@ -46,11 +51,11 @@ func Api_insert_more(gms []GroupMember) bool {
 	}
 }
 
-func Api_select(bot, gid interface{}) []gorose.Data {
+func Api_select(self_id, group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"gid": gid,
+		"self_id":  self_id,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	ret, err := db.Get()
@@ -62,13 +67,13 @@ func Api_select(bot, gid interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_byUid(uid interface{}, Type []interface{}) []gorose.Data {
+func Api_select_byUid(user_id interface{}, role []interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"uid": uid,
+		"user_id": user_id,
 	}
 	db.Where(where)
-	db.WhereIn("type", Type)
+	db.WhereIn("role", role)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -78,11 +83,11 @@ func Api_select_byUid(uid interface{}, Type []interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete_byGid(bot, gid interface{}) bool {
+func Api_delete_byGid(self_id, group_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
-		"gid": gid,
+		"self_id":  self_id,
+		"group_id": group_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -94,10 +99,10 @@ func Api_delete_byGid(bot, gid interface{}) bool {
 	}
 }
 
-func Api_delete(bot interface{}) bool {
+func Api_delete(self_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot": bot,
+		"self_id": self_id,
 	}
 	db.Where(where)
 	_, err := db.Delete()
@@ -109,11 +114,11 @@ func Api_delete(bot interface{}) bool {
 	}
 }
 
-func Api_find(gid, uid interface{}) gorose.Data {
+func Api_find(group_id, user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -125,10 +130,10 @@ func Api_find(gid, uid interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byUid(uid interface{}) gorose.Data {
+func Api_find_byUid(user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"uid": uid,
+		"user_id": user_id,
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -140,15 +145,15 @@ func Api_find_byUid(uid interface{}) gorose.Data {
 	}
 }
 
-func Api_update_type(gid, uid, Type interface{}) bool {
+func Api_update_type(group_id, user_id, role interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"gid": gid,
-		"uid": uid,
+		"group_id": group_id,
+		"user_id":  user_id,
 	}
 	db.Where(where)
 	data := map[string]interface{}{
-		"type": Type,
+		"role": role,
 	}
 	db.Data(data)
 	_, err := db.Update()
@@ -160,11 +165,11 @@ func Api_update_type(gid, uid, Type interface{}) bool {
 	}
 }
 
-func Api_find_owner(bot, gid interface{}) gorose.Data {
+func Api_find_owner(self_id, group_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot":        bot,
-		"gid":        gid,
+		"self_id":    self_id,
+		"group_id":   group_id,
 		"grouplevel": 6,
 	}
 	db.Where(where)
@@ -177,11 +182,11 @@ func Api_find_owner(bot, gid interface{}) gorose.Data {
 	}
 }
 
-func Api_select_admin(bot, gid interface{}) []gorose.Data {
+func Api_select_admin(self_id, group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"bot":        bot,
-		"gid":        gid,
+		"self_id":    self_id,
+		"group_id":   group_id,
 		"grouplevel": 4,
 	}
 	db.Where(where)

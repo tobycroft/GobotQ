@@ -18,17 +18,17 @@ type GroupMemberList struct {
 	Area            string `json:"area"`
 	Card            string `json:"card"`
 	CardChangeable  bool   `json:"card_changeable"`
-	GroupID         int    `json:"group_id"`
-	JoinTime        int    `json:"join_time"`
-	LastSentTime    int    `json:"last_sent_time"`
+	GroupID         int64  `json:"group_id"`
+	JoinTime        int64  `json:"join_time"`
+	LastSentTime    int64  `json:"last_sent_time"`
 	Level           string `json:"level"`
 	Nickname        string `json:"nickname"`
 	Role            string `json:"role"`
 	Sex             string `json:"sex"`
 	Title           string `json:"title"`
-	TitleExpireTime int    `json:"title_expire_time"`
+	TitleExpireTime int64  `json:"title_expire_time"`
 	Unfriendly      bool   `json:"unfriendly"`
-	UserID          int    `json:"user_id"`
+	UserID          int64  `json:"user_id"`
 }
 
 func Getgroupmemberlist(self_id, group_id interface{}) ([]GroupMemberList, error) {

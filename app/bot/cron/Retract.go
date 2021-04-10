@@ -6,11 +6,6 @@ import (
 	"time"
 )
 
-type Struct_Retract struct {
-	Self_id   interface{}
-	MessageId interface{}
-}
-
 func Retract() {
 	go retract_private()
 	retract_instant()

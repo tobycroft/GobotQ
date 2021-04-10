@@ -354,7 +354,6 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	var ret api.Struct_Retract
 	ret.MessageId = group_id
 	ret.Self_id = self_id
-	api.Retract_chan_instant <- ret
 
 	switch Type {
 	case "sign":

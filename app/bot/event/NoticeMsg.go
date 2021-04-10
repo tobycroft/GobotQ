@@ -142,7 +142,6 @@ func NoticeMsg(em Notice) {
 		break
 
 	case "group_ban":
-
 		switch sub_type {
 		case "ban":
 
@@ -155,6 +154,13 @@ func NoticeMsg(em Notice) {
 			}
 			break
 		}
+		break
+
+	case "friend_add":
+
+		break
+
+	case "friend_recall":
 		break
 
 	case "notice":

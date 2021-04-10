@@ -131,10 +131,10 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			owner = true
 		}
 	}
-	auto_retract := true
-	if groupfunction["auto_retract"].(int64) == 0 {
-		auto_retract = false
-	}
+	//auto_retract := true
+	//if groupfunction["auto_retract"].(int64) == 0 {
+	//	auto_retract = false
+	//}
 	switch new_text {
 	case "help":
 		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, groupfunction)

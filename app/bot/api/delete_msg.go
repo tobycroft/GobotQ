@@ -18,7 +18,7 @@ type Struct_Retract struct {
 var Retract_chan = make(chan Struct_Retract, 20)
 var Retract_chan_instant = make(chan Struct_Retract, 20)
 
-type DeleteMsgStruct struct {
+type DefaultRetStruct struct {
 	Data    interface{} `json:"data"`
 	Msg     string      `json:"msg"`
 	Retcode int         `json:"retcode"`
@@ -39,7 +39,7 @@ func DeleteMsg(self_id, message_id interface{}) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	var dls DeleteMsgStruct
+	var dls DefaultRetStruct
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &dls)
 	if err != nil {

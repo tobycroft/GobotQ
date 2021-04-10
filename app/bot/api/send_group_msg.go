@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Calc"
@@ -37,6 +38,7 @@ type GroupSendStruct struct {
 func Send_group() {
 	for gss := range Group_send_chan {
 		gmr, err := sendgroupmsg(gss)
+		fmt.Println(gmr)
 		if err != nil {
 
 		} else {

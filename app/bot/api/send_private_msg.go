@@ -14,6 +14,12 @@ import (
 var Private_send_chan = make(chan PrivateSendStruct, 20)
 
 type MessageRet struct {
+	Data    Message `json:"data"`
+	Retcode int     `json:"retcode"`
+	Status  string  `json:"status"`
+}
+
+type Message struct {
 	MessageId int `json:"message_id"`
 }
 

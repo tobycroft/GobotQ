@@ -2,7 +2,6 @@ package cron
 
 import (
 	"main.go/app/bot/api"
-	"main.go/config/app_conf"
 	"time"
 )
 
@@ -19,7 +18,7 @@ func Retract() {
 func retract_private() {
 	for r := range api.Retract_chan {
 		go func(retract api.Struct_Retract) {
-			time.Sleep(app_conf.Retract_time_second * time.Second)
+			time.Sleep(2 * time.Second)
 			select {
 			case api.Retract_chan_instant <- retract:
 

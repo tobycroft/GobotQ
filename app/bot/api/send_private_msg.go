@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Calc"
@@ -23,11 +22,12 @@ type Message struct {
 	MessageId int `json:"message_id"`
 }
 
-func Sendprivatemsg(Self_id, UserId interface{}, Message string, AutoRetract bool) {
+func Sendprivatemsg(Self_id, UserId, GroupId interface{}, Message string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.Self_id = Self_id
 	pss.UserId = UserId
 	pss.Message = Message
+	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 
 	select {
@@ -41,6 +41,7 @@ func Sendprivatemsg(Self_id, UserId interface{}, Message string, AutoRetract boo
 type PrivateSendStruct struct {
 	Self_id     interface{}
 	UserId      interface{}
+	GroupId     interface{}
 	Message     interface{}
 	AutoRetract bool
 }
@@ -65,6 +66,7 @@ func sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	post := map[string]interface{}{
 		"user_id":     pss.UserId,
 		"message":     pss.Message,
+		"group_id":    pss.GroupId,
 		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)
@@ -72,9 +74,7 @@ func sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
 		return Message{}, errors.New("botinfo_notfound")
 	}
-	fmt.Println(post)
 	data, err := Net.Post(botinfo["url"].(string)+"/send_private_msg", nil, post, nil, nil)
-	fmt.Println(post, data)
 
 	if err != nil {
 		return Message{}, err

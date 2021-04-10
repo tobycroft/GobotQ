@@ -441,6 +441,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		api.Sendgroupmsg(self_id, group_id, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)), auto_retract)
 		time := GroupBanModel.Api_count(group_id, user_id)
 		GroupBanModel.Api_insert(group_id, user_id)
+		api.Sendgroupmsg(self_id, group_id, "这是你第"+Calc.Any2String(time+1)+"次接受惩罚了", auto_retract)
 		api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 		break
 

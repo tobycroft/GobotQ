@@ -52,7 +52,7 @@ func Send_group() {
 	}
 }
 
-func sendgroupmsg(gss GroupSendStruct) (MessageRet, error) {
+func sendgroupmsg(gss GroupSendStruct) (Message, error) {
 	post := map[string]interface{}{
 		"group_id":    gss.Group_id,
 		"message":     gss.Message,
@@ -61,18 +61,18 @@ func sendgroupmsg(gss GroupSendStruct) (MessageRet, error) {
 	botinfo := BotModel.Api_find(gss.Self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(gss.Self_id))
-		return MessageRet{}, errors.New("botinfo_notfound")
+		return Message{}, errors.New("botinfo_notfound")
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/send_group_msg", nil, post, nil, nil)
 	if err != nil {
-		return MessageRet{}, err
+		return Message{}, err
 	}
 	var gm MessageRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &gm)
 	if err != nil {
-		return MessageRet{}, err
+		return Message{}, err
 	}
 
-	return gm, nil
+	return gm.Data, nil
 }

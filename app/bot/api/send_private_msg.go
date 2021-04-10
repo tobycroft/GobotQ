@@ -61,7 +61,7 @@ func Send_private() {
 	}
 }
 
-func sendprivatemsg(pss PrivateSendStruct) (MessageRet, error) {
+func sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	post := map[string]interface{}{
 		"user_id":     pss.UserId,
 		"message":     pss.Message,
@@ -70,20 +70,20 @@ func sendprivatemsg(pss PrivateSendStruct) (MessageRet, error) {
 	botinfo := BotModel.Api_find(pss.Self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
-		return MessageRet{}, errors.New("botinfo_notfound")
+		return Message{}, errors.New("botinfo_notfound")
 	}
 	fmt.Println(post)
 	data, err := Net.Post(botinfo["url"].(string)+"/send_private_msg", nil, post, nil, nil)
 	fmt.Println(post, data)
 
 	if err != nil {
-		return MessageRet{}, err
+		return Message{}, err
 	}
 	var pmr MessageRet
 	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 	err = jsr.UnmarshalFromString(data, &pmr)
 	if err != nil {
-		return MessageRet{}, err
+		return Message{}, err
 	}
-	return pmr, nil
+	return pmr.Data, nil
 }

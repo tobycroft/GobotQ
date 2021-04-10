@@ -57,6 +57,7 @@ func EventRouter(json string) {
 			break
 
 		case "notice":
+			//fmt.Println(json)
 			var notice Notice
 			err = jsr.UnmarshalFromString(json, &notice)
 			if err != nil {

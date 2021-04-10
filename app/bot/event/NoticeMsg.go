@@ -14,6 +14,7 @@ import (
 )
 
 type Notice struct {
+	Duration   int    `json:"duration"`
 	GroupID    int64  `json:"group_id"`
 	NoticeType string `json:"notice_type"`
 	OperatorID int64  `json:"operator_id"`
@@ -135,6 +136,22 @@ func NoticeMsg(em Notice) {
 			fmt.Println("notice no route sub_type", em)
 			break
 		}
+		break
+
+	case "group_ban":
+
+		switch sub_type {
+		case "ban":
+
+			break
+
+		case "lift_ban":
+
+			break
+		}
+		break
+
+	case "notice":
 		break
 
 	default:

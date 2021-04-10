@@ -45,12 +45,7 @@ type _PrivateSender struct {
 var PrivateMsgChan = make(chan PM, 99)
 
 func PrivateMsg(pm PM) {
-	/*
-		message：消息事件
-		notice：通知事件
-		request：请求事件
-		meta_event：元事件
-	*/
+
 	PrivateMsgChan <- pm
 	selfId := pm.SelfID
 	user_id := pm.UserID

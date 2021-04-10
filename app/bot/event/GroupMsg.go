@@ -258,69 +258,69 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_ban_group(message)
-		new_text[idx] = message
+		ok := service.Serv_ban_group(raw_message)
+		new_text[idx] = raw_message
 		function[idx] = ok
 	}(1, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_url_detect(message)
-		new_text[idx] = message
+		ok := service.Serv_url_detect(raw_message)
+		new_text[idx] = raw_message
 		function[idx] = ok
 	}(2, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_ban_weixin(message)
-		new_text[idx] = message
+		ok := service.Serv_ban_weixin(raw_message)
+		new_text[idx] = raw_message
 		function[idx] = ok
 	}(3, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_ban_share(raw_message)
-		new_text[idx] = raw_message
+		ok := service.Serv_ban_share(raw_raw_message)
+		new_text[idx] = raw_raw_message
 		function[idx] = ok
 	}(4, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur屏蔽"})
+		str, ok := service.Serv_text_match(raw_message, []string{"acfur屏蔽"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(5, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur设定"})
+		str, ok := service.Serv_text_match(raw_message, []string{"acfur设定"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(6, &wg)
 	//签到(直接)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(message, []string{"签到"})
+		str, ok := service.Serv_text_match_all(raw_message, []string{"签到"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(7, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "威望查询"})
+		str, ok := service.Serv_text_match_all(raw_message, []string{"积分查询", "威望查询"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(8, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		_, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行"})
+		_, ok := service.Serv_text_match_all(raw_message, []string{"积分排行", "威望排行"})
 		new_text[idx] = ""
 		function[idx] = ok
 	}(9, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		if int64(len(message)) > groupfunction["word_limit"].(int64) {
-			new_text[idx] = message
+		if int64(len(raw_message)) > groupfunction["word_limit"].(int64) {
+			new_text[idx] = raw_message
 			function[idx] = true
 		}
 	}(10, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_auto_reply(group_id, message)
+		str, ok := service.Serv_auto_reply(group_id, raw_message)
 		new_text[idx] = str
 		function[idx] = ok
 	}(11, &wg)

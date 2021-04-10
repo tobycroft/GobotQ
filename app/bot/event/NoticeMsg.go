@@ -51,7 +51,6 @@ func NoticeMsg(em Notice) {
 		auto_retract = false
 	}
 
-	fmt.Println(em)
 	switch notice_type {
 	//取消管理
 	case "group_admin":
@@ -164,7 +163,7 @@ func NoticeMsg(em Notice) {
 		break
 
 	case "friend_add":
-
+		fmt.Println(em)
 		break
 
 	case "friend_recall":

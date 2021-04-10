@@ -17,7 +17,7 @@ func EditController(route *gin.RouterGroup) {
 }
 
 func group_setting_set(c *gin.Context) {
-	gid, ok := Input.PostInt64("gid", c)
+	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return
 	}

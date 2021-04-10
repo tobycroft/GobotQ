@@ -19,13 +19,13 @@ func AutoreplyController(route *gin.RouterGroup) {
 }
 
 func autoreply_list(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	data := GroupAutoReplyModel.Api_select_semi(gid)
 	RET.Success(c, 0, data, nil)
 }
 
 func autoreply_add(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	uid := c.PostForm("uid")
 	Type, ok := Input.Post("type", c, false)
 	if !ok {
@@ -60,7 +60,7 @@ func autoreply_add(c *gin.Context) {
 }
 
 func autoreply_delete(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	id, ok := Input.PostInt64("id", c)
 	if !ok {
 		return
@@ -73,7 +73,7 @@ func autoreply_delete(c *gin.Context) {
 }
 
 func autoreply_full_list(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	data := GroupAutoReplyModel.Api_select_full(gid)
 	RET.Success(c, 0, data, nil)
 }

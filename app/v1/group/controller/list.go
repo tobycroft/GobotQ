@@ -51,7 +51,7 @@ func group_member(c *gin.Context) {
 
 func group_setting_get(c *gin.Context) {
 	uid := c.PostForm("uid")
-	gid, ok := Input.PostInt64("gid", c)
+	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return
 	}

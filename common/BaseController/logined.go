@@ -64,7 +64,7 @@ func CheckBotPower() gin.HandlerFunc {
 func CheckGroupAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid := c.PostForm("uid")
-		gid, ok := Input.PostInt64("gid", c)
+		gid, ok := Input.PostInt64("group_id", c)
 		if !ok {
 			return
 		}

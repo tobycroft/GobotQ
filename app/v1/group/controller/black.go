@@ -19,13 +19,13 @@ func BlackController(route *gin.RouterGroup) {
 }
 
 func black_group_list(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	data := GroupBlackListModel.Api_select(gid)
 	RET.Success(c, 0, data, nil)
 }
 
 func black_group_add(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	qq, ok := Input.PostInt64("qq", c)
 	if !ok {
 		return
@@ -38,7 +38,7 @@ func black_group_add(c *gin.Context) {
 }
 
 func black_group_delete(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	qq, ok := Input.PostInt64("qq", c)
 	if !ok {
 		return

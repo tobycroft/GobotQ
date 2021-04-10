@@ -22,13 +22,13 @@ func AutosendController(route *gin.RouterGroup) {
 }
 
 func autosend_list(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	data := AutoSendModel.Api_select(gid)
 	RET.Success(c, 0, data, nil)
 }
 
 func autosend_get(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	id, ok := Input.PostInt("id", c)
 	if !ok {
 		return
@@ -42,7 +42,7 @@ func autosend_get(c *gin.Context) {
 }
 
 func autosend_delete(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	id, ok := Input.PostInt("id", c)
 	if !ok {
 		return
@@ -55,7 +55,7 @@ func autosend_delete(c *gin.Context) {
 }
 
 func autosend_add(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	uid := c.PostForm("uid")
 	ident, ok := Input.Post("ident", c, true)
 	if !ok {
@@ -112,7 +112,7 @@ func autosend_add(c *gin.Context) {
 }
 
 func autosend_update(c *gin.Context) {
-	gid := c.PostForm("gid")
+	gid := c.PostForm("group_id")
 	uid := c.PostForm("uid")
 	id, ok := Input.PostInt("id", c)
 	if !ok {

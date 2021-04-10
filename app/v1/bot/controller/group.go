@@ -36,7 +36,7 @@ func bot_white_group_list(c *gin.Context) {
 
 func bot_white_group_add(c *gin.Context) {
 	bot := c.PostForm("self_id")
-	gid, ok := Input.PostInt64("gid", c)
+	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return
 	}
@@ -50,7 +50,7 @@ func bot_white_group_add(c *gin.Context) {
 
 func bot_white_group_delete(c *gin.Context) {
 	bot := c.PostForm("self_id")
-	gid, ok := Input.PostInt64("gid", c)
+	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return
 	}
@@ -70,7 +70,7 @@ func bot_group_list(c *gin.Context) {
 
 func bot_group_exit(c *gin.Context) {
 	bot := c.PostForm("self_id")
-	gid, ok := Input.PostInt64("gid", c)
+	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return
 	}

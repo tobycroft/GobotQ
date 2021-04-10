@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz"
@@ -36,7 +35,6 @@ func DeleteMsg(self_id, message_id interface{}) (bool, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	fmt.Println(post)
 	data, err := Net.Post(botinfo["url"].(string)+"/delete_msg", nil, post, nil, nil)
 	if err != nil {
 		return false, err

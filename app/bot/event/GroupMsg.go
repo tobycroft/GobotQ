@@ -124,10 +124,10 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
-		if groupmember["type"].(string) == "admin" {
+		if groupmember["role"].(string) == "admin" {
 			admin = true
 		}
-		if groupmember["type"].(string) == "owner" {
+		if groupmember["role"].(string) == "owner" {
 			admin = true
 			owner = true
 		}
@@ -339,10 +339,10 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
-		if groupmember["type"].(string) == "admin" {
+		if groupmember["role"].(string) == "admin" {
 			admin = true
 		}
-		if groupmember["type"].(string) == "owner" {
+		if groupmember["role"].(string) == "owner" {
 			admin = true
 			owner = true
 		}

@@ -143,7 +143,7 @@ func NoticeMsg(em Notice) {
 	case "group_ban":
 		switch sub_type {
 		case "ban":
-			if em.Duration > 2505600 {
+			if em.Duration >= 2505600 {
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
 				} else {

@@ -106,7 +106,7 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 
 	if active || service.Serv_is_at_me(self_id, message) {
 		if botinfo["end_time"].(int64) < time.Now().Unix() {
-			Group.AutoMessage(self_id, group_id, user_id, app_default.Default_over_time, true, groupfunction)
+			Group.AutoMessage(self_id, group_id, user_id, app_default.Default_over_time, groupfunction)
 			return
 		}
 		groupHandle_acfur(self_id, group_id, user_id, message_id, new_text, raw_message, sender, groupmember, groupfunction)
@@ -137,11 +137,11 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	}
 	switch new_text {
 	case "help":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, groupfunction)
 		break
 
 	case "app":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_app_download_url, auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_app_download_url, groupfunction)
 		break
 
 	case "设定":
@@ -153,7 +153,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "刷新":
-		Group.AutoMessage(self_id, group_id, user_id, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", groupfunction)
 		break
 
 	case "刷新人数":
@@ -164,7 +164,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			}
 		}
 		Group.App_refreshmember(self_id, group_id)
-		Group.AutoMessage(self_id, group_id, user_id, "群用户已经刷新", auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "群用户已经刷新", groupfunction)
 		break
 
 	case "刷新群信息":
@@ -173,7 +173,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			return
 		}
 		Group.App_refresh_groupinfo(self_id, group_id)
-		Group.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", groupfunction)
 		break
 
 	case "测试撤回":
@@ -191,12 +191,12 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		if err != nil {
 
 		} else {
-			Group.AutoMessage(self_id, group_id, user_id, py, auto_retract, groupfunction)
+			Group.AutoMessage(self_id, group_id, user_id, py, groupfunction)
 		}
 		break
 
 	case "测试自动撤回":
-		Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", groupfunction)
 		break
 
 	case "屏蔽":
@@ -204,7 +204,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_str_ban_word, auto_retract, groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_str_ban_word, groupfunction)
 		break
 
 	case "屏蔽词":

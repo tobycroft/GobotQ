@@ -151,9 +151,7 @@ func NoticeMsg(em Notice) {
 		case "lift_ban":
 			if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 				GroupBanPermenentModel.Api_delete(group_id, user_id)
-				api.sendgroupmsg
-			} else {
-
+				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了", auto_retract)
 			}
 			break
 		}

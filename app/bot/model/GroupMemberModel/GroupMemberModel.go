@@ -21,10 +21,6 @@ type GroupMember struct {
 	UserID       int64       `gorose:"user_id"`
 }
 
-func (u *GroupMember) TableName() string {
-	return table
-}
-
 func Api_insert(gm GroupMember) bool {
 	db := tuuz.Db().Table(table)
 	db.Data(gm)
@@ -113,8 +109,7 @@ func Api_delete(self_id interface{}) bool {
 }
 
 func Api_find(group_id, user_id interface{}) gorose.Data {
-	var gm GroupMember
-	db := tuuz.Db().Table(&gm)
+	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,

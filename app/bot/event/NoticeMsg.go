@@ -94,11 +94,16 @@ func NoticeMsg(em Notice) {
 		if user_id == self_id {
 
 		} else {
-			if groupfunction["join_alert"].(int64) == 1 {
-				api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
-			}
 			if groupfunction["auto_welcome"].(int64) == 1 {
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+				if groupfunction["welcome_at"].(int64) == 1 {
+					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+				} else {
+					api.Sendgroupmsg(self_id, group_id, Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+				}
+			} else {
+				if groupfunction["join_alert"].(int64) == 1 {
+					api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
+				}
 			}
 		}
 		break

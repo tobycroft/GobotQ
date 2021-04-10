@@ -7,6 +7,7 @@ import (
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
+	"main.go/tuuz/Redis"
 	"time"
 )
 
@@ -36,6 +37,10 @@ type GroupSendStruct struct {
 
 func Send_group() {
 	for gss := range Group_send_chan {
+		if Redis.CheckExists("SendCheck:" + gss.Message) {
+			continue
+		}
+		Redis.SetRaw("SendCheck:"+gss.Message, true, 10)
 		gmr, err := sendgroupmsg(gss)
 		if err != nil {
 

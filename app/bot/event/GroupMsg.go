@@ -393,7 +393,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupfunction["ban_retract"].(int64) == 1 {
 				api.Retract_chan_instant <- ret
 			}
-			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
+			Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
 		}
 		break
 

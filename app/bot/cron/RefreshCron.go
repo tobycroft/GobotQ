@@ -11,18 +11,18 @@ import (
 
 func Refresh_group_chan() {
 	for data := range event.RefreshGroupChan {
-		group_check(data.Uid, data.Bot, data.Gid)
+		group_check(data.SelfId, data.UserId, data.GroupId)
 	}
 }
 
-func group_check(uid, bot, gid int) {
-	groupinfo := GroupListModel.Api_find(gid)
+func group_check(self_id, user_id, group_id int64) {
+	groupinfo := GroupListModel.Api_find(group_id)
 	if len(groupinfo) < 1 {
-		Group.App_refresh_groupinfo(bot, gid)
+		Group.App_refresh_groupinfo(self_id, group_id)
 	}
-	userinfo := GroupMemberModel.Api_find(gid, uid)
+	userinfo := GroupMemberModel.Api_find(group_id, user_id)
 	if len(userinfo) < 1 {
-		Group.App_refreshmember(&bot, &gid)
+		Group.App_refreshmember(&self_id, &group_id)
 	}
 }
 

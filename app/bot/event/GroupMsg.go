@@ -21,16 +21,16 @@ import (
 )
 
 type RefreshGroupStruct struct {
-	Uid int
-	Bot int
-	Gid int
+	UserId  int64
+	SelfId  int64
+	GroupId int64
 }
 
 var RefreshGroupChan = make(chan RefreshGroupStruct, 20)
 
 type GM struct {
 	Anonymous   interface{} `json:"anonymous"`
-	Font        int         `json:"font"`
+	Font        int64       `json:"font"`
 	GroupID     int64       `json:"group_id"`
 	Message     string      `json:"message"`
 	MessageID   int64       `json:"message_id"`
@@ -46,7 +46,7 @@ type GM struct {
 }
 
 type _Sender struct {
-	Age      int    `json:"age"`
+	Age      int64  `json:"age"`
 	Area     string `json:"area"`
 	Card     string `json:"card"`
 	Level    string `json:"level"`

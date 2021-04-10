@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Calc"
@@ -65,7 +66,10 @@ func sendprivatemsg(pss PrivateSendStruct) (MessageRet, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
 		return MessageRet{}, errors.New("botinfo_notfound")
 	}
+	fmt.Println(post)
 	data, err := Net.Post(botinfo["url"].(string)+"/send_private_msg", nil, post, nil, nil)
+	fmt.Println(post, data)
+
 	if err != nil {
 		return MessageRet{}, err
 	}

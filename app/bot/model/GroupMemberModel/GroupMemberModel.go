@@ -21,6 +21,10 @@ type GroupMember struct {
 	UserID       int64       `gorose:"user_id"`
 }
 
+func (u *GroupMember) TableName() string {
+	return table
+}
+
 func Api_insert(gm GroupMember) bool {
 	db := tuuz.Db().Table(table)
 	db.Data(gm)
@@ -109,7 +113,8 @@ func Api_delete(self_id interface{}) bool {
 }
 
 func Api_find(group_id, user_id interface{}) gorose.Data {
-	db := tuuz.Db().Table(table)
+	var gm GroupMember
+	db := tuuz.Db().Table(&gm)
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -162,9 +167,9 @@ func Api_update_type(group_id, user_id, role interface{}) bool {
 func Api_find_owner(self_id, group_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"self_id":    self_id,
-		"group_id":   group_id,
-		"grouplevel": 6,
+		"self_id":  self_id,
+		"group_id": group_id,
+		"role":     "owner",
 	}
 	db.Where(where)
 	ret, err := db.First()
@@ -179,9 +184,9 @@ func Api_find_owner(self_id, group_id interface{}) gorose.Data {
 func Api_select_admin(self_id, group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
-		"self_id":    self_id,
-		"group_id":   group_id,
-		"grouplevel": 4,
+		"self_id":  self_id,
+		"group_id": group_id,
+		"role":     "admin",
 	}
 	db.Where(where)
 	ret, err := db.Get()

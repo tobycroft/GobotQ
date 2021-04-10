@@ -4,6 +4,8 @@ import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
 	"time"
 )
@@ -56,6 +58,7 @@ func sendgroupmsg(gss GroupSendStruct) (MessageRet, error) {
 	}
 	botinfo := BotModel.Api_find(gss.Self_id)
 	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(gss.Self_id))
 		return MessageRet{}, errors.New("botinfo_notfound")
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/sendgroupmsg", nil, post, nil, nil)

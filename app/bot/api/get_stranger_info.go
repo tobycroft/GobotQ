@@ -4,6 +4,8 @@ import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
 )
 
@@ -30,6 +32,7 @@ func GetStrangerInfo(self_id, user_id interface{}, no_cache bool) (UserInfo, err
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return UserInfo{}, errors.New("botinfo_notfound")
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/get_stranger_info", nil, post, nil, nil)

@@ -4,6 +4,8 @@ import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
 )
 
@@ -22,6 +24,7 @@ type FriendList struct {
 func Getfriendlist(self_id interface{}) ([]FriendList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return nil, errors.New("botinfo_notfound")
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/get_friend_list", nil, nil, nil, nil)

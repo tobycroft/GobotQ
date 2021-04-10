@@ -4,6 +4,8 @@ import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
+	"main.go/tuuz/Calc"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
 	"time"
 )
@@ -60,6 +62,7 @@ func sendprivatemsg(pss PrivateSendStruct) (MessageRet, error) {
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)
 	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
 		return MessageRet{}, errors.New("botinfo_notfound")
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/send_private_msg", nil, post, nil, nil)

@@ -1,24 +1,5 @@
 package event
 
-//
-//import (
-//	"main.go/app/bot/action/Private"
-//	"main.go/app/bot/api"
-//	"main.go/app/bot/model/BotGroupAllowModel"
-//	"main.go/app/bot/model/BotModel"
-//	"main.go/app/bot/model/GroupBlackListModel"
-//	"main.go/app/bot/model/GroupFunctionModel"
-//	"main.go/app/bot/model/GroupKickModel"
-//	"main.go/app/bot/model/GroupMemberModel"
-//	"main.go/app/bot/model/GroupMsgModel"
-//	"main.go/app/bot/service"
-//	"main.go/tuuz/Calc"
-//	"main.go/tuuz/Jsong"
-//	"time"
-//)
-//
-//
-//
 //func EventMsg(em EM) {
 //	//operator := em.OperateQQ.UIN
 //	//text := em.Msg.Text

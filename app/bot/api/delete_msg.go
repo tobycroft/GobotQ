@@ -4,7 +4,6 @@ import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
-	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
@@ -48,7 +47,7 @@ func DeleteMsg(self_id, message_id interface{}) (bool, error) {
 	if dls.Retcode == 0 {
 		return true, nil
 	} else {
-		Log.Crrs(errors.New(dls.Wording), tuuz.FUNCTION_ALL())
+		Log.Crrs(errors.New(dls.Wording), "message:"+Calc.Any2String(message_id))
 		return false, errors.New(dls.Wording)
 	}
 }

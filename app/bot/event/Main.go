@@ -1,6 +1,7 @@
 package event
 
 import (
+	"errors"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/LogErrorModel"
@@ -8,10 +9,10 @@ import (
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Jsong"
+	"main.go/tuuz/Log"
 )
 
 func EventRouter(json string) {
-	//save the data in the first place
 	LogsModel.Api_insert(json, "main")
 	data, err := Jsong.JObject(json)
 	if err != nil {
@@ -49,21 +50,34 @@ func EventRouter(json string) {
 				}
 				break
 
-			case "EventMsg":
-				fmt.Println(json)
-
-				//var em EM
-				//err = jsr.UnmarshalFromString(json, &em)
-				if err != nil {
-					fmt.Println(err)
-				} else {
-					//EventMsg(em)
-				}
+			default:
+				Log.Crrs(errors.New("undefine route"), json)
 				break
 			}
 			break
 
+		case "notice":
+			var notice Notice
+			err = jsr.UnmarshalFromString(json, &notice)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				NoticeMsg(notice)
+			}
+			break
+
+		case "request":
+			var req Request
+			err = jsr.UnmarshalFromString(json, &req)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				RequestMsg(req)
+			}
+			break
+
 		case "meta_event":
+			fmt.Println(json)
 			break
 
 		default:

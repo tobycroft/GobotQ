@@ -10,7 +10,7 @@ import (
 	"main.go/tuuz/Net"
 )
 
-func SetFriendAddRequest(self_id, flag, approve, remark interface{}) (bool, error) {
+func SetFriendAddRequest(self_id, flag interface{}, approve bool, remark interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"flag":    flag,
 		"approve": approve,

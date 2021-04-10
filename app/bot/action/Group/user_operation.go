@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
+	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/app/v1/user/action/BalanceAction"
@@ -35,13 +36,19 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 
 func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, groupfunction map[string]interface{}, reason string) {
 	auto_kick_out := groupfunction["auto_kick_out"].(int64)
+	str := ""
+
 	if auto_kick_out == 1 {
+		if groupfunction["kick_to_black"].(int64) == 1 {
+			str = "并被拉黑"
+			GroupBlackListModel.Api_insert(group_id, user_id, self_id)
+		}
 		gm := GroupMemberModel.Api_find(group_id, user_id)
 		if len(gm) > 0 {
 			nickname := Calc.Any2String(gm["nickname"])
-			api.Sendgroupmsg(self_id, group_id, nickname+"被T出，原因为："+reason, auto_retract)
+			api.Sendgroupmsg(self_id, group_id, nickname+"被T出"+str+"，原因为："+reason, auto_retract)
 		} else {
-			api.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"被T出，原因为："+reason, auto_retract)
+			api.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"被T出"+str+"，原因为："+reason, auto_retract)
 		}
 	} else {
 		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {

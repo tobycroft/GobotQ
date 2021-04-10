@@ -26,7 +26,7 @@ func bot_white_group_list(c *gin.Context) {
 	bot := c.PostForm("bot")
 	data := BotGroupAllowModel.Api_select(bot)
 	for k, v := range data {
-		groupinfo := GroupListModel.Api_find(v["gid"])
+		groupinfo := GroupListModel.Api_find(v["group_id"])
 		if len(groupinfo) > 0 {
 			data[k]["group_info"] = groupinfo
 		}

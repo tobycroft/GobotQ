@@ -26,7 +26,7 @@ func group_control(c *gin.Context) {
 	con_group := GroupMemberModel.Api_select_byUid(uid, []interface{}{"owner", "admin"})
 	gids := []interface{}{}
 	for _, data := range con_group {
-		gids = append(gids, data["gid"])
+		gids = append(gids, data["group_id"])
 	}
 	gls := GroupListModel.Api_select_InGid(gids)
 	RET.Success(c, 0, gls, nil)
@@ -37,7 +37,7 @@ func group_joined(c *gin.Context) {
 	con_group := GroupMemberModel.Api_select_byUid(uid, []interface{}{"member"})
 	gids := []interface{}{}
 	for _, data := range con_group {
-		gids = append(gids, data["gid"])
+		gids = append(gids, data["group_id"])
 	}
 	gls := GroupListModel.Api_select_InGid(gids)
 	RET.Success(c, 0, gls, nil)

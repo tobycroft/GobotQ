@@ -26,7 +26,7 @@ func bot_white_friend_list(c *gin.Context) {
 	data := BotFriendAllowModel.Api_select(self_id)
 
 	for k, v := range data {
-		user_info := FriendListModel.Api_find(v["uid"])
+		user_info := FriendListModel.Api_find(v["user_id"])
 		if len(user_info) > 0 {
 			data[k]["user_info"] = user_info
 		} else {
@@ -35,7 +35,7 @@ func bot_white_friend_list(c *gin.Context) {
 
 			} else {
 				FriendListModel.Api_insert(self_id, ui.UserID, ui.Nickname)
-				data[k]["user_info"] = FriendListModel.Api_find(v["uid"])
+				data[k]["user_info"] = FriendListModel.Api_find(v["user_id"])
 			}
 		}
 	}

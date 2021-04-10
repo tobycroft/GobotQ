@@ -276,8 +276,8 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	}(3, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_ban_share(raw_raw_message)
-		new_text[idx] = raw_raw_message
+		ok := service.Serv_ban_share(raw_message)
+		new_text[idx] = raw_message
 		function[idx] = ok
 	}(4, &wg)
 	go func(idx int, wg *sync.WaitGroup) {

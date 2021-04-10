@@ -7,6 +7,7 @@ import (
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
+	"main.go/tuuz/Redis"
 	"time"
 )
 
@@ -42,12 +43,16 @@ type PrivateSendStruct struct {
 	Self_id     interface{}
 	UserId      interface{}
 	GroupId     interface{}
-	Message     interface{}
+	Message     string
 	AutoRetract bool
 }
 
 func Send_private() {
 	for pss := range Private_send_chan {
+		if Redis.CheckExists("SendCheck:" + pss.Message) {
+			continue
+		}
+		Redis.SetRaw("SendCheck:"+pss.Message, true, 10)
 		pmr, err := sendprivatemsg(pss)
 		if err != nil {
 

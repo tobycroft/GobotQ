@@ -8,8 +8,10 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/app/v1/user/action/BalanceAction"
+	"main.go/config/app_conf"
 	"main.go/tuuz/Calc"
 	"math"
+	"time"
 )
 
 func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, groupfunction map[string]interface{}, reason string) {
@@ -54,7 +56,7 @@ func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, gr
 		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
 		} else {
-			if GroupBanPermenentModel.Api_insert(group_id, user_id) {
+			if GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400) {
 				at := service.Serv_at(user_id)
 				api.Sendgroupmsg(self_id, group_id, at+"你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁", auto_retract)
 			}

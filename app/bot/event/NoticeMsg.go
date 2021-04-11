@@ -196,7 +196,7 @@ func NoticeMsg(em Notice) {
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
 				} else {
-					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+2149200)
+					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
 					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你进入永久小黑屋，可联系群管解除", auto_retract)
 				}
 			}

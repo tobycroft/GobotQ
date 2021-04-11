@@ -5,9 +5,17 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"time"
 )
 
 func PowerCheck() {
+	for {
+		time.Sleep(24 * time.Hour)
+		go power_check()
+	}
+}
+
+func power_check() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
 		self_id := bot["self_id"]

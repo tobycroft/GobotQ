@@ -78,7 +78,7 @@ func Api_select(self_id, group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_groupBy_groupId(self_id, group_id interface{}) []gorose.Data {
+func Api_select_groupBy_groupId(self_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"self_id": self_id,

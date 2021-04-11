@@ -9,12 +9,12 @@ import (
 
 const table = "group_ban_permenent"
 
-func Api_insert(group_id, next_time interface{}, next_bind int64) bool {
+func Api_insert(group_id, user_id interface{}, next_time int64) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"group_id":  group_id,
+		"user_id":   user_id,
 		"next_time": next_time,
-		"next_bind": next_bind,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -26,7 +26,7 @@ func Api_insert(group_id, next_time interface{}, next_bind int64) bool {
 	}
 }
 
-func Api_update_nextTime(group_id, user_id, next_bind interface{}) bool {
+func Api_update_nextTime(group_id, user_id, next_time interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -34,7 +34,7 @@ func Api_update_nextTime(group_id, user_id, next_bind interface{}) bool {
 	}
 	db.Where(where)
 	data := map[string]interface{}{
-		"next_bind": next_bind,
+		"next_time": next_time,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -48,7 +48,7 @@ func Api_update_nextTime(group_id, user_id, next_bind interface{}) bool {
 
 func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Where("next_bind", "<", time.Now().Unix())
+	db.Where("next_time", "<", time.Now().Unix())
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

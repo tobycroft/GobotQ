@@ -12,6 +12,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Jsong"
+	"time"
 )
 
 type Notice struct {
@@ -167,7 +168,7 @@ func NoticeMsg(em Notice) {
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
 				} else {
-					GroupBanPermenentModel.Api_insert(group_id, user_id)
+					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+2149200)
 					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"哦豁你进永久小黑屋了！", auto_retract)
 				}
 			}

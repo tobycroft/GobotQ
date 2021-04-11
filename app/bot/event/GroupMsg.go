@@ -358,7 +358,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		auto_retract = false
 	}
 	var ret api.Struct_Retract
-	ret.MessageId = group_id
+	ret.MessageId = message_id
 	ret.Self_id = self_id
 
 	switch Type {

@@ -10,7 +10,7 @@ import (
 
 func PowerCheck() {
 	for {
-		time.Sleep(24 * time.Hour)
+		time.Sleep(2 * time.Hour)
 		go power_check()
 	}
 }

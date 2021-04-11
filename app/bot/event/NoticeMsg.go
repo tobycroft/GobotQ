@@ -94,6 +94,11 @@ func NoticeMsg(em Notice) {
 		if user_id == self_id {
 
 		} else {
+			if groupfunction["auto_hold"].(int64) == 1 {
+				GroupBanPermenentModel.Api_insert(group_id, user_id)
+			} else {
+
+			}
 			if groupfunction["auto_welcome"].(int64) == 1 {
 				if groupfunction["welcome_at"].(int64) == 1 {
 					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)

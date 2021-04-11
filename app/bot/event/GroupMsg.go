@@ -481,7 +481,6 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			api.Retract_chan_instant <- ret
 			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字"+Calc.Any2String(code), true)
 		}
-
 		break
 	}
 }

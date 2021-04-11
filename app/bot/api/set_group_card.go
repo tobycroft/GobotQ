@@ -10,7 +10,7 @@ import (
 	"main.go/tuuz/Net"
 )
 
-func SetGroupCard(self_id, group_id, user_id, card interface{}) (bool, error) {
+func Setgroupcard(self_id, group_id, user_id, card interface{}) (bool, error) {
 	post := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,

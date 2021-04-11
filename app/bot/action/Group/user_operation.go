@@ -24,7 +24,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 		bal, _ := balance.App_check_balance(user_id)
 		balance_decr := float64(time) * math.Pow10(int(time))
 		balance_left := bal - balance_decr
-		if balance_left < 0 {
+		if balance_left <= 0 {
 			api.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次，接受惩罚\n"+"本次惩罚原因："+reason+"\n你还剩下："+Calc.Any2String(left_time)+"点生命值", auto_retract)
 			api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 		} else {

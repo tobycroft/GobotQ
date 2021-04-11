@@ -109,7 +109,7 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 			Group.AutoMessage(self_id, group_id, user_id, app_default.Default_over_time, groupfunction)
 			return
 		}
-		groupHandle_acfur(self_id, group_id, user_id, message_id, new_text, raw_message, sender, groupmember, groupfunction)
+		groupHandle_acfur(self_id, group_id, user_id, message_id, new_text, message, raw_message, sender, groupmember, groupfunction)
 	} else {
 		if botinfo["end_time"].(int64) < time.Now().Unix() {
 			return
@@ -119,7 +119,7 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 	}
 }
 
-func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -131,10 +131,6 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			owner = true
 		}
 	}
-	//auto_retract := true
-	//if groupfunction["auto_retract"].(int64) == 0 {
-	//	auto_retract = false
-	//}
 	switch new_text {
 	case "help":
 		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, groupfunction)
@@ -240,7 +236,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	default:
-		api.Sendgroupmsg(self_id, group_id, "Hi~我是Acfur，有任何问题可以发送acfurhelp哦~", true)
+		groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
 		break
 	}
 }
@@ -269,44 +265,44 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	}(2, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_ban_weixin(raw_message)
-		new_text[idx] = raw_message
+		ok := service.Serv_ban_weixin(message)
+		new_text[idx] = message
 		function[idx] = ok
 	}(3, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		ok := service.Serv_ban_share(raw_message)
-		new_text[idx] = raw_message
+		ok := service.Serv_ban_share(message)
+		new_text[idx] = message
 		function[idx] = ok
 	}(4, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(raw_message, []string{"acfur屏蔽"})
+		str, ok := service.Serv_text_match(message, []string{"acfur屏蔽"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(5, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(raw_message, []string{"acfur设定"})
+		str, ok := service.Serv_text_match(message, []string{"acfur设定"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(6, &wg)
 	//签到(直接)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(raw_message, []string{"签到"})
+		str, ok := service.Serv_text_match_all(message, []string{"签到"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(7, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(raw_message, []string{"积分查询", "威望查询"})
+		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "威望查询"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(8, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		_, ok := service.Serv_text_match_all(raw_message, []string{"积分排行", "威望排行"})
+		_, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行"})
 		new_text[idx] = ""
 		function[idx] = ok
 	}(9, &wg)

@@ -114,7 +114,7 @@ func NoticeMsg(em Notice) {
 					} else {
 						if ok {
 							api.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
-							api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
+							api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
 						}
 					}
 				}(self_id, group_id, user_id)

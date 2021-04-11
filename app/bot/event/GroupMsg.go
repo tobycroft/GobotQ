@@ -163,6 +163,11 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", groupfunction)
 		break
 
+	case "权限":
+
+		Group.AutoMessage(self_id, group_id, user_id, "我当前的权限为：", groupfunction)
+		break
+
 	case "刷新人数":
 		if !admin && !owner {
 			if len(groupmember) > 0 {

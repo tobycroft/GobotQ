@@ -66,3 +66,5 @@ const Default_kick_word = "用户触发T出词，和他说再见吧？哦不过�
 const Default_retract_word = "用户触发了撤回"
 
 const Default_over_time = "您的服务已经到期，如需增加时间请加入反馈：542749156"
+
+const Default_welcome = "Hi~我是Acfur，如果需要查看功能可以发acfurhelp哦~"

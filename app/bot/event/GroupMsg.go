@@ -85,11 +85,9 @@ func GroupMsg(gm GM) {
 			Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(self_id))
 			return
 		}
-		member_bot := GroupMemberModel.Api_find(group_id, self_id)
-		if len(member_bot) > 0 {
-			if member_bot["role"] != "admin" {
-				return
-			}
+
+		if Group.BotPower(group_id, self_id) != "admin" {
+			return
 		}
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
@@ -165,7 +163,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 
 	case "权限":
 
-		Group.AutoMessage(self_id, group_id, user_id, "我当前的权限为：", groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "我当前的权限为："+Group.BotPower(group_id, self_id), groupfunction)
 		break
 
 	case "刷新人数":

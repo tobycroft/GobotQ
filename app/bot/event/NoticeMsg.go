@@ -56,6 +56,7 @@ func NoticeMsg(em Notice) {
 	switch notice_type {
 	//取消管理
 	case "group_admin":
+		fmt.Println(em)
 		switch sub_type {
 		case "set":
 			if user_id == self_id {

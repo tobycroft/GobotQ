@@ -36,6 +36,7 @@ type GroupMemberList struct {
 func Getgroupmemberlist(self_id, group_id interface{}) ([]GroupMemberList, error) {
 	post := map[string]interface{}{
 		"group_id": group_id,
+		"no_cache": true,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {

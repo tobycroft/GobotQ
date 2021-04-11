@@ -86,9 +86,9 @@ func GroupMsg(gm GM) {
 			return
 		}
 
-		if Group.BotPower(group_id, self_id) != "admin" {
-			return
-		}
+		//if Group.BotPower(group_id, self_id) != "admin" {
+		//	return
+		//}
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 

@@ -56,7 +56,11 @@ func App_refresh_group_member_one(self_id, group_id interface{}) {
 			g.Title = gmm.Title
 			g.LastSentTime = gmm.LastSentTime
 			g.Role = gmm.Role
-			GroupMemberModel.Api_update(group_id, gmm.UserID, g)
+			if len(GroupMemberModel.Api_find(group_id, gmm.UserID)) > 0 {
+				GroupMemberModel.Api_update(group_id, gmm.UserID, g)
+			} else {
+				GroupMemberModel.Api_insert(g)
+			}
 		}
 	}
 }

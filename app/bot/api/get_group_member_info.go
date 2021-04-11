@@ -19,6 +19,7 @@ func GetGroupMemberInfo(self_id, group_id, user_id interface{}) (GroupMemberList
 	post := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,
+		"no_cache": true,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {

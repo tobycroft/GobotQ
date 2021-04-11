@@ -85,6 +85,12 @@ func GroupMsg(gm GM) {
 			Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(self_id))
 			return
 		}
+		member_bot := GroupMemberModel.Api_find(group_id, self_id)
+		if len(member_bot) > 0 {
+			if member_bot["role"] != "admin" {
+				return
+			}
+		}
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 

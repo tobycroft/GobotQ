@@ -24,6 +24,7 @@ func PowerCheck() {
 					api.SetGroupAdmin(self_id, group_id, gm["user_id"], false)
 				}
 				api.SetGroupWholeBan(self_id, group_id, true)
+				api.SetGroupLeave(self_id, group_id)
 			}
 		}
 	}

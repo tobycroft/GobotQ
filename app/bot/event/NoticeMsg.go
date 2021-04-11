@@ -99,7 +99,9 @@ func NoticeMsg(em Notice) {
 			if groupfunction["auto_hold"].(int64) == 1 {
 				ok, _ := api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
 				if ok {
+					//如果禁言成功，就将这个人暂时加入永久小黑屋
 					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
+
 				}
 			} else {
 				//在没有启动自动验证模式的时候，使用正常欢迎流程
@@ -195,7 +197,7 @@ func NoticeMsg(em Notice) {
 
 				} else {
 					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+2149200)
-					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"哦豁你进永久小黑屋了！", auto_retract)
+					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你进入永久小黑屋，可联系群管解除", auto_retract)
 				}
 			}
 			break
@@ -203,7 +205,7 @@ func NoticeMsg(em Notice) {
 		case "lift_ban":
 			if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 				GroupBanPermenentModel.Api_delete(group_id, user_id)
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了！", auto_retract)
+				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了", auto_retract)
 			}
 			break
 		}

@@ -2,6 +2,7 @@ package event
 
 import (
 	"errors"
+	"fmt"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
@@ -456,12 +457,18 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 		//验证程序
 		code, err := Redis.GetString("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+		fmt.Println(code, err)
 		if err != nil {
 
 		} else {
 			if code == message {
-				GroupBanPermenentModel.Api_delete(group_id, user_id)
-				Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+				fmt.Println(GroupBanPermenentModel.Api_delete(group_id, user_id))
+				fmt.Println(Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)))
+				str := ""
+				if groupfunction["auto_welcome"] == 1 {
+					str = "\n" + Calc.Any2String(groupfunction["welcome_word"])
+				}
+				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)
 			}
 		}
 

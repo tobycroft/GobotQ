@@ -49,7 +49,7 @@ const Default_str_login_text = "如果忘记密码或需要修改密码，再次
 
 const Default_error_alert = "系统故障，向机器人小组反馈：\r\n542749156\r\n谢谢！"
 
-const Default_app_download_url = "下载地址还没有准备好，请年后再试"
+const Default_app_download_url = "https://pandorabox.tuuz.cc:444/app/gobotq/app-release.apk"
 
 const Default_ban_url = "本群不允许发送链接，请勿发送链接或者分享"
 

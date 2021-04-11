@@ -78,6 +78,22 @@ func Api_select(self_id, group_id interface{}) []gorose.Data {
 	}
 }
 
+func Api_select_groupBy_groupId(self_id, group_id interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"self_id": self_id,
+	}
+	db.GroupBy("group_id")
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_select_byUid(user_id interface{}, role []interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

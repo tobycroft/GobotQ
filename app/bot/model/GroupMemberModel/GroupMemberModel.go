@@ -45,6 +45,23 @@ func Api_insert_more(gms []GroupMember) bool {
 	}
 }
 
+func Api_update(group_id, user_id interface{}, gm GroupMember) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	db.Data(gm)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_select(self_id, group_id interface{}) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

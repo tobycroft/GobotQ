@@ -72,6 +72,7 @@ func NoticeMsg(em Notice) {
 					api.Sendgroupmsg(self_id, group_id, "恭喜上位"+service.Serv_at(user_id), auto_retract)
 					GroupBlackListModel.Api_delete(group_id, user_id)
 					GroupBanPermenentModel.Api_delete(group_id, user_id)
+					Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 				} else {
 					api.Sendgroupmsg(self_id, group_id, "恭喜上位,但是权限变动失败", auto_retract)
 				}

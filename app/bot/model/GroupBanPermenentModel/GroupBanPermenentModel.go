@@ -9,11 +9,31 @@ import (
 
 const table = "group_ban_permenent"
 
-func Api_insert(group_id, user_id interface{}, next_bind int64) bool {
+func Api_insert(group_id, next_time interface{}, next_bind int64) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"group_id":  group_id,
-		"user_id":   user_id,
+		"next_time": next_time,
+		"next_bind": next_bind,
+	}
+	db.Data(data)
+	_, err := db.Insert()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func Api_update_nextTime(group_id, user_id, next_bind interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	data := map[string]interface{}{
 		"next_bind": next_bind,
 	}
 	db.Data(data)

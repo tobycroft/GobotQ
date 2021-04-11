@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/GroupBanPermenentModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
@@ -21,6 +22,10 @@ func BanController(route *gin.RouterGroup) {
 func ban_group_list(c *gin.Context) {
 	gid := c.PostForm("group_id")
 	data := GroupBanPermenentModel.Api_select_byGroupId(gid)
+	for i, datum := range data {
+		datum["user_info"] = GroupMemberModel.Api_find(datum["group_id"], datum["user_id"])
+		data[i] = datum
+	}
 	RET.Success(c, 0, data, nil)
 }
 

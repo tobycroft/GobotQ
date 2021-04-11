@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupBlackListModel"
@@ -95,14 +96,13 @@ func NoticeMsg(em Notice) {
 
 	case "group_increase":
 		if user_id == self_id {
-
+			Group.App_refreshmember(self_id, group_id)
 		} else {
 			if groupfunction["auto_hold"].(int64) == 1 {
 				ok, _ := api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
 				if ok {
 					//如果禁言成功，就将这个人暂时加入永久小黑屋
 					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
-
 				}
 			} else {
 				//在没有启动自动验证模式的时候，使用正常欢迎流程

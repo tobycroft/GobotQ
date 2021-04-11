@@ -25,6 +25,8 @@ func main() {
 
 	go cron.Cron_auto_send()
 
+	go cron.BanPermenentCheck()
+
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard

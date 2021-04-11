@@ -97,22 +97,25 @@ func NoticeMsg(em Notice) {
 
 		} else {
 			if groupfunction["auto_hold"].(int64) == 1 {
-				GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time)
-				api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
+				ok, _ := api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
+				if ok {
+					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
+				}
 			} else {
-
-			}
-			if groupfunction["auto_welcome"].(int64) == 1 {
-				if groupfunction["welcome_at"].(int64) == 1 {
-					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+				//在没有启动自动验证模式的时候，使用正常欢迎流程
+				if groupfunction["auto_welcome"].(int64) == 1 {
+					if groupfunction["welcome_at"].(int64) == 1 {
+						api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+					} else {
+						api.Sendgroupmsg(self_id, group_id, Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+					}
 				} else {
-					api.Sendgroupmsg(self_id, group_id, Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
-				}
-			} else {
-				if groupfunction["join_alert"].(int64) == 1 {
-					api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
+					if groupfunction["join_alert"].(int64) == 1 {
+						api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
+					}
 				}
 			}
+
 		}
 		//将这个新加群的用户单条加入数据库
 		member, err := api.GetGroupMemberInfo(self_id, group_id, user_id)

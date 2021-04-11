@@ -115,6 +115,7 @@ func NoticeMsg(em Notice) {
 		break
 
 	case "group_decrease":
+		GroupMemberModel.Api_delete_byUid(self_id, group_id, user_id)
 		switch sub_type {
 		case "leave":
 			if groupfunction["exit_to_black"].(int64) == 1 {

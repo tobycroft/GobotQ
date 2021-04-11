@@ -93,6 +93,23 @@ func Api_delete_byGid(self_id, group_id interface{}) bool {
 	}
 }
 
+func Api_delete_byUid(self_id, group_id, user_id interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"user_id":  user_id,
+		"self_id":  self_id,
+		"group_id": group_id,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_delete(self_id interface{}) bool {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

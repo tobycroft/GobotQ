@@ -2,7 +2,6 @@ package event
 
 import (
 	"errors"
-	"fmt"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
@@ -253,7 +252,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	}
 }
 
-const group_function_number = 11
+const group_function_number = 12
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "威望查询", "威望排行", "长度限制", "自动回复"}
 
@@ -262,7 +261,10 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
 	wg.Add(group_function_number)
-
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		new_text[idx] = message
+	}(0, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		ok := service.Serv_ban_group(raw_message)
@@ -457,25 +459,27 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 		//验证程序
 		code, err := Redis.GetString("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
-		fmt.Println(code, err)
 		if err != nil {
 
 		} else {
 			if code == message {
-				fmt.Println(GroupBanPermenentModel.Api_delete(group_id, user_id))
-				fmt.Println(Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)))
+				GroupBanPermenentModel.Api_delete(group_id, user_id)
+				Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 				str := ""
 				if groupfunction["auto_welcome"] == 1 {
 					str = "\n" + Calc.Any2String(groupfunction["welcome_word"])
 				}
+				api.Retract_chan_instant <- ret
 				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)
 			}
 		}
 
 		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 			api.Retract_chan_instant <- ret
+			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字", true)
 		} else if Redis.CheckExists("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)) {
 			api.Retract_chan_instant <- ret
+			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字", true)
 		}
 
 		break

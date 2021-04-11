@@ -58,5 +58,10 @@ func GetGroupInfo(self_id, group_id interface{}) (GroupInfo, error) {
 	if err != nil {
 		return GroupInfo{}, err
 	}
-	return ret1.Data, nil
+	if ret1.Retcode == 0 {
+		return ret1.Data, nil
+	} else {
+		return GroupInfo{}, errors.New(ret1.Status)
+	}
+
 }

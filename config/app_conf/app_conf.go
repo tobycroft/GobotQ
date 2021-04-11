@@ -20,3 +20,6 @@ const TestMode = false
 const Debug = "65535"
 
 const Qq = 710209520
+
+//设定永久小黑屋禁言时间
+const Auto_ban_time = 2419200

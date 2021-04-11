@@ -10,6 +10,7 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/service"
+	"main.go/config/app_conf"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Jsong"
 	"time"
@@ -96,7 +97,8 @@ func NoticeMsg(em Notice) {
 
 		} else {
 			if groupfunction["auto_hold"].(int64) == 1 {
-				GroupBanPermenentModel.Api_insert(group_id, user_id)
+				GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time)
+				api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
 			} else {
 
 			}
@@ -110,6 +112,26 @@ func NoticeMsg(em Notice) {
 				if groupfunction["join_alert"].(int64) == 1 {
 					api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
 				}
+			}
+		}
+		//将这个新加群的用户单条加入数据库
+		member, err := api.GetGroupMemberInfo(self_id, group_id, user_id)
+		if err != nil {
+
+		} else {
+			var mb GroupMemberModel.GroupMember
+			mb.SelfId = self_id
+			mb.UserID = user_id
+			mb.GroupID = group_id
+			mb.Card = member.Card
+			mb.Title = member.Title
+			mb.Level = member.Level
+			mb.JoinTime = member.JoinTime
+			mb.LastSentTime = member.LastSentTime
+			mb.Nickname = member.Nickname
+			mb.Role = member.Role
+			if !GroupMemberModel.Api_insert(mb) {
+				api.Sendgroupmsg(self_id, group_id, "群成员数据增加失败", auto_retract)
 			}
 		}
 		break

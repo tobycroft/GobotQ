@@ -58,7 +58,6 @@ func NoticeMsg(em Notice) {
 	switch notice_type {
 	//取消管理
 	case "group_admin":
-		fmt.Println(em)
 		switch sub_type {
 		case "set":
 			if user_id == self_id {
@@ -94,6 +93,10 @@ func NoticeMsg(em Notice) {
 					api.Sendgroupmsg(self_id, group_id, "管理员权限变动失败", auto_retract)
 				}
 			}
+			break
+
+		default:
+			fmt.Println(em)
 			break
 		}
 		break

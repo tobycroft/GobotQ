@@ -15,4 +15,5 @@ func Serv_ban_share(text string) bool {
 		}
 		return true
 	}
+	return false
 }

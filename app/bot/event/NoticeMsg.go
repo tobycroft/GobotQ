@@ -14,6 +14,7 @@ import (
 	"main.go/config/app_conf"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Jsong"
+	"main.go/tuuz/Redis"
 	"time"
 )
 
@@ -99,11 +100,24 @@ func NoticeMsg(em Notice) {
 			Group.App_refreshmember(self_id, group_id)
 		} else {
 			if groupfunction["auto_hold"].(int64) == 1 {
-				ok, _ := api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
-				if ok {
-					//如果禁言成功，就将这个人暂时加入永久小黑屋
-					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
-				}
+				//如果禁言成功，就将这个人暂时加入永久小黑屋
+				GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
+				num := Calc.Rand(1000, 9999)
+				Redis.SetRaw("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_second+10)
+				Redis.SetRaw("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), true, 3600)
+				at := service.Serv_at(user_id)
+				api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内回复验证码：\n\n"+Calc.Any2String(num), true)
+				go func(self_id, group_id, user_id interface{}) {
+					time.Sleep(120 * time.Second)
+					ok, err := Redis.GetBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+					if err != nil {
+					} else {
+						if ok {
+							api.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
+							api.SetGroupBan(self_id, group_id, user_id, float64(time.Now().Unix()+app_conf.Auto_ban_time))
+						}
+					}
+				}(self_id, group_id, user_id)
 			} else {
 				//在没有启动自动验证模式的时候，使用正常欢迎流程
 				if groupfunction["auto_welcome"].(int64) == 1 {

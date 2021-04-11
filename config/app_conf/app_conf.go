@@ -6,8 +6,7 @@ const Http_Api = "http://10.0.0.150:8000"
 
 //撤回秒数
 
-const Retract_time_second = 116
-
+const Retract_time_second = 118
 const Db_default_load_limit = 20
 
 const Db_limit = 40

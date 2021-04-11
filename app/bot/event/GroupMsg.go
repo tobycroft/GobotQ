@@ -6,6 +6,7 @@ import (
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBanModel"
+	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -86,9 +87,6 @@ func GroupMsg(gm GM) {
 			return
 		}
 
-		//if Group.BotPower(group_id, self_id) != "admin" {
-		//	return
-		//}
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 
@@ -454,6 +452,23 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
 				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
 			}
+		}
+
+		//验证程序
+		code, err := Redis.GetString("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+		if err != nil {
+
+		} else {
+			if code == message {
+				GroupBanPermenentModel.Api_delete(group_id, user_id)
+				Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+			}
+		}
+
+		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
+			api.Retract_chan_instant <- ret
+		} else if Redis.CheckExists("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)) {
+			api.Retract_chan_instant <- ret
 		}
 
 		break

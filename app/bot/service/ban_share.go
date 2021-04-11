@@ -9,5 +9,10 @@ func Serv_ban_share(text string) bool {
 	if c1 {
 		return c1
 	}
-	return strings.Contains(text, "<?xml")
+	if strings.Contains(text, "<?xml") {
+		if strings.Contains(text, "serviceID=\"104\" templateID=\"1\"") {
+			return false
+		}
+		return true
+	}
 }

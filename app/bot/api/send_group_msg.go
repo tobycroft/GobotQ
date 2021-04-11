@@ -40,7 +40,7 @@ func Send_group() {
 		if Redis.CheckExists("SendCheck:" + gss.Message) {
 			continue
 		}
-		Redis.SetRaw("SendCheck:"+gss.Message, true, 10)
+		Redis.SetRaw("SendCheck:"+gss.Message, true, 110)
 		gmr, err := sendgroupmsg(gss)
 		if err != nil {
 

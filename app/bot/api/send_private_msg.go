@@ -52,7 +52,7 @@ func Send_private() {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			continue
 		}
-		Redis.SetRaw("SendCheck:"+pss.Message, true, 10)
+		Redis.SetRaw("SendCheck:"+pss.Message, true, 110)
 		pmr, err := sendprivatemsg(pss)
 		if err != nil {
 

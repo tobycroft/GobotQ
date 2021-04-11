@@ -43,6 +43,10 @@ func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password,
 
 func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
+	db.Where("end_time>UNIX_TIMESTAMP(CURRENT_TIMESTAMP)")
+	db.Where("active", "=", 1)
+	db.Where("url IS NOT NULL")
+	db.Where("url != ''")
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

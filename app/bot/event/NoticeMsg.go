@@ -182,6 +182,7 @@ func NoticeMsg(em Notice) {
 			break
 
 		case "kick_me":
+			GroupMemberModel.Api_delete_byGid(self_id, group_id)
 			break
 
 		default:

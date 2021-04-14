@@ -18,9 +18,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	//if groupfunction["sign_send_private"].(int64) == 1 {
 	//	private_mode = true
 	//}
-	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
-		auto_retract = true
 		var ret api.Struct_Retract
 		ret.MessageId = message_id
 		ret.Self_id = self_id
@@ -28,7 +26,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	}
 	if len(sign) > 0 {
 		at := service.Serv_at(user_id)
-		api.Sendgroupmsg(self_id, group_id, "你今天已经签到过了"+at, auto_retract)
+		AutoMessage(self_id, group_id, user_id, "你今天已经签到过了"+at, groupfunction)
 	} else {
 		rank := GroupSignModel.Api_count(group_id)
 		order := rank + 1
@@ -66,7 +64,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 		} else {
 			db.Commit()
 			at := service.Serv_at(user_id)
-			api.Sendgroupmsg(self_id, group_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), auto_retract)
+			AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+",现有威望："+Calc.Any2String(group_model["balance"]), groupfunction)
 		}
 	}
 }

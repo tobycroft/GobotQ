@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz"
@@ -33,6 +34,7 @@ func SetGroupLeave(self_id, group_id interface{}) (bool, error) {
 	if dls.Retcode == 0 {
 		return true, nil
 	} else {
+		fmt.Println(dls)
 		Log.Crrs(errors.New(dls.Wording), tuuz.FUNCTION_ALL())
 		return false, errors.New(dls.Wording)
 	}

@@ -4,7 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/BotModel"
 	"main.go/common/BaseController"
+	"main.go/tuuz/Calc"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/Net"
 	"main.go/tuuz/RET"
@@ -19,7 +21,12 @@ func ServerController(route *gin.RouterGroup) {
 }
 
 func server_add(c *gin.Context) {
+	uid := c.PostForm("uid")
 	address, ok := Input.Post("address", c, false)
+	if !ok {
+		return
+	}
+	name, ok := Input.Post("name", c, false)
 	if !ok {
 		return
 	}
@@ -60,6 +67,7 @@ func server_add(c *gin.Context) {
 			return
 		} else {
 			//todo:完成后执行动作
+			BotModel.Api_insert(qq, name, "remote", uid, secret, password, 1672502399, "http://"+address+Calc.Any2String(":port"))
 		}
 	}
 }

@@ -58,6 +58,8 @@ func server_add(c *gin.Context) {
 		if ret_struct.Retcode != 0 {
 			RET.Fail(c, 200, ret_struct.Wording, "您的机器人没有准备好，请先登录并按照提示操作后再使用APP绑定")
 			return
+		} else {
+			RET.Success(c, 0, nil, nil)
 		}
 	}
 }

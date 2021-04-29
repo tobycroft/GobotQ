@@ -10,6 +10,7 @@ import (
 	"main.go/tuuz/Input"
 	"main.go/tuuz/Net"
 	"main.go/tuuz/RET"
+	"strings"
 )
 
 func ServerController(route *gin.RouterGroup) {
@@ -25,6 +26,9 @@ func server_add(c *gin.Context) {
 	address, ok := Input.Post("address", c, false)
 	if !ok {
 		return
+	}
+	if strings.Contains(address, "http") {
+		RET.Fail(c, 400, nil, "请直接填写您服务器的IP即可，无需在前面添加http，请保持")
 	}
 	name, ok := Input.Post("name", c, false)
 	if !ok {

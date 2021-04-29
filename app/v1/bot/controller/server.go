@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	jsoniter "github.com/json-iterator/go"
+	"main.go/app/bot/api"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/Net"
@@ -50,7 +52,13 @@ func server_add(c *gin.Context) {
 		RET.Fail(c, 300, nil, "无法访问远程服务器，请确认您的机器人接口已经对外开放，请稍后再试")
 		return
 	} else {
-
+		var ret_struct api.DefaultRetStruct
+		json := jsoniter.ConfigCompatibleWithStandardLibrary
+		json.UnmarshalFromString(ret, &ret_struct)
+		if ret_struct.Retcode != 0 {
+			RET.Fail(c, 200, ret_struct.Wording, "您的机器人没有准备好，请先登录并按照提示操作后再使用APP绑定")
+			return
+		}
 	}
 }
 

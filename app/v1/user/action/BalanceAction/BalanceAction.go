@@ -20,12 +20,6 @@ func App_single_balance(uid interface{}, order_id interface{}, amount float64, r
 }
 
 func (self *Interface) App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
-	self_create := false
-	if self.Db == nil {
-		self.Db = tuuz.Db()
-		self.Db.Begin()
-		self_create = true
-	}
 	userbalance, err := self.App_check_balance(uid)
 	if err != nil {
 		Log.Crrs(err, tuuz.FUNCTION_ALL())
@@ -36,17 +30,13 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 	}
 	after_userbalance, _ := Calc.Bc_add(userbalance, amount).Float64()
 	if after_userbalance < 0 {
-		if self_create {
-			self.Db.Rollback()
-		}
+		self.Db.Rollback()
 		return errors.New("余额还差" + Calc.Float642String(after_userbalance))
 	}
 	var ub UserBalanceModel.Interface
 	ub.Db = self.Db
 	if !ub.Api_inc_balance(uid, amount) {
-		if self_create {
-			self.Db.Rollback()
-		}
+		self.Db.Rollback()
 		return errors.New("余额变动出现故障")
 	}
 	var ubr UserBalanceRecordModel.Interface
@@ -55,22 +45,16 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 	if len(one_balancerecord) > 0 {
 		after_balancerecord, _ := Calc.Bc_add(one_balancerecord["after_balance"], amount).Float64()
 		if after_userbalance < 0 {
-			if self_create {
-				self.Db.Rollback()
-			}
+			self.Db.Rollback()
 			return errors.New("余额不足,仍需" + Calc.Float642String(after_balancerecord))
 		}
 		if !ubr.Api_insert(uid, one_balancerecord["after_balance"], amount, after_balancerecord, remark) {
-			if self_create {
-				self.Db.Rollback()
-			}
+			self.Db.Rollback()
 			return errors.New("UserBalanceRecordModel插入失败")
 		}
 	} else {
 		if !ubr.Api_insert(uid, 0, amount, amount, remark) {
-			if self_create {
-				self.Db.Rollback()
-			}
+			self.Db.Rollback()
 			return errors.New("UserBalanceRecordModel插入失败")
 		}
 	}
@@ -78,30 +62,18 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 }
 
 func (self *Interface) App_check_balance(uid interface{}) (float64, error) {
-	self_create := false
-	if self.Db == nil {
-		self.Db = tuuz.Db()
-		self.Db.Begin()
-		self_create = true
-	}
 	var ub UserBalanceModel.Interface
 	ub.Db = self.Db
 	userbalance := ub.Api_find(uid)
 	if len(userbalance) > 0 {
-		if self_create {
-			self.Db.Commit()
-		}
+		self.Db.Commit()
 		return userbalance["balance"].(float64), nil
 	} else {
 		if ub.Api_insert(uid, 0) {
-			if self_create {
-				self.Db.Commit()
-			}
+			self.Db.Commit()
 			return 0, nil
 		} else {
-			if self_create {
-				self.Db.Rollback()
-			}
+			self.Db.Rollback()
 			return 0, errors.New("UB初始化失败")
 		}
 	}

@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
-	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Calc"
@@ -30,23 +29,11 @@ func server_add(c *gin.Context) {
 	if strings.Contains(address, "http") {
 		RET.Fail(c, 400, nil, "请直接填写您服务器的IP即可，无需在前面添加http，请保持")
 	}
-	name, ok := Input.Post("name", c, false)
-	if !ok {
-		return
-	}
 	port, ok := Input.PostInt64("port", c)
 	if !ok {
 		return
 	}
 	secret, ok := Input.Post("secret", c, false)
-	if !ok {
-		return
-	}
-	qq, ok := Input.PostInt64("qq", c)
-	if !ok {
-		return
-	}
-	password, ok := Input.Post("password", c, false)
 	if !ok {
 		return
 	}
@@ -64,17 +51,25 @@ func server_add(c *gin.Context) {
 		RET.Fail(c, 300, nil, "无法访问远程服务器，请确认您的机器人接口已经对外开放，请稍后再试")
 		return
 	} else {
-		var ret_struct api.DefaultRetStruct
-		json := jsoniter.ConfigCompatibleWithStandardLibrary
-		json.UnmarshalFromString(ret, &ret_struct)
+		var ret_struct get_login_info
+		jsoniter.UnmarshalFromString(ret, &ret_struct)
 		if ret_struct.Retcode != 0 {
-			RET.Fail(c, 200, ret_struct.Wording, "您的机器人没有准备好，请先登录并按照提示操作后再使用APP绑定")
+			RET.Fail(c, 202, nil, "您的机器人没有准备好，请先登录并按照提示操作后再使用APP绑定")
 			return
 		} else {
 			//todo:完成后执行动作
-			BotModel.Api_insert(qq, name, "remote", uid, secret, password, 1672502399, "http://"+address+Calc.Any2String(":port"))
+			BotModel.Api_insert(ret_struct.Data.UserID, ret_struct.Data.Nickname, "remote", uid, secret, "", 1672502399, "http://"+address+Calc.Any2String(":port"))
 		}
 	}
+}
+
+type get_login_info struct {
+	Data struct {
+		Nickname string `json:"nickname"`
+		UserID   int    `json:"user_id"`
+	} `json:"data"`
+	Retcode int    `json:"retcode"`
+	Status  string `json:"status"`
 }
 
 func update(c *gin.Context) {

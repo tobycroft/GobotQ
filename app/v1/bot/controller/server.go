@@ -58,10 +58,16 @@ func server_add(c *gin.Context) {
 			return
 		} else {
 			//todo:完成后执行动作
-			if BotModel.Api_insert(ret_struct.Data.UserID, ret_struct.Data.Nickname, "remote", uid, secret, "", 1672502399, "http://"+address+Calc.Any2String(":port")) {
+			if len(BotModel.Api_find(ret_struct)) > 0 {
+				RET.Fail(c, 407, nil, "机器人已经存在无法再次添加")
+				return
+			}
+
+			if BotModel.Api_insert(ret_struct.Data.UserID, ret_struct.Data.Nickname, "remote", uid, secret, "", 1672502399, "http://"+address+":"+Calc.Any2String(port)) {
 				RET.Success(c, 0, "请务必保持服务器在线，对外端口开放正确，如果您的服务器经常掉线，您的账号将会被屏蔽", "绑定成功")
 			} else {
 				//todo:
+				RET.Fail(c, 500, nil, "无法写入机器人数据库")
 			}
 		}
 	}

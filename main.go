@@ -9,6 +9,7 @@ import (
 
 func main() {
 
+	go cron.BotInfoCron()
 	go cron.BaseCron()
 	go cron.Refresh_friend_list()
 

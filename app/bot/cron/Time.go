@@ -1,11 +1,14 @@
 package cron
 
 import (
+	"errors"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupListModel"
+	"main.go/tuuz"
+	"main.go/tuuz/Log"
 	"time"
 )
 
@@ -40,5 +43,26 @@ func BaseCron() {
 			}
 		}
 		time.Sleep(3600 * time.Second)
+	}
+}
+
+func BotInfoCron() {
+	tick := time.NewTicker(30 * time.Minute)
+	select {
+	case <-tick.C:
+		bots := BotModel.Api_select()
+		for _, bot := range bots {
+			bot_info, err := api.GetLoginInfo(bot["self_id"])
+			if err != nil {
+
+			} else {
+				self_id := bot_info.UserID
+				name := bot_info.Nickname
+				if !BotModel.Api_update_cname(self_id, name) {
+					Log.Crrs(errors.New("机器人用户名无法更新"), tuuz.FUNCTION_ALL())
+				}
+			}
+		}
+		break
 	}
 }

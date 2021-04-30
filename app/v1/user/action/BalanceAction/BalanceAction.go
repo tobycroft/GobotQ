@@ -21,6 +21,7 @@ func App_single_balance(uid interface{}, order_id interface{}, amount float64, r
 }
 
 func (self *Interface) App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
+	self.Db.Begin()
 	userbalance, err := self.App_check_balance(uid)
 	if err != nil {
 		Log.Crrs(err, tuuz.FUNCTION_ALL())
@@ -59,11 +60,13 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 			return errors.New("UserBalanceRecordModel插入失败")
 		}
 	}
+	self.Db.Commit()
 	return nil
 }
 
 func (self *Interface) App_check_balance(uid interface{}) (float64, error) {
 	var ub UserBalanceModel.Interface
+	self.Db.Begin()
 	ub.Db = self.Db
 	userbalance := ub.Api_find(uid)
 	if len(userbalance) > 0 {

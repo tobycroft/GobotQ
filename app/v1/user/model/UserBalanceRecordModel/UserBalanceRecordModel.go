@@ -19,7 +19,7 @@ func Api_insert(qq, before_balance, amount, after_balance, remark interface{}) b
 }
 
 func (self *Interface) Api_insert(qq, before_balance, amount, after_balance, remark interface{}) bool {
-	db := tuuz.Db().Table(table)
+	db := self.Db.Table(table)
 	data := map[string]interface{}{
 		"qq":             qq,
 		"before_balance": before_balance,
@@ -60,7 +60,7 @@ func Api_find(qq interface{}) gorose.Data {
 }
 
 func (self *Interface) Api_find(qq interface{}) gorose.Data {
-	db := tuuz.Db().Table(table)
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"qq": qq,
 	}

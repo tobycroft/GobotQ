@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"main.go/app/v1/user/action/BalanceAction"
+	"main.go/tuuz"
 )
 
 func main() {
@@ -32,7 +33,12 @@ func main() {
 	////gin.DefaultWriter = ioutil.Discard
 	//route.OnRoute(mainroute)
 	//mainroute.Run(":81")
-
-	err := BalanceAction.App_single_balance(0, "test", -1, "test")
+	var bl BalanceAction.Interface
+	bl.Db = tuuz.Db()
+	bl.Db.Begin()
+	err := bl.App_single_balance(0, "test1", 1, "test1")
 	fmt.Println(err)
+	//err2 := bl.App_single_balance(1, "test2", -1, "test2")
+	//fmt.Println(err2)
+	bl.Db.Rollback()
 }

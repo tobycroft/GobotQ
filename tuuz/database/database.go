@@ -40,8 +40,8 @@ func dsn_local() string {
 		dbuser := value["dbuser"]
 		dbpass := value["dbpass"]
 		dbhost := value["dbhost"]
+		dbport := value["dbport"]
 		conntype := "tcp"
-		dbport := "3306"
 		charset := "utf8mb4"
 		return dbuser + ":" + dbpass + "@" + conntype + "(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=" + charset + "&parseTime=true"
 	}

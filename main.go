@@ -1,5 +1,7 @@
 package main
 
+import "main.go/app/v1/user/action/BalanceAction"
+
 func main() {
 
 	//go cron.BaseCron()
@@ -28,4 +30,5 @@ func main() {
 	//route.OnRoute(mainroute)
 	//mainroute.Run(":81")
 
+	BalanceAction.App_single_balance(0, "test", 0, "test")
 }

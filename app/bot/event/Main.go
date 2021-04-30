@@ -8,27 +8,26 @@ import (
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
-	"main.go/tuuz/Jsong"
 	"main.go/tuuz/Log"
 )
 
+type EventStruct struct {
+	MessageType string `json:"message_type"`
+	PostType    string `json:"post_type"`
+}
+
 func EventRouter(json string) {
 	LogsModel.Api_insert(json, "main")
-	data, err := Jsong.JObject(json)
+	var data EventStruct
+	err := jsoniter.UnmarshalFromString(json, &data)
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {
-		post_type := data["post_type"]
-		if post_type == nil {
-			fmt.Println("typenot on", data)
-			return
-		}
 		jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 
-		switch post_type {
-
+		switch data.PostType {
 		case "message":
-			message_type := data["message_type"].(string)
+			message_type := data.MessageType
 			switch message_type {
 			case "private":
 				var pm PM

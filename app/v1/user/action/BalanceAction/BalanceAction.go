@@ -16,6 +16,7 @@ type Interface struct {
 
 func App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
 	var self Interface
+	self.Db = tuuz.Db()
 	return self.App_single_balance(uid, order_id, amount, remark)
 }
 

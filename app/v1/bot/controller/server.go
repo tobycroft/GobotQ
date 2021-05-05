@@ -17,6 +17,7 @@ func ServerController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
 	route.Any("add", server_add)
+	route.Any("update", server_update)
 
 }
 
@@ -81,7 +82,7 @@ type get_login_info struct {
 	Status  string `json:"status"`
 }
 
-func update(c *gin.Context) {
+func server_update(c *gin.Context) {
 	uid := c.PostForm("uid")
 	self_id, ok := Input.PostInt64("self_id", c)
 	if !ok {

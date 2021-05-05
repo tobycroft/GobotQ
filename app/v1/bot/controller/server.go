@@ -29,6 +29,7 @@ func server_add(c *gin.Context) {
 	}
 	if strings.Contains(address, "http") {
 		RET.Fail(c, 400, nil, "请直接填写您服务器的IP即可，无需在前面添加http，请保持")
+		return
 	}
 	port, ok := Input.PostInt64("port", c)
 	if !ok {
@@ -94,6 +95,7 @@ func server_update(c *gin.Context) {
 	}
 	if strings.Contains(address, "http") {
 		RET.Fail(c, 400, nil, "请直接填写您服务器的IP即可，无需在前面添加http，请保持")
+		return
 	}
 	port, ok := Input.PostInt64("port", c)
 	if !ok {

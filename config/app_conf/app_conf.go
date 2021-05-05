@@ -14,7 +14,7 @@ const Db_limit = 40
 //每日签到威望
 const Group_Sign_incr = 10
 
-const TestMode = false
+const TestMode = true
 
 const Debug = "65535"
 

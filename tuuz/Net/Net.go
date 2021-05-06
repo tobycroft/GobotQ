@@ -3,6 +3,7 @@ package Net
 import (
 	"crypto/tls"
 	"fmt"
+	"main.go/config/app_conf"
 	"main.go/tuuz/Array"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
@@ -66,6 +67,11 @@ func PostRaw(url string, postData interface{}) (string, error) {
 
 func Post(url string, queries map[string]interface{}, postData map[string]interface{}, headers map[string]string, cookies map[string]string) (string, error) {
 	// 链式操作
+	if headers == nil {
+		headers = map[string]string{
+			"Authorization": app_conf.Authorization,
+		}
+	}
 	req := Request()
 	req.SetHeaders(headers)
 	req.SetCookies(cookies)

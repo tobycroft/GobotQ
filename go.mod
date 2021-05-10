@@ -8,12 +8,12 @@ require (
 	github.com/bitly/go-simplejson v0.5.1-0.20200416141419-39a59b1b2866
 	github.com/gin-contrib/cors v1.3.2-0.20200402113712-0223cb87b2c4
 	github.com/gin-gonic/gin v1.7.1
-	github.com/go-playground/validator/v10 v10.5.0 // indirect
+	github.com/go-playground/validator/v10 v10.6.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gohouse/converter v0.0.3 // indirect
 	github.com/gohouse/golib v0.0.0-20201013092821-ca87ab19b554 // indirect
 	github.com/gohouse/gorose v1.0.5
-	github.com/gohouse/gorose/v2 v2.1.10
+	github.com/gohouse/gorose/v2 v2.1.11-0.20210408035829-ace634012b8c
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gomodule/redigo v1.8.4
@@ -24,10 +24,12 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/shopspring/decimal v1.2.0
 	github.com/ugorji/go v1.2.5 // indirect
-	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
+	golang.org/x/crypto v0.0.0-20210506145944-38f3c27a63bf // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
-	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 // indirect
+	golang.org/x/sys v0.0.0-20210510120138-977fb7262007 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace github.com/tobycroft/gorose/v2 => github.com/tobycroft/gorose/v2 v2.2.0

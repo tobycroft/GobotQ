@@ -32,4 +32,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/tobycroft/gorose/v2 => github.com/tobycroft/gorose/v2 v2.2.0
+replace github.com/gohouse/gorose/v2 => github.com/tobycroft/gorose/v2 v2.2.1

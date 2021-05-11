@@ -122,7 +122,7 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
+			api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), true)
 			break
 		}
 	}

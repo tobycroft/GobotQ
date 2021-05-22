@@ -54,10 +54,6 @@ func PrivateMsg(pm PM) {
 	message := pm.Message
 	rawMessage := pm.RawMessage
 
-	//security
-	BotModel.Api_find_byBot_WithoutPassword()
-	//end-security
-
 	if Redis.CheckExists("PrivateMsg:" + user_idString) {
 		return
 	}

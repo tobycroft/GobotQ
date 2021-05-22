@@ -9,6 +9,9 @@ import (
 func OnRoute(router *gin.Engine) {
 	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
+		ip, b := context.RemoteIP()
+		ipaddress := ip.String()
+
 		event.EventRouter(string(data))
 		context.String(200, "ok")
 	})

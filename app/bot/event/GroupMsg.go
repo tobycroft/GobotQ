@@ -60,7 +60,7 @@ type _Sender struct {
 
 var GroupMsgChan = make(chan GM, 99)
 
-func GroupMsg(gm GM) {
+func GroupMsg(gm GM, remoteip string) {
 	GroupMsgChan <- gm
 	is_self := false
 

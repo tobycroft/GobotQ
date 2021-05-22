@@ -16,7 +16,7 @@ type EventStruct struct {
 	PostType    string `json:"post_type"`
 }
 
-func EventRouter(json string) {
+func EventRouter(json string, remoteip string) {
 	go LogsModel.Api_insert(json, "main")
 	var data EventStruct
 	err := jsoniter.UnmarshalFromString(json, &data)
@@ -35,7 +35,7 @@ func EventRouter(json string) {
 				if err != nil {
 					fmt.Println(err)
 				} else {
-					PrivateMsg(pm)
+					PrivateMsg(pm, remoteip)
 				}
 				break
 
@@ -45,7 +45,7 @@ func EventRouter(json string) {
 				if err != nil {
 					fmt.Println(err)
 				} else {
-					GroupMsg(gm)
+					GroupMsg(gm, remoteip)
 				}
 				break
 
@@ -62,7 +62,7 @@ func EventRouter(json string) {
 			if err != nil {
 				fmt.Println(err)
 			} else {
-				NoticeMsg(notice)
+				NoticeMsg(notice, remoteip)
 			}
 			break
 
@@ -72,7 +72,7 @@ func EventRouter(json string) {
 			if err != nil {
 				fmt.Println(err)
 			} else {
-				RequestMsg(req)
+				RequestMsg(req, remoteip)
 			}
 			break
 

@@ -72,7 +72,7 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 		return
 	}
 	if strings.Contains(botinfo["url"].(string), remoteip) {
-
+		return
 	}
 	if len(botinfo) < 1 {
 		Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(selfId))

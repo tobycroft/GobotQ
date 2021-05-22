@@ -20,11 +20,13 @@ type
 date
 */
 
-func Api_insert(self_id, log interface{}) bool {
+func Api_insert(self_id, log, data, Type interface{}) bool {
 	db := tuuz.Db().Table(table)
 	db.Data(map[string]interface{}{
 		"log":     log,
 		"self_id": self_id,
+		"data":    data,
+		"type":    Type,
 	})
 	_, err := db.Insert()
 	if err != nil {

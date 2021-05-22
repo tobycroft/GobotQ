@@ -16,7 +16,7 @@ func EditController(route *gin.RouterGroup) {
 	route.Any("clear_owner", edit_clear_owner)
 	route.Any("secret", edit_change_secret)
 	route.Any("password", edit_change_password)
-	route.Any("password", edit_change_password)
+	route.Any("url", edit_change_url)
 }
 
 func edit_change_img(c *gin.Context) {

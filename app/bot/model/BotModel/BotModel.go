@@ -216,5 +216,13 @@ func Api_update_cname(self_id, cname interface{}) bool {
 }
 func Api_find_url(self_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
+	db.Fields("url")
 	db.Where("self_id", self_id)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
 }

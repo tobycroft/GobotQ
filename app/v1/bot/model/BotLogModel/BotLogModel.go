@@ -15,6 +15,7 @@ collection:
 
 self_id
 log
+data
 type
 date
 */

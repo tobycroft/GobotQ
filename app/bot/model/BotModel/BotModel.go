@@ -214,3 +214,7 @@ func Api_update_cname(self_id, cname interface{}) bool {
 		return true
 	}
 }
+func Api_find_url(self_id interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	db.Where("self_id", self_id)
+}

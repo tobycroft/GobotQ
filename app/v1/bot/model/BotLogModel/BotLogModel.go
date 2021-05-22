@@ -44,6 +44,8 @@ func Api_select(self_id interface{}, page, limit int) []gorose.Data {
 		"self_id": self_id,
 	}
 	db.Where(where)
+	db.Limit(limit)
+	db.Page(page)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

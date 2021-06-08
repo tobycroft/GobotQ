@@ -136,6 +136,11 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 
 func privateHandle_acfur(selfId, user_id, group_id int64, message, origin_text string) {
 	switch message {
+
+	case "app", "下载":
+		api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_app_download_url, true)
+		break
+
 	case "help":
 		botinfo := BotModel.Api_find(selfId)
 		if len(botinfo) > 0 {

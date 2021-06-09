@@ -22,7 +22,7 @@ func SetGroupBan(self_id, group_id, user_id interface{}, duration float64) (bool
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
-		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
+		Log.Crrs(errors.New("bot:"+Calc.Any2String(self_id)), tuuz.FUNCTION_ALL())
 		return false, errors.New("botinfo_notfound")
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/set_group_ban", nil, post, nil, nil)

@@ -2,9 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/v1/bot/model/BotLogModel"
 	"main.go/common/BaseController"
-	"main.go/tuuz/Input"
 )
 
 func LogController(route *gin.RouterGroup) {
@@ -16,16 +14,16 @@ func LogController(route *gin.RouterGroup) {
 }
 
 func log_list_common(c *gin.Context) {
-	self_id := c.PostForm("uid")
-	page, ok := Input.PostInt("page", c)
-	if !ok {
-		return
-	}
-	limit, ok := Input.PostInt("limit", c)
-	if !ok {
-		return
-	}
-	datas := BotLogModel.Api_select(self_id, page, limit)
+	//self_id := c.PostForm("uid")
+	//page, ok := Input.PostInt("page", c)
+	//if !ok {
+	//	return
+	//}
+	//limit, ok := Input.PostInt("limit", c)
+	//if !ok {
+	//	return
+	//}
+	//datas := BotLogModel.Api_select(self_id, page, limit)
 
 }
 

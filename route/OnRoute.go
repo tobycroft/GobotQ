@@ -10,7 +10,7 @@ func OnRoute(router *gin.Engine) {
 	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
 		//fmt.Println(string(data))
-		event.EventRouter(string(data))
+		event.EventRouter(string(data), context.ClientIP())
 		context.String(200, "ok")
 	})
 	version1 := router.Group("/v1")

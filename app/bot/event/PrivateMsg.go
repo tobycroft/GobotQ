@@ -2,6 +2,7 @@ package event
 
 import (
 	"errors"
+	"fmt"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotDefaultReplyModel"
@@ -59,6 +60,7 @@ func PrivateMsg(pm PM, remoteip string) {
 	}
 
 	Redis.SetRaw("PrivateMsg:"+user_idString, Calc.Md5(message), 1)
+
 	PrivateHandle(selfId, user_id, group_id, message, rawMessage, remoteip)
 }
 
@@ -71,9 +73,11 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 	if botinfo["url"] == nil {
 		return
 	}
-	if strings.Contains(botinfo["url"].(string), remoteip) {
+
+	if strings.Contains(remoteip, botinfo["url"].(string)) {
 		return
 	}
+
 	if len(botinfo) < 1 {
 		Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(selfId))
 		return
@@ -83,6 +87,7 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 		return
 	}
 	if active {
+		fmt.Println("privateHandle_acfur")
 		privateHandle_acfur(selfId, user_id, group_id, new_text, message)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原

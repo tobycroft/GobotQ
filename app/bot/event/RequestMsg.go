@@ -23,7 +23,7 @@ type Request struct {
 	UserID      int    `json:"user_id"`
 }
 
-func RequestMsg(em Request) {
+func RequestMsg(em Request, remoteip string) {
 
 	self_id := em.SelfID
 	user_id := em.UserID

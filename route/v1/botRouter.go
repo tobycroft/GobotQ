@@ -20,4 +20,5 @@ func BotRouter(route *gin.RouterGroup) {
 	controller.GroupController(route.Group("group"))
 	controller.FriendController(route.Group("friend"))
 	controller.ServerController(route.Group("server"))
+	controller.LogController(route.Group("log"))
 }

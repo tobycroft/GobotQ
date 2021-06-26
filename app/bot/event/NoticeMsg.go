@@ -30,7 +30,7 @@ type Notice struct {
 	UserID     int64  `json:"user_id"`
 }
 
-func NoticeMsg(em Notice) {
+func NoticeMsg(em Notice, remoteip string) {
 	self_id := em.SelfID
 	user_id := em.UserID
 	group_id := em.GroupID

@@ -44,7 +44,7 @@ type _PrivateSender struct {
 
 var PrivateMsgChan = make(chan PM, 99)
 
-func PrivateMsg(pm PM) {
+func PrivateMsg(pm PM, remoteip string) {
 
 	PrivateMsgChan <- pm
 	selfId := pm.SelfID
@@ -59,15 +59,21 @@ func PrivateMsg(pm PM) {
 	}
 
 	Redis.SetRaw("PrivateMsg:"+user_idString, Calc.Md5(message), 1)
-	PrivateHandle(selfId, user_id, group_id, message, rawMessage)
+	PrivateHandle(selfId, user_id, group_id, message, rawMessage, remoteip)
 }
 
-func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage string) {
+func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remoteip string) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(message)
 	new_text := reg.ReplaceAllString(message, "")
 
 	botinfo := BotModel.Api_find(selfId)
+	if botinfo["url"] == nil {
+		return
+	}
+	if strings.Contains(botinfo["url"].(string), remoteip) {
+		return
+	}
 	if len(botinfo) < 1 {
 		Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(selfId))
 		return

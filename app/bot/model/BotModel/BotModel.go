@@ -214,3 +214,32 @@ func Api_update_cname(self_id, cname interface{}) bool {
 		return true
 	}
 }
+
+func Api_find_url(self_id interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	db.Fields("url")
+	db.Where("self_id", self_id)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_update_url(self_id, url interface{}) bool {
+	db := tuuz.Db().Table(table)
+	db.Fields("url")
+	db.Where("self_id", self_id)
+	db.Data(map[string]interface{}{
+		"url": url,
+	})
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

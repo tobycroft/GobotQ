@@ -1,15 +1,6 @@
 package Group
 
-import (
-	"main.go/app/bot/api"
-	"main.go/app/bot/model/GroupBalanceModel"
-	"main.go/app/bot/model/GroupSignModel"
-	"main.go/app/bot/service"
-	"main.go/config/app_conf"
-	"main.go/tuuz"
-	"main.go/tuuz/Calc"
-	"main.go/tuuz/Log"
-)
+import ()
 
 //func App_group_lunpan(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 //	sign := GroupSignModel.Api_find(group_id, user_id)

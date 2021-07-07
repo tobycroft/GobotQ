@@ -369,6 +369,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 		break
 
+	case "轮盘":
+		break
+
 	case "setting":
 		if !admin && !owner {
 			if len(groupmember) > 0 {

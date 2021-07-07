@@ -36,7 +36,7 @@ func Api_find(group_id, user_id interface{}) gorose.Data {
 		"user_id":  user_id,
 	}
 	db.Where(where)
-	db.Where("date", ">", Date.Today())
+	db.Where("date > (SELECT DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%s'))")
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

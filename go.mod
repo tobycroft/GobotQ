@@ -7,28 +7,30 @@ require (
 	github.com/afocus/captcha v0.0.0-20191010092841-4bd1f21c8868
 	github.com/bitly/go-simplejson v0.5.1-0.20200416141419-39a59b1b2866
 	github.com/gin-contrib/cors v1.3.2-0.20200402113712-0223cb87b2c4
-	github.com/gin-gonic/gin v1.7.1
-	github.com/go-playground/validator/v10 v10.6.0 // indirect
+	github.com/gin-gonic/gin v1.7.2
+	github.com/go-playground/validator/v10 v10.7.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gohouse/converter v0.0.3 // indirect
-	github.com/gohouse/golib v0.0.0-20201013092821-ca87ab19b554 // indirect
+	github.com/gohouse/golib v0.0.0-20210711163732-a5c22059eb75 // indirect
 	github.com/gohouse/gorose v1.0.5
-	github.com/gohouse/gorose/v2 v2.1.11-0.20210408035829-ace634012b8c
+	github.com/gohouse/gorose/v2 v2.1.12
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/gomodule/redigo v1.8.4
+	github.com/gomodule/redigo v1.8.5
 	github.com/json-iterator/go v1.1.11
 	github.com/kirinlabs/HttpRequest v1.1.1
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/shopspring/decimal v1.2.0
-	github.com/ugorji/go v1.2.5 // indirect
-	golang.org/x/crypto v0.0.0-20210506145944-38f3c27a63bf // indirect
+	github.com/ugorji/go v1.2.6 // indirect
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
-	golang.org/x/sys v0.0.0-20210510120138-977fb7262007 // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 

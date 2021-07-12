@@ -9,6 +9,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/app/v1/user/action/BalanceAction"
 	"main.go/config/app_conf"
+	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 	"math"
 	"time"
@@ -20,6 +21,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	GroupBanModel.Api_insert(group_id, user_id)
 	left_time := groupfunction["ban_limit"].(int64) - 1
 	var balance BalanceAction.Interface
+	balance.Db = tuuz.Db()
 	if left_time > 0 {
 		bal, _ := balance.App_check_balance(user_id)
 		balance_decr := float64(time) * math.Pow10(int(time))

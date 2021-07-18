@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gohouse/gorose/v2"
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupListModel"
@@ -28,7 +29,10 @@ func group_control(c *gin.Context) {
 	for _, data := range con_group {
 		gids = append(gids, data["group_id"])
 	}
-	gls := GroupListModel.Api_select_InGid(gids)
+	gls := []gorose.Data{}
+	if len(gids) > 0 {
+		gls = GroupListModel.Api_select_InGid(gids)
+	}
 	RET.Success(c, 0, gls, nil)
 }
 
@@ -39,7 +43,10 @@ func group_joined(c *gin.Context) {
 	for _, data := range con_group {
 		gids = append(gids, data["group_id"])
 	}
-	gls := GroupListModel.Api_select_InGid(gids)
+	gls := []gorose.Data{}
+	if len(gids) > 0 {
+		gls = GroupListModel.Api_select_InGid(gids)
+	}
 	RET.Success(c, 0, gls, nil)
 }
 

@@ -26,6 +26,7 @@ func power_check() {
 			if role == "member" {
 				api.Sendgroupmsg(self_id, group_id, "额，如果以后有需要管理，可以再叫我来啊？", false)
 				api.SetGroupLeave(self_id, group_id)
+				GroupMemberModel.Api_delete_byGid(self_id, group_id)
 			} else if role == "owner" {
 				gms := GroupMemberModel.Api_select_admin(self_id, group_id)
 				for _, gm := range gms {

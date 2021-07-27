@@ -19,7 +19,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	at := service.Serv_at(user_id)
 	time := GroupBanModel.Api_count(group_id, user_id)
 	GroupBanModel.Api_insert(group_id, user_id)
-	left_time := groupfunction["ban_limit"].(int64) - 1
+	left_time := groupfunction["ban_limit"].(int64) - 1 - time
 	var balance BalanceAction.Interface
 	balance.Db = tuuz.Db()
 	if left_time > 0 {

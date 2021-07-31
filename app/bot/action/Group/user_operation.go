@@ -3,12 +3,12 @@ package Group
 import (
 	"fmt"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
-	"main.go/app/v1/user/action/BalanceAction"
 	"main.go/config/app_conf"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
@@ -21,20 +21,24 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	time := GroupBanModel.Api_count(group_id, user_id)
 	GroupBanModel.Api_insert(group_id, user_id)
 	left_time := groupfunction["ban_limit"].(int64) - 1 - time
-	var balance BalanceAction.Interface
+	var balance GroupBalanceModel.Interface
 	balance.Db = tuuz.Db()
 	if left_time > 0 {
-		bal, _ := balance.App_check_balance(user_id)
-		balance_decr := float64(time) * 10
-		balance_left := bal - balance_decr
-		fmt.Println("当前积分", bal, balance_decr, balance_left)
-		if balance_left <= 0 {
-			api.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次，接受惩罚\n"+"本次惩罚原因："+reason+"\n你还剩下："+Calc.Any2String(left_time)+"点生命值", auto_retract)
-			api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
-		} else {
-			BalanceAction.App_single_balance(user_id, "", -math.Abs(balance_decr), "扣分")
-			api.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次扣分\n"+"本次扣分原因："+reason+"\n你还剩下："+Calc.Any2String(balance_left)+"分", auto_retract)
+		groupbal := GroupBalanceModel.Api_value_balance(group_id, user_id)
+		if groupbal != nil {
+			bal, _ := groupbal.(float64)
+			balance_decr := float64(time) * 10
+			balance_left := bal - balance_decr
+			fmt.Println("当前积分", bal, balance_decr, balance_left)
+			if balance_left >= 0 {
+				balance.Api_decr(group_id, user_id, math.Abs(balance_decr))
+				api.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次扣分，扣除"+Calc.Any2String(balance_decr)+"分\n"+"本次扣分原因："+reason+"\n你还剩下："+
+					""+Calc.Any2String(balance_left)+"分", auto_retract)
+				return
+			}
 		}
+		api.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次，接受惩罚\n"+"本次惩罚原因："+reason+"\n你还剩下："+Calc.Any2String(left_time)+"点生命值", auto_retract)
+		api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 	} else {
 		App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, reason+"\n且他已经没有生命值了")
 	}

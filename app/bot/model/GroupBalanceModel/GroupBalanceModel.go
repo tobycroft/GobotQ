@@ -163,3 +163,19 @@ func (self *Interface) Api_decr(group_id, user_id, balance_decr interface{}) boo
 		return true
 	}
 }
+
+func Api_value_balance(group_id, user_id interface{}) interface{} {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	ret, err := db.Value("balance")
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

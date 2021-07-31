@@ -27,7 +27,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 		groupbal := GroupBalanceModel.Api_value_balance(group_id, user_id)
 		if groupbal != nil {
 			bal, _ := groupbal.(float64)
-			balance_decr := float64(time) * 10
+			balance_decr := float64(time+1) * 10
 			balance_left := bal - balance_decr
 			fmt.Println("当前积分", bal, balance_decr, balance_left)
 			if balance_left >= 0 {

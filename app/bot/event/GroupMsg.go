@@ -243,7 +243,11 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		GroupBanModel.Api_delete(group_id)
+		if GroupBanModel.Api_delete(group_id) {
+			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
+		} else {
+			Group.AutoMessage(self_id, group_id, user_id, "小黑屋里面没有人啦~", groupfunction)
+		}
 		break
 
 	default:

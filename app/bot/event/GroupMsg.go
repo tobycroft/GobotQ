@@ -5,7 +5,6 @@ import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -243,7 +242,8 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		if GroupBanModel.Api_delete(group_id) {
+
+		if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
 		} else {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋里面没有人啦~", groupfunction)

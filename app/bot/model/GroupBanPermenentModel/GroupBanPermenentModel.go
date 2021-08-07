@@ -104,3 +104,18 @@ func Api_delete(group_id, user_id interface{}) bool {
 		return true
 	}
 }
+
+func Api_delete_byGroupId(group_id interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

@@ -91,9 +91,13 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				}
 			} else {
-
+				if !gbp.Api_incr(group_id, user_id, amount+week_sign) {
+					db.Rollback()
+					Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
+					return
+				}
 				AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+","+
-					"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
+					"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1)+",明日继续签到可堆叠奖励呢！", groupfunction)
 			}
 			db.Commit()
 		}

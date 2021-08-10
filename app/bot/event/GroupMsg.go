@@ -256,7 +256,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	}
 }
 
-const group_function_number = 12
+const group_function_number = 13
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复"}
 

@@ -87,7 +87,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						return
 					}
 					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
-						"威望奖励"+Calc.Int642String(amount)+"+"+Calc.Any2String(week_sign)+","+
+						"威望奖励"+Calc.Int642String(amount)+"＋"+Calc.Any2String(week_sign)+","+
 						"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				}
 			} else {

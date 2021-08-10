@@ -57,11 +57,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			message_num := reg.FindString(message)
 			num, err := Calc.Any2Float64_2(message_num)
 			if err != nil {
-				AutoMessage(self_id, group_id, user_id, at+"想请输入一个正确的轮盘数字哦，不要超过自己的威望，可以使用威望查询来查看自己的威望", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+"想请输入一个正确的轮盘数字哦，不要超过自己的威望，可以使用[威望查询]来查看自己的威望", groupfunction)
 				return
 			}
 			if num > rest_bal {
-				AutoMessage(self_id, group_id, user_id, at+"你想压的威望不能超过你的威望总和哦~", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+"你最多只能提取"+Calc.Any2String(rest_bal)+"威望参与游戏~", groupfunction)
 				return
 			}
 			rand := Calc.Int2String(Calc.Rand(1, 6))

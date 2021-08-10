@@ -59,7 +59,6 @@ func Api_count(group_id interface{}) int64 {
 	} else {
 		return ret
 	}
-
 }
 
 func Api_select(group_id interface{}) []gorose.Data {
@@ -73,6 +72,23 @@ func Api_select(group_id interface{}) []gorose.Data {
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_count_userId(group_id, user_id, date interface{}) int64 {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	db.Where("date", ">", date)
+	ret, err := db.Count()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return 0
 	} else {
 		return ret
 	}

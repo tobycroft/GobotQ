@@ -10,6 +10,7 @@ import (
 	"main.go/config/app_conf"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
+	"main.go/tuuz/Date"
 	"main.go/tuuz/Log"
 )
 
@@ -53,6 +54,10 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 			db.Commit()
 		} else {
 			//加分模式
+			yesterday := Date.Yesterday()
+			yesterday_sign := GroupSignModel.Api_count_userId(group_id, user_id, yesterday)
+			week := Date.ThisWeek()
+			week_sign := GroupSignModel.Api_count_userId(group_id, user_id)
 			group_model := GroupBalanceModel.Api_find(group_id, user_id)
 			var gbp GroupBalanceModel.Interface
 			gbp.Db = db
@@ -63,6 +68,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 					return
 				}
 			}
+			Date.Date2Int()
 			if !gbp.Api_incr(group_id, user_id, amount) {
 				db.Rollback()
 				Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())

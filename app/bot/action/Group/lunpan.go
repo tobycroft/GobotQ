@@ -2,7 +2,6 @@ package Group
 
 import (
 	"errors"
-	"fmt"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupLunpanModel"
@@ -200,30 +199,28 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			str := ""
 			if rand <= 1 {
 				amount = rest_bal * 9
-				str += at + "完胜,当前余额:" + Calc.Any2String(rest_bal) + "十倍奖励"
+				str += at + "十倍奖励完胜,当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 1 && rand <= 20 {
 				amount = -float64(rand)
-				str += at + "小败,当前余额:" + Calc.Any2String(rest_bal) + ",扣除:" + Calc.Any2String(amount)
+				str += at + "小败,扣除:" + Calc.Any2String(amount) + ",当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 20 && rand <= 50 {
 				amount = 2
-				str += at + "小胜,当前余额:" + Calc.Any2String(rest_bal) + ",赢得2"
+				str += at + "小胜,赢得2" + ",当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 50 && rand <= 85 {
 				amount = 5
-				str += at + "胜利,当前余额:" + Calc.Any2String(rest_bal) + ",赢得5"
+				str += at + "胜利,赢得5" + ",当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 85 && rand <= 95 {
 				amount = 10
-				str += at + "大胜,当前余额:" + Calc.Any2String(rest_bal) + ",赢得10"
+				str += at + "大胜,赢得10" + ",当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 95 && rand <= 99 {
 				amount = -rest_bal / 2
-				str += at + "轮盘大败,当前余额:" + Calc.Any2String(rest_bal) + ",现在扣除一半"
+				str += at + "扣除一半轮盘大败,当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else {
 				amount = -rest_bal
 				str += at + "轮盘完败,你的余额已不复存在"
 			}
 			count_lunpan := GroupLunpanModel.Api_count_userId(group_id, user_id)
-
 			if count_lunpan == 0 {
-				fmt.Println(count_lunpan)
 				str += "\n这是你第一次参与轮盘，下次你可以用“轮盘[模式字母][数字]" +
 					"\n例如轮盘A10，来挑战1/6的获胜几率，挑战成功，奖励1/6押注威望" +
 					"\n同时你可以使用轮盘B10来挑战2/6的胜率，获得2/6的奖励" +
@@ -235,7 +232,6 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 				return
 			}
-			fmt.Println(str)
 			AutoMessage(self_id, group_id, user_id, str, groupfunction)
 		}
 

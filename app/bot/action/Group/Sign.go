@@ -56,9 +56,10 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 			//加分模式
 			yesterday := Date.Yesterday()
 			yesterday_sign := GroupSignModel.Api_count_userId(group_id, user_id, yesterday)
-			week := Date.ThisWeek()
-			week_sign := GroupSignModel.Api_count_userId(group_id, user_id)
+			week := Date.WeekBefore()
+			week_sign := GroupSignModel.Api_count_userId(group_id, user_id, week)
 			group_model := GroupBalanceModel.Api_find(group_id, user_id)
+			rank := GroupBalanceModel.Api_count_lt_balance(group_id, user_id, group_model["balance"])
 			var gbp GroupBalanceModel.Interface
 			gbp.Db = db
 			if len(group_model) < 1 {
@@ -68,16 +69,33 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 					return
 				}
 			}
-			Date.Date2Int()
-			if !gbp.Api_incr(group_id, user_id, amount) {
-				db.Rollback()
-				Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
-				return
+
+			if yesterday_sign > 1 {
+				if week_sign > 6 {
+					if !gbp.Api_incr(group_id, user_id, amount+7) {
+						db.Rollback()
+						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
+						return
+					}
+					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
+						"威望奖励"+Calc.Int642String(amount)+"+7"+","+
+						"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
+				} else {
+					if !gbp.Api_incr(group_id, user_id, amount+week_sign) {
+						db.Rollback()
+						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
+						return
+					}
+					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
+						"威望奖励"+Calc.Int642String(amount)+"+"+Calc.Any2String(week_sign)+","+
+						"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
+				}
+			} else {
+
+				AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+","+
+					"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
 			}
 			db.Commit()
-			rank := GroupBalanceModel.Api_count_lt_balance(group_id, user_id, group_model["balance"])
-			AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+","+
-				"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
 		}
 	}
 }

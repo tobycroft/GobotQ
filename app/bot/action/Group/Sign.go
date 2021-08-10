@@ -46,6 +46,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 		}
 		at := service.Serv_at(user_id)
 		if len(GroupBanModel.Api_find(group_id, user_id)) > 1 {
+			//奖励生命模式
 			if GroupBanModel.Api_delete_userId(group_id, user_id) {
 				AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,生命值已经补满", groupfunction)
 			}

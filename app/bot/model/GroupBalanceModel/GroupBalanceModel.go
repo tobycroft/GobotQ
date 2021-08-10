@@ -97,7 +97,13 @@ func Api_select_uid(user_id interface{}) []gorose.Data {
 }
 
 func Api_find(group_id, user_id interface{}) gorose.Data {
-	db := tuuz.Db().Table(table)
+	var gbp Interface
+	gbp.Db = tuuz.Db().Table(table)
+	return gbp.Api_find(group_id, user_id)
+}
+
+func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,

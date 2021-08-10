@@ -258,7 +258,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 
 const group_function_number = 12
 
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "威望查询", "威望排行", "长度限制", "自动回复"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复"}
 
 func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -314,29 +314,35 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	}(7, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "威望查询"})
+		str, ok := service.Serv_text_match(message, []string{"轮盘"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(8, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
+		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "威望查询"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(9, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
 		_, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行"})
 		new_text[idx] = ""
 		function[idx] = ok
-	}(9, &wg)
+	}(10, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		if int64(len(raw_message)) > groupfunction["word_limit"].(int64) {
 			new_text[idx] = raw_message
 			function[idx] = true
 		}
-	}(10, &wg)
+	}(11, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_auto_reply(group_id, raw_message)
 		new_text[idx] = str
 		function[idx] = ok
-	}(11, &wg)
+	}(12, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -374,6 +380,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "轮盘":
+		Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 
 	case "setting":

@@ -59,6 +59,9 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 			week := Date.WeekBefore()
 			week_sign := GroupSignModel.Api_count_userId(group_id, user_id, week)
 			group_model := GroupBalanceModel.Api_find(group_id, user_id)
+			if group_model["balance"] == nil {
+				group_model["balance"] = 0
+			}
 			rank := GroupBalanceModel.Api_count_gt_balance(group_id, group_model["balance"])
 			var gbp GroupBalanceModel.Interface
 			gbp.Db = db

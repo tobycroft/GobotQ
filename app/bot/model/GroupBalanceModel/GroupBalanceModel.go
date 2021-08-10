@@ -112,6 +112,23 @@ func Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
+func Api_count_lt_balance(group_id, user_id, balance interface{}) int64 {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where("balance", "<", balance)
+	db.Where(where)
+	ret, err := db.Count()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return 0
+	} else {
+		return ret
+	}
+}
+
 func (self *Interface) Api_update(group_id, user_id, balance interface{}) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{

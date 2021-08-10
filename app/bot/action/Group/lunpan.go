@@ -229,7 +229,6 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					"\n同时你可以使用轮盘B10来挑战2/6的胜率，获得2/6的奖励" +
 					"\n可选模式有ABCDE，挑战威望无上限，你可以使用威望查询来查看自己的可用情况" +
 					"\n觉得自己运气还不错的话可以试试哦~"
-				fmt.Println(str)
 			}
 			if !gbp.Api_incr(group_id, user_id, amount) {
 				db.Rollback()

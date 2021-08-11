@@ -162,6 +162,12 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "我当前的权限为："+Group.BotPowerRefresh(group_id, self_id), groupfunction)
 		break
 
+	case "随机数测试":
+		rand1 := Calc.Rand(1, 100)
+		rand2 := Calc.Rand(1, 100)
+		Group.AutoMessage(self_id, group_id, user_id, "随机数1："+Calc.Any2String(rand1)+"\n随机数1："+Calc.Any2String(rand2), groupfunction)
+		break
+
 	case "刷新人数":
 		if !admin && !owner {
 			if len(groupmember) > 0 {

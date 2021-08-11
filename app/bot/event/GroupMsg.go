@@ -256,9 +256,9 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	}
 }
 
-const group_function_number = 13
+const group_function_number = 14
 
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme"}
 
 func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -343,6 +343,12 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 		new_text[idx] = str
 		function[idx] = ok
 	}(12, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		_, ok := service.Serv_text_match_any(message, []string{"[CQ:at,qq" + Calc.Any2String(self_id) + "]"})
+		new_text[idx] = ""
+		function[idx] = ok
+	}(13, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -375,6 +381,11 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	ret.Self_id = self_id
 
 	switch Type {
+
+	case "atme":
+		api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		break
+
 	case "sign":
 		Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 		break

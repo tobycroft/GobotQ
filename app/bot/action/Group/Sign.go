@@ -59,10 +59,13 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 			week := Date.WeekBefore()
 			week_sign := GroupSignModel.Api_count_userId(group_id, user_id, week)
 			group_model := GroupBalanceModel.Api_find(group_id, user_id)
+			rest_bal := float64(0)
 			if group_model["balance"] == nil {
-				group_model["balance"] = 0
+				rest_bal = 0
+			} else {
+				rest_bal = group_model["balance"].(float64)
 			}
-			rank := GroupBalanceModel.Api_count_gt_balance(group_id, group_model["balance"])
+			rank := GroupBalanceModel.Api_count_gt_balance(group_id, rest_bal)
 			var gbp GroupBalanceModel.Interface
 			gbp.Db = db
 			if len(group_model) < 1 {
@@ -82,7 +85,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 					}
 					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
 						"威望奖励"+Calc.Int642String(amount)+"＋7"+","+
-						"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
+						"现有威望："+Calc.Any2String(rest_bal)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				} else {
 					if !gbp.Api_incr(group_id, user_id, amount+week_sign) {
 						db.Rollback()
@@ -91,7 +94,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 					}
 					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
 						"威望奖励"+Calc.Int642String(amount)+"＋"+Calc.Any2String(week_sign)+","+
-						"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1), groupfunction)
+						"现有威望："+Calc.Any2String(rest_bal)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				}
 			} else {
 				if !gbp.Api_incr(group_id, user_id, amount+week_sign) {
@@ -100,7 +103,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 					return
 				}
 				AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+","+
-					"现有威望："+Calc.Any2String(group_model["balance"])+",排名第："+Calc.Int642String(rank+1)+",明日继续签到可堆叠奖励呢！", groupfunction)
+					"现有威望："+Calc.Any2String(rest_bal)+",排名第："+Calc.Int642String(rank+1)+",明日继续签到可堆叠奖励呢！", groupfunction)
 			}
 			db.Commit()
 		}

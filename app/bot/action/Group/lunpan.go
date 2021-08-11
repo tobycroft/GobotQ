@@ -88,7 +88,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
-					amount = num / 6
+					amount = Calc.Round(num/6, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
@@ -110,7 +110,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
-					amount = num / 3
+					amount = Calc.Round(num/3, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
@@ -132,7 +132,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
-					amount = num / 2
+					amount = Calc.Round(num/2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
@@ -154,7 +154,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
-					amount = num / 3 * 2
+					amount = Calc.Round(num/3*2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
@@ -176,7 +176,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
-					amount = num / 6 * 5
+					amount = Calc.Round(num/6*5, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
@@ -202,7 +202,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			rand := Calc.Rand(0, 100)
 			str := ""
 			if rand <= 1 {
-				amount = rest_bal * 9
+				amount = Calc.Round(rest_bal*9, 2)
 				str += at + "十倍奖励完胜,当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 1 && rand <= 20 {
 				amount = -float64(rand)
@@ -217,7 +217,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				amount = 10
 				str += at + "大胜,赢得10" + ",当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 95 && rand <= 99 {
-				amount = -rest_bal / 2
+				amount = -Calc.Round(rest_bal/2, 2)
 				str += at + "扣除一半轮盘大败,当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else {
 				amount = -rest_bal

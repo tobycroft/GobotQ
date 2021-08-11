@@ -32,7 +32,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	} else {
 		rank := GroupSignModel.Api_count(group_id)
 		order := rank + 1
-		amount := app_conf.Group_Sign_incr - rank
+		amount := float64(app_conf.Group_Sign_incr - rank)
 		if amount <= 0 {
 			amount = 1
 		}
@@ -84,26 +84,26 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						return
 					}
 					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
-						"威望奖励"+Calc.Int642String(amount)+"＋7"+","+
-						"现有威望："+Calc.Any2String(rest_bal)+",排名第："+Calc.Int642String(rank+1), groupfunction)
+						"威望奖励"+Calc.Float642String(amount)+"＋7"+","+
+						"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				} else {
-					if !gbp.Api_incr(group_id, user_id, amount+week_sign) {
+					if !gbp.Api_incr(group_id, user_id, amount+float64(week_sign)) {
 						db.Rollback()
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
 					}
 					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
-						"威望奖励"+Calc.Int642String(amount)+"＋"+Calc.Any2String(week_sign)+","+
-						"现有威望："+Calc.Any2String(rest_bal)+",排名第："+Calc.Int642String(rank+1), groupfunction)
+						"威望奖励"+Calc.Float642String(amount)+"＋"+Calc.Any2String(week_sign)+","+
+						"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				}
 			} else {
-				if !gbp.Api_incr(group_id, user_id, amount+week_sign) {
+				if !gbp.Api_incr(group_id, user_id, amount+float64(week_sign)) {
 					db.Rollback()
 					Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 					return
 				}
-				AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Int642String(amount)+","+
-					"现有威望："+Calc.Any2String(rest_bal)+",排名第："+Calc.Int642String(rank+1)+",明日继续签到可堆叠奖励呢！", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,威望奖励"+Calc.Float642String(amount)+","+
+					"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1)+",明日继续签到可堆叠奖励呢！", groupfunction)
 			}
 			db.Commit()
 		}

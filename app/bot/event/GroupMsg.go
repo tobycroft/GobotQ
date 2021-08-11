@@ -165,7 +165,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "随机数测试":
 		rand1 := Calc.Rand(1, 100)
 		rand2 := Calc.Rand(1, 100)
-		Group.AutoMessage(self_id, group_id, user_id, "随机数1："+Calc.Any2String(rand1)+"\n随机数1："+Calc.Any2String(rand2), groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "随机数1："+Calc.Any2String(rand1)+"\n随机数2："+Calc.Any2String(rand2), groupfunction)
 		break
 
 	case "刷新人数":

@@ -51,7 +51,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			}
 		}
 
-		reg := regexp.MustCompile("[0-9]")
+		reg := regexp.MustCompile("[0-9]+")
 		active := reg.MatchString(message)
 		if active {
 			//左轮模式

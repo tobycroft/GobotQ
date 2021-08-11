@@ -36,6 +36,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		} else {
 			rest_bal = group_model["balance"].(float64)
 		}
+
 		if rest_bal < 0 {
 			AutoMessage(self_id, group_id, user_id, at+"威望小于0,请先通过每日签到增加威望至正数", groupfunction)
 			return

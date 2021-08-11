@@ -320,7 +320,7 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	}(8, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包"})
+		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包", "查询余额", "余额查询"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(9, &wg)

@@ -83,11 +83,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				if Array.InArrayString(rand, rand_slice) {
 					//poom!!!
 					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
 				} else {
 					amount = num / 6
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
 				}
 				break
@@ -105,11 +105,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				if Array.InArrayString(rand, rand_slice) {
 					//poom!!!
 					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
 				} else {
 					amount = num / 3
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
 				}
 				break
@@ -127,11 +127,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				if Array.InArrayString(rand, rand_slice) {
 					//poom!!!
 					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
 				} else {
 					amount = num / 2
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
 				}
 				break
@@ -149,11 +149,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				if Array.InArrayString(rand, rand_slice) {
 					//poom!!!
 					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
 				} else {
 					amount = num / 3 * 2
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
 				}
 				break
@@ -171,11 +171,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				if Array.InArrayString(rand, rand_slice) {
 					//poom!!!
 					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
 				} else {
 					amount = num / 6 * 5
-					AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
 						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
 				}
 				break
@@ -183,7 +183,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "F", "f":
 				//poom!!!
 				amount = -num
-				AutoMessage(self_id, group_id, user_id, at+"-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(num)+"威望~", groupfunction)
 				break
 
 			default:

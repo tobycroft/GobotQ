@@ -10,6 +10,7 @@ import (
 	"main.go/tuuz/Array"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
+	"math"
 	"regexp"
 	"strings"
 )
@@ -84,11 +85,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
 					amount = num / 6
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
 				break
 
@@ -106,11 +107,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
 					amount = num / 3
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
 				break
 
@@ -128,11 +129,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
 					amount = num / 2
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
 				break
 
@@ -150,11 +151,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
 					amount = num / 3 * 2
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
 				break
 
@@ -172,18 +173,18 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				} else {
 					amount = num / 6 * 5
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+rand+"上，"+
-						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(num)+"威望~", groupfunction)
+						"激发位置在"+tick+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
 				break
 
 			case "F", "f":
 				//poom!!!
 				amount = -num
-				AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(num)+"威望~", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				break
 
 			default:
@@ -204,7 +205,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				str += at + "十倍奖励完胜,当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 1 && rand <= 20 {
 				amount = -float64(rand)
-				str += at + "小败,扣除:" + Calc.Any2String(amount) + ",当前余额:" + Calc.Any2String(rest_bal+amount)
+				str += at + "小败,扣除:" + Calc.Any2String(math.Abs(amount)) + ",当前余额:" + Calc.Any2String(rest_bal+amount)
 			} else if rand > 20 && rand <= 50 {
 				amount = 2
 				str += at + "小胜,赢得2" + ",当前余额:" + Calc.Any2String(rest_bal+amount)

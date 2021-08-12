@@ -24,7 +24,9 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		api.Retract_chan <- ret
 	}
 	mode := regexp.MustCompile("[A-Za-z]")
-	if message[:0] != "" && !mode.MatchString(message) {
+	//fmt.Println(len(message), message, mode.MatchString(message))
+	if len(message) > 3 && message[:3] != "" && !mode.MatchString(message) {
+		//fmt.Println(len(message) > 3, message[:3] != "", !mode.MatchString(message))
 		return
 	}
 	if len(sign) > 0 {

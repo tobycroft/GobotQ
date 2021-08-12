@@ -23,6 +23,10 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		ret.Self_id = self_id
 		api.Retract_chan <- ret
 	}
+	mode := regexp.MustCompile("[A-Za-z]")
+	if message[:0] != "" && !mode.MatchString(message) {
+		return
+	}
 	if len(sign) > 0 {
 		at := service.Serv_at(user_id)
 		AutoMessage(self_id, group_id, user_id, "你今天已经挑战过了，请明天再来"+at, groupfunction)
@@ -57,7 +61,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		active := reg.MatchString(message)
 		if active {
 			//左轮模式
-			mode_string := regexp.MustCompile("[A-Za-z]").FindString(message)
+			mode_string := mode.FindString(message)
 			message_num := reg.FindString(message)
 			num, err := Calc.Any2Float64_2(message_num)
 			if err != nil {

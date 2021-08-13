@@ -74,7 +74,8 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				AutoMessage(self_id, group_id, user_id, at+"你最多只能提取"+Calc.Any2String(rest_bal)+"威望参与游戏~", groupfunction)
 				return
 			}
-			rand := Calc.Int2String(Calc.Rand(1, 6))
+			rand_num := Calc.Rand(10, 60)
+			rand := Calc.Float642String(math.Floor(float64(rand_num / 10)))
 			rand_slice := []string{}
 			switch mode_string {
 

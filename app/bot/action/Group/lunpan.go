@@ -196,7 +196,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				break
 
 			default:
-				AutoMessage(self_id, group_id, user_id, at+"请输入一个正确的字母，想参与1/6胜率轮盘输入A，2/6输入B，3/6选C，以此类推可在ABCDE中选择(大小写不敏感)", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+"请输入一个正确的字母，想参与1/6胜率轮盘输入“轮盘A10”，2/6输入“轮盘B10”，3/6选C，以此类推可在ABCDE中选择(大小写不敏感)", groupfunction)
 				return
 			}
 			if !gbp.Api_incr(group_id, user_id, amount) {

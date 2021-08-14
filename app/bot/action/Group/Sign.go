@@ -83,8 +83,8 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
 					}
-					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
-						"威望奖励"+Calc.Float642String(amount)+"＋7"+","+
+					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,"+
+						"威望奖励"+Calc.Float642String(amount)+",连续签到"+Calc.Any2String(week_sign)+"天,"+"额外奖励＋7"+
 						"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				} else {
 					if !gbp.Api_incr(group_id, user_id, amount+float64(week_sign)) {
@@ -92,8 +92,8 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
 					}
-					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到,连续签到"+Calc.Any2String(week_sign)+"天，"+
-						"威望奖励"+Calc.Float642String(amount)+"＋"+Calc.Any2String(week_sign)+","+
+					AutoMessage(self_id, group_id, user_id, at+",您是今日第"+Calc.Int642String(order)+"个签到"+
+						"威望奖励"+Calc.Float642String(amount)+",连续签到"+Calc.Any2String(week_sign)+"天,"+"额外奖励＋"+Calc.Any2String(week_sign)+
 						"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				}
 			} else {

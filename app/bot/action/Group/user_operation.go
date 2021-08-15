@@ -66,6 +66,7 @@ func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, gr
 		} else {
 			if GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400) {
 				at := service.Serv_at(user_id)
+				api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
 				api.Sendgroupmsg(self_id, group_id, at+"你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁", auto_retract)
 			}
 		}

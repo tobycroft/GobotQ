@@ -63,6 +63,9 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		reg := regexp.MustCompile("[0-9]+")
 		active := reg.MatchString(message)
 		played_time := GroupLunpanModel.Api_count(group_id)
+		if played_time > 100 {
+			played_time = 100
+		}
 		ext_text := ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
 		if active {
 			//左轮模式

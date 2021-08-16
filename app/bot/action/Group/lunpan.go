@@ -223,7 +223,6 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					amount = num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n百分之20的卡弹率让你碰上了！恭喜你！运气爆棚奖励翻倍，你赢得了:"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
 				}
-
 				break
 
 			default:

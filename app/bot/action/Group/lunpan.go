@@ -29,7 +29,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		//fmt.Println(len(message) > 3, message[:3] != "", !mode.MatchString(message))
 		return
 	}
-	played_time := GroupLunpanModel.Api_count(group_id)
+
 	if len(sign) > 0 {
 		at := service.Serv_at(user_id)
 		AutoMessage(self_id, group_id, user_id, "你今天已经挑战过了，请明天再来"+at, groupfunction)
@@ -62,6 +62,8 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 
 		reg := regexp.MustCompile("[0-9]+")
 		active := reg.MatchString(message)
+		played_time := GroupLunpanModel.Api_count(group_id)
+		ext_text := ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
 		if active {
 			//左轮模式
 			mode_string := mode.FindString(message)
@@ -75,12 +77,13 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				AutoMessage(self_id, group_id, user_id, at+"你最多只能提取"+Calc.Any2String(rest_bal)+"威望参与游戏~", groupfunction)
 				return
 			}
+
 			rand_num := Calc.Rand(10, 60)
 			rand := Calc.Float642String(math.Floor(float64(rand_num / 10)))
 			rand_slice := []string{}
-			stuck_mode := int64(Calc.Rand(1, 50))
-			switch mode_string {
+			stuck_mode := int64(Calc.Rand(1, 100))
 
+			switch mode_string {
 			case "A", "a":
 				for i := 0; i < 1; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
@@ -96,15 +99,15 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/6, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else {
 					amount = Calc.Round(num/6, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				}
 				break
 
@@ -123,15 +126,15 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/3, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else {
 					amount = Calc.Round(num/3, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				}
 				break
 
@@ -150,15 +153,15 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else {
 					amount = Calc.Round(num/2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				}
 				break
 
@@ -177,15 +180,15 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/3*2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else {
 					amount = Calc.Round(num/3*2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				}
 				break
 
@@ -204,30 +207,30 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					//poom!!!
 					amount = -num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/6*5, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else {
 					amount = Calc.Round(num/6*5, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+						"激发位置在"+rand+",没响，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				}
 				break
 
 			case "F", "f":
 				//poom!!!
 				if stuck_mode > played_time {
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				} else {
 					amount = num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n百分之20的卡弹率让你碰上了！恭喜你！运气爆棚奖励翻倍，你赢得了:"+Calc.Any2String(math.Abs(amount))+"威望~", groupfunction)
+					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n百分之20的卡弹率让你碰上了！恭喜你！运气爆棚奖励翻倍，你赢得了:"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 				}
 				break
 
 			default:
-				AutoMessage(self_id, group_id, user_id, at+"请输入一个正确的字母，想参与1/6胜率轮盘输入“轮盘A10”，2/6输入“轮盘B10”，3/6选C，以此类推可在ABCDE中选择(大小写不敏感)", groupfunction)
+				AutoMessage(self_id, group_id, user_id, at+"请输入一个正确的字母，想参与1/6胜率轮盘输入“轮盘A10”，2/6输入“轮盘B10”，3/6选C，以此类推可在ABCDE中选择(大小写不敏感)"+ext_text, groupfunction)
 				return
 			}
 			if !gbp.Api_incr(group_id, user_id, amount) {
@@ -260,6 +263,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			} else {
 				amount = -rest_bal
 				str += at + "轮盘完败,你的余额已不复存在"
+				str += ext_text
 			}
 			count_lunpan := GroupLunpanModel.Api_count_userId(group_id, user_id)
 			if count_lunpan == 0 {

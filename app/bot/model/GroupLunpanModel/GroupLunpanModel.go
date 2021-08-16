@@ -51,7 +51,6 @@ func Api_count(group_id interface{}) int64 {
 		"group_id": group_id,
 	}
 	db.Where(where)
-	db.Where("date > (SELECT CURDATE())")
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

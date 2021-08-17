@@ -138,6 +138,10 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
+	case "轮盘":
+		api.Sendgroupmsg(self_id, group_id, app_default.Default_lunpan_help, true)
+		break
+
 	case "help":
 		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, groupfunction)
 		break

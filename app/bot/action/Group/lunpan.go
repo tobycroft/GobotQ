@@ -271,8 +271,8 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			count_lunpan := GroupLunpanModel.Api_count_userId(group_id, user_id)
 			if count_lunpan == 0 {
 				str += "\n\n这是你第一次参与轮盘，下次你可以用“轮盘[模式字母][数字]" +
-					"\n例如“轮盘A10”，来挑战1/6的获胜几率，挑战成功，奖励1/6押注威望" +
-					"\n同时你可以使用轮盘B10来挑战2/6的胜率，获得2/6的奖励" +
+					"\n例如“轮盘A10”，来挑战1/6的失败几率，挑战成功，奖励1/6押注威望" +
+					"\n同时你可以使用轮盘B10来挑战2/6的败率，获得2/6的奖励" +
 					"\n可选模式有ABCDE，挑战威望无上限，你可以使用威望查询来查看自己的可用情况" +
 					"\n觉得自己运气还不错的话可以试试哦~"
 			}

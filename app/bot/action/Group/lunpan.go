@@ -266,8 +266,8 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			} else {
 				amount = -rest_bal
 				str += at + "轮盘完败,你的余额已不复存在"
-				str += ext_text
 			}
+			str += ext_text
 			count_lunpan := GroupLunpanModel.Api_count_userId(group_id, user_id)
 			if count_lunpan == 0 {
 				str += "\n\n这是你第一次参与轮盘，下次你可以用“轮盘[模式字母][数字]" +

@@ -86,7 +86,7 @@ func list_my_daoju(group_id, user_id interface{}) string {
 		if len(daoju) < 1 {
 			continue
 		}
-		str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",数量," + Calc.Any2String(data["num"])
+		str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",作用" + Calc.Any2String(daoju["type"]) + ",数量," + Calc.Any2String(data["num"])
 	}
 	return str
 }

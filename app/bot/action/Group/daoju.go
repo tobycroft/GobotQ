@@ -122,7 +122,7 @@ func list_my_daoju(group_id, user_id interface{}) string {
 		str := "您拥有如下道具："
 		for i, data := range datas {
 			list := i + 1
-			daoju := DaojuModel.Api_find_canUse(data["jd_id"])
+			daoju := DaojuModel.Api_find_canUse(data["dj_id"])
 			if len(daoju) < 1 {
 				continue
 			}

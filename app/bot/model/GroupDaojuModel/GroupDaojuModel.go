@@ -85,7 +85,7 @@ func (self *Interface) Api_decr(group_id, user_id, dj_id interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}) bool {
+func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}, num int64) bool {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -93,7 +93,41 @@ func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}) bool {
 		"dj_id":    dj_id,
 	}
 	db.Where(where)
-	_, err := db.Increment("num", 1)
+	_, err := db.Increment("num", num)
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func (self *Interface) Api_insert(group_id, user_id, dj_id, num interface{}) bool {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+		"dj_id":    dj_id,
+		"num":      num,
+	}
+	db.Where(where)
+	_, err := db.Insert()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
+func (self *Interface) Api_delete(group_id, user_id interface{}) bool {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	_, err := db.Delete()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return false

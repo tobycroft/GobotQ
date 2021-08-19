@@ -19,6 +19,21 @@ func Api_select() []gorose.Data {
 	}
 }
 
+func Api_select_canShow() []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"can_show": 1,
+	}
+	db.Where(where)
+	data, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return data
+	}
+}
+
 func Api_find(id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

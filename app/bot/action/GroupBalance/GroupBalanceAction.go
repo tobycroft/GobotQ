@@ -33,7 +33,7 @@ func (self *Interface) App_single_balance(group_id, user_id interface{}, order_i
 	after_userbalance, _ := Calc.Bc_add(userbalance, amount).Float64()
 	if after_userbalance < 0 {
 		self.Db.Rollback()
-		return errors.New("威望还差：" + Calc.Float642String(after_userbalance))
+		return errors.New("威望不足无法购买,还差：" + Calc.Float642String(after_userbalance))
 	}
 	var ub GroupBalanceModel.Interface
 	ub.Db = self.Db

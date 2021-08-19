@@ -77,6 +77,26 @@ func clean_backpack(group_id, user_id interface{}) string {
 	}
 }
 
+func list_my_daoju(group_id, user_id interface{}) string {
+	datas := GroupDaojuModel.Api_select(group_id, user_id)
+	str := "您已经清空了您的背包，如下道具被丢弃："
+	for i, data := range datas {
+		list := i + 1
+		daoju := DaojuModel.Api_find_canUse(data["jd_id"])
+		if len(daoju) < 1 {
+			continue
+		}
+		str += "\r\n" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",数量," + Calc.Any2String(data["num"])
+	}
+	var gjd GroupDaojuModel.Interface
+	gjd.Db = tuuz.Db()
+	if gjd.Api_delete(group_id, user_id) {
+		return str
+	} else {
+		return "背包清空失败"
+	}
+}
+
 func send_daoju(group_id, user_id, to_uid interface{}) {
 
 }

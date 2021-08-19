@@ -49,6 +49,22 @@ func Api_find(id interface{}) gorose.Data {
 	}
 }
 
+func Api_find_canUse(id interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"id":      id,
+		"can_use": 1,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_find_byCname(cname interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{

@@ -138,7 +138,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
-	case "道具", "商店":
+	case "道具", "商店", "商城":
 		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_daoju, groupfunction)
 		break
 

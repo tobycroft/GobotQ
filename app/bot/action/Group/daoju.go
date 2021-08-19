@@ -96,7 +96,7 @@ func buy_daoju(self_id, group_id, user_id, cname interface{}) (string, error) {
 	ujd := GroupDaojuModel.Api_find(group_id, user_id, data["id"])
 	gbl := GroupBalanceModel.Api_find(group_id, user_id)
 	str := "您当前还剩" + Calc.Any2String(gbl["balance"]) + "威望\r\n"
-	str += "您永久" + Calc.Any2String(ujd["num"]) + "个同类型道具"
+	str += "您当前拥有" + Calc.Any2String(ujd["num"]) + "个同类型道具"
 	return "兑换完成，您兑换了：" + Calc.Any2String(data["cname"]) + "" +
 		"\r\n " + Calc.Any2String(data["cname"]) + ":" + Calc.Any2String(data["info"]) +
 		"\r\n 类型:" + Calc.Any2String(data["type"]) + "\r\n 消耗:" + Calc.Any2String(data["price"]) +

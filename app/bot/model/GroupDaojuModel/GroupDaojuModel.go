@@ -68,6 +68,12 @@ func (self *Interface) Api_find(group_id, user_id, dj_id interface{}) gorose.Dat
 	}
 }
 
+func Api_value(group_id, user_id, dj_id interface{}) interface{} {
+	var self Interface
+	self.Db = tuuz.Db()
+	return Api_value(group_id, user_id, dj_id)
+}
+
 func (self *Interface) Api_value(group_id, user_id, dj_id interface{}) interface{} {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{

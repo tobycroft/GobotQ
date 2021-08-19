@@ -18,21 +18,21 @@ func Serv_is_at_me(self_id interface{}, message string) bool {
 	return strings.Contains(message, Serv_at(self_id))
 }
 
-func Serv_at_who(contains_at_message string) string {
+func Serv_at_who(contains_at_message string) (string, string) {
 	reg, err := regexp.Compile("\\[CQ\\:at\\,qq\\=[0-9]+\\]")
 	if err != nil {
-		return ""
+		return "", ""
 	} else {
 		at_str := reg.FindString(contains_at_message)
 		if at_str != "" {
 			reg, err := regexp.Compile("[0-9]+")
 			if err != nil {
-				return ""
+				return "", ""
 			} else {
-				return reg.FindString(at_str)
+				return at_str, reg.FindString(at_str)
 			}
 		}
-		return ""
+		return "", ""
 	}
 }
 

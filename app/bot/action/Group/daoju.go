@@ -6,11 +6,13 @@ import (
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupDaojuModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 	"math"
+	"strings"
 )
 
 func App_group_daoju(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
@@ -157,14 +159,44 @@ func list_my_daoju(group_id, user_id interface{}) string {
 
 func send_daoju(group_id, user_id interface{}, send_to_message string) (string, error) {
 	qq := service.Serv_get_qq(send_to_message)
-	to_user_id := service.Serv_at_who(send_to_message)
+	cq_mess, to_user_id := service.Serv_at_who(send_to_message)
 	qq_num := ""
 	if to_user_id != "" {
 		qq_num = to_user_id
+		send_to_message = strings.ReplaceAll(send_to_message, cq_mess, "")
 	} else if qq != "" {
 		qq_num = qq
+		send_to_message = strings.ReplaceAll(send_to_message, qq, "")
 	} else {
 		return "", errors.New("接收人不正确，请使用道具赠送[道具名称]群成员号码或者道具赠送[道具名称]@某个人，例如“道具赠送免死金牌@张三”来赠送自己已有的道具")
 	}
-	GroupDaojuModel.Api_find(group_id,user_id)
+	member := GroupMemberModel.Api_find(group_id, qq_num)
+	if len(member) < 1 {
+		return "", errors.New("没有找到该群员")
+	}
+	daoju_data := DaojuModel.Api_find_byCname(send_to_message)
+	if len(daoju_data) > 0 {
+		db := tuuz.Db()
+		var gd GroupDaojuModel.Interface
+		gd.Db = db
+		user_daoju := gd.Api_value(group_id, user_id, daoju_data["id"])
+		if user_daoju.(int64) < 1 {
+			return "", errors.New("你没有这个道具，无法赠送")
+		} else {
+			db.Begin()
+			if !gd.Api_decr(group_id, user_id, daoju_data["id"]) {
+				db.Rollback()
+				return "", errors.New("赠送失败，无法扣除该道具")
+			}
+			if !gd.Api_incr(group_id, member["user_id"], daoju_data["id"], 1) {
+				db.Rollback()
+				return "", errors.New("赠送失败，对方无法增加该类型道具")
+			}
+			left := gd.Api_value(group_id, user_id, daoju_data["id"])
+			db.Commit()
+			return "成功赠送道具，你目前还剩" + Calc.Any2String(left) + "个" + send_to_message, nil
+		}
+	} else {
+		return "", errors.New("该道具不存在")
+	}
 }

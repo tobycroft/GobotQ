@@ -206,6 +206,14 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		api.Retract_chan_instant <- ret
 		break
 
+	case "测试T出测试":
+		Group.App_kick_user(self_id, group_id, user_id, true, groupfunction, "测试")
+		break
+
+	case "测试禁言测试":
+		Group.App_ban_user(self_id, group_id, user_id, true, groupfunction, "测试")
+		break
+
 	case "测试拼音":
 		py, err := service.Serv_pinyin(new_text)
 		if err != nil {

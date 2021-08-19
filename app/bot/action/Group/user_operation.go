@@ -32,7 +32,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	daoju.Db = db
 	dj_data := DaojuModel.Api_find_byName("anti_ban")
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
-	if len(user_dj) > 0 && user_dj["num"].(float64) > 0 {
+	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
 			dj_left := daoju.Api_value(group_id, user_id, dj_data["id"])
 			db.Commit()
@@ -67,7 +67,7 @@ func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, gr
 	daoju.Db = tuuz.Db()
 	dj_data := DaojuModel.Api_find_byName("anti_kick")
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
-	if len(user_dj) > 0 && user_dj["num"].(float64) > 0 {
+	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
 			dj_left := daoju.Api_value(group_id, user_id, dj_data["id"])
 			str := "\r\n[" + Calc.Any2String(dj_data["cname"]) + "]还剩下" + Calc.Any2String(dj_left)

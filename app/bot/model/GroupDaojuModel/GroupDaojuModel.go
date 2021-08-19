@@ -28,6 +28,23 @@ func Api_select(group_id, user_id interface{}) []gorose.Data {
 	}
 }
 
+func Api_select_have(group_id, user_id interface{}) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	db.Where("num", ">", 0)
+	data, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return data
+	}
+}
+
 func Api_find(group_id, user_id, dj_id interface{}) gorose.Data {
 	var self Interface
 	self.Db = tuuz.Db()

@@ -123,7 +123,9 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			var gd GroupDaojuModel.Interface
 			gd.Db = db
 			daoju_num := gd.Api_value(group_id, user_id, 3)
-
+			if daoju_num == nil {
+				daoju_num = 0
+			}
 			switch mode_string {
 			case "A", "a":
 				for i := 0; i < 1; i++ {

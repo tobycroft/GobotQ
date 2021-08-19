@@ -180,7 +180,7 @@ func send_daoju(group_id, user_id interface{}, send_to_message string) (string, 
 		var gd GroupDaojuModel.Interface
 		gd.Db = db
 		user_daoju := gd.Api_value(group_id, user_id, daoju_data["id"])
-		if user_daoju.(int64) < 1 {
+		if user_daoju == nil || user_daoju.(int64) < 1 {
 			return "", errors.New("你没有这个道具，无法赠送")
 		} else {
 			db.Begin()

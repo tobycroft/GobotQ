@@ -10,6 +10,7 @@ import (
 	"main.go/config/app_default"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
+	"math"
 )
 
 func App_group_daoju(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
@@ -73,7 +74,7 @@ func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
 
 	var gbal GroupBalance.Interface
 	gbal.Db = db
-	err := gbal.App_single_balance(group_id, user_id, nil, data["price"].(float64), "购买道具")
+	err := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(data["price"].(float64)), "购买道具")
 	if err != nil {
 		db.Rollback()
 		return "", err
@@ -92,8 +93,8 @@ func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
 			return "", errors.New("购买道具失败")
 		}
 	}
+	ujd := dj.Api_find(group_id, user_id, data["id"])
 	db.Commit()
-	ujd := GroupDaojuModel.Api_find(group_id, user_id, data["id"])
 	gbl := GroupBalanceModel.Api_find(group_id, user_id)
 	str := "您当前还剩" + Calc.Any2String(gbl["balance"]) + "威望\r\n"
 	str += "您当前拥有" + Calc.Any2String(ujd["num"]) + "个同类型道具"

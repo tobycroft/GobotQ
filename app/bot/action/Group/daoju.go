@@ -5,12 +5,45 @@ import (
 	"main.go/app/bot/action/GroupBalance"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupDaojuModel"
+	"main.go/app/bot/service"
+	"main.go/config/app_default"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 )
 
 func App_group_daoju(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	switch message {
+	case "清空我的背包":
+		str := clear_backpack(group_id, user_id)
+		AutoMessage(self_id, group_id, user_id, str, groupfunction)
+		break
 
+	case "我的", "列表", "背包":
+		str := list_my_daoju(group_id, user_id)
+		AutoMessage(self_id, group_id, user_id, str, groupfunction)
+		break
+
+	case "商城", "商店":
+		str := list_daoju()
+		AutoMessage(self_id, group_id, user_id, str, groupfunction)
+		break
+
+	case "帮助":
+		AutoMessage(self_id, group_id, user_id, app_default.Default_daoju, groupfunction)
+		break
+
+	default:
+		str, has := service.Serv_text_match(message, []string{"购买", "兑换"})
+		if has {
+			err := buy_daoju(group_id, user_id, str)
+			if err != nil {
+				AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
+			} else {
+				AutoMessage(self_id, group_id, user_id, "兑换完成,你可以使用“道具列表”来查看", groupfunction)
+			}
+		}
+		break
+	}
 }
 
 func list_daoju() string {
@@ -27,6 +60,9 @@ func list_daoju() string {
 
 func buy_daoju(group_id, user_id, cname interface{}) error {
 	data := DaojuModel.Api_find_byCname(cname)
+	if len(data) < 1 {
+		return errors.New(app_default.Daoju_notfound)
+	}
 	db := tuuz.Db()
 	db.Begin()
 
@@ -42,6 +78,7 @@ func buy_daoju(group_id, user_id, cname interface{}) error {
 	user_daoju_data := dj.Api_find(group_id, user_id, data["id"])
 	if len(user_daoju_data) > 0 {
 		if dj.Api_incr(group_id, user_id, data["id"], 1) {
+			db.Commit()
 			return nil
 		} else {
 			db.Rollback()
@@ -49,6 +86,7 @@ func buy_daoju(group_id, user_id, cname interface{}) error {
 		}
 	} else {
 		if dj.Api_insert(group_id, user_id, data["id"], 1) {
+			db.Commit()
 			return nil
 		} else {
 			db.Rollback()
@@ -57,7 +95,7 @@ func buy_daoju(group_id, user_id, cname interface{}) error {
 	}
 }
 
-func clean_backpack(group_id, user_id interface{}) string {
+func clear_backpack(group_id, user_id interface{}) string {
 	datas := GroupDaojuModel.Api_select(group_id, user_id)
 	str := "您已经清空了您的背包，如下道具被丢弃："
 	for i, data := range datas {

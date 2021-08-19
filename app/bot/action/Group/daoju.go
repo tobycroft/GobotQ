@@ -58,10 +58,10 @@ func list_daoju() string {
 	return str
 }
 
-func buy_daoju(group_id, user_id, cname interface{}) error {
+func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
 	data := DaojuModel.Api_find_byCname(cname)
 	if len(data) < 1 {
-		return errors.New(app_default.Daoju_notfound)
+		return "", errors.New(app_default.Daoju_notfound)
 	}
 	db := tuuz.Db()
 	db.Begin()
@@ -71,28 +71,25 @@ func buy_daoju(group_id, user_id, cname interface{}) error {
 	err := gbal.App_single_balance(group_id, user_id, nil, data["price"].(float64), "购买道具")
 	if err != nil {
 		db.Rollback()
-		return err
+		return "", err
 	}
 	var dj GroupDaojuModel.Interface
 	dj.Db = db
 	user_daoju_data := dj.Api_find(group_id, user_id, data["id"])
 	if len(user_daoju_data) > 0 {
-		if dj.Api_incr(group_id, user_id, data["id"], 1) {
-			db.Commit()
-			return nil
-		} else {
+		if !dj.Api_incr(group_id, user_id, data["id"], 1) {
 			db.Rollback()
-			return errors.New("购买道具失败")
+			return "", errors.New("购买道具失败")
 		}
 	} else {
-		if dj.Api_insert(group_id, user_id, data["id"], 1) {
-			db.Commit()
-			return nil
-		} else {
+		if !dj.Api_insert(group_id, user_id, data["id"], 1) {
 			db.Rollback()
-			return errors.New("购买道具失败")
+			return "", errors.New("购买道具失败")
 		}
 	}
+	return "兑换完成，您兑换了：" + Calc.Any2String(data["cname"]) + "" +
+		"\r\n " + Calc.Any2String(data["cname"]) + ":" + Calc.Any2String(data["info"]) +
+		"\r\n 类型:" + Calc.Any2String(data["type"]) + "\r\n 消耗:" + Calc.Any2String(data["price"]), nil
 }
 
 func clear_backpack(group_id, user_id interface{}) string {

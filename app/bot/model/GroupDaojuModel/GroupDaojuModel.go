@@ -104,13 +104,13 @@ func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}, num int64)
 
 func (self *Interface) Api_insert(group_id, user_id, dj_id, num interface{}) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	data := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"dj_id":    dj_id,
 		"num":      num,
 	}
-	db.Where(where)
+	db.Data(data)
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

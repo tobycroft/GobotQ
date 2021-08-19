@@ -79,3 +79,18 @@ func Api_find_byCname(cname interface{}) gorose.Data {
 		return ret
 	}
 }
+
+func Api_find_byName(name interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"name": name,
+	}
+	db.Where(where)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

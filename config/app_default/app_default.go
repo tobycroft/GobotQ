@@ -92,3 +92,6 @@ const Default_daoju = "道具说明：" +
 const Daoju_notfound = "未找到当前道具，或者道具不可获得，请换一个哦，如需查看列表，请输入“道具商店”来查看可兑换列表"
 
 const Daoju_goumai = "您可以使用使用“道具购买”/“道具兑换”[道具名称]来购买一个道具，例如“道具购买免死金牌”来购买对应的道具"
+
+const Daoju_use_for_ban = "您使用道具抵抗了一次禁言伤害"
+const Daoju_use_for_kick = "您使用道具抵抗了一次T出伤害"

@@ -58,7 +58,9 @@ func list_daoju() string {
 	datas := DaojuModel.Api_select_canShow()
 	for i, data := range datas {
 		list := i + 1
-		str += "\r\n	" + Calc.Int2String(list) + "." + data["cname"].(string) + "：" + Calc.Any2String(data["price"]) + "威望," + data["info"].(string)
+		if data["num"].(int64) > 0 {
+			str += "\r\n	" + Calc.Int2String(list) + "." + data["cname"].(string) + "：" + Calc.Any2String(data["price"]) + "威望," + data["info"].(string)
+		}
 	}
 	str += "\r\n你可以使用“道具兑换”[道具名称]，例如“道具购买免死金牌”来购买对应的道具，或者使用“acfur道具”来查看帮助"
 	return str
@@ -109,7 +111,7 @@ func clear_backpack(group_id, user_id interface{}) string {
 	str := "您已经清空了您的背包，如下道具被丢弃："
 	for i, data := range datas {
 		list := i + 1
-		daoju := DaojuModel.Api_find(data["jd_id"])
+		daoju := DaojuModel.Api_find(data["dj_id"])
 		if len(daoju) < 1 {
 			continue
 		}

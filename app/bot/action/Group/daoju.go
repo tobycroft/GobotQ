@@ -40,7 +40,7 @@ func App_group_daoju(self_id, group_id, user_id, message_id int64, message strin
 	default:
 		str, has := service.Serv_text_match(message, []string{"购买", "兑换"})
 		if has {
-			str, err := buy_daoju(self_id, group_id, user_id, str)
+			str, err := buy_daoju(group_id, user_id, str)
 			if err != nil {
 				AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 			} else {
@@ -63,7 +63,7 @@ func list_daoju() string {
 	return str
 }
 
-func buy_daoju(self_id, group_id, user_id, cname interface{}) (string, error) {
+func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
 	data := DaojuModel.Api_find_byCname(cname)
 	if len(data) < 1 {
 		return "", errors.New(app_default.Daoju_notfound)

@@ -118,16 +118,20 @@ func clear_backpack(group_id, user_id interface{}) string {
 
 func list_my_daoju(group_id, user_id interface{}) string {
 	datas := GroupDaojuModel.Api_select(group_id, user_id)
-	str := "您拥有如下道具：："
-	for i, data := range datas {
-		list := i + 1
-		daoju := DaojuModel.Api_find_canUse(data["jd_id"])
-		if len(daoju) < 1 {
-			continue
+	if len(datas) > 0 {
+		str := "您拥有如下道具："
+		for i, data := range datas {
+			list := i + 1
+			daoju := DaojuModel.Api_find_canUse(data["jd_id"])
+			if len(daoju) < 1 {
+				continue
+			}
+			str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",作用" + Calc.Any2String(daoju["type"]) + ",数量," + Calc.Any2String(data["num"])
 		}
-		str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",作用" + Calc.Any2String(daoju["type"]) + ",数量," + Calc.Any2String(data["num"])
+		return str
+	} else {
+		return "您还未拥有任何道具,可以使用“道具商店”命令来查看可购买的道具"
 	}
-	return str
 }
 
 func send_daoju(group_id, user_id, to_uid interface{}) {

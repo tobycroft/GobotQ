@@ -53,7 +53,7 @@ func Api_find_canUse(id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"id":      id,
-		"can_use": 1,
+		"can_use": true,
 	}
 	db.Where(where)
 	ret, err := db.First()

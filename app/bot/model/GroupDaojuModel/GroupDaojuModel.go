@@ -74,7 +74,7 @@ func Api_value(group_id, user_id, dj_id interface{}) interface{} {
 	return Api_value(group_id, user_id, dj_id)
 }
 
-func (self *Interface) Api_value(group_id, user_id, dj_id interface{}) interface{} {
+func (self *Interface) Api_value_num(group_id, user_id, dj_id interface{}) int64 {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -87,7 +87,11 @@ func (self *Interface) Api_value(group_id, user_id, dj_id interface{}) interface
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return 0
 	} else {
-		return data
+		if data == nil {
+			return 0
+		} else {
+			return data.(int64)
+		}
 	}
 }
 

@@ -179,8 +179,8 @@ func send_daoju(group_id, user_id interface{}, send_to_message string) (string, 
 		db := tuuz.Db()
 		var gd GroupDaojuModel.Interface
 		gd.Db = db
-		user_daoju := gd.Api_value(group_id, user_id, daoju_data["id"])
-		if user_daoju == nil || user_daoju.(int64) < 1 {
+		user_daoju := gd.Api_value_num(group_id, user_id, daoju_data["id"])
+		if user_daoju < 1 {
 			return "", errors.New("你没有这个道具，无法赠送")
 		} else {
 			db.Begin()
@@ -192,7 +192,7 @@ func send_daoju(group_id, user_id interface{}, send_to_message string) (string, 
 				db.Rollback()
 				return "", errors.New("赠送失败，对方无法增加该类型道具")
 			}
-			left := gd.Api_value(group_id, user_id, daoju_data["id"])
+			left := gd.Api_value_num(group_id, user_id, daoju_data["id"])
 			db.Commit()
 			return "成功赠送道具，你目前还剩" + Calc.Any2String(left) + "个" + send_to_message, nil
 		}

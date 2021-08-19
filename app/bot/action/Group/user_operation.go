@@ -34,7 +34,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
 	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
-			dj_left := daoju.Api_value(group_id, user_id, dj_data["id"])
+			dj_left := daoju.Api_value_num(group_id, user_id, dj_data["id"])
 			db.Commit()
 			str := "\r\n[" + Calc.Any2String(dj_data["cname"]) + "]还剩下" + Calc.Any2String(dj_left)
 			AutoMessage(self_id, group_id, user_id, app_default.Daoju_use_for_ban+str, groupfunction)
@@ -69,7 +69,7 @@ func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, gr
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
 	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
-			dj_left := daoju.Api_value(group_id, user_id, dj_data["id"])
+			dj_left := daoju.Api_value_num(group_id, user_id, dj_data["id"])
 			str := "\r\n[" + Calc.Any2String(dj_data["cname"]) + "]还剩下" + Calc.Any2String(dj_left)
 			AutoMessage(self_id, group_id, user_id, app_default.Daoju_use_for_kick+str, groupfunction)
 			return

@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var Group_send_chan = make(chan GroupSendStruct, 20)
+var Group_send_chan = make(chan GroupSendStruct, 100)
 
 func Sendgroupmsg(Self_id, Group_id interface{}, Message string, AutoRetract bool) {
 	var gss GroupSendStruct
@@ -59,7 +59,7 @@ func sendgroupmsg(gss GroupSendStruct) (Message, error) {
 	post := map[string]interface{}{
 		"group_id":    gss.Group_id,
 		"message":     gss.Message,
-		"auto_escape": false,
+		"auto_escape": true,
 	}
 	botinfo := BotModel.Api_find(gss.Self_id)
 	if len(botinfo) < 1 {

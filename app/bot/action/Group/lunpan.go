@@ -122,10 +122,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 
 			var gd GroupDaojuModel.Interface
 			gd.Db = db
-			daoju_num := gd.Api_value(group_id, user_id, 3)
-			if daoju_num == nil {
-				daoju_num = 0
-			}
+			daoju_num := gd.Api_value_num(group_id, user_id, 3)
 			switch mode_string {
 			case "A", "a":
 				for i := 0; i < 1; i++ {
@@ -140,7 +137,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					if daoju_num.(int64) > 0 {
+					if daoju_num > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
@@ -174,7 +171,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					if daoju_num.(int64) > 0 {
+					if daoju_num > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
@@ -208,7 +205,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					if daoju_num.(int64) > 0 {
+					if daoju_num > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
@@ -242,7 +239,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					if daoju_num.(int64) > 0 {
+					if daoju_num > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
@@ -276,7 +273,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					if daoju_num.(int64) > 0 {
+					if daoju_num > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
@@ -300,7 +297,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "F", "f":
 				//poom!!!
 				if stuck_mode > played_time {
-					if daoju_num.(int64) > 0 {
+					if daoju_num > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)

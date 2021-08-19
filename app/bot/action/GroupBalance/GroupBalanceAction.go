@@ -23,6 +23,7 @@ func (self *Interface) App_single_balance(group_id, user_id interface{}, order_i
 	self.Db.Begin()
 	userbalance, err := self.App_check_balance(group_id, user_id)
 	if err != nil {
+		self.Db.Rollback()
 		Log.Crrs(err, tuuz.FUNCTION_ALL())
 		return err
 	}

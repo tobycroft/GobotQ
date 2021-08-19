@@ -8,6 +8,7 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Net"
 	"main.go/tuuz/Redis"
+	"net/url"
 	"time"
 )
 
@@ -56,10 +57,11 @@ func Send_group() {
 }
 
 func sendgroupmsg(gss GroupSendStruct) (Message, error) {
+	msg := url.QueryEscape(gss.Message)
 	post := map[string]interface{}{
 		"group_id":    gss.Group_id,
-		"message":     gss.Message,
-		"auto_escape": true,
+		"message":     msg,
+		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(gss.Self_id)
 	if len(botinfo) < 1 {

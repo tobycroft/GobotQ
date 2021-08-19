@@ -403,7 +403,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 	switch Type {
 
-	case "道具":
+	case "道具", "商店":
 		Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 

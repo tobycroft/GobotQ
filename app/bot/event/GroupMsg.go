@@ -26,7 +26,7 @@ type RefreshGroupStruct struct {
 	GroupId int64
 }
 
-var RefreshGroupChan = make(chan RefreshGroupStruct, 20)
+var RefreshGroupChan = make(chan RefreshGroupStruct, 100)
 
 type GM struct {
 	Anonymous   interface{} `json:"anonymous"`
@@ -75,17 +75,20 @@ func GroupMsg(gm GM, remoteip string) {
 	}
 
 	if !is_self {
-		var group RefreshGroupStruct
-		group.GroupId = group_id
-		group.SelfId = self_id
-		group.UserId = user_id
-		RefreshGroupChan <- group
 		botinfo := BotModel.Api_find(self_id)
 		if len(botinfo) < 1 {
 			Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(self_id))
 			return
 		}
-
+		has1 := Redis.CheckExists("__groupinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
+		has2 := Redis.CheckExists("__userinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
+		if !has1 || !has2 {
+			var group RefreshGroupStruct
+			group.GroupId = group_id
+			group.SelfId = self_id
+			group.UserId = user_id
+			RefreshGroupChan <- group
+		}
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 

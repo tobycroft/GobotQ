@@ -271,9 +271,10 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	}
 }
 
-const group_function_number = 14
+const group_function_number = 15
 
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting", "sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme"}
+var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting",
+	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具"}
 
 func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -364,6 +365,12 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 		new_text[idx] = ""
 		function[idx] = ok
 	}(13, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(message, []string{"道具"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(14, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -396,6 +403,10 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	ret.Self_id = self_id
 
 	switch Type {
+
+	case "道具":
+		Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		break
 
 	case "atme":
 		api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)

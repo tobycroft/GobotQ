@@ -175,8 +175,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					if daoju_num.(int64) > 0 {
 						amount = 0
 						gd.Api_decr(group_id, user_id, 3)
-						AutoMessage(self_id, group_id, use
-						r_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
 							"激发位置在"+rand+",因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
 					} else {
 						amount = -num

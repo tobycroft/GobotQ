@@ -95,3 +95,5 @@ const Daoju_goumai = "您可以使用使用“道具购买”/“道具兑换”
 
 const Daoju_use_for_ban = "您使用道具抵抗了一次禁言伤害"
 const Daoju_use_for_kick = "您使用道具抵抗了一次T出伤害"
+
+const Default_send_daoju = "你可以使用道具赠送[道具名称]给[qq号码]来将你购买的道具送给群友"

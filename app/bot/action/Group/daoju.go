@@ -34,6 +34,10 @@ func App_group_daoju(self_id, group_id, user_id, message_id int64, message strin
 		AutoMessage(self_id, group_id, user_id, app_default.Default_daoju, groupfunction)
 		break
 
+	case "赠送":
+		AutoMessage(self_id, group_id, user_id, app_default.Default_send_daoju, groupfunction)
+		break
+
 	case "购买", "兑换":
 		AutoMessage(self_id, group_id, user_id, app_default.Daoju_goumai, groupfunction)
 		break
@@ -46,6 +50,15 @@ func App_group_daoju(self_id, group_id, user_id, message_id int64, message strin
 				AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 			} else {
 				AutoMessage(self_id, group_id, user_id, str, groupfunction)
+			}
+		}
+		send_to, has := service.Serv_text_match(message, []string{"赠送", "赠与", "送给"})
+		if has {
+			send, err := send_daoju(group_id, user_id, send_to)
+			if err != nil {
+				AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
+			} else {
+				AutoMessage(self_id, group_id, user_id, send, groupfunction)
 			}
 		}
 		break
@@ -142,6 +155,16 @@ func list_my_daoju(group_id, user_id interface{}) string {
 	}
 }
 
-func send_daoju(group_id, user_id, to_uid interface{}) {
-
+func send_daoju(group_id, user_id interface{}, send_to_message string) (string, error) {
+	qq := service.Serv_get_qq(send_to_message)
+	to_user_id := service.Serv_at_who(send_to_message)
+	qq_num := ""
+	if to_user_id != "" {
+		qq_num = to_user_id
+	} else if qq != "" {
+		qq_num = qq
+	} else {
+		return "", errors.New("接收人不正确，请使用道具赠送[道具名称]群成员号码或者道具赠送[道具名称]@某个人，例如“道具赠送免死金牌@张三”来赠送自己已有的道具")
+	}
+	GroupDaojuModel.Api_find(group_id,user_id)
 }

@@ -158,3 +158,20 @@ func (self *Interface) Api_delete(group_id, user_id interface{}) bool {
 		return true
 	}
 }
+
+func Api_find_in_djId(group_id, user_id interface{}, dj_id []interface{}) gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	db.WhereIn("dj_id", dj_id)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

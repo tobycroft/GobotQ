@@ -3,7 +3,9 @@ package Group
 import (
 	"errors"
 	"main.go/app/bot/api"
+	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupBalanceModel"
+	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupLunpanModel"
 	"main.go/app/bot/service"
 	"main.go/tuuz"
@@ -29,7 +31,33 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		//fmt.Println(len(message) > 3, message[:3] != "", !mode.MatchString(message))
 		return
 	}
+	possible := int64(0)
+	user_daoju := GroupDaojuModel.Api_find_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
+	if len(user_daoju) > 0 {
+		daoju := DaojuModel.Api_find_canUse(user_daoju["dj_id"])
+		if len(daoju) > 0 {
+			switch daoju["name"].(string) {
+			case "r_25":
+				possible = 25
+				break
 
+			case "r_50":
+				possible = 50
+				break
+
+			case "r_75":
+				possible = 75
+				break
+
+			case "r_90":
+				possible = 90
+				break
+
+			default:
+				break
+			}
+		}
+	}
 	if len(sign) > 0 {
 		at := service.Serv_at(user_id)
 		AutoMessage(self_id, group_id, user_id, "你今天已经挑战过了，请明天再来"+at, groupfunction)
@@ -66,7 +94,13 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		if played_time > 85 {
 			played_time = 85
 		}
-		ext_text := ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
+		ext_text := ""
+		if possible > played_time {
+			played_time = possible
+			ext_text = ",你用了自家的左轮，这把左轮的完好度为:" + Calc.Any2String(100-played_time) + "％"
+		} else {
+			ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
+		}
 		if active {
 			//左轮模式
 			mode_string := mode.FindString(message)
@@ -86,6 +120,10 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			rand_slice := []string{}
 			stuck_mode := int64(Calc.Rand(1, 100))
 
+			var gd GroupDaojuModel.Interface
+			gd.Db = db
+			daoju_num := gd.Api_value(group_id, user_id, 3)
+
 			switch mode_string {
 			case "A", "a":
 				for i := 0; i < 1; i++ {
@@ -100,9 +138,16 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if daoju_num.(int64) > 0 {
+						amount = 0
+						gd.Api_decr(group_id, user_id, 3)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
+					} else {
+						amount = -num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					}
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/6, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
@@ -127,9 +172,17 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if daoju_num.(int64) > 0 {
+						amount = 0
+						gd.Api_decr(group_id, user_id, 3)
+						AutoMessage(self_id, group_id, use
+						r_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
+					} else {
+						amount = -num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					}
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/3, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
@@ -154,9 +207,16 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if daoju_num.(int64) > 0 {
+						amount = 0
+						gd.Api_decr(group_id, user_id, 3)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
+					} else {
+						amount = -num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					}
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
@@ -181,9 +241,16 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if daoju_num.(int64) > 0 {
+						amount = 0
+						gd.Api_decr(group_id, user_id, 3)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
+					} else {
+						amount = -num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					}
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/3*2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
@@ -208,9 +275,16 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				poom := Array.InArrayString(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
-					amount = -num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if daoju_num.(int64) > 0 {
+						amount = 0
+						gd.Api_decr(group_id, user_id, 3)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
+					} else {
+						amount = -num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n可惜了，子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					}
 				} else if poom && stuck_mode <= played_time {
 					amount = Calc.Round(num/6*5, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
@@ -225,7 +299,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "F", "f":
 				//poom!!!
 				if stuck_mode > played_time {
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if daoju_num.(int64) > 0 {
+						amount = 0
+						gd.Api_decr(group_id, user_id, 3)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n-Dang!\n脖子差点折了，因为你带了防弹头盔，所以平局，不奖励也不损失威望"+ext_text, groupfunction)
+					} else {
+						amount = -num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					}
 				} else {
 					amount = num
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n百分之20的卡弹率让你碰上了！恭喜你！运气爆棚奖励翻倍，你赢得了:"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)

@@ -33,6 +33,10 @@ func App_group_daoju(self_id, group_id, user_id, message_id int64, message strin
 		AutoMessage(self_id, group_id, user_id, app_default.Default_daoju, groupfunction)
 		break
 
+	case "购买", "兑换":
+		AutoMessage(self_id, group_id, user_id, app_default.Daoju_goumai, groupfunction)
+		break
+
 	default:
 		str, has := service.Serv_text_match(message, []string{"购买", "兑换"})
 		if has {

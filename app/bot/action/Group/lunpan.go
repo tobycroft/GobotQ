@@ -77,8 +77,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			} else {
 				ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
 			}
-			user_daoju := GroupDaojuModel.Api_find
-			_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
+			user_daoju := GroupDaojuModel.Api_find_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
 			if len(user_daoju) > 0 {
 				daoju := DaojuModel.Api_find_canUse(user_daoju["dj_id"])
 				if len(daoju) > 0 {

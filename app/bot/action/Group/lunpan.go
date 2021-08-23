@@ -31,33 +31,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		//fmt.Println(len(message) > 3, message[:3] != "", !mode.MatchString(message))
 		return
 	}
-	possible := int64(0)
-	user_daoju := GroupDaojuModel.Api_find_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
-	if len(user_daoju) > 0 {
-		daoju := DaojuModel.Api_find_canUse(user_daoju["dj_id"])
-		if len(daoju) > 0 {
-			switch daoju["name"].(string) {
-			case "r_25":
-				possible = 25
-				break
 
-			case "r_50":
-				possible = 50
-				break
-
-			case "r_75":
-				possible = 75
-				break
-
-			case "r_90":
-				possible = 90
-				break
-
-			default:
-				break
-			}
-		}
-	}
 	if len(sign) > 0 {
 		at := service.Serv_at(user_id)
 		AutoMessage(self_id, group_id, user_id, "你今天已经挑战过了，请明天再来"+at, groupfunction)
@@ -95,13 +69,45 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			played_time = 85
 		}
 		ext_text := ""
-		if possible > played_time {
-			played_time = possible
-			ext_text = ",你用了自家的左轮，这把左轮的完好度为:" + Calc.Any2String(100-played_time) + "％"
-		} else {
-			ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
-		}
 		if active {
+			possible := int64(0)
+			if possible > played_time {
+				played_time = possible
+				ext_text = ",你用了自家的左轮，这把左轮的完好度为:" + Calc.Any2String(100-played_time) + "％"
+			} else {
+				ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
+			}
+			user_daoju := GroupDaojuModel.Api_find
+			_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
+			if len(user_daoju) > 0 {
+				daoju := DaojuModel.Api_find_canUse(user_daoju["dj_id"])
+				if len(daoju) > 0 {
+					switch daoju["name"].(string) {
+					case "r_25":
+						possible = 25
+						break
+
+					case "r_50":
+						possible = 50
+						break
+
+					case "r_75":
+						possible = 75
+						break
+
+					case "r_90":
+						possible = 90
+						break
+
+					default:
+						break
+					}
+					var gj GroupDaojuModel.Interface
+					gj.Db = db
+					gj.Api_decr(group_id, user_id, daoju["id"])
+				}
+			}
+
 			//左轮模式
 			mode_string := mode.FindString(message)
 			message_num := reg.FindString(message)
@@ -321,6 +327,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				return
 			}
 		} else {
+			ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
 			//普通模式
 			rand := Calc.Rand(0, 100)
 			str := ""

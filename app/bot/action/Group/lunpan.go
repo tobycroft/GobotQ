@@ -77,7 +77,9 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			} else {
 				ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
 			}
-			user_daoju := GroupDaojuModel.Api_find_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
+			var gd GroupDaojuModel.Interface
+			gd.Db = db
+			user_daoju := gd.Api_find_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
 			if len(user_daoju) > 0 {
 				daoju := DaojuModel.Api_find_canUse(user_daoju["dj_id"])
 				if len(daoju) > 0 {
@@ -101,9 +103,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					default:
 						break
 					}
-					var gj GroupDaojuModel.Interface
-					gj.Db = db
-					gj.Api_decr(group_id, user_id, daoju["id"])
+					gd.Api_decr(group_id, user_id, daoju["id"])
 				}
 			}
 
@@ -125,8 +125,6 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			rand_slice := []string{}
 			stuck_mode := int64(Calc.Rand(1, 100))
 
-			var gd GroupDaojuModel.Interface
-			gd.Db = db
 			daoju_num := gd.Api_value_num(group_id, user_id, 3)
 			switch mode_string {
 			case "A", "a":

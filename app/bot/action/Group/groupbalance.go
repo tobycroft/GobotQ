@@ -18,8 +18,8 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 		api.Retract_chan <- ret
 	}
 	gbl := GroupBalanceModel.Api_find(group_id, user_id)
-	at:=service.Serv_at(user_id)
-	str := at+"您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
+	at := service.Serv_at(user_id)
+	str := at + "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
 	api.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }
 

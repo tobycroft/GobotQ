@@ -151,6 +151,7 @@ func sell_coin(group_id, user_id interface{}, message string) (string, error) {
 	var gc GroupCoinModel.Interface
 	gc.Db = db
 	user_coin := gc.Api_find(group_id, user_id, coin["id"])
+	all_num := gc.Api_sum_byCid(coin["id"])
 	if len(user_coin) < 1 {
 		db.Rollback()
 		return "", errors.New("你没有这个币种，无法卖出")
@@ -164,13 +165,29 @@ func sell_coin(group_id, user_id interface{}, message string) (string, error) {
 			return "", errors.New("卖出记录减少失败")
 		}
 	}
-
 	var gbal GroupBalance.Interface
 	gbal.Db = db
 	err, left := gbal.App_single_balance(group_id, user_id, nil, math.Abs(coin_reward), "卖出币种")
 	if err != nil {
 		db.Rollback()
 		return "", err
+	}
+	switch coin["type"].(int64) {
+	case 1:
+		break
+
+	case 2:
+		after_all_num := gc.Api_sum_byCid(coin["id"])
+		ratio := Calc.Round(after_all_num/all_num, 6)
+		if ratio > 0 {
+			var c CoinModel.Interface
+			c.Db = db
+			c.Api_incr_price(coin["id"], -math.Abs(ratio))
+		}
+		break
+
+	default:
+		break
 	}
 	db.Commit()
 	str := "您当拥有" + Calc.Any2String(left) + "威望\r\n"

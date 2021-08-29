@@ -85,12 +85,9 @@ func buy_coin(group_id, user_id interface{}, message string) (string, error) {
 	}
 	db := tuuz.Db()
 	db.Begin()
-
 	var gbal GroupBalance.Interface
 	gbal.Db = db
-
 	coin_num := amount / coin["price"].(float64)
-
 	err, left := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(amount), "购买币种")
 	if err != nil {
 		db.Rollback()

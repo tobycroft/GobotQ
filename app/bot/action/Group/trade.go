@@ -2,7 +2,6 @@ package Group
 
 import (
 	"errors"
-	"github.com/shopspring/decimal"
 	"main.go/app/bot/action/GroupBalance"
 	"main.go/app/bot/model/CoinModel"
 	"main.go/app/bot/model/GroupCoinModel"
@@ -90,9 +89,7 @@ func buy_coin(group_id, user_id interface{}, message string) (string, error) {
 	var gbal GroupBalance.Interface
 	gbal.Db = db
 
-	price, _ := coin["price"].(decimal.Decimal).Abs().Float64()
-
-	coin_num := amount / price
+	coin_num := amount / coin["price"].(float64)
 
 	err, left := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(amount), "购买币种")
 	if err != nil {
@@ -134,8 +131,7 @@ func sell_coin(group_id, user_id interface{}, message string) (string, error) {
 	db := tuuz.Db()
 	db.Begin()
 
-	price, _ := coin["price"].(decimal.Decimal).Abs().Float64()
-	coin_reward := amount * price
+	coin_reward := amount * coin["price"].(float64)
 	var gc GroupCoinModel.Interface
 	gc.Db = db
 	user_coin := gc.Api_find(group_id, user_id, coin["id"])

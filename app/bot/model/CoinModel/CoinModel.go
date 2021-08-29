@@ -9,7 +9,7 @@ import (
 const table = "coin"
 
 func Api_find(id interface{}) gorose.Data {
-	db := tuuz.Db()
+	db := tuuz.Db().Table(table)
 	db.Where("id", "=", id)
 	ret, err := db.First()
 	if err != nil {
@@ -21,7 +21,7 @@ func Api_find(id interface{}) gorose.Data {
 }
 
 func Api_select() []gorose.Data {
-	db := tuuz.Db()
+	db := tuuz.Db().Table(table)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

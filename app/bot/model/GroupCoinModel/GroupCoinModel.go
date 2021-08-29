@@ -46,6 +46,7 @@ func (self *Interface) Api_find(group_id, user_id, cid interface{}) gorose.Data 
 		return ret
 	}
 }
+
 func (self *Interface) Api_select(group_id, user_id interface{}) []gorose.Data {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
@@ -53,6 +54,23 @@ func (self *Interface) Api_select(group_id, user_id interface{}) []gorose.Data {
 		"user_id":  user_id,
 	}
 	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func (self *Interface) Api_join_select(group_id, user_id interface{}) []gorose.Data {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"user_id":  user_id,
+	}
+	db.Where(where)
+	db.Join("coin on coin.id=cid")
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"main.go/app/bot/action/GroupBalance"
 	"main.go/app/bot/model/DaojuModel"
-	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"

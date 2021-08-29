@@ -19,7 +19,7 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 	switch message {
 
 	case "我的", "列表", "背包":
-		str := list_my_daoju(group_id, user_id)
+		str := list_my_coin(group_id, user_id)
 		AutoMessage(self_id, group_id, user_id, str, groupfunction)
 		break
 

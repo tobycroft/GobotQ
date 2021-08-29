@@ -68,5 +68,11 @@ type Interface struct {
 func (self *Interface) Api_incr_price(id, price interface{}) bool {
 	db := self.Db.Table(table)
 	db.Where("id", "=", id)
-	db.Increment("price", price)
+	_, err := db.Increment("price", price)
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
 }

@@ -74,7 +74,11 @@ func (self *Interface) Api_sum_byCid(cid interface{}) float64 {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return 0
 	} else {
-		return ret.(float64)
+		if ret != nil {
+			return ret.(float64)
+		} else {
+			return 0
+		}
 	}
 }
 

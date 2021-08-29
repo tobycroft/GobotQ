@@ -1,6 +1,7 @@
 package Group
 
 import (
+	"github.com/shopspring/decimal"
 	"main.go/app/bot/action/GroupBalance"
 	"main.go/app/bot/model/CoinModel"
 	"main.go/app/bot/model/DaojuModel"
@@ -75,7 +76,7 @@ func list_coin() string {
 	return str
 }
 
-func but_coin(group_id, user_id, cname interface{}) (string, error) {
+func buy_coin(group_id, user_id, cname interface{}, amount float64) (string, error) {
 	coin := CoinModel.Api_find_byCname(cname)
 	if len(coin) < 1 {
 		return "", errors.New(app_default.Trade_coin)
@@ -85,26 +86,19 @@ func but_coin(group_id, user_id, cname interface{}) (string, error) {
 
 	var gbal GroupBalance.Interface
 	gbal.Db = db
-	err := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(data["price"].(float64)), "购买道具")
+
+	price, _ := coin["price"].(decimal.Decimal).Abs().Float64()
+
+	coin_num := amount / price
+
+	err := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(amount), "购买币种")
 	if err != nil {
 		db.Rollback()
 		return "", err
 	}
 	var dj GroupDaojuModel.Interface
 	dj.Db = db
-	user_daoju_data := dj.Api_find(group_id, user_id, data["id"])
-	if len(user_daoju_data) > 0 {
-		if !dj.Api_incr(group_id, user_id, data["id"], 1) {
-			db.Rollback()
-			return "", errors.New("购买道具失败")
-		}
-	} else {
-		if !dj.Api_insert(group_id, user_id, data["id"], 1) {
-			db.Rollback()
-			return "", errors.New("购买道具失败")
-		}
-	}
-	ujd := dj.Api_find(group_id, user_id, data["id"])
+
 	db.Commit()
 	gbl := GroupBalanceModel.Api_find(group_id, user_id)
 	str := "您当前还剩" + Calc.Any2String(gbl["balance"]) + "威望\r\n"

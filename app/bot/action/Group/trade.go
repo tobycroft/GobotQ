@@ -66,7 +66,8 @@ func list_coin() string {
 	datas := CoinModel.Api_select()
 	for i, data := range datas {
 		list := i + 1
-		str += "\r\n	" + Calc.Int2String(list) + ".名称:" + data["cname"].(string) + ",比重:" + Calc.Any2String(data["price"]) + ",增值率:" + Calc.Any2String(data["gain"]) + "(每天)"
+		str += "\r\n	" + Calc.Int2String(list) + ".名称:" + data["cname"].(string) + ",比重:" + Calc.Any2String(data["price"]) +
+			",增值率:" + Calc.Any2String(data["gain"]) + "(每天)" + ",说明:" + data["info"].(string)
 	}
 	str += "\r\n你可以使用“交易买入”[名称][数量]，例如“道具买入A100”来购买对应比重，例如比重为2时，使用100购买，就可以获得50比重，可使用“交易帮助”来查看帮助详情"
 	return str

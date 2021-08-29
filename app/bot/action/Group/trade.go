@@ -6,6 +6,7 @@ import (
 	"main.go/app/bot/model/CoinModel"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupBalanceModel"
+	"main.go/app/bot/model/GroupCoinModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -96,11 +97,22 @@ func buy_coin(group_id, user_id, cname interface{}, amount float64) (string, err
 		db.Rollback()
 		return "", err
 	}
-	var dj GroupDaojuModel.Interface
-	dj.Db = db
-
+	var gc GroupCoinModel.Interface
+	gc.Db = db
+	user_coin := gc.Api_find(group_id, user_id, coin["id"])
+	if len(user_coin) < 1 {
+		if !gc.Api_insert(group_id, user_id, coin["id"], coin_num) {
+			db.Rollback()
+			return "", errors.New("买入记录创建失败")
+		}
+	} else {
+		if !gc.Api_incr(group_id, user_id, coin["id"], coin_num) {
+			db.Rollback()
+			return "", errors.New("修改记录创建失败")
+		}
+	}
 	db.Commit()
-	gbl := GroupBalanceModel.Api_find(group_id, user_id)
+	gbl := gbal.App_check_balance(group_id, user_id)
 	str := "您当前还剩" + Calc.Any2String(gbl["balance"]) + "威望\r\n"
 	str += "您当前拥有" + Calc.Any2String(ujd["num"]) + "个同类型道具"
 	return "兑换完成，您兑换了：" + Calc.Any2String(data["cname"]) + "" +

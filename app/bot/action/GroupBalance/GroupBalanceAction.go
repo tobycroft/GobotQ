@@ -47,18 +47,14 @@ func (self *Interface) App_single_balance(group_id, user_id interface{}, order_i
 
 func (self *Interface) App_check_balance(group_id, user_id interface{}) (float64, error) {
 	var ub GroupBalanceModel.Interface
-	self.Db.Begin()
 	ub.Db = self.Db
 	userbalance := ub.Api_find(group_id, user_id)
 	if len(userbalance) > 0 {
-		self.Db.Commit()
 		return userbalance["balance"].(float64), nil
 	} else {
 		if ub.Api_insert(group_id, user_id) {
-			self.Db.Commit()
 			return 0, nil
 		} else {
-			self.Db.Rollback()
 			return 0, errors.New("威望初始化失败")
 		}
 	}

@@ -1,8 +1,19 @@
 package Group
 
 import (
+	"main.go/app/bot/action/GroupBalance"
+	"main.go/app/bot/model/CoinModel"
+	"main.go/app/bot/model/DaojuModel"
+	"main.go/app/bot/model/GroupBalanceModel"
+	"main.go/app/bot/model/GroupDaojuModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
+	"main.go/tuuz"
+	"main.go/tuuz/Calc"
+	"math"
+	"strings"
+	"errors"
 )
 
 func App_trade_center(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
@@ -14,7 +25,7 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 		break
 
 	case "中心", "商城", "商店":
-		str := list_daoju()
+		str := list_coin()
 		AutoMessage(self_id, group_id, user_id, str, groupfunction)
 		break
 
@@ -22,8 +33,11 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 		AutoMessage(self_id, group_id, user_id, app_default.Default_trade, groupfunction)
 		break
 
-	case "购买", "兑换":
-		AutoMessage(self_id, group_id, user_id, app_default.Daoju_goumai, groupfunction)
+	case "买入", "购买", "兑换":
+		AutoMessage(self_id, group_id, user_id, app_default.Trade_buy, groupfunction)
+		break
+	case "卖出", "卖掉", "兑出":
+		AutoMessage(self_id, group_id, user_id, app_default.Trade_sell, groupfunction)
 		break
 
 	default:
@@ -46,5 +60,139 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 			}
 		}
 		break
+	}
+}
+
+func list_coin() string {
+	str := ""
+	str += "交易中心目前拥有如下币种可买入："
+	datas := DaojuModel.Api_select_canShow()
+	for i, data := range datas {
+		list := i + 1
+		str += "\r\n	" + Calc.Int2String(list) + ".名称:" + data["cname"].(string) + ",比重:" + Calc.Any2String(data["price"]) + ",增值率:" + Calc.Any2String(data["gain"]) + "(每天)"
+	}
+	str += "\r\n你可以使用“交易买入”[名称][数量]，例如“道具买入A100”来购买对应比重，例如比重为2时，使用100购买，就可以获得50比重，可使用“交易帮助”来查看帮助详情"
+	return str
+}
+
+func but_coin(group_id, user_id, cname interface{}) (string, error) {
+	coin := CoinModel.Api_find_byCname(cname)
+	if len(coin) < 1 {
+		return "", errors.New(app_default.Trade_coin)
+	}
+	db := tuuz.Db()
+	db.Begin()
+
+	var gbal GroupBalance.Interface
+	gbal.Db = db
+	err := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(data["price"].(float64)), "购买道具")
+	if err != nil {
+		db.Rollback()
+		return "", err
+	}
+	var dj GroupDaojuModel.Interface
+	dj.Db = db
+	user_daoju_data := dj.Api_find(group_id, user_id, data["id"])
+	if len(user_daoju_data) > 0 {
+		if !dj.Api_incr(group_id, user_id, data["id"], 1) {
+			db.Rollback()
+			return "", errors.New("购买道具失败")
+		}
+	} else {
+		if !dj.Api_insert(group_id, user_id, data["id"], 1) {
+			db.Rollback()
+			return "", errors.New("购买道具失败")
+		}
+	}
+	ujd := dj.Api_find(group_id, user_id, data["id"])
+	db.Commit()
+	gbl := GroupBalanceModel.Api_find(group_id, user_id)
+	str := "您当前还剩" + Calc.Any2String(gbl["balance"]) + "威望\r\n"
+	str += "您当前拥有" + Calc.Any2String(ujd["num"]) + "个同类型道具"
+	return "兑换完成，您兑换了：" + Calc.Any2String(data["cname"]) + "" +
+		"\r\n " + Calc.Any2String(data["cname"]) + ":" + Calc.Any2String(data["info"]) +
+		"\r\n 类型:" + Calc.Any2String(data["type"]) + "\r\n 消耗:" + Calc.Any2String(data["price"]) +
+		"\r\n" + str, nil
+}
+
+func clear_backpack(group_id, user_id interface{}) string {
+	datas := GroupDaojuModel.Api_select(group_id, user_id)
+	str := "您已经清空了您的背包，如下道具被丢弃："
+	for i, data := range datas {
+		list := i + 1
+		daoju := DaojuModel.Api_find(data["dj_id"])
+		if len(daoju) < 1 {
+			continue
+		}
+		str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",数量," + Calc.Any2String(data["num"])
+	}
+	var gjd GroupDaojuModel.Interface
+	gjd.Db = tuuz.Db()
+	if gjd.Api_delete(group_id, user_id) {
+		return str
+	} else {
+		return "背包清空失败"
+	}
+}
+
+func list_my_daoju(group_id, user_id interface{}) string {
+	datas := GroupDaojuModel.Api_select_have(group_id, user_id)
+	if len(datas) > 0 {
+		str := "您拥有如下道具："
+		for i, data := range datas {
+			list := i + 1
+			daoju := DaojuModel.Api_find_canUse(data["dj_id"])
+			if len(daoju) < 1 {
+				continue
+			}
+			str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",作用" + Calc.Any2String(daoju["type"]) + ",数量," + Calc.Any2String(data["num"])
+		}
+		return str
+	} else {
+		return "您还未拥有任何道具,可以使用“道具商店”命令来查看可购买的道具"
+	}
+}
+
+func send_daoju(group_id, user_id interface{}, send_to_message string) (string, error) {
+	qq := service.Serv_get_qq(send_to_message)
+	cq_mess, to_user_id := service.Serv_at_who(send_to_message)
+	qq_num := ""
+	if to_user_id != "" {
+		qq_num = to_user_id
+		send_to_message = strings.ReplaceAll(send_to_message, cq_mess, "")
+	} else if qq != "" {
+		qq_num = qq
+		send_to_message = strings.ReplaceAll(send_to_message, qq, "")
+	} else {
+		return "", errors.New("接收人不正确，请使用道具赠送[道具名称]群成员号码或者道具赠送[道具名称]@某个人，例如“道具赠送免死金牌@张三”来赠送自己已有的道具")
+	}
+	member := GroupMemberModel.Api_find(group_id, qq_num)
+	if len(member) < 1 {
+		return "", errors.New("没有找到该群员")
+	}
+	daoju_data := DaojuModel.Api_find_byCname(send_to_message)
+	if len(daoju_data) > 0 {
+		db := tuuz.Db()
+		var gd GroupDaojuModel.Interface
+		gd.Db = db
+		user_daoju := gd.Api_value_num(group_id, user_id, daoju_data["id"])
+		if user_daoju < 1 {
+			return "", errors.New("你没有这个道具，无法赠送")
+		} else {
+			db.Begin()
+			if !gd.Api_decr(group_id, user_id, daoju_data["id"]) {
+				db.Rollback()
+				return "", errors.New("赠送失败，无法扣除该道具")
+			}
+			if !gd.Api_incr(group_id, member["user_id"], daoju_data["id"], 1) {
+				db.Rollback()
+				return "", errors.New("赠送失败，对方无法增加该类型道具")
+			}
+			left := gd.Api_value_num(group_id, user_id, daoju_data["id"])
+			db.Commit()
+			return "成功赠送道具，你目前还剩" + Calc.Any2String(left) + "个" + send_to_message, nil
+		}
+	} else {
+		return "", errors.New("该道具不存在")
 	}
 }

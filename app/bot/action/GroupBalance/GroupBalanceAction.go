@@ -30,8 +30,8 @@ func (self *Interface) App_single_balance(group_id, user_id interface{}, order_i
 	if order_id == nil {
 		order_id = Calc.GenerateOrderId()
 	}
+	after_userbalance, _ := Calc.Bc_add(userbalance, amount).Float64()
 	if amount < 0 {
-		after_userbalance, _ := Calc.Bc_add(userbalance, amount).Float64()
 		if after_userbalance < 0 {
 			self.Db.Rollback()
 			return errors.New("威望不足无法购买,还差：" + Calc.Float642String(after_userbalance)), 0

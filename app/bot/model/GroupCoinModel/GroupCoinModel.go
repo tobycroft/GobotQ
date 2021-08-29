@@ -63,6 +63,21 @@ func (self *Interface) Api_select(group_id, user_id interface{}) []gorose.Data {
 	}
 }
 
+func (self *Interface) Api_sum_byCid(cid interface{}) float64 {
+	db := self.Db.Table(table)
+	where := map[string]interface{}{
+		"cid": cid,
+	}
+	db.Where(where)
+	ret, err := db.Sum("amount")
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return 0
+	} else {
+		return ret.(float64)
+	}
+}
+
 func (self *Interface) Api_join_select(group_id, user_id interface{}) []gorose.Data {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{

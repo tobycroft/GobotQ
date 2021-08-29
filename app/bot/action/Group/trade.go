@@ -96,6 +96,7 @@ func buy_coin(group_id, user_id interface{}, message string) (string, error) {
 	}
 	var gc GroupCoinModel.Interface
 	gc.Db = db
+	all_num := gc.Api_sum_byCid(coin["id"])
 	user_coin := gc.Api_find(group_id, user_id, coin["id"])
 	if len(user_coin) < 1 {
 		if !gc.Api_insert(group_id, user_id, coin["id"], coin_num) {
@@ -107,6 +108,23 @@ func buy_coin(group_id, user_id interface{}, message string) (string, error) {
 			db.Rollback()
 			return "", errors.New("买入记录增加失败")
 		}
+	}
+	switch coin["type"].(int64) {
+	case 1:
+		break
+
+	case 2:
+		after_all_num := gc.Api_sum_byCid(coin["id"])
+		ratio := Calc.Round(all_num/after_all_num, 6)
+		if ratio > 0 {
+			var c CoinModel.Interface
+			c.Db = db
+			c.Api_incr_price(coin["id"], ratio)
+		}
+		break
+
+	default:
+		break
 	}
 	db.Commit()
 	str := "您当前还剩" + Calc.Any2String(left) + "威望\r\n"

@@ -71,7 +71,7 @@ func (self *Interface) Api_join_select(group_id, user_id interface{}) []gorose.D
 	}
 	db.Where(where)
 	db.Join("coin on coin.id=cid")
-	db.Where("amount", ">=", 0)
+	db.Where("amount", ">", 0)
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

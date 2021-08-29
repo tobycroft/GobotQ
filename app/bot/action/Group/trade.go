@@ -170,7 +170,7 @@ func list_my_coin(group_id, user_id interface{}) string {
 		str := "您拥有如下币种："
 		for i, data := range datas {
 			list := i + 1
-			str += "\r\n	" + Calc.Int2String(list) + "." + data["cname"].(string) + ",数量:" + Calc.Any2String(data["num"])
+			str += "\r\n	" + Calc.Int2String(list) + "." + data["cname"].(string) + ",数量:" + Calc.Any2String(data["amount"])
 		}
 		return str
 	} else {

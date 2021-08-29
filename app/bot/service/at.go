@@ -44,3 +44,7 @@ func Serv_get_qq(get_qq string) string {
 		return reg.FindString(get_qq)
 	}
 }
+
+func Serv_get_num(get_num string) string {
+	return Serv_get_qq(get_num)
+}

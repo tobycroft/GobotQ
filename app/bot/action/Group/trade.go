@@ -1,11 +1,11 @@
 package Group
 
 import (
+	"errors"
 	"github.com/shopspring/decimal"
 	"main.go/app/bot/action/GroupBalance"
 	"main.go/app/bot/model/CoinModel"
 	"main.go/app/bot/model/DaojuModel"
-	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupCoinModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -15,7 +15,6 @@ import (
 	"main.go/tuuz/Calc"
 	"math"
 	"strings"
-	"errors"
 )
 
 func App_trade_center(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
@@ -43,16 +42,16 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 		break
 
 	default:
-		str, has := service.Serv_text_match(message, []string{"购买", "兑换"})
+		str, has := service.Serv_text_match(message, []string{"买入", "购买", "兑换"})
 		if has {
-			str, err := buy_daoju(group_id, user_id, str)
+			str, err := buy_coin(group_id, user_id, str)
 			if err != nil {
 				AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 			} else {
 				AutoMessage(self_id, group_id, user_id, str, groupfunction)
 			}
 		}
-		send_to, has := service.Serv_text_match(message, []string{"赠送", "赠与", "送给"})
+		send_to, has := service.Serv_text_match(message, []string{"卖出", "卖掉", "兑出"})
 		if has {
 			send, err := send_daoju(group_id, user_id, send_to)
 			if err != nil {
@@ -77,10 +76,16 @@ func list_coin() string {
 	return str
 }
 
-func buy_coin(group_id, user_id, cname interface{}, amount float64) (string, error) {
+func buy_coin(group_id, user_id interface{}, message string) (string, error) {
+	temp_amount := service.Serv_get_num(message)
+	amount, err := Calc.Any2Float64_2(temp_amount)
+	if err != nil {
+		return "", errors.New(app_default.Trade_buy)
+	}
+	cname := strings.ReplaceAll(message, temp_amount, "")
 	coin := CoinModel.Api_find_byCname(cname)
 	if len(coin) < 1 {
-		return "", errors.New(app_default.Trade_coin)
+		return "", errors.New(app_default.Trade_coin_not_found)
 	}
 	db := tuuz.Db()
 	db.Begin()
@@ -92,7 +97,7 @@ func buy_coin(group_id, user_id, cname interface{}, amount float64) (string, err
 
 	coin_num := amount / price
 
-	err := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(amount), "购买币种")
+	err, left := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(amount), "购买币种")
 	if err != nil {
 		db.Rollback()
 		return "", err
@@ -112,33 +117,59 @@ func buy_coin(group_id, user_id, cname interface{}, amount float64) (string, err
 		}
 	}
 	db.Commit()
-	gbl := gbal.App_check_balance(group_id, user_id)
-	str := "您当前还剩" + Calc.Any2String(gbl["balance"]) + "威望\r\n"
-	str += "您当前拥有" + Calc.Any2String(ujd["num"]) + "个同类型道具"
-	return "兑换完成，您兑换了：" + Calc.Any2String(data["cname"]) + "" +
-		"\r\n " + Calc.Any2String(data["cname"]) + ":" + Calc.Any2String(data["info"]) +
-		"\r\n 类型:" + Calc.Any2String(data["type"]) + "\r\n 消耗:" + Calc.Any2String(data["price"]) +
+	str := "您当前还剩" + Calc.Any2String(left) + "威望\r\n"
+	return "您本次买入了" + Calc.Any2String(coin_num) + "个" + Calc.Any2String(coin["cname"]) +
+		"\r\n 增长率:" + Calc.Any2String(coin["gain"]) + "\r\n 消耗:" + temp_amount +
 		"\r\n" + str, nil
 }
 
-func clear_backpack(group_id, user_id interface{}) string {
-	datas := GroupDaojuModel.Api_select(group_id, user_id)
-	str := "您已经清空了您的背包，如下道具被丢弃："
-	for i, data := range datas {
-		list := i + 1
-		daoju := DaojuModel.Api_find(data["dj_id"])
-		if len(daoju) < 1 {
-			continue
+func sell_coin(group_id, user_id interface{}, message string) (string, error) {
+	temp_amount := service.Serv_get_num(message)
+	amount, err := Calc.Any2Float64_2(temp_amount)
+	if err != nil {
+		return "", errors.New(app_default.Trade_sell)
+	}
+	cname := strings.ReplaceAll(message, temp_amount, "")
+	coin := CoinModel.Api_find_byCname(cname)
+	if len(coin) < 1 {
+		return "", errors.New(app_default.Trade_coin_not_found)
+	}
+	db := tuuz.Db()
+	db.Begin()
+
+	price, _ := coin["price"].(decimal.Decimal).Abs().Float64()
+
+	coin_num := amount / price
+
+	var gc GroupCoinModel.Interface
+	gc.Db = db
+	user_coin := gc.Api_find(group_id, user_id, coin["id"])
+	if len(user_coin) < 1 {
+		if !gc.Api_insert(group_id, user_id, coin["id"], coin_num) {
+			db.Rollback()
+			return "", errors.New("买入记录创建失败")
 		}
-		str += "\r\n	" + Calc.Int2String(list) + "." + daoju["cname"].(string) + ",数量," + Calc.Any2String(data["num"])
-	}
-	var gjd GroupDaojuModel.Interface
-	gjd.Db = tuuz.Db()
-	if gjd.Api_delete(group_id, user_id) {
-		return str
 	} else {
-		return "背包清空失败"
+		if !gc.Api_incr(group_id, user_id, coin["id"], coin_num) {
+			db.Rollback()
+			return "", errors.New("修改记录创建失败")
+		}
 	}
+
+	var gbal GroupBalance.Interface
+	gbal.Db = db
+
+	err, left := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(amount), "购买币种")
+	if err != nil {
+		db.Rollback()
+		return "", err
+	}
+
+	db.Commit()
+	str := "您当前还剩" + Calc.Any2String(left) + "威望\r\n"
+	return "您本次买入了" + Calc.Any2String(coin_num) + "个" + Calc.Any2String(coin["cname"]) +
+		"\r\n 增长率:" + Calc.Any2String(coin["gain"]) + "\r\n 消耗:" + temp_amount +
+		"\r\n" + str, nil
 }
 
 func list_my_daoju(group_id, user_id interface{}) string {

@@ -5,7 +5,6 @@ import (
 	"github.com/shopspring/decimal"
 	"main.go/app/bot/action/GroupBalance"
 	"main.go/app/bot/model/CoinModel"
-	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupCoinModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -65,7 +64,7 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 func list_coin() string {
 	str := ""
 	str += "交易中心目前拥有如下币种可买入："
-	datas := DaojuModel.Api_select_canShow()
+	datas := CoinModel.Api_select()
 	for i, data := range datas {
 		list := i + 1
 		str += "\r\n	" + Calc.Int2String(list) + ".名称:" + data["cname"].(string) + ",比重:" + Calc.Any2String(data["price"]) + ",增值率:" + Calc.Any2String(data["gain"]) + "(每天)"

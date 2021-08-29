@@ -20,7 +20,7 @@ func init() {
 func DbConfig() *gorose.Config {
 	var conf gorose.Config
 	conf.Driver = "mysql"
-	conf.SetMaxIdleConns = 20
+	conf.SetMaxIdleConns = 90
 	conf.SetMaxOpenConns = 300
 	conf.Prefix = ""
 	conf.Dsn = dsn_local()

@@ -9,7 +9,7 @@ GobotQ可以使用传统命令管理，也可以使用APP远程管理，这是�
 即使是免费版也能得到技术支持
 
 
-群：542749156[https://qm.qq.com/cgi-bin/qm/qr?k=FNGtcEezDDfSHuADhoFezsOAa7XNiBDQ&jump_from=webapi]
+群：542749156[!https://qm.qq.com/cgi-bin/qm/qr?k=FNGtcEezDDfSHuADhoFezsOAa7XNiBDQ&jump_from=webapi]
 
 
 ## 功能说明

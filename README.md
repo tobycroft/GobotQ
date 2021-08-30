@@ -15,3 +15,8 @@ Todo
 
 Todo
 
+## 项目说明
+
+如果你没有加入机器人开发群，并希望向我们提交PR，请确认您的修改内容为Tuuzxxxx，用Tuuz开头，例如TuuzPC
+
+Todo

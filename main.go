@@ -34,6 +34,7 @@ func main() {
 
 	go cron.PowerCheck()
 
+
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard

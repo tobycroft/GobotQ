@@ -7,8 +7,8 @@ require (
 	github.com/afocus/captcha v0.0.0-20191010092841-4bd1f21c8868
 	github.com/bitly/go-simplejson v0.5.1-0.20200416141419-39a59b1b2866
 	github.com/gin-contrib/cors v1.3.2-0.20200402113712-0223cb87b2c4
-	github.com/gin-gonic/gin v1.7.2
-	github.com/go-playground/validator/v10 v10.7.0 // indirect
+	github.com/gin-gonic/gin v1.7.4
+	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gohouse/converter v0.0.3 // indirect
 	github.com/gohouse/golib v0.0.0-20210711163732-a5c22059eb75 // indirect
@@ -25,10 +25,10 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/shopspring/decimal v1.2.0
 	github.com/ugorji/go v1.2.6 // indirect
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
-	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
+	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

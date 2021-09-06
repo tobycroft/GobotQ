@@ -100,6 +100,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					gd.Api_decr(group_id, user_id, daoju["id"])
 				}
 			}
+
 			if possible > played_time {
 				played_time = possible
 				ext_text = ",你用了自家的子弹，这课弹的激发概率为:" + Calc.Any2String(100-played_time) + "％"

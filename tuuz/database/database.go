@@ -3,7 +3,7 @@ package database
 import (
 	"github.com/Unknwon/goconfig"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gohouse/gorose/v2"
+	"github.com/tobycroft/gorose"
 	"log"
 )
 

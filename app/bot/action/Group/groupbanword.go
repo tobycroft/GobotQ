@@ -1,7 +1,7 @@
 package Group
 
 import (
-	"github.com/gohouse/gorose/v2"
+	"github.com/tobycroft/gorose"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanWordModel"
 	"main.go/tuuz/Calc"

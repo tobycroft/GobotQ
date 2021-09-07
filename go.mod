@@ -14,7 +14,7 @@ require (
 	github.com/json-iterator/go v1.1.11
 	github.com/kirinlabs/HttpRequest v1.1.1
 	github.com/shopspring/decimal v1.2.0
-	github.com/tobycroft/gorose v1.2.1
+	github.com/tobycroft/gorose-pro v1.2.5
 )
 
 require (

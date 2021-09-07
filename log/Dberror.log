@@ -1,0 +1,97 @@
+2021/01/05 22:02:59 main.go/app/bot/model/PrivateAutoReplyModel.Api_select_byMode  Error 1054: Unknown column 'semi' in 'where clause'
+2021/01/05 22:03:38 main.go/app/bot/model/PrivateAutoReplyModel.Api_select_byMode  Error 1054: Unknown column 'semi' in 'where clause'
+2021/01/05 22:09:17 main.go/app/bot/model/PrivateAutoReplyModel.Api_select_byMode  Error 1054: Unknown column 'semi' in 'where clause'
+2021/01/05 22:38:43 main.go/app/bot/model/UserTokenModel.Api_insert  Error 1364: Field 'id' doesn't have a default value
+2021/01/07 20:39:32 main.go/app/bot/model/UserMemberModel.Api_insert  参数缺失:[Data()]
+2021/01/07 20:42:22 main.go/app/bot/model/UserMemberModel.Api_insert  参数缺失:[Data()]
+2021/01/07 20:45:15 main.go/app/bot/model/UserMemberModel.Api_insert  参数缺失:[Data()]
+2021/01/07 20:46:27 main.go/app/bot/model/UserMemberModel.Api_insert  Error 1364: Field 'id' doesn't have a default value
+2021/01/10 12:20:38 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/01/10 12:46:22 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/01/10 12:47:20 main.go/app/bot/model/GroupMemberModel.Api_insert_more  Error 1406: Data too long for column 'nickname' at row 216
+2021/01/10 12:48:06 main.go/app/bot/model/GroupMemberModel.Api_insert_more  Error 1406: Data too long for column 'card' at row 239
+2021/01/10 18:51:37 main.go/app/bot/model/GroupMemberModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_member`.`lastsend` at row 25
+2021/01/10 18:51:38 main.go/app/bot/model/GroupMemberModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_member`.`lastsend` at row 3
+2021/01/12 22:18:35 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/01 22:04:38 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/01 22:04:39 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/01 23:03:50 main.go/app/bot/model/BotGroupAllowModel.Api_insert  Error 1364: Field 'id' doesn't have a default value
+2021/02/01 23:05:59 main.go/app/bot/model/BotGroupAllowModel.Api_insert  Error 1364: Field 'id' doesn't have a default value
+2021/02/01 23:07:19 main.go/app/bot/model/BotGroupAllowModel.Api_insert  Error 1364: Field 'id' doesn't have a default value
+2021/02/01 23:15:32 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/01 23:15:34 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/01 23:34:47 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/01 23:34:48 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/01 23:43:37 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/01 23:43:37 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/01 23:45:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/01 23:46:03 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/01 23:46:03 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/01 23:50:21 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/03 22:02:53 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/02/03 22:02:53 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/03 22:02:54 main.go/app/bot/model/GroupListModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_list`.`gid` at row 41
+2021/02/03 22:03:16 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/03 23:02:54 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/03 23:02:54 main.go/app/bot/model/GroupListModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_list`.`gid` at row 41
+2021/02/03 23:02:55 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/02/03 23:03:18 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/04 12:38:08 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/02/04 12:38:08 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/04 12:38:09 main.go/app/bot/model/GroupListModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_list`.`gid` at row 41
+2021/02/04 20:32:01 main.go/app/bot/model/GroupFunctionModel.Api_update  Error 1366: Incorrect integer value: 'true' for column `GobotQ`.`group_function`.`adblock` at row 2
+2021/02/04 20:36:15 main.go/app/bot/model/GroupFunctionModel.Api_update  Error 1366: Incorrect integer value: 'true' for column `GobotQ`.`group_function`.`adblock` at row 2
+2021/02/04 22:28:48 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/02/04 22:28:48 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/04 22:28:49 main.go/app/bot/model/GroupListModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_list`.`number` at row 41
+2021/02/04 22:29:31 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/02/04 22:29:31 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/02/04 22:29:31 main.go/app/bot/model/GroupListModel.Api_insert_more  Error 1366: Incorrect integer value: 'null' for column `GobotQ`.`group_list`.`gid` at row 41
+2021/02/04 22:29:56 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/02/08 12:28:44 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:29:30 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:30:39 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:32:38 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:33:01 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:35:31 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:36:08 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:38:22 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:40:11 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:40:27 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:40:37 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:41:17 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:41:22 main.go/app/bot/model/BotFriendAllowModel.Api_select  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/08 12:42:40 main.go/app/bot/model/BotFriendAllowModel.Api_insert  Error 1146: Table 'GobotQ.bot_friend_alloow' doesn't exist
+2021/02/09 18:58:17 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/02/09 18:58:40 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/02/09 18:59:02 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/02/09 19:00:07 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/02/10 13:23:54 main.go/app/bot/model/GroupBlackListModel.Api_select  Error 1146: Table 'GobotQ.group_black_list' doesn't exist
+2021/04/04 12:08:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:16 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:17 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/04/04 12:08:17 main.go/app/bot/model/FriendListModel.Api_insert_more  传入数据为空
+2021/04/09 20:23:21 main.go/app/bot/model/PrivateMsgModel.Api_insert  Error 1264: Out of range value for column 'message_id' at row 1
+2021/04/09 20:23:21 main.go/app/bot/model/BotModel.Api_find  Error 1054: Unknown column 'bot' in 'where clause'
+2021/04/09 20:24:07 main.go/app/bot/model/PrivateMsgModel.Api_insert  Error 1264: Out of range value for column 'message_id' at row 1
+2021/04/09 20:24:07 main.go/app/bot/model/BotModel.Api_find  Error 1054: Unknown column 'bot' in 'where clause'
+2021/04/09 20:26:31 main.go/app/bot/model/BotModel.Api_find  Error 1054: Unknown column 'bot' in 'where clause'
+2021/04/09 20:30:38 main.go/app/bot/model/PrivateMsgModel.Api_insert  Error 1264: Out of range value for column 'message_id' at row 1
+2021/04/09 20:30:38 main.go/app/bot/model/BotModel.Api_find  Error 1146: Table 'GobotQ2.self_id' doesn't exist
+2021/04/09 20:33:11 main.go/app/bot/model/PrivateMsgModel.Api_insert  Error 1264: Out of range value for column 'message_id' at row 1
+2021/04/09 20:33:11 main.go/app/bot/model/BotModel.Api_find  Error 1146: Table 'GobotQ2.self_id' doesn't exist
+2021/04/09 20:33:48 main.go/app/bot/model/PrivateMsgModel.Api_insert  Error 1264: Out of range value for column 'message_id' at row 1
+2021/04/10 12:57:40 main.go/app/bot/model/GroupMemberModel.Api_insert_more  Error 1054: Unknown column 'UserID' in 'field list'
+2021/04/10 15:14:36 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/10 15:14:36 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/04/10 15:15:12 main.go/app/bot/model/GroupListModel.Api_insert_more  传入数据为空
+2021/04/10 15:15:12 main.go/app/bot/model/GroupMemberModel.Api_insert_more  传入数据为空
+2021/04/10 16:09:34 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/04/10 16:10:00 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/04/10 16:18:36 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/04/10 16:25:29 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2021/04/10 16:25:31 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1

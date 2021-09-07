@@ -1,7 +1,7 @@
 package GroupMsgModel
 
 import (
-	"github.com/tobycroft/gorose"
+	"github.com/tobycroft/gorose-pro"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )

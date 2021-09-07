@@ -2,7 +2,7 @@ package GroupBalance
 
 import (
 	"errors"
-	"github.com/tobycroft/gorose"
+	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"

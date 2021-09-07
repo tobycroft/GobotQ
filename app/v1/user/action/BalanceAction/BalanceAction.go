@@ -2,7 +2,7 @@ package BalanceAction
 
 import (
 	"errors"
-	"github.com/tobycroft/gorose"
+	"github.com/tobycroft/gorose-pro"
 	"main.go/app/v1/user/model/UserBalanceModel"
 	"main.go/app/v1/user/model/UserBalanceRecordModel"
 	"main.go/tuuz"

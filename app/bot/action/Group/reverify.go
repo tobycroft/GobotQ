@@ -17,11 +17,10 @@ func App_reverify(self_id, group_id, user_id, message_id int64, message string, 
 	switch message {
 
 	default:
-		send, err := reverify(self_id, group_id, user_id, message)
+		_, err := reverify(self_id, group_id, user_id, message)
 		if err != nil {
 			AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 		} else {
-			AutoMessage(self_id, group_id, user_id, send, groupfunction)
 		}
 		break
 	}
@@ -64,6 +63,7 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string) (s
 				}
 			}
 		}(self_id, group_id, user_id)
+		return "", nil
 	} else {
 		return "", errors.New("群成员没有在小黑屋内")
 	}

@@ -37,15 +37,15 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string) (s
 	if len(member) < 1 {
 		return "", errors.New("群成员不在群内")
 	}
-	user := GroupBanPermenentModel.Api_find(group_id, user_id)
-	api.SetGroupBan(self_id, group_id, user_id, 0)
+	user := GroupBanPermenentModel.Api_find(group_id, member["user_id"])
+	api.SetGroupBan(self_id, group_id, member["user_id"], 0)
 	if len(user) > 0 {
-		GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
+		GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
 		num := Calc.Rand(1000, 9999)
-		Redis.SetRaw("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_second+10)
-		Redis.SetRaw("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), true, 3600)
-		at := service.Serv_at(user_id)
-		api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
+		Redis.SetRaw("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, app_conf.Retract_time_second+10)
+		Redis.SetRaw("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), true, 3600)
+		at := service.Serv_at(member["user_id"])
+		api.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 		go func(self_id, group_id, user_id interface{}) {
 			time.Sleep(120 * time.Second)
 			ok, err := Redis.GetBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
@@ -56,7 +56,7 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string) (s
 					api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
 				}
 			}
-		}(self_id, group_id, user_id)
+		}(self_id, group_id, member["user_id"])
 		return "", nil
 	} else {
 		return "", errors.New("群成员没有在小黑屋内")

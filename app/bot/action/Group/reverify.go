@@ -14,15 +14,9 @@ import (
 )
 
 func App_reverify(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	switch message {
-
-	default:
-		_, err := reverify(self_id, group_id, user_id, message)
-		if err != nil {
-			AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
-		} else {
-		}
-		break
+	_, err := reverify(self_id, group_id, user_id, message)
+	if err != nil {
+		AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 	}
 }
 

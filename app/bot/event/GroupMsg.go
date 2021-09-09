@@ -393,7 +393,7 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	}(15, &wg)
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"重新验证"})
+		str, ok := service.Serv_text_match(message, []string{"acfur重新验证"})
 		new_text[idx] = str
 		function[idx] = ok
 	}(16, &wg)

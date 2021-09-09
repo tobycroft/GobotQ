@@ -14,13 +14,20 @@ import (
 )
 
 func App_reverify(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	_, err := reverify(self_id, group_id, user_id, message)
+	_, err := reverify(self_id, group_id, user_id, message, false)
 	if err != nil {
 		AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 	}
 }
 
-func reverify(self_id, group_id, user_id interface{}, send_to_message string) (string, error) {
+func App_reverify_death(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	_, err := reverify(self_id, group_id, user_id, message, true)
+	if err != nil {
+		AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
+	}
+}
+
+func reverify(self_id, group_id, user_id interface{}, send_to_message string, kick bool) (string, error) {
 	qq := service.Serv_get_qq(send_to_message)
 	cq_mess, to_user_id := service.Serv_at_who(send_to_message)
 	qq_num := ""
@@ -46,17 +53,22 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string) (s
 		Redis.SetRaw("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), true, 3600)
 		at := service.Serv_at(member["user_id"])
 		api.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
-		go func(self_id, group_id, user_id interface{}) {
+		go func(self_id, group_id, user_id interface{}, kick bool) {
 			time.Sleep(120 * time.Second)
 			ok, err := Redis.GetBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 			if err != nil {
 			} else {
 				if ok {
 					api.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
-					api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
+					if kick {
+						api.SetGroupKick(self_id, group_id, user_id, false)
+					} else {
+						api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
+					}
+
 				}
 			}
-		}(self_id, group_id, member["user_id"])
+		}(self_id, group_id, member["user_id"], kick)
 		return "", nil
 	} else {
 		return "", errors.New("群成员没有在小黑屋内")

@@ -431,6 +431,12 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	switch Type {
 
 	case "重新验证":
+		if !admin && !owner {
+			if len(groupmember) > 0 {
+				service.Not_admin(self_id, group_id, user_id)
+				return
+			}
+		}
 		Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 

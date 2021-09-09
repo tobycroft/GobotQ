@@ -285,10 +285,10 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	}
 }
 
-const group_function_number = 16
+const group_function_number = 17
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting",
-	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易"}
+	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易", "重新验证"}
 
 func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
@@ -391,6 +391,12 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 		new_text[idx] = str
 		function[idx] = ok
 	}(15, &wg)
+	go func(idx int, wg *sync.WaitGroup) {
+		defer wg.Done()
+		str, ok := service.Serv_text_match(message, []string{"重新验证"})
+		new_text[idx] = str
+		function[idx] = ok
+	}(16, &wg)
 	wg.Wait()
 	function_route := 0
 	for i := range function {
@@ -423,6 +429,10 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	ret.Self_id = self_id
 
 	switch Type {
+
+	case "重新验证":
+		Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		break
 
 	case "交易":
 		Group.App_trade_center(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)

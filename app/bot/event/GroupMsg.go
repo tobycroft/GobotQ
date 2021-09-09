@@ -554,11 +554,15 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 		} else {
 			if code == message {
+				str := ""
+				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
+					str += "\r\n永久小黑屋记录已移除"
+				}
 				GroupBanPermenentModel.Api_delete(group_id, user_id)
 				Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
-				str := ""
+
 				if groupfunction["auto_welcome"] == 1 {
-					str = "\n" + Calc.Any2String(groupfunction["welcome_word"])
+					str = "\r\n" + Calc.Any2String(groupfunction["welcome_word"])
 				}
 				api.Retract_chan_instant <- ret
 				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)

@@ -82,6 +82,7 @@ func (self *Interface) Api_value_num(group_id, user_id, dj_id interface{}) int64
 		"dj_id":    dj_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	data, err := db.Value("num")
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -103,6 +104,7 @@ func (self *Interface) Api_decr(group_id, user_id, dj_id interface{}) bool {
 		"dj_id":    dj_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	_, err := db.Decrement("num", 1)
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -120,6 +122,7 @@ func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}, num int64)
 		"dj_id":    dj_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	_, err := db.Increment("num", num)
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

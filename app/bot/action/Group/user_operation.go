@@ -24,24 +24,21 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	time := GroupBanModel.Api_count(group_id, user_id)
 	GroupBanModel.Api_insert(group_id, user_id)
 	left_time := groupfunction["ban_limit"].(int64) - 1 - time
-	db := tuuz.Db()
-	db.Begin()
-	var balance GroupBalanceModel.Interface
-	balance.Db = db
 	var daoju GroupDaojuModel.Interface
-	daoju.Db = db
+	daoju.Db = tuuz.Db()
 	dj_data := DaojuModel.Api_find_byName("anti_ban")
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
 	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
 			dj_left := daoju.Api_value_num(group_id, user_id, dj_data["id"])
-			db.Commit()
 			str := "\r\n[" + Calc.Any2String(dj_data["cname"]) + "]还剩下" + Calc.Any2String(dj_left)
 			AutoMessage(self_id, group_id, user_id, app_default.Daoju_use_for_ban+str, groupfunction)
 			return
 		}
 	}
 	if left_time > 0 {
+		var balance GroupBalanceModel.Interface
+		balance.Db = tuuz.Db()
 		groupbal := GroupBalanceModel.Api_value_balance(group_id, user_id)
 		if groupbal != nil {
 			bal, _ := groupbal.(float64)

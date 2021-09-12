@@ -109,6 +109,7 @@ func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 		"user_id":  user_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -145,6 +146,7 @@ func (self *Interface) Api_update(group_id, user_id, balance interface{}) bool {
 		"balance": balance,
 	}
 	db.Data(data)
+	db.LockForUpdate()
 	_, err := db.Update()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -161,6 +163,7 @@ func (self *Interface) Api_incr(group_id, user_id, balance_inc interface{}) bool
 		"user_id":  user_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	_, err := db.Increment("balance", balance_inc)
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -177,6 +180,7 @@ func (self *Interface) Api_decr(group_id, user_id, balance_decr interface{}) boo
 		"user_id":  user_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	_, err := db.Decrement("balance", balance_decr)
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -193,6 +197,7 @@ func Api_value_balance(group_id, user_id interface{}) interface{} {
 		"user_id":  user_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	ret, err := db.Value("balance")
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

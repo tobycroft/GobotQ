@@ -97,7 +97,6 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					default:
 						break
 					}
-					gd.Api_decr(group_id, user_id, daoju["id"])
 				}
 			}
 

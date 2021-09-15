@@ -28,7 +28,7 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	}
 }
 
-func Api_find(group_id, user_id interface{}) gorose.Data {
+func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -45,7 +45,7 @@ func Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_count(group_id interface{}) int64 {
+func (self *Interface) Api_count(group_id interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -77,7 +77,7 @@ func Api_select(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_count_userId(group_id, user_id, date interface{}) int64 {
+func (self *Interface) Api_count_userId(group_id, user_id, date interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,

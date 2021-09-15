@@ -15,7 +15,11 @@ import (
 )
 
 func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	sign := GroupSignModel.Api_find(group_id, user_id)
+	var gsm GroupSignModel.Interface
+	db := tuuz.Db()
+	db.Begin()
+	gsm.Db = db
+	sign := gsm.Api_find(group_id, user_id)
 	//private_mode := false
 	//if groupfunction["sign_send_private"].(int64) == 1 {
 	//	private_mode = true
@@ -27,17 +31,16 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 		api.Retract_chan <- ret
 	}
 	if len(sign) > 0 {
+		db.Rollback()
 		at := service.Serv_at(user_id)
 		AutoMessage(self_id, group_id, user_id, "你今天已经签到过了"+at, groupfunction)
 	} else {
-		rank := GroupSignModel.Api_count(group_id)
+		rank := gsm.Api_count(group_id)
 		order := rank + 1
 		amount := float64(app_conf.Group_Sign_incr - rank)
 		if amount <= 0 {
 			amount = 1
 		}
-		db := tuuz.Db()
-		db.Begin()
 		var gsp GroupSignModel.Interface
 		gsp.Db = db
 		if !gsp.Api_insert(group_id, user_id) {
@@ -55,21 +58,21 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 		} else {
 			//加分模式
 			yesterday := Date.Yesterday()
-			yesterday_sign := GroupSignModel.Api_count_userId(group_id, user_id, yesterday)
+			yesterday_sign := gsm.Api_count_userId(group_id, user_id, yesterday)
 			week := Date.WeekBefore()
-			week_sign := GroupSignModel.Api_count_userId(group_id, user_id, week)
-			group_model := GroupBalanceModel.Api_find(group_id, user_id)
+			week_sign := gsm.Api_count_userId(group_id, user_id, week)
+			var groupbalance GroupBalanceModel.Interface
+			groupbalance.Db = db
+			group_model := groupbalance.Api_find(group_id, user_id)
 			rest_bal := float64(0)
 			if group_model["balance"] == nil {
 				rest_bal = 0
 			} else {
 				rest_bal = group_model["balance"].(float64)
 			}
-			rank := GroupBalanceModel.Api_count_gt_balance(group_id, rest_bal)
-			var gbp GroupBalanceModel.Interface
-			gbp.Db = db
+			rank := groupbalance.Api_count_gt_balance(group_id, rest_bal)
 			if len(group_model) < 1 {
-				if !gbp.Api_insert(group_id, user_id) {
+				if !groupbalance.Api_insert(group_id, user_id) {
 					db.Rollback()
 					Log.Errs(errors.New("GroupBalanceModel,写入失败"), tuuz.FUNCTION_ALL())
 					return
@@ -78,7 +81,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 
 			if yesterday_sign > 1 {
 				if week_sign > 6 {
-					if !gbp.Api_incr(group_id, user_id, amount+7) {
+					if !groupbalance.Api_incr(group_id, user_id, amount+7) {
 						db.Rollback()
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
@@ -87,7 +90,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						"威望奖励"+Calc.Float642String(amount)+",连续签到"+Calc.Any2String(week_sign)+"天,"+"额外奖励＋7"+
 						"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				} else {
-					if !gbp.Api_incr(group_id, user_id, amount+float64(week_sign)) {
+					if !groupbalance.Api_incr(group_id, user_id, amount+float64(week_sign)) {
 						db.Rollback()
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
@@ -97,7 +100,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						"现有威望："+Calc.Any2String(rest_bal+amount)+",排名第："+Calc.Int642String(rank+1), groupfunction)
 				}
 			} else {
-				if !gbp.Api_incr(group_id, user_id, amount+float64(week_sign)) {
+				if !groupbalance.Api_incr(group_id, user_id, amount+float64(week_sign)) {
 					db.Rollback()
 					Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 					return

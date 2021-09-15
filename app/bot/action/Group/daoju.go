@@ -2,7 +2,7 @@ package Group
 
 import (
 	"errors"
-	"main.go/app/bot/action/GroupBalance"
+	"main.go/app/bot/action/GroupBalanceAction"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -86,7 +86,7 @@ func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
 	db := tuuz.Db()
 	db.Begin()
 
-	var gbal GroupBalance.Interface
+	var gbal GroupBalanceAction.Interface
 	gbal.Db = db
 	err, left := gbal.App_single_balance(group_id, user_id, nil, -math.Abs(data["price"].(float64)), "购买道具")
 	if err != nil {

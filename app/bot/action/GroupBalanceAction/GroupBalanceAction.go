@@ -1,4 +1,4 @@
-package GroupBalance
+package GroupBalanceAction
 
 import (
 	"errors"

@@ -28,7 +28,7 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	}
 }
 
-func Api_select(group_id interface{}, limit int) []gorose.Data {
+func (self *Interface) Api_select(group_id interface{}, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -96,12 +96,6 @@ func Api_select_uid(user_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(group_id, user_id interface{}) gorose.Data {
-	var gbp Interface
-	gbp.Db = tuuz.Db().Table(table)
-	return gbp.Api_find(group_id, user_id)
-}
-
 func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
@@ -119,7 +113,7 @@ func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_count_gt_balance(group_id, balance interface{}) int64 {
+func (self *Interface) Api_count_gt_balance(group_id, balance interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
@@ -190,7 +184,7 @@ func (self *Interface) Api_decr(group_id, user_id, balance_decr interface{}) boo
 	}
 }
 
-func Api_value_balance(group_id, user_id interface{}) interface{} {
+func (self *Interface) Api_value_balance(group_id, user_id interface{}) interface{} {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,

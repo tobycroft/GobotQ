@@ -26,20 +26,23 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 	left_time := groupfunction["ban_limit"].(int64) - 1 - time
 	var daoju GroupDaojuModel.Interface
 	daoju.Db = tuuz.Db()
+	daoju.Db.Begin()
 	dj_data := DaojuModel.Api_find_byName("anti_ban")
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
 	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
 			dj_left := daoju.Api_value_num(group_id, user_id, dj_data["id"])
+			daoju.Db.Commit()
 			str := "\r\n[" + Calc.Any2String(dj_data["cname"]) + "]还剩下" + Calc.Any2String(dj_left)
 			AutoMessage(self_id, group_id, user_id, app_default.Daoju_use_for_ban+str, groupfunction)
 			return
 		}
 	}
+	daoju.Db.Rollback()
 	if left_time > 0 {
 		var balance GroupBalanceModel.Interface
 		balance.Db = tuuz.Db()
-		groupbal := GroupBalanceModel.Api_value_balance(group_id, user_id)
+		groupbal := balance.Api_value_balance(group_id, user_id)
 		if groupbal != nil {
 			bal, _ := groupbal.(float64)
 			balance_decr := float64(time+1) * 10
@@ -62,17 +65,19 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 func App_kick_user(self_id, group_id, user_id interface{}, auto_retract bool, groupfunction map[string]interface{}, reason string) {
 	var daoju GroupDaojuModel.Interface
 	daoju.Db = tuuz.Db()
+	daoju.Db.Begin()
 	dj_data := DaojuModel.Api_find_byName("anti_kick")
 	user_dj := daoju.Api_find(group_id, user_id, dj_data["id"])
 	if len(user_dj) > 0 && user_dj["num"].(int64) > 0 {
 		if daoju.Api_decr(group_id, user_id, dj_data["id"]) {
 			dj_left := daoju.Api_value_num(group_id, user_id, dj_data["id"])
+			daoju.Db.Commit()
 			str := "\r\n[" + Calc.Any2String(dj_data["cname"]) + "]还剩下" + Calc.Any2String(dj_left)
 			AutoMessage(self_id, group_id, user_id, app_default.Daoju_use_for_kick+str, groupfunction)
 			return
 		}
 	}
-
+	daoju.Db.Rollback()
 	auto_kick_out := groupfunction["auto_kick_out"].(int64)
 	str := ""
 	if auto_kick_out == 1 {

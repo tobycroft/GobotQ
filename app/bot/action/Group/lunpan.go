@@ -2,6 +2,7 @@ package Group
 
 import (
 	"errors"
+	"main.go/app/bot/action/GroupBalanceAction"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupBalanceModel"
@@ -38,28 +39,19 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 	} else {
 		amount := float64(0)
 		at := service.Serv_at(user_id)
-		group_model := GroupBalanceModel.Api_find(group_id, user_id)
-		rest_bal := float64(0)
-		if group_model["balance"] == nil {
-			rest_bal = 0
-		} else {
-			rest_bal = group_model["balance"].(float64)
+		db := tuuz.Db()
+		db.Begin()
+		var bal GroupBalanceAction.Interface
+		bal.Db = db
+		rest_bal, err := bal.App_check_balance(group_id, user_id)
+		if err != nil {
+			db.Rollback()
+			AutoMessage(self_id, group_id, user_id, at+"积分初始化出错", groupfunction)
+			return
 		}
-
 		if rest_bal < 0 {
 			AutoMessage(self_id, group_id, user_id, at+"威望小于0,请先通过每日签到增加威望至正数", groupfunction)
 			return
-		}
-		db := tuuz.Db()
-		db.Begin()
-		var gbp GroupBalanceModel.Interface
-		gbp.Db = db
-		if len(group_model) < 1 {
-			if !gbp.Api_insert(group_id, user_id) {
-				db.Rollback()
-				Log.Errs(errors.New("GroupBalanceModel,写入失败"), tuuz.FUNCTION_ALL())
-				return
-			}
 		}
 
 		reg := regexp.MustCompile("[0-9]+")
@@ -69,6 +61,8 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			played_time = 85
 		}
 		ext_text := ""
+		var gbp GroupBalanceModel.Interface
+		gbp.Db = db
 		if active {
 			possible := int64(0)
 			var gd GroupDaojuModel.Interface

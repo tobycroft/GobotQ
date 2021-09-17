@@ -91,7 +91,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					default:
 						break
 					}
-					gd.Api_decr(group_id, user_id, daoju["id"])
+					if !gd.Api_decr(group_id, user_id, daoju["id"]) {
+						db.Rollback()
+						AutoMessage(self_id, group_id, user_id, at+"你没有多余可用于扣除的道具", groupfunction)
+						return
+					}
 				}
 			}
 
@@ -106,10 +110,12 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			message_num := reg.FindString(message)
 			num, err := Calc.Any2Float64_2(message_num)
 			if err != nil {
+				db.Rollback()
 				AutoMessage(self_id, group_id, user_id, at+"想请输入一个正确的轮盘数字哦，不要超过自己的威望，可以使用[威望查询]来查看自己的威望", groupfunction)
 				return
 			}
 			if num > rest_bal {
+				db.Rollback()
 				AutoMessage(self_id, group_id, user_id, at+"你最多只能提取"+Calc.Any2String(rest_bal)+"威望参与游戏~", groupfunction)
 				return
 			}
@@ -309,6 +315,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				break
 
 			default:
+				db.Rollback()
 				AutoMessage(self_id, group_id, user_id, at+"请输入一个正确的字母，想参与1/6胜率轮盘输入“轮盘A10”，2/6输入“轮盘B10”，3/6选C，以此类推可在ABCDE中选择(大小写不敏感)"+ext_text, groupfunction)
 				return
 			}

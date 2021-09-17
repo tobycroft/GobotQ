@@ -175,13 +175,14 @@ func send_daoju(group_id, user_id interface{}, send_to_message string) (string, 
 	daoju_data := DaojuModel.Api_find_byCname(send_to_message)
 	if len(daoju_data) > 0 {
 		db := tuuz.Db()
+		db.Begin()
 		var gd GroupDaojuModel.Interface
 		gd.Db = db
 		user_daoju := gd.Api_value_num(group_id, user_id, daoju_data["id"])
 		if user_daoju < 1 {
+			db.Rollback()
 			return "", errors.New("你没有这个道具，无法赠送")
 		} else {
-			db.Begin()
 			if !gd.Api_decr(group_id, user_id, daoju_data["id"]) {
 				db.Rollback()
 				return "", errors.New("赠送失败，无法扣除该道具")

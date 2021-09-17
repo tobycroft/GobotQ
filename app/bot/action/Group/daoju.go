@@ -187,9 +187,16 @@ func send_daoju(group_id, user_id interface{}, send_to_message string) (string, 
 				db.Rollback()
 				return "", errors.New("赠送失败，无法扣除该道具")
 			}
-			if !gd.Api_incr(group_id, member["user_id"], daoju_data["id"], 1) {
-				db.Rollback()
-				return "", errors.New("赠送失败，对方无法增加该类型道具")
+			if len(gd.Api_find(group_id, member["user_id"], daoju_data["id"])) < 1 {
+				if !gd.Api_insert(group_id, member["user_id"], daoju_data["id"], 1) {
+					db.Rollback()
+					return "", errors.New("赠送失败，对方无法增加该类型道具")
+				}
+			} else {
+				if !gd.Api_incr(group_id, member["user_id"], daoju_data["id"], 1) {
+					db.Rollback()
+					return "", errors.New("赠送失败，对方无法增加该类型道具")
+				}
 			}
 			left := gd.Api_value_num(group_id, user_id, daoju_data["id"])
 			db.Commit()

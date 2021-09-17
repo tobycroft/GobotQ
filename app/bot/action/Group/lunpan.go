@@ -20,12 +20,15 @@ import (
 
 func App_group_lunpan(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 	sign := GroupLunpanModel.Api_find(group_id, user_id)
-	if groupfunction["sign_send_retract"].(int64) == 1 {
-		var ret api.Struct_Retract
-		ret.MessageId = message_id
-		ret.Self_id = self_id
-		api.Retract_chan <- ret
-	}
+
+	go func(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+		if groupfunction["sign_send_retract"].(int64) == 1 {
+			var ret api.Struct_Retract
+			ret.MessageId = message_id
+			ret.Self_id = self_id
+			api.Retract_chan <- ret
+		}
+	}(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 	mode := regexp.MustCompile("[A-Za-z]")
 	//fmt.Println(len(message), message, mode.MatchString(message))
 	if len(message) > 3 && message[:3] != "" && !mode.MatchString(message) {

@@ -18,11 +18,15 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
-		var ret api.Struct_Retract
-		ret.MessageId = message_id
-		ret.Self_id = self_id
-		api.Retract_chan <- ret
 	}
+	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+		if groupfunction["sign_send_retract"].(int64) == 1 {
+			var ret api.Struct_Retract
+			ret.MessageId = message_id
+			ret.Self_id = self_id
+			api.Retract_chan <- ret
+		}
+	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
 	gpm.Db = tuuz.Db()
 	gbl := gpm.Api_find(group_id, user_id)
@@ -35,11 +39,15 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
-		var ret api.Struct_Retract
-		ret.MessageId = message_id
-		ret.Self_id = self_id
-		api.Retract_chan <- ret
 	}
+	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+		if groupfunction["sign_send_retract"].(int64) == 1 {
+			var ret api.Struct_Retract
+			ret.MessageId = message_id
+			ret.Self_id = self_id
+			api.Retract_chan <- ret
+		}
+	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
 	gpm.Db = tuuz.Db()
 	gbl := gpm.Api_select(group_id, 10)

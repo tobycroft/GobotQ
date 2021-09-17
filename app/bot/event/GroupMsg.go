@@ -60,7 +60,9 @@ type _Sender struct {
 var GroupMsgChan = make(chan GM, 99)
 
 func GroupMsg(gm GM, remoteip string) {
-	GroupMsgChan <- gm
+	go func(gm GM) {
+		GroupMsgChan <- gm
+	}(gm)
 	is_self := false
 
 	self_id := gm.SelfID
@@ -80,15 +82,19 @@ func GroupMsg(gm GM, remoteip string) {
 			Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(self_id))
 			return
 		}
-		has1 := Redis.CheckExists("__groupinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
-		has2 := Redis.CheckExists("__userinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
-		if !has1 || !has2 {
-			var group RefreshGroupStruct
-			group.GroupId = group_id
-			group.SelfId = self_id
-			group.UserId = user_id
-			RefreshGroupChan <- group
-		}
+
+		go func(group_id, self_id, user_id int64) {
+			has1 := Redis.CheckExists("__groupinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
+			has2 := Redis.CheckExists("__userinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
+			if !has1 || !has2 {
+				var group RefreshGroupStruct
+				group.GroupId = group_id
+				group.SelfId = self_id
+				group.UserId = user_id
+				RefreshGroupChan <- group
+			}
+		}(group_id, self_id, user_id)
+
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 
@@ -210,7 +216,9 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		if !admin {
 			return
 		}
-		api.Retract_chan_instant <- ret
+		go func(ret api.Struct_Retract) {
+			api.Retract_chan_instant <- ret
+		}(ret)
 		break
 
 	case "测试T出测试":
@@ -499,7 +507,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "url_detect":
 		if groupfunction["ban_url"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				api.Retract_chan_instant <- ret
+				go func(ret api.Struct_Retract) {
+					api.Retract_chan_instant <- ret
+				}(ret)
 			}
 			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
 		}
@@ -508,7 +518,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "ban_group":
 		if groupfunction["ban_group"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				api.Retract_chan_instant <- ret
+				go func(ret api.Struct_Retract) {
+					api.Retract_chan_instant <- ret
+				}(ret)
 			}
 			Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
 		}
@@ -517,7 +529,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "ban_weixin":
 		if groupfunction["ban_wx"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				api.Retract_chan_instant <- ret
+				go func(ret api.Struct_Retract) {
+					api.Retract_chan_instant <- ret
+				}(ret)
 			}
 			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
 		}
@@ -526,7 +540,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "ban_share":
 		if groupfunction["ban_share"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				api.Retract_chan_instant <- ret
+				go func(ret api.Struct_Retract) {
+					api.Retract_chan_instant <- ret
+				}(ret)
 			}
 			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
 		}
@@ -541,7 +557,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "长度限制":
-		api.Retract_chan_instant <- ret
+		go func(ret api.Struct_Retract) {
+			api.Retract_chan_instant <- ret
+		}(ret)
 		Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
 			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
 		break
@@ -580,16 +598,22 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				if groupfunction["auto_welcome"] == 1 {
 					str = "\r\n" + Calc.Any2String(groupfunction["welcome_word"])
 				}
-				api.Retract_chan_instant <- ret
+				go func(ret api.Struct_Retract) {
+					api.Retract_chan_instant <- ret
+				}(ret)
 				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)
 			}
 		}
 
 		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
-			api.Retract_chan_instant <- ret
+			go func(ret api.Struct_Retract) {
+				api.Retract_chan_instant <- ret
+			}(ret)
 			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字"+Calc.Any2String(code), true)
 		} else if Redis.CheckExists("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)) {
-			api.Retract_chan_instant <- ret
+			go func(ret api.Struct_Retract) {
+				api.Retract_chan_instant <- ret
+			}(ret)
 			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字"+Calc.Any2String(code), true)
 		}
 		break

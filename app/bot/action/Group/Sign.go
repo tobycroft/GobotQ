@@ -24,12 +24,14 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	//if groupfunction["sign_send_private"].(int64) == 1 {
 	//	private_mode = true
 	//}
-	if groupfunction["sign_send_retract"].(int64) == 1 {
-		var ret api.Struct_Retract
-		ret.MessageId = message_id
-		ret.Self_id = self_id
-		api.Retract_chan <- ret
-	}
+	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+		if groupfunction["sign_send_retract"].(int64) == 1 {
+			var ret api.Struct_Retract
+			ret.MessageId = message_id
+			ret.Self_id = self_id
+			api.Retract_chan <- ret
+		}
+	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	if len(sign) > 0 {
 		db.Rollback()
 		at := service.Serv_at(user_id)

@@ -19,6 +19,7 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 		"user_id":  user_id,
 	}
 	db.Data(data)
+	db.LockForUpdate()
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -36,6 +37,7 @@ func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 	db.Where(where)
 	db.Where("date > (SELECT CURDATE())")
+	db.LockForUpdate()
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -52,6 +54,7 @@ func (self *Interface) Api_count(group_id interface{}) int64 {
 	}
 	db.Where(where)
 	db.Where("date > (SELECT CURDATE())")
+	db.LockForUpdate()
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -85,6 +88,7 @@ func (self *Interface) Api_count_userId(group_id, user_id, date interface{}) int
 	}
 	db.Where(where)
 	db.Where("date", ">", date)
+	db.LockForUpdate()
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

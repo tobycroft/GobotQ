@@ -5,7 +5,6 @@ import (
 	"main.go/app/bot/action/GroupBalanceAction"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/DaojuModel"
-	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupLunpanModel"
 	"main.go/app/bot/service"
@@ -19,8 +18,11 @@ import (
 )
 
 func App_group_lunpan(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	sign := GroupLunpanModel.Api_find(group_id, user_id)
-
+	db := tuuz.Db()
+	db.Begin()
+	var glm GroupLunpanModel.Interface
+	glm.Db = db
+	sign := glm.Api_find(group_id, user_id)
 	go func(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
 			var ret api.Struct_Retract
@@ -33,17 +35,17 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 	//fmt.Println(len(message), message, mode.MatchString(message))
 	if len(message) > 3 && message[:3] != "" && !mode.MatchString(message) {
 		//fmt.Println(len(message) > 3, message[:3] != "", !mode.MatchString(message))
+		db.Rollback()
 		return
 	}
 
 	if len(sign) > 0 {
+		db.Rollback()
 		at := service.Serv_at(user_id)
 		AutoMessage(self_id, group_id, user_id, "你今天已经挑战过了，请明天再来"+at, groupfunction)
 	} else {
 		amount := float64(0)
 		at := service.Serv_at(user_id)
-		db := tuuz.Db()
-		db.Begin()
 		var bal GroupBalanceAction.Interface
 		bal.Db = db
 		rest_bal, err := bal.App_check_balance(group_id, user_id)
@@ -53,19 +55,18 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			return
 		}
 		if rest_bal < 0 {
+			db.Rollback()
 			AutoMessage(self_id, group_id, user_id, at+"威望小于0,请先通过每日签到增加威望至正数", groupfunction)
 			return
 		}
 
 		reg := regexp.MustCompile("[0-9]+")
 		active := reg.MatchString(message)
-		played_time := GroupLunpanModel.Api_count(group_id)
+		played_time := glm.Api_count(group_id)
 		if played_time > 85 {
 			played_time = 85
 		}
 		ext_text := ""
-		var gbp GroupBalanceModel.Interface
-		gbp.Db = db
 		if active {
 			possible := int64(0)
 			var gd GroupDaojuModel.Interface
@@ -322,9 +323,10 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				AutoMessage(self_id, group_id, user_id, at+"请输入一个正确的字母，想参与1/6胜率轮盘输入“轮盘A10”，2/6输入“轮盘B10”，3/6选C，以此类推可在ABCDE中选择(大小写不敏感)"+ext_text, groupfunction)
 				return
 			}
-			if !gbp.Api_incr(group_id, user_id, amount) {
+			err, _ = bal.App_single_balance(group_id, user_id, nil, amount, "")
+			if err != nil {
 				db.Rollback()
-				Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
+				Log.Errs(err, tuuz.FUNCTION_ALL())
 				return
 			}
 		} else {
@@ -355,7 +357,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 				str += at + "轮盘完败,你的余额已不复存在"
 			}
 			str += ext_text
-			count_lunpan := GroupLunpanModel.Api_count_userId(group_id, user_id)
+			count_lunpan := glm.Api_count_userId(group_id, user_id)
 			if count_lunpan == 0 {
 				str += "\n\n这是你第一次参与轮盘，下次你可以用“轮盘[模式字母][数字]" +
 					"\n例如“轮盘A10”，来挑战1/6的失败几率，挑战成功，奖励1/6押注威望" +
@@ -363,7 +365,8 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					"\n可选模式有ABCDE，挑战威望无上限，你可以使用威望查询来查看自己的可用情况" +
 					"\n觉得自己运气还不错的话可以试试哦~"
 			}
-			if !gbp.Api_incr(group_id, user_id, amount) {
+			err, _ = bal.App_single_balance(group_id, user_id, nil, amount, "")
+			if err != nil {
 				db.Rollback()
 				Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 				return
@@ -371,12 +374,9 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			AutoMessage(self_id, group_id, user_id, str, groupfunction)
 		}
 
-		var gsp GroupLunpanModel.Interface
-		gsp.Db = db
-		if !gsp.Api_insert(group_id, user_id) {
+		if !glm.Api_insert(group_id, user_id) {
 			db.Rollback()
 			Log.Errs(errors.New("GroupLunpanModel,插入失败"), tuuz.FUNCTION_ALL())
-			return
 		} else {
 			db.Commit()
 		}

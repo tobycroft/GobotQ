@@ -19,6 +19,7 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 		"user_id":  user_id,
 	}
 	db.Data(data)
+	db.LockForUpdate()
 	_, err := db.Insert()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -28,14 +29,15 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	}
 }
 
-func Api_find(group_id, user_id interface{}) gorose.Data {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
 	db.Where(where)
 	db.Where("date > (SELECT CURDATE())")
+	db.LockForUpdate()
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -45,13 +47,14 @@ func Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_count(group_id interface{}) int64 {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_count(group_id interface{}) int64 {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
 	}
 	db.Where(where)
 	db.Where("date > (SELECT CURDATE())")
+	db.LockForUpdate()
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -77,13 +80,14 @@ func Api_select(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_count_userId(group_id, user_id interface{}) int64 {
-	db := tuuz.Db().Table(table)
+func (self *Interface) Api_count_userId(group_id, user_id interface{}) int64 {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
 	db.Where(where)
+	db.LockForUpdate()
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
@@ -93,14 +97,15 @@ func Api_count_userId(group_id, user_id interface{}) int64 {
 	}
 }
 
-func Api_count_userIdandDate(group_id, user_id, date interface{}) int64 {
-	db := tuuz.Db().Table(table)
+func (self *Interface)Api_count_userIdandDate(group_id, user_id, date interface{}) int64 {
+	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
 	db.Where(where)
 	db.Where("date", ">", date)
+	db.LockForUpdate()
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

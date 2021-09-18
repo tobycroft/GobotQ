@@ -196,7 +196,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 				return
 			}
 		}
-		Group.App_refreshmember(self_id, group_id)
+		go Group.App_refreshmember(self_id, group_id)
 		Group.AutoMessage(self_id, group_id, user_id, "群用户已经刷新", groupfunction)
 		break
 
@@ -205,7 +205,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		Group.App_refresh_groupinfo(self_id, group_id)
+		go Group.App_refresh_groupinfo(self_id, group_id)
 		Group.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", groupfunction)
 		break
 

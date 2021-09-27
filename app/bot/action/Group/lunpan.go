@@ -81,15 +81,15 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 						break
 
 					case "r_50":
-						possible = 50
+						possible = 40
 						break
 
 					case "r_75":
-						possible = 75
+						possible = 55
 						break
 
 					case "r_90":
-						possible = 90
+						possible = 80
 						break
 
 					default:

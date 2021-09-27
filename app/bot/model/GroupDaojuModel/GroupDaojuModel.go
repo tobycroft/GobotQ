@@ -174,6 +174,7 @@ func (self *Interface) Api_find_in_djId(group_id, user_id interface{}, dj_id []i
 	}
 	db.Where(where)
 	db.WhereIn("dj_id", dj_id)
+	db.Where("num", ">", 0)
 	ret, err := db.First()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

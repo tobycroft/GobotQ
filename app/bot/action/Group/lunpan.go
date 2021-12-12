@@ -102,10 +102,11 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 					}
 				}
 			}
-
+			self_bullet := false
 			if possible > played_time {
+				self_bullet = true
 				played_time = possible
-				ext_text = ",你用了自家的子弹，这课弹的激发概率为:" + Calc.Any2String(100-played_time) + "％"
+				ext_text = ",你用了自家的子弹，这颗弹的激发概率为:" + Calc.Any2String(100-played_time) + "％"
 			} else {
 				ext_text = ",左轮目前完好度:" + Calc.Any2String(100-played_time) + "％"
 			}
@@ -155,9 +156,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 					}
 				} else if poom && stuck_mode <= played_time {
-					amount = Calc.Round(num/6, 2)
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if self_bullet && num < 10000 && stuck_mode < 50 {
+						amount = Calc.Round(num/6, 2)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					} else {
+						amount = -num * 0.9
+						AutoMessage(self_id, group_id, user_id, at+"\n换弹被监督者发现，你损失了本次90%的额度~"+ext_text, groupfunction)
+					}
 				} else {
 					amount = Calc.Round(num/6, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
@@ -189,9 +195,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 					}
 				} else if poom && stuck_mode <= played_time {
-					amount = Calc.Round(num/3, 2)
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if self_bullet && num < 10000 && stuck_mode < 50 {
+						amount = Calc.Round(num/3, 2)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					} else {
+						amount = -num * 0.9
+						AutoMessage(self_id, group_id, user_id, at+"\n换弹被监督者发现，你损失了本次90%的额度~"+ext_text, groupfunction)
+					}
 				} else {
 					amount = Calc.Round(num/3, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
@@ -223,9 +234,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 					}
 				} else if poom && stuck_mode <= played_time {
-					amount = Calc.Round(num/2, 2)
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if self_bullet && num < 10000 && stuck_mode < 50 {
+						amount = Calc.Round(num/2, 2)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					} else {
+						amount = -num * 0.9
+						AutoMessage(self_id, group_id, user_id, at+"\n换弹被监督者发现，你损失了本次90%的额度~"+ext_text, groupfunction)
+					}
 				} else {
 					amount = Calc.Round(num/2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
@@ -257,9 +273,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 					}
 				} else if poom && stuck_mode <= played_time {
-					amount = Calc.Round(num/3*2, 2)
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if self_bullet && num < 10000 && stuck_mode < 50 {
+						amount = Calc.Round(num/3*2, 2)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					} else {
+						amount = -num * 0.9
+						AutoMessage(self_id, group_id, user_id, at+"\n换弹被监督者发现，你损失了本次90%的额度~"+ext_text, groupfunction)
+					}
 				} else {
 					amount = Calc.Round(num/3*2, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
@@ -291,9 +312,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 							"激发位置在"+rand+",因此你损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 					}
 				} else if poom && stuck_mode <= played_time {
-					amount = Calc.Round(num/6*5, 2)
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
-						"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if self_bullet && num < 10000 && stuck_mode < 50 {
+						amount = Calc.Round(num/6*5, 2)
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n好险！子弹被放在了位置"+tick+"上，"+
+							"激发位置在"+rand+",卡弹了，你成功得到了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					} else {
+						amount = -num * 0.9
+						AutoMessage(self_id, group_id, user_id, at+"\n换弹被监督者发现，你损失了本次90%的额度~"+ext_text, groupfunction)
+					}
 				} else {
 					amount = Calc.Round(num/6*5, 2)
 					AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Kaa~\nWow赢了！子弹被放在了位置"+tick+"上，"+
@@ -313,8 +339,13 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 						AutoMessage(self_id, group_id, user_id, at+"\n-Tick!\n-Poom！\n必死结局，你白白损失了"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
 					}
 				} else {
-					amount = num
-					AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n百分之20的卡弹率让你碰上了！恭喜你！运气爆棚奖励翻倍，你赢得了:"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					if self_bullet && num < 10000 && stuck_mode < 50 {
+						amount = num
+						AutoMessage(self_id, group_id, user_id, at+"\n-Tick~\n百分之20的卡弹率让你碰上了！恭喜你！运气爆棚奖励翻倍，你赢得了:"+Calc.Any2String(math.Abs(amount))+"威望~"+ext_text, groupfunction)
+					} else {
+						amount = -num * 0.9
+						AutoMessage(self_id, group_id, user_id, at+"\n换弹被监督者发现，你损失了本次90%的额度~"+ext_text, groupfunction)
+					}
 				}
 				break
 

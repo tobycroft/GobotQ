@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Calc"
@@ -47,6 +48,9 @@ func Send_group() {
 
 		} else {
 			if gss.AutoRetract {
+				if gmr.MessageId == 0 {
+					fmt.Println("gmr.MessageId:", gmr.MessageId)
+				}
 				var r Struct_Retract
 				r.Self_id = gss.Self_id
 				r.MessageId = gmr.MessageId

@@ -242,6 +242,10 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", groupfunction)
 		break
 
+	case "测试立即撤回":
+		Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计0秒后撤回", groupfunction)
+		break
+
 	case "屏蔽":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)

@@ -48,7 +48,7 @@ func Send_group() {
 
 		} else {
 			if gss.AutoRetract {
-				if gmr.MessageId == 0 {
+				if gmr.MessageId < 2 {
 					fmt.Println("gmr.MessageId:", gmr.MessageId)
 				}
 				var r Struct_Retract

@@ -34,11 +34,11 @@ func main() {
 
 	go cron.PowerCheck()
 
-
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard
 	route.OnRoute(mainroute)
 	mainroute.Run(":81")
+	mainroute.Run(":15081")
 
 }

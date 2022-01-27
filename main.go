@@ -38,7 +38,7 @@ func main() {
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard
 	route.OnRoute(mainroute)
-	mainroute.Run(":81")
+	go mainroute.Run(":81")
 	mainroute.Run(":15081")
 
 }

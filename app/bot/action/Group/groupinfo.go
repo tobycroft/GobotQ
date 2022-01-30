@@ -25,6 +25,8 @@ func App_refresh_groupinfo(self_id, group_id int64) {
 			gs.Max_member_count = gll.MaxMemberCount
 			gss = append(gss, gs)
 		}
-		GroupListModel.Api_insert_more(gss)
+		if len(gss) > 0 {
+			GroupListModel.Api_insert_more(gss)
+		}
 	}
 }

@@ -25,7 +25,9 @@ func App_refresh_group_list() {
 				gs.Member_count = gll.MemberCount
 				gss = append(gss, gs)
 			}
-			GroupListModel.Api_insert_more(gss)
+			if len(gss) > 0 {
+				GroupListModel.Api_insert_more(gss)
+			}
 		}
 	}
 }

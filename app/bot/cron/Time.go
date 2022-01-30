@@ -39,7 +39,9 @@ func BaseCron() {
 						GroupFunctionModel.Api_insert(gll.GroupID)
 					}
 				}
-				GroupListModel.Api_insert_more(gss)
+				if len(gss) > 0 {
+					GroupListModel.Api_insert_more(gss)
+				}
 			}
 		}
 		time.Sleep(3600 * time.Second)

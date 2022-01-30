@@ -67,7 +67,7 @@ func word_delete(c *gin.Context) {
 	if !ok {
 		return
 	}
-	if GroupBanWordModel.Api_delete(gid, id) {
+	if GroupBanWordModel.Api_delete_byId(gid, id) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

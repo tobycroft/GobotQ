@@ -60,7 +60,7 @@ func App_group_ban_word_set(self_id, group_id, user_id int64, message string, me
 					api.Sendgroupmsg(self_id, group_id, "修改失败", true)
 				}
 			} else {
-				if GroupBanWordModel.Api_insert(self_id, group_id, user_id, new_str, 0, false, true, true, false) {
+				if GroupBanWordModel.Api_insert(group_id, user_id, new_str, 0, false, true, true, false) {
 					api.Sendgroupmsg(self_id, group_id, "添加成功", true)
 				} else {
 					api.Sendgroupmsg(self_id, group_id, "添加失败", true)
@@ -77,7 +77,7 @@ func App_group_ban_word_set(self_id, group_id, user_id int64, message string, me
 					api.Sendgroupmsg(self_id, group_id, "修改失败", true)
 				}
 			} else {
-				if GroupBanWordModel.Api_insert(self_id, group_id, user_id, new_str, 0, true, false, true, false) {
+				if GroupBanWordModel.Api_insert(group_id, user_id, new_str, 0, true, false, true, false) {
 					api.Sendgroupmsg(self_id, group_id, "添加成功", true)
 				} else {
 					api.Sendgroupmsg(self_id, group_id, "添加失败", true)
@@ -94,7 +94,7 @@ func App_group_ban_word_set(self_id, group_id, user_id int64, message string, me
 					api.Sendgroupmsg(self_id, group_id, "修改失败", true)
 				}
 			} else {
-				if GroupBanWordModel.Api_insert(self_id, group_id, user_id, new_str, 0, false, false, true, false) {
+				if GroupBanWordModel.Api_insert(group_id, user_id, new_str, 0, false, false, true, false) {
 					api.Sendgroupmsg(self_id, group_id, "添加成功", true)
 				} else {
 					api.Sendgroupmsg(self_id, group_id, "添加失败", true)
@@ -128,7 +128,7 @@ func App_group_ban_word_set(self_id, group_id, user_id int64, message string, me
 						api.Sendgroupmsg(self_id, group_id, "屏蔽词更新失败", true)
 					}
 				} else {
-					if GroupBanWordModel.Api_insert(self_id, group_id, user_id, strs[0], 0, strings.Contains(strs[1], "T出"),
+					if GroupBanWordModel.Api_insert(group_id, user_id, strs[0], 0, strings.Contains(strs[1], "T出"),
 						strings.Contains(strs[1], "屏蔽"), strings.Contains(strs[1], "撤回"), false) {
 						api.Sendgroupmsg(self_id, group_id, "屏蔽词添加成功，新增："+strs[0], true)
 					} else {

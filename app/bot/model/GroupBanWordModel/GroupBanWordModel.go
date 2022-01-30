@@ -8,10 +8,9 @@ import (
 
 const table = "group_ban_word"
 
-func Api_insert(self_id, group_id, user_id, word, mode, is_kick, is_ban, is_retract, share interface{}) bool {
+func Api_insert(group_id, user_id, word, mode, is_kick, is_ban, is_retract, share interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
-		"self_id":    self_id,
 		"group_id":   group_id,
 		"user_id":    user_id,
 		"word":       word,
@@ -83,6 +82,21 @@ func Api_delete(group_id, word interface{}) bool {
 	where := map[string]interface{}{
 		"group_id": group_id,
 		"word":     word,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+func Api_delete_byId(group_id, id interface{}) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]interface{}{
+		"group_id": group_id,
+		"id":       id,
 	}
 	db.Where(where)
 	_, err := db.Delete()

@@ -26,11 +26,11 @@ func black_group_list(c *gin.Context) {
 
 func black_group_add(c *gin.Context) {
 	gid := c.PostForm("group_id")
-	qq, ok := Input.PostInt64("qq", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
-	if GroupBlackListModel.Api_delete(gid, qq) {
+	if GroupBlackListModel.Api_delete(gid, uid) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -39,11 +39,11 @@ func black_group_add(c *gin.Context) {
 
 func black_group_delete(c *gin.Context) {
 	gid := c.PostForm("group_id")
-	qq, ok := Input.PostInt64("qq", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
-	if GroupBlackListModel.Api_delete(gid, qq) {
+	if GroupBlackListModel.Api_delete(gid, uid) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

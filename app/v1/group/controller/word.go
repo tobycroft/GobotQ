@@ -26,7 +26,7 @@ func word_list(c *gin.Context) {
 
 func word_add(c *gin.Context) {
 	gid := c.PostForm("group_id")
-	qq, ok := Input.PostInt64("qq", c)
+	uid, ok := Input.PostInt64("uid", c)
 	if !ok {
 		return
 	}
@@ -54,7 +54,7 @@ func word_add(c *gin.Context) {
 	if !ok {
 		return
 	}
-	if GroupBanWordModel.Api_insert(gid, qq, word, mode, is_kick, is_ban, is_retract, share) {
+	if GroupBanWordModel.Api_insert(gid, uid, word, mode, is_kick, is_ban, is_retract, share) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

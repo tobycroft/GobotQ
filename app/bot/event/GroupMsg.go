@@ -296,7 +296,6 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		if len(group_list_data) > 0 {
 			group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
 			Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_list_data["max_member_count"])+"当前人数为"+Calc.Any2String(group_member_count)+",如需清理请执行:acfur群人数清理", groupfunction)
-
 		} else {
 			Group.AutoMessage(self_id, group_id, user_id, "未找到本群，请使用acfur刷新群信息", groupfunction)
 		}

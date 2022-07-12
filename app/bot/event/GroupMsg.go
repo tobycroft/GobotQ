@@ -186,6 +186,19 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "我当前的管理权限为："+Calc.Any2String(admin)+"\n群主权限为："+Calc.Any2String(owner), groupfunction)
 		break
 
+	case "群主权限":
+		if !admin && !owner {
+			service.Not_admin(self_id, group_id, user_id)
+			return
+		}
+		owner_data := GroupMemberModel.Api_find_owner(self_id, group_id)
+		if len(owner_data) > 0 {
+			Group.AutoMessage(self_id, group_id, user_id, "本群群主为："+service.Serv_at(owner_data["user_id"]), groupfunction)
+		} else {
+			Group.AutoMessage(self_id, group_id, user_id, "本群未找到群主", groupfunction)
+		}
+		break
+
 	case "随机数测试":
 		rand1 := Calc.Rand(1, 100)
 		rand2 := Calc.Rand(1, 100)

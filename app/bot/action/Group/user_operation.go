@@ -116,17 +116,15 @@ func App_drcrease_member_test(self_id, group_id, user_id interface{}, groupfunct
 	if len(group_list_data) > 0 {
 		group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
 		if group_list_data["max_member_count"].(int64) < group_member_count {
-
+			group_member_datas := GroupMemberModel.Api_select_byGroupId(group_id, "last_sent_time desc", int(group_list_data["max_member_count"].(int64)), 2)
+			if len(group_member_datas) > 0 {
+				api.Sendgroupmsg(self_id, group_id, "本群将被清除"+Calc.Any2String(len(group_member_datas))+
+					"人，第一个被T出的人为:"+Calc.Any2String(group_member_datas[0]["nickname"])+
+					"最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"]), true)
+			}
+		} else {
+			api.Sendgroupmsg(self_id, group_id, "未达到清理下限无需调用", true)
 		}
-		group_member_datas := GroupMemberModel.Api_select_byGroupId(group_id, "last_sent_time desc", int(group_list_data["max_member_count"].(int64)), 2)
-		if len(group_member_datas) > 0 {
-			api.Sendgroupmsg(self_id, group_id, "本群将被清除"+Calc.Any2String(len(group_member_datas))+
-				"人，第一个被T出的人为:"+Calc.Any2String(group_member_datas[0]["nickname"])+
-				"最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"]), true)
-		}
-		//for _, data := range group_member_datas {
-		//	return
-		//}
 	} else {
 		api.Sendgroupmsg(self_id, group_id, "未找到当前群信息", true)
 	}

@@ -283,19 +283,18 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-
-	case "清理人数测试":
-		if !admin && !owner {
-			Group.App_drcrease_member_test(self_id, group_id, user_id, groupfunction, "程序自动清理，如需交流可再次加入")
-			return
-		}
-
 		if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
 		} else {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋里面没有人啦~", groupfunction)
 		}
 		break
+
+	case "清理人数测试":
+		if !admin && !owner {
+			Group.App_drcrease_member_test(self_id, group_id, user_id, groupfunction, "程序自动清理，如需交流可再次加入")
+			return
+		}
 
 	default:
 		groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)

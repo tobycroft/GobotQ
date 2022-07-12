@@ -327,7 +327,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			Group.AutoMessage(self_id, group_id, user_id, "执行中请稍等", groupfunction)
 		} else {
 			Redis.Set_add("__lock__group_id__"+Calc.Any2String(group_id), 1, 60)
-			Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "清理人数上限")
+			Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "")
 		}
 		break
 

@@ -119,8 +119,9 @@ func App_drcrease_member_test(self_id, group_id, user_id interface{}, groupfunct
 			group_member_datas := GroupMemberModel.Api_select_byGroupId(group_id, "last_sent_time desc", int(group_list_data["max_member_count"].(int64)), 2)
 			if len(group_member_datas) > 0 {
 				api.Sendgroupmsg(self_id, group_id, "本群将被清除"+Calc.Any2String(len(group_member_datas))+
-					"人，第一个被T出的人为:"+Calc.Any2String(group_member_datas[0]["nickname"])+
-					"最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"]), true)
+					"人，\n第一个被T出的人为:"+Calc.Any2String(group_member_datas[0]["nickname"])+
+					"\n最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"]), false)
+				api.SetGroupKick(self_id, group_id, user_id, false)
 			}
 		} else {
 			api.Sendgroupmsg(self_id, group_id, "未达到清理下限无需调用", true)

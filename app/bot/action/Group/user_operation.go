@@ -111,7 +111,7 @@ func Api_retract_send(bot, gid, uid int, req int, random int, groupmember map[st
 
 }
 
-func App_drcrease_member_test(self_id, group_id, user_id interface{}, groupfunction map[string]interface{}, reason string) {
+func App_drcrease_member(self_id, group_id, user_id interface{}, groupfunction map[string]interface{}, reason string) {
 	group_list_data := GroupListModel.Api_find(group_id)
 	if len(group_list_data) > 0 {
 		group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)

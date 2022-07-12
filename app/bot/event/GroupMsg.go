@@ -7,6 +7,7 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupFunctionModel"
+	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
@@ -290,9 +291,15 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		}
 		break
 
-	case "查看人数上限":
-		group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
-		Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_member_count)+"如需清理请执行:acfur群人数清理", groupfunction)
+	case "查看人数", "查看人数上限":
+		group_list_data := GroupListModel.Api_find(group_id)
+		if len(group_list_data) > 0 {
+			group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
+			Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_list_data["max_member_count"])+"当前人数为"+Calc.Any2String(group_member_count)+",如需清理请执行:acfur群人数清理", groupfunction)
+
+		} else {
+			Group.AutoMessage(self_id, group_id, user_id, "未找到本群，请使用acfur刷新群信息", groupfunction)
+		}
 		break
 
 	case "群人数清理", "清理人数上限":

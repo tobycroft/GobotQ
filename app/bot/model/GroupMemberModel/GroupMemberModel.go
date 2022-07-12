@@ -83,6 +83,7 @@ func Api_select_byGroupId(group_id interface{}, order string, limit, page int) [
 	db.Fields("*", "FROM_UNIXTIME(last_sent_time) as last_date")
 	where := map[string]interface{}{
 		"group_id": group_id,
+		"role":     "member",
 	}
 	db.Where(where)
 	db.OrderBy(order)
@@ -101,6 +102,7 @@ func Api_count_byGroupId(group_id interface{}) int64 {
 	db := tuuz.Db().Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,
+		"role":     "member",
 	}
 	db.Where(where)
 	ret, err := db.Count()

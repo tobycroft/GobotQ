@@ -292,7 +292,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 
 	case "查看人数上限":
 		group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
-		Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_member_count), groupfunction)
+		Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_member_count)+"如需清理请执行:acfur群人数清理", groupfunction)
 		break
 
 	case "群人数清理", "清理人数上限":

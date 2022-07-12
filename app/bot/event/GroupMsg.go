@@ -178,7 +178,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", groupfunction)
 		break
 
-	case "权限":
+	case "权限", "查看权限":
 		Group.AutoMessage(self_id, group_id, user_id, "我当前的权限为："+Group.BotPowerRefresh(group_id, self_id), groupfunction)
 		break
 

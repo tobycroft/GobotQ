@@ -132,7 +132,6 @@ func App_drcrease_member(self_id, group_id, user_id interface{}, groupfunction m
 						if ok {
 							GroupMemberModel.Api_delete_byUid(self_id, group_id, data["user_id"])
 						}
-
 					}
 				}
 			} else {

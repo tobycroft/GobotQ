@@ -188,7 +188,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "随机数1："+Calc.Any2String(rand1)+"\n随机数2："+Calc.Any2String(rand2), groupfunction)
 		break
 
-	case "刷新人数":
+	case "刷新人数", "刷新群成员":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				service.Not_admin(self_id, group_id, user_id)

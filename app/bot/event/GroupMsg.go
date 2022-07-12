@@ -292,7 +292,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "群人数清理":
-		if !owner {
+		if !admin && !owner {
 			return
 		}
 		Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "感谢您的加入，如有需要可重新加群")

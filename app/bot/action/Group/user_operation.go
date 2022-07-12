@@ -123,9 +123,9 @@ func App_drcrease_member(self_id, group_id, user_id interface{}, groupfunction m
 					Calc.Any2String(group_member_datas[0]["last_date"])+
 					"\n最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"])+
 					"，他最后一次说话是在："+Calc.Any2String(group_member_datas[0]["last_date"]), false)
-				for _, data := range group_member_datas {
-					api.SetGroupKick(self_id, group_id, data["user_id"], false)
-				}
+				//for _, data := range group_member_datas {
+				//	api.SetGroupKick(self_id, group_id, data["user_id"], false)
+				//}
 			}
 		} else {
 			api.Sendgroupmsg(self_id, group_id, "未达到清理下限无需调用", true)

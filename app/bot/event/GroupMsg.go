@@ -291,7 +291,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		}
 		break
 
-	case "清理人数测试":
+	case "群人数清理":
 		if !owner {
 			return
 		}

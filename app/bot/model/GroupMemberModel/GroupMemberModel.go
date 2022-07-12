@@ -80,6 +80,7 @@ func Api_select(self_id, group_id interface{}) []gorose.Data {
 
 func Api_select_byGroupId(group_id interface{}, order string, limit, page int) []gorose.Data {
 	db := tuuz.Db().Table(table)
+	db.Fields("*", "FROM_UNIXTIME(last_sent_time) as last_date")
 	where := map[string]interface{}{
 		"group_id": group_id,
 	}

@@ -307,6 +307,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "查看人数", "查看人数上限":
+		Group.App_refreshmember(self_id, group_id)
 		group_list_data := GroupListModel.Api_find(group_id)
 		if len(group_list_data) > 0 {
 			group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)

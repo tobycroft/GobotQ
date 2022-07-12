@@ -319,7 +319,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "群人数清理", "清理人数上限":
-		if !owner {
+		if !owner && !admin {
 			service.Not_owner(self_id, group_id, user_id)
 			return
 		}

@@ -574,11 +574,11 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 	default:
 		if groupfunction["ban_repeat"].(int64) == 1 {
-			num, err := Redis.GetInt(Calc.Md5(Calc.Any2String(user_id) + "_" + raw_message))
+			num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(user_id) + "_" + raw_message))
 			if err != nil {
 				Log.Crrs(err, tuuz.FUNCTION_ALL())
 			}
-			Redis.SetRaw(Calc.Md5(Calc.Any2String(user_id)+"_"+raw_message), num+1, int(groupfunction["repeat_time"].(int64)))
+			Redis.String_set(Calc.Md5(Calc.Any2String(user_id)+"_"+raw_message), num+1, time.Duration(groupfunction["repeat_time"].(int64)))
 			if int64(num) > groupfunction["repeat_count"].(int64) {
 				Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容")
 			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
@@ -587,7 +587,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		}
 
 		//验证程序
-		code, err := Redis.GetString("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+		code, err := Redis.String_get("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 		if err != nil {
 
 		} else {

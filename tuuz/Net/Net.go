@@ -3,9 +3,8 @@ package Net
 import (
 	"crypto/tls"
 	"fmt"
-	"main.go/config/app_conf"
+	"github.com/tobycroft/Calc"
 	"main.go/tuuz/Array"
-	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"net"
@@ -67,11 +66,6 @@ func PostRaw(url string, postData interface{}) (string, error) {
 
 func Post(url string, queries map[string]interface{}, postData map[string]interface{}, headers map[string]string, cookies map[string]string) (string, error) {
 	// 链式操作
-	if headers == nil {
-		headers = map[string]string{
-			"Authorization": app_conf.Authorization,
-		}
-	}
 	req := Request()
 	req.SetHeaders(headers)
 	req.SetCookies(cookies)
@@ -283,7 +277,7 @@ func CookieUpdater(new_cookie map[string]interface{}, ident string) {
 	} else {
 		user_cookie_map = Array.Merge(user_cookie_map, new_cookie)
 	}
-	_, err = Redis.Set("__cookie__"+ident, user_cookie_map, 30*86400)
+	err = Redis.Hash_add("__cookie__"+ident, user_cookie_map)
 	if err != nil {
 		fmt.Println(err)
 		Log.Err(err)
@@ -292,12 +286,16 @@ func CookieUpdater(new_cookie map[string]interface{}, ident string) {
 }
 
 func CookieSelector(ident string) (map[string]interface{}, error) {
-	user_cookie_map, err := Redis.Get("__cookie__" + ident)
+	user_cookie_map, err := Redis.Hash_map_get("__cookie__" + ident)
 	if err != nil {
 		return make(map[string]interface{}), err
 	}
+	arr := make(map[string]interface{})
 	//fmt.Println(user_cookie_map)
-	return user_cookie_map.(map[string]interface{}), err
+	for s, s2 := range user_cookie_map {
+		arr[s] = s2
+	}
+	return arr, err
 }
 
 func Http_build_query(querymap map[string]interface{}) string {

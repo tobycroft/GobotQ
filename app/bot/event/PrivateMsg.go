@@ -59,7 +59,7 @@ func PrivateMsg(pm PM, remoteip string) {
 		return
 	}
 
-	Redis.SetRaw("PrivateMsg:"+user_idString, Calc.Md5(message), 1)
+	Redis.String_set("PrivateMsg:"+user_idString, Calc.Md5(message), 1)
 
 	PrivateHandle(selfId, user_id, group_id, message, rawMessage, remoteip)
 }

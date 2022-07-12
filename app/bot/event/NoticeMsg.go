@@ -109,13 +109,13 @@ func NoticeMsg(em Notice, remoteip string) {
 				//如果禁言成功，就将这个人暂时加入永久小黑屋
 				GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
 				num := Calc.Rand(1000, 9999)
-				Redis.SetRaw("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_second+10)
-				Redis.SetRaw("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), true, 3600)
+				Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_second+10)
+				Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), true, 3600)
 				at := service.Serv_at(user_id)
 				api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 				go func(self_id, group_id, user_id interface{}) {
 					time.Sleep(120 * time.Second)
-					ok, err := Redis.GetBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+					ok, err := Redis.String_getBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 					if err != nil {
 					} else {
 						if ok {

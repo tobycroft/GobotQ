@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/tobycroft/gorose-pro"
 	"log"
+	"main.go/config/db_conf"
 )
 
 var Database *gorose.Engin
@@ -20,7 +21,7 @@ func init() {
 func DbConfig() *gorose.Config {
 	var conf gorose.Config
 	conf.Driver = "mysql"
-	conf.SetMaxIdleConns = 90
+	conf.SetMaxIdleConns = 20
 	conf.SetMaxOpenConns = 300
 	conf.Prefix = ""
 	conf.Dsn = dsn_local()
@@ -30,11 +31,11 @@ func DbConfig() *gorose.Config {
 func dsn_local() string {
 	cfg, err := goconfig.LoadConfigFile("conf.ini")
 	if err != nil {
-		return dsn()
+		return db_conf.Dsn()
 	}
 	value, err := cfg.GetSection("database")
 	if err != nil {
-		return dsn()
+		return db_conf.Dsn()
 	} else {
 		dbname := value["dbname"]
 		dbuser := value["dbuser"]
@@ -45,15 +46,4 @@ func dsn_local() string {
 		charset := "utf8mb4"
 		return dbuser + ":" + dbpass + "@" + conntype + "(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=" + charset + "&parseTime=true"
 	}
-}
-
-func dsn() string {
-	dbname := "GobotQ2"
-	dbuser := "GobotQ"
-	dbpass := "123456"
-	dbhost := "10.0.0.170"
-	conntype := "tcp"
-	dbport := "3306"
-	charset := "utf8mb4"
-	return dbuser + ":" + dbpass + "@" + conntype + "(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=" + charset + "&parseTime=true"
 }

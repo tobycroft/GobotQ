@@ -186,7 +186,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		Group.AutoMessage(self_id, group_id, user_id, "我当前的管理权限为："+Calc.Any2String(admin)+"\n群主权限为："+Calc.Any2String(owner), groupfunction)
 		break
 
-	case "群主权限":
+	case "查询群主", "查看群主":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
 			return

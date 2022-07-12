@@ -93,7 +93,6 @@ func GroupMsg(gm GM, remoteip string) {
 			group.UserId = user_id
 			RefreshGroupChan <- group
 		}
-
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 

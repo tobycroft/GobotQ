@@ -125,7 +125,15 @@ func App_drcrease_member(self_id, group_id, user_id interface{}, groupfunction m
 					"\n最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"])+
 					"，他最后一次说话是在："+Date.Date_format_second(group_member_datas[len(group_member_datas)-1]["last_date"].(time.Time)), false)
 				for _, data := range group_member_datas {
-					api.SetGroupKick(self_id, group_id, data["user_id"], false)
+					ok, err := api.SetGroupKick(self_id, group_id, data["user_id"], false)
+					if err != nil {
+						fmt.Println(err)
+					} else {
+						if ok {
+							GroupMemberModel.Api_delete_byUid(self_id, group_id, data["user_id"])
+						}
+
+					}
 				}
 			} else {
 				api.Sendgroupmsg(self_id, group_id, "没有需要清理的人", true)

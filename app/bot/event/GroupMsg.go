@@ -284,6 +284,12 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			return
 		}
 
+	case "清理人数测试":
+		if !admin && !owner {
+			Group.App_drcrease_member_test(self_id, group_id, user_id, groupfunction, "程序自动清理，如需交流可再次加入")
+			return
+		}
+
 		if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
 		} else {
@@ -574,10 +580,6 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 	case "自动回复":
 		api.Sendgroupmsg(self_id, group_id, message, auto_retract)
-		break
-
-	case "群清理上限人数":
-
 		break
 
 	default:

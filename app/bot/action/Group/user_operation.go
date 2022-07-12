@@ -126,6 +126,8 @@ func App_drcrease_member(self_id, group_id, user_id interface{}, groupfunction m
 				//for _, data := range group_member_datas {
 				//	api.SetGroupKick(self_id, group_id, data["user_id"], false)
 				//}
+			} else {
+				api.Sendgroupmsg(self_id, group_id, "没有需要清理的人", true)
 			}
 		} else {
 			api.Sendgroupmsg(self_id, group_id, "未达到清理下限无需调用", true)

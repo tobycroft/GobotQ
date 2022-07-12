@@ -576,6 +576,10 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		api.Sendgroupmsg(self_id, group_id, message, auto_retract)
 		break
 
+	case "群清理上限人数":
+
+		break
+
 	default:
 		if groupfunction["ban_repeat"].(int64) == 1 {
 			num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(user_id) + "_" + raw_message))

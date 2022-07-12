@@ -283,7 +283,6 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-
 		if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
 		} else {
@@ -293,6 +292,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 
 	case "群人数清理":
 		if !owner {
+			service.Not_owner(self_id, group_id, user_id)
 			return
 		}
 		Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "感谢您的加入，如有需要可重新加群")

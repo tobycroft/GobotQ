@@ -84,17 +84,15 @@ func GroupMsg(gm GM, remoteip string) {
 			return
 		}
 
-		go func(group_id, self_id, user_id int64) {
-			has1 := Redis.CheckExists("__groupinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
-			has2 := Redis.CheckExists("__userinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
-			if !has1 || !has2 {
-				var group RefreshGroupStruct
-				group.GroupId = group_id
-				group.SelfId = self_id
-				group.UserId = user_id
-				RefreshGroupChan <- group
-			}
-		}(group_id, self_id, user_id)
+		has1 := Redis.CheckExists("__groupinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
+		has2 := Redis.CheckExists("__userinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))
+		if !has1 || !has2 {
+			var group RefreshGroupStruct
+			group.GroupId = group_id
+			group.SelfId = self_id
+			group.UserId = user_id
+			RefreshGroupChan <- group
+		}
 
 		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
@@ -197,7 +195,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 				return
 			}
 		}
-		go Group.App_refreshmember(self_id, group_id)
+		Group.App_refreshmember(self_id, group_id)
 		Group.AutoMessage(self_id, group_id, user_id, "群用户已经刷新", groupfunction)
 		break
 
@@ -206,7 +204,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		go Group.App_refresh_groupinfo(self_id, group_id)
+		Group.App_refresh_groupinfo(self_id, group_id)
 		Group.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", groupfunction)
 		break
 

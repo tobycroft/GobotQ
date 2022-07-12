@@ -16,6 +16,7 @@ import (
 	"main.go/config/app_default"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
+	"main.go/tuuz/Date"
 	"math"
 	"time"
 )
@@ -120,12 +121,12 @@ func App_drcrease_member(self_id, group_id, user_id interface{}, groupfunction m
 			if len(group_member_datas) > 0 {
 				api.Sendgroupmsg(self_id, group_id, "本群将被清除"+Calc.Any2String(len(group_member_datas))+
 					"人，\n第一个被T出的人为:"+Calc.Any2String(group_member_datas[0]["nickname"])+"，他最后一次说话是在："+
-					Calc.Any2String(group_member_datas[0]["last_date"])+
+					Date.Date_format_second(group_member_datas[0]["last_date"].(time.Time))+
 					"\n最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"])+
-					"，他最后一次说话是在："+Calc.Any2String(group_member_datas[0]["last_date"]), false)
-				//for _, data := range group_member_datas {
-				//	api.SetGroupKick(self_id, group_id, data["user_id"], false)
-				//}
+					"，他最后一次说话是在："+Date.Date_format_second(group_member_datas[len(group_member_datas)-1]["last_date"].(time.Time)), false)
+				for _, data := range group_member_datas {
+					api.SetGroupKick(self_id, group_id, data["user_id"], false)
+				}
 			} else {
 				api.Sendgroupmsg(self_id, group_id, "没有需要清理的人", true)
 			}

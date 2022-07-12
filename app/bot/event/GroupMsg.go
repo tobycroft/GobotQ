@@ -481,11 +481,15 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "sign":
-		Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+		if groupfunction["sign"].(int64) == 1 {
+			Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+		}
 		break
 
 	case "轮盘":
-		Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		if groupfunction["sign"].(int64) == 1 {
+			Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		}
 		break
 
 	case "setting":

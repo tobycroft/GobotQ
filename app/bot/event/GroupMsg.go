@@ -290,12 +290,17 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		}
 		break
 
-	case "群人数清理":
+	case "查看人数上限":
+		group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
+		Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_member_count), groupfunction)
+		break
+
+	case "群人数清理", "清理人数上限":
 		if !owner {
 			service.Not_owner(self_id, group_id, user_id)
 			return
 		}
-		Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "感谢您的加入，如有需要可重新加群")
+		Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "清理人数上限")
 		break
 
 	default:

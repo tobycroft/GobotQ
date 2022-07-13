@@ -45,7 +45,7 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string, ki
 		return "", errors.New("群成员不在群内")
 	}
 	user := GroupBanPermenentModel.Api_find(group_id, member["user_id"])
-	api.SetGroupBan(self_id, group_id, member["user_id"], 0)
+	go api.SetGroupBan(self_id, group_id, member["user_id"], 0)
 	if len(user) > 0 {
 		GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
 		num := Calc.Rand(1000, 9999)

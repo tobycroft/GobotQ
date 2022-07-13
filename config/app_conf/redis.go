@@ -10,3 +10,4 @@ const Redicon_timeout = 5
 const Redicon_readtimeout = 5
 const Redicon_writetimeout = 5
 const Redicon_MinIdleConn = 10
+const Recicon_on = true

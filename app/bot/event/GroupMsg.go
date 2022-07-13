@@ -635,6 +635,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if code == message {
 				str := ""
 				Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+				Redis.Del("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 					GroupBanPermenentModel.Api_delete(group_id, user_id)
 					str += "\r\n永久小黑屋记录已移除"

@@ -2,7 +2,6 @@ package event
 
 import (
 	"errors"
-	"fmt"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
@@ -633,7 +632,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		//验证程序
 		code, err := Redis.String_get("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 		if err != nil {
-			fmt.Println("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), code, message)
+			//fmt.Println("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id),code,message)
 		} else {
 			if code == message {
 				str := ""

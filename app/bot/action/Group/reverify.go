@@ -50,7 +50,7 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string, ki
 		GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
 		num := Calc.Rand(1000, 9999)
 		Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, app_conf.Retract_time_second+10)
-		Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), true, 3600)
+		Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, 3600)
 		at := service.Serv_at(member["user_id"])
 		api.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 		go func(self_id, group_id, user_id interface{}, kick bool) {

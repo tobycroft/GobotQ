@@ -661,7 +661,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			go func(ret api.Struct_Retract) {
 				api.Retract_chan_instant <- ret
 			}(ret)
-			api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
+			//api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 		}
 		break
 	}

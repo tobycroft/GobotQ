@@ -34,6 +34,7 @@ func init() {
 			ret, err := goredis.Ping(goredis_ctx).Result()
 			if err != nil {
 				log.Println("redis_out", ret, err)
+				panic("redis_out")
 			}
 		}
 	}()

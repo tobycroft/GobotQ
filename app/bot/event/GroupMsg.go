@@ -653,16 +653,16 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			}
 		}
 
-		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
+		if Redis.CheckExists("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)) {
 			go func(ret api.Struct_Retract) {
 				api.Retract_chan_instant <- ret
 			}(ret)
 			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字"+Calc.Any2String(code), true)
-		} else if Redis.CheckExists("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id)) {
+		} else if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 			go func(ret api.Struct_Retract) {
 				api.Retract_chan_instant <- ret
 			}(ret)
-			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字"+Calc.Any2String(code), true)
+			api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证@你，来脱离当前状态", true)
 		}
 		break
 	}

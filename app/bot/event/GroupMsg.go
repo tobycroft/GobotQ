@@ -638,8 +638,8 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				str := ""
 				Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
-					str += "\r\n永久小黑屋记录已移除"
 					GroupBanPermenentModel.Api_delete(group_id, user_id)
+					str += "\r\n永久小黑屋记录已移除"
 				}
 				if groupfunction["auto_welcome"] == 1 {
 					str = "\r\n" + Calc.Any2String(groupfunction["welcome_word"])

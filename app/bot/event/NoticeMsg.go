@@ -110,7 +110,7 @@ func NoticeMsg(em Notice, remoteip string) {
 				GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
 				num := Calc.Rand(1000, 9999)
 				Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_second+10)
-				Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), true, 3600)
+				Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, 3600)
 				at := service.Serv_at(user_id)
 				api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 				go func(self_id, group_id, user_id interface{}) {
@@ -124,6 +124,7 @@ func NoticeMsg(em Notice, remoteip string) {
 						}
 					}
 				}(self_id, group_id, user_id)
+				//Group.App_reverify(self_id, group_id, user_id, 0, "", nil, groupfunction)
 			} else {
 				//在没有启动自动验证模式的时候，使用正常欢迎流程
 				if groupfunction["auto_welcome"].(int64) == 1 {

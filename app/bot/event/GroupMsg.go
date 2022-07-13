@@ -12,7 +12,6 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
-	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -619,7 +618,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if groupfunction["ban_repeat"].(int64) == 1 {
 			num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(user_id) + "_" + raw_message))
 			if err != nil {
-				Log.Crrs(err, tuuz.FUNCTION_ALL())
+				//Log.Crrs(err, tuuz.FUNCTION_ALL())
 			}
 			Redis.String_set(Calc.Md5(Calc.Any2String(user_id)+"_"+raw_message), num+1, time.Duration(groupfunction["repeat_time"].(int64)))
 			if int64(num) > groupfunction["repeat_count"].(int64) {
@@ -632,7 +631,6 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		//验证程序
 		code, err := Redis.String_get("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 		if err != nil {
-			//fmt.Println("verify_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id),code,message)
 		} else {
 			if code == message {
 				str := ""

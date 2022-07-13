@@ -649,7 +649,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				}(ret)
 				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)
 			} else {
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请先输入上述四位数字"+Calc.Any2String(code), true)
+				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 			}
 		}
 

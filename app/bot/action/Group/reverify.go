@@ -65,7 +65,6 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string, ki
 					} else {
 						api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
 					}
-
 				}
 			}
 		}(self_id, group_id, member["user_id"], kick)

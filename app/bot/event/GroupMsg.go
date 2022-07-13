@@ -17,7 +17,6 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
-	"strings"
 	"sync"
 	"time"
 )
@@ -635,7 +634,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if err != nil {
 
 		} else {
-			if code == strings.TrimSpace(message) {
+			if code == message {
 				str := ""
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 					str += "\r\n永久小黑屋记录已移除"

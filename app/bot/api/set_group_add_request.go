@@ -25,7 +25,6 @@ func SetGroupAddRequestRet(self_id, flag, sub_type interface{}, approve bool, re
 	}
 	data, err := Net.Post(botinfo["url"].(string)+"/set_group_add_request", nil, post, nil, nil)
 	if err != nil {
-		Log.Crrs(err, tuuz.FUNCTION_ALL())
 		return false, err
 	}
 	var dls DefaultRetStruct

@@ -34,7 +34,9 @@ func init() {
 			ret, err := goredis.Ping(goredis_ctx).Result()
 			if err != nil {
 				log.Println("redis_out", ret, err)
-				panic("redis_out")
+				if app_conf.Recicon_panic_on_link_error {
+					panic("redis_out")
+				}
 			}
 		}
 	}()

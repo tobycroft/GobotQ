@@ -116,13 +116,13 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 			go Group.AutoMessage(self_id, group_id, user_id, app_default.Default_over_time, groupfunction)
 			return
 		}
-		groupHandle_acfur(self_id, group_id, user_id, message_id, new_text, message, raw_message, sender, groupmember, groupfunction)
+		go groupHandle_acfur(self_id, group_id, user_id, message_id, new_text, message, raw_message, sender, groupmember, groupfunction)
 	} else {
 		if botinfo["end_time"].(int64) < time.Now().Unix() {
 			return
 		}
 		//在未激活acfur的情况下应该对原始内容进行还原
-		groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
+		go groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
 	}
 }
 
@@ -236,11 +236,11 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "测试T出测试":
-		Group.App_kick_user(self_id, group_id, user_id, true, groupfunction, "测试")
+		go Group.App_kick_user(self_id, group_id, user_id, true, groupfunction, "测试")
 		break
 
 	case "测试禁言测试":
-		Group.App_ban_user(self_id, group_id, user_id, true, groupfunction, "测试")
+		go Group.App_ban_user(self_id, group_id, user_id, true, groupfunction, "测试")
 		break
 
 	case "测试拼音":
@@ -273,7 +273,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 1, groupmember, groupfunction)
+		go Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 1, groupmember, groupfunction)
 		break
 
 	case "T出词":
@@ -281,7 +281,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 2, groupmember, groupfunction)
+		go Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 2, groupmember, groupfunction)
 		break
 
 	case "撤回词":
@@ -289,7 +289,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 3, groupmember, groupfunction)
+		go Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 3, groupmember, groupfunction)
 		break
 
 	case "清除小黑屋":
@@ -330,7 +330,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	default:
-		groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
+		go groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
 		break
 	}
 }
@@ -495,75 +495,75 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "重新验证":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
-				service.Not_admin(self_id, group_id, user_id)
+				go service.Not_admin(self_id, group_id, user_id)
 				return
 			}
 		}
-		Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		go Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 
 	case "活人验证":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
-				service.Not_admin(self_id, group_id, user_id)
+				go service.Not_admin(self_id, group_id, user_id)
 				return
 			}
 		}
-		Group.App_reverify_force(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		go Group.App_reverify_force(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 
 	case "死亡验证":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
-				service.Not_admin(self_id, group_id, user_id)
+				go service.Not_admin(self_id, group_id, user_id)
 				return
 			}
 		}
-		Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 
 	case "交易":
-		Group.App_trade_center(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		go Group.App_trade_center(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 
 	case "道具":
-		Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+		go Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		break
 
 	case "atme":
-		api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "sign":
 		if groupfunction["sign"].(int64) == 1 {
-			Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+			go Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 		}
 		break
 
 	case "轮盘":
 		if groupfunction["sign"].(int64) == 1 {
-			Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+			go Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 		}
 		break
 
 	case "setting":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
-				service.Not_admin(self_id, group_id, user_id)
+				go service.Not_admin(self_id, group_id, user_id)
 				return
 			}
 		}
-		Group.App_group_function_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
+		go Group.App_group_function_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
 		break
 
 	case "ban_word":
 		if !admin && !owner {
 			if len(groupmember) > 0 {
-				service.Not_admin(self_id, group_id, user_id)
+				go service.Not_admin(self_id, group_id, user_id)
 				return
 			}
 		}
-		Group.App_group_ban_word_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
+		go Group.App_group_ban_word_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
 		break
 
 	case "url_detect":
@@ -573,7 +573,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					api.Retract_chan_instant <- ret
 				}(ret)
 			}
-			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
+			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
 		}
 		break
 
@@ -584,7 +584,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					api.Retract_chan_instant <- ret
 				}(ret)
 			}
-			Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
+			go Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
 		}
 		break
 
@@ -595,7 +595,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					api.Retract_chan_instant <- ret
 				}(ret)
 			}
-			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
+			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
 		}
 		break
 
@@ -606,28 +606,28 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					api.Retract_chan_instant <- ret
 				}(ret)
 			}
-			Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
+			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
 		}
 		break
 
 	case "威望查询":
-		Group.App_check_balance(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+		go Group.App_check_balance(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 		break
 
 	case "威望排行":
-		Group.App_check_rank(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+		go Group.App_check_rank(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 		break
 
 	case "长度限制":
 		go func(ret api.Struct_Retract) {
 			api.Retract_chan_instant <- ret
 		}(ret)
-		Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
+		go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
 			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
 		break
 
 	case "自动回复":
-		api.Sendgroupmsg(self_id, group_id, message, auto_retract)
+		go api.Sendgroupmsg(self_id, group_id, message, auto_retract)
 		break
 
 	default:
@@ -638,9 +638,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			}
 			Redis.String_set(Calc.Md5(Calc.Any2String(user_id)+"_"+raw_message), num+1, time.Duration(groupfunction["repeat_time"].(int64)))
 			if int64(num) > groupfunction["repeat_count"].(int64) {
-				Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容")
+				go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, "请不要在"+Calc.Any2String(groupfunction["repeat_time"])+"秒内重复发送相同内容")
 			} else if int64(num)+1 > groupfunction["repeat_count"].(int64) {
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
+				go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
 			}
 		}
 
@@ -662,9 +662,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				go func(ret api.Struct_Retract) {
 					api.Retract_chan_instant <- ret
 				}(ret)
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)
+				go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"验证成功"+str, true)
 			} else {
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+				go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 			}
 		}
 

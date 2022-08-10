@@ -135,7 +135,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "A", "a":
 				for i := 0; i < 1; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
-					if !Array.InArray(r1, rand_slice) {
+					if !Array.InArray[string](r1, rand_slice) {
 						rand_slice = append(rand_slice, r1)
 					} else {
 						i = i - 1

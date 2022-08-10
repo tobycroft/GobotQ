@@ -6,12 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/shopspring/decimal"
-	"github.com/tobycroft/Calc"
 	"html/template"
 	"io"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Array"
+	"main.go/tuuz/Calc"
 	"main.go/tuuz/Date"
+	"main.go/tuuz/Jsong"
 	"main.go/tuuz/RET"
 	"main.go/tuuz/Vali"
 	"path/filepath"
@@ -85,6 +86,72 @@ func SPost(key string, c *gin.Context, DemoType interface{}) interface{} {
 	}
 }
 
+func SPostDefault[T string | int | int32 | int64 | float32 | float64 | decimal.Decimal | any](key string, c *gin.Context, defaultValue T) T {
+	in, ok := c.GetPostForm(key)
+	if !ok {
+		return defaultValue
+	} else {
+		switch any(defaultValue).(type) {
+		case string:
+			return any(in).(T)
+
+		case int:
+			str, err := Calc.String2Int(in)
+			if err != nil {
+				return defaultValue
+			}
+			return any(str).(T)
+
+		case int32:
+			str, err := Calc.String2Int64(in)
+			if err != nil {
+				return defaultValue
+			}
+			return any(str).(T)
+
+		case int64:
+			str, err := Calc.String2Int64(in)
+			if err != nil {
+				return defaultValue
+			}
+			return any(str).(T)
+
+		case float64:
+			str, err := Calc.String2Float64(in)
+			if err != nil {
+				return defaultValue
+			}
+			return any(str).(T)
+
+		case float32:
+			str, err := Calc.String2Float64(in)
+			if err != nil {
+				return defaultValue
+			}
+			return any(str).(T)
+
+		case decimal.Decimal:
+			ret, err := decimal.NewFromString(in)
+			if err != nil {
+				return defaultValue
+			}
+			return any(ret).(T)
+
+		case nil:
+			return defaultValue
+
+		case bool:
+			str, ok := SPostBool(key, c)
+			if !ok {
+				return defaultValue
+			}
+			return any(str).(T)
+
+		}
+		return defaultValue
+	}
+}
+
 func SPostString(key string, c *gin.Context, xss bool) (string, bool) {
 	in, ok := c.GetPostForm(key)
 	if !ok {
@@ -125,7 +192,7 @@ func SPostDate(key string, c *gin.Context) (time.Time, bool) {
 
 func SPostDateTime(key string, c *gin.Context) (time.Time, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return time.Time{}, false
 	} else {
 		datetime, err := Date.Date_time_parser(in)
@@ -139,7 +206,7 @@ func SPostDateTime(key string, c *gin.Context) (time.Time, bool) {
 }
 
 func SPostTime(key string, c *gin.Context) (time.Time, bool) {
-	in, ok := PostInt64(key, c)
+	in, ok := SPostInt64(key, c)
 	if !ok {
 		return time.Time{}, false
 	} else {
@@ -149,7 +216,7 @@ func SPostTime(key string, c *gin.Context) (time.Time, bool) {
 
 func SPostLength(key string, min, max int, c *gin.Context, xss bool) (string, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return "", false
 	} else {
 		err := Vali.Length(in, min, max)
@@ -168,7 +235,7 @@ func SPostLength(key string, min, max int, c *gin.Context, xss bool) (string, bo
 
 func SPostInt(key string, c *gin.Context) (int, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return 0, false
 	} else {
 		i, e := Calc.String2Int(in)
@@ -183,7 +250,7 @@ func SPostInt(key string, c *gin.Context) (int, bool) {
 
 func SPostInt64(key string, c *gin.Context) (int64, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return 0, false
 	} else {
 		i, e := Calc.String2Int64(in)
@@ -198,7 +265,7 @@ func SPostInt64(key string, c *gin.Context) (int64, bool) {
 
 func SPostFloat64(key string, c *gin.Context) (float64, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return 0, false
 	} else {
 		i, e := Calc.String2Float64(in)
@@ -213,7 +280,7 @@ func SPostFloat64(key string, c *gin.Context) (float64, bool) {
 
 func SPostDecimal(key string, c *gin.Context) (decimal.Decimal, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return decimal.Zero, false
 	} else {
 		ret, err := decimal.NewFromString(in)
@@ -228,7 +295,7 @@ func SPostDecimal(key string, c *gin.Context) (decimal.Decimal, bool) {
 
 func SPostBool(key string, c *gin.Context) (bool, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return false, false
 	} else {
 		switch in {
@@ -252,62 +319,59 @@ func SPostBool(key string, c *gin.Context) (bool, bool) {
 	}
 }
 
-func SPostArray[T int | string | int64 | float64 | interface{}](key string, c *gin.Context) ([]T, bool) {
+func SPostArray[T string | int | int32 | int64 | float32 | float64 | any](key string, c *gin.Context) ([]T, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return nil, false
 	} else {
-		var arr []T
-		err := jsoniter.UnmarshalFromString(in, &arr)
+		i, err := Jsong.JArray[T](in)
 		if err != nil {
-			c.JSON(RET.Ret_fail(407, err.Error(), key+" should be a Json-Array now is : "+in))
+			c.JSON(RET.Ret_fail(407, err.Error(), key+" should be a Json-Array"))
 			c.Abort()
 			return nil, false
 		}
-		return arr, true
+		return i, true
 	}
 }
 
-func SPostObject[T int | string | int64 | float64 | interface{}](key string, c *gin.Context) (map[string]T, bool) {
+func SPostObject[T string | int | int32 | int64 | float32 | float64, V string | int | int32 | int64 | float32 | float64 | any](key string, c *gin.Context) (map[T]V, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return nil, false
 	} else {
-		var arr map[string]T
-		err := jsoniter.UnmarshalFromString(in, &arr)
+		i, err := Jsong.JObject[T, V](in)
 		if err != nil {
-			c.JSON(RET.Ret_fail(407, err.Error(), key+" should be a Json-Object now is : "+in))
+			c.JSON(RET.Ret_fail(407, key+" should be a Json-Object", key+" should be a Json-Object"))
 			c.Abort()
 			return nil, false
 		}
-		return arr, true
+		return i, true
 	}
 }
 
-func SPostArrayObject[T int | string | int64 | float64 | interface{}](key string, c *gin.Context) ([]map[string]T, bool) {
+func SPostArrayObject[T string | int | int32 | int64 | float32 | float64, V string | int | int32 | int64 | float32 | float64 | any](key string, c *gin.Context) ([]map[T]V, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return nil, false
 	} else {
-		var arr []map[string]T
-		err := jsoniter.UnmarshalFromString(in, &arr)
+		i, err := Jsong.JArrayObject[T, V](in)
 		if err != nil {
-			c.JSON(RET.Ret_fail(407, err.Error(), key+" should be a Json-ArrayObject now is : "+in))
+			c.JSON(RET.Ret_fail(407, key+" should be a Json-ArrayObject", key+" should be a Json-ArrayObject"))
 			c.Abort()
 			return nil, false
 		}
-		return arr, true
+		return i, true
 	}
 }
 
 func SPostAny(key string, c *gin.Context, AnyType interface{}) bool {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return false
 	} else {
 		err := jsoniter.UnmarshalFromString(in, &AnyType)
 		if err != nil {
-			c.JSON(RET.Ret_fail(407, err.Error(), key+" should be a Json-AnyType now is : "+in))
+			c.JSON(RET.Ret_fail(407, err.Error(), key+" should be a Json-AnyType"))
 			c.Abort()
 			return false
 		}
@@ -329,10 +393,10 @@ func SPostLimitPage(c *gin.Context) (int, int, error) {
 
 func SPostIn(key string, c *gin.Context, str_slices []string) (string, bool) {
 	in, ok := c.GetPostForm(key)
-	if !ok {
+	if !ok || in == "" {
 		return "", false
 	} else {
-		if Array.InArrayString(in, str_slices) {
+		if Array.InArray(in, str_slices) {
 			return in, true
 		} else {
 			c.JSON(RET.Ret_fail(407, key+" 's data should in ["+strings.Join(str_slices, ",")+"]", key+" 's data should in ["+strings.Join(str_slices, ",")+"]"))

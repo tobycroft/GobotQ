@@ -135,14 +135,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "A", "a":
 				for i := 0; i < 1; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
-					if !Array.InArrayString(r1, rand_slice) {
+					if !Array.InArray(r1, rand_slice) {
 						rand_slice = append(rand_slice, r1)
 					} else {
 						i = i - 1
 					}
 				}
 				tick := strings.Join(rand_slice, ",")
-				poom := Array.InArrayString(rand, rand_slice)
+				poom := Array.InArray(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
 					if bullet_proof_num > 0 {
@@ -174,14 +174,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "B", "b":
 				for i := 0; i < 2; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
-					if !Array.InArrayString(r1, rand_slice) {
+					if !Array.InArray(r1, rand_slice) {
 						rand_slice = append(rand_slice, r1)
 					} else {
 						i = i - 1
 					}
 				}
 				tick := strings.Join(rand_slice, ",")
-				poom := Array.InArrayString(rand, rand_slice)
+				poom := Array.InArray(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
 					if bullet_proof_num > 0 {
@@ -213,14 +213,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "C", "c":
 				for i := 0; i < 3; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
-					if !Array.InArrayString(r1, rand_slice) {
+					if !Array.InArray(r1, rand_slice) {
 						rand_slice = append(rand_slice, r1)
 					} else {
 						i = i - 1
 					}
 				}
 				tick := strings.Join(rand_slice, ",")
-				poom := Array.InArrayString(rand, rand_slice)
+				poom := Array.InArray(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
 					if bullet_proof_num > 0 {
@@ -252,14 +252,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "D", "d":
 				for i := 0; i < 4; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
-					if !Array.InArrayString(r1, rand_slice) {
+					if !Array.InArray(r1, rand_slice) {
 						rand_slice = append(rand_slice, r1)
 					} else {
 						i = i - 1
 					}
 				}
 				tick := strings.Join(rand_slice, ",")
-				poom := Array.InArrayString(rand, rand_slice)
+				poom := Array.InArray(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
 					if bullet_proof_num > 0 {
@@ -291,14 +291,14 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			case "E", "e":
 				for i := 0; i < 5; i++ {
 					r1 := Calc.Int2String(Calc.Rand(1, 6))
-					if !Array.InArrayString(r1, rand_slice) {
+					if !Array.InArray(r1, rand_slice) {
 						rand_slice = append(rand_slice, r1)
 					} else {
 						i = i - 1
 					}
 				}
 				tick := strings.Join(rand_slice, ",")
-				poom := Array.InArrayString(rand, rand_slice)
+				poom := Array.InArray(rand, rand_slice)
 				if poom && stuck_mode > played_time {
 					//poom!!!
 					if bullet_proof_num > 0 {

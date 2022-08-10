@@ -103,7 +103,7 @@ func NoticeMsg(em Notice, remoteip string) {
 
 	case "group_increase":
 		if user_id == self_id {
-			Group.App_refreshmember(self_id, group_id)
+			go Group.App_refreshmember(self_id, group_id)
 		} else {
 			if groupfunction["auto_hold"].(int64) == 1 {
 				//如果禁言成功，就将这个人暂时加入永久小黑屋
@@ -112,7 +112,7 @@ func NoticeMsg(em Notice, remoteip string) {
 				Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_second+10)
 				Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, 3600)
 				at := service.Serv_at(user_id)
-				api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
+				go api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 				go func(self_id, group_id, user_id interface{}) {
 					time.Sleep(120 * time.Second)
 					ok, err := Redis.String_getBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
@@ -140,7 +140,7 @@ func NoticeMsg(em Notice, remoteip string) {
 				}
 			}
 			if groupfunction["auto_card"].(int64) == 1 {
-				api.Setgroupcard(self_id, group_id, user_id, groupfunction["card_value"])
+				go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
 			}
 
 			//将这个新加群的用户单条加入数据库

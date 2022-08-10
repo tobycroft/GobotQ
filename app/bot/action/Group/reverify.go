@@ -14,20 +14,27 @@ import (
 )
 
 func App_reverify(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	_, err := reverify(self_id, group_id, user_id, message, false)
+	_, err := reverify(self_id, group_id, user_id, message, false, false)
 	if err != nil {
 		AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 	}
 }
 
 func App_reverify_death(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
-	_, err := reverify(self_id, group_id, user_id, message, true)
+	_, err := reverify(self_id, group_id, user_id, message, true, false)
 	if err != nil {
 		AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 	}
 }
 
-func reverify(self_id, group_id, user_id interface{}, send_to_message string, kick bool) (string, error) {
+func App_reverify_force(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	_, err := reverify(self_id, group_id, user_id, message, false, true)
+	if err != nil {
+		AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
+	}
+}
+
+func reverify(self_id, group_id, user_id interface{}, send_to_message string, kick, force bool) (string, error) {
 	qq := service.Serv_get_qq(send_to_message)
 	cq_mess, to_user_id := service.Serv_at_who(send_to_message)
 	qq_num := ""
@@ -46,7 +53,7 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string, ki
 	}
 	user := GroupBanPermenentModel.Api_find(group_id, member["user_id"])
 	go api.SetGroupBan(self_id, group_id, member["user_id"], 0)
-	if len(user) > 0 {
+	if len(user) > 0 || force {
 		GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
 		num := Calc.Rand(1000, 9999)
 		Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, app_conf.Retract_time_second+10)

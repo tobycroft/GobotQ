@@ -113,14 +113,14 @@ func NoticeMsg(em Notice, remoteip string) {
 				Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, 3600)
 				at := service.Serv_at(user_id)
 				go api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
-				go func(self_id, group_id, user_id interface{}) {
+				go func(selfId, groupId, userId interface{}) {
 					time.Sleep(120 * time.Second)
-					ok, err := Redis.String_getBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+					ok, err := Redis.String_getBool("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
 					if err != nil {
 					} else {
 						if ok {
-							api.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
-							api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
+							go api.Sendgroupmsg(selfId, groupId, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
+							api.SetGroupBan(selfId, groupId, userId, app_conf.Auto_ban_time)
 						}
 					}
 				}(self_id, group_id, user_id)
@@ -129,40 +129,50 @@ func NoticeMsg(em Notice, remoteip string) {
 				//在没有启动自动验证模式的时候，使用正常欢迎流程
 				if groupfunction["auto_welcome"].(int64) == 1 {
 					if groupfunction["welcome_at"].(int64) == 1 {
-						api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+						go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
 					} else {
-						api.Sendgroupmsg(self_id, group_id, Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
+						go api.Sendgroupmsg(self_id, group_id, Calc.Any2String(groupfunction["welcome_word"]), auto_retract)
 					}
 				} else {
 					if groupfunction["join_alert"].(int64) == 1 {
-						api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
+						go api.Sendgroupmsg(self_id, group_id, "成员+1", auto_retract)
 					}
 				}
 			}
 			if groupfunction["auto_card"].(int64) == 1 {
-				go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
-			}
-
-			//将这个新加群的用户单条加入数据库
-			member, err := api.GetGroupMemberInfo(self_id, group_id, user_id)
-			if err != nil {
-
-			} else {
-				var mb GroupMemberModel.GroupMember
-				mb.SelfId = self_id
-				mb.UserID = user_id
-				mb.GroupID = group_id
-				mb.Card = member.Card
-				mb.Title = member.Title
-				mb.Level = member.Level
-				mb.JoinTime = member.JoinTime
-				mb.LastSentTime = member.LastSentTime
-				mb.Nickname = member.Nickname
-				mb.Role = member.Role
-				if !GroupMemberModel.Api_insert(mb) {
-					go api.Sendgroupmsg(self_id, group_id, "群成员数据增加失败", auto_retract)
+				if groupfunction["auto_card_insert"] == 1 {
+					comment, err := Redis.String_get("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+					if err != nil {
+						go api.Setgroupcard(self_id, group_id, user_id, comment)
+						Redis.Del("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+					}
+				} else {
+					go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
 				}
 			}
+
+			go func(selfId, groupId, userId int64, autoRetract bool) {
+				//将这个新加群的用户单条加入数据库
+				member, err := api.GetGroupMemberInfo(selfId, groupId, userId)
+				if err != nil {
+
+				} else {
+					var mb GroupMemberModel.GroupMember
+					mb.SelfId = selfId
+					mb.UserID = userId
+					mb.GroupID = groupId
+					mb.Card = member.Card
+					mb.Title = member.Title
+					mb.Level = member.Level
+					mb.JoinTime = member.JoinTime
+					mb.LastSentTime = member.LastSentTime
+					mb.Nickname = member.Nickname
+					mb.Role = member.Role
+					if !GroupMemberModel.Api_insert(mb) {
+						go api.Sendgroupmsg(selfId, groupId, "群成员数据增加失败", autoRetract)
+					}
+				}
+			}(self_id, group_id, user_id, auto_retract)
 		}
 		break
 

@@ -62,18 +62,18 @@ func NoticeMsg(em Notice, remoteip string) {
 		case "set":
 			if user_id == self_id {
 				if GroupMemberModel.Api_update_type(group_id, user_id, "admin") {
-					api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，可使用acfurhelp查看功能", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，可使用acfurhelp查看功能", auto_retract)
 				} else {
-					api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息", auto_retract)
 				}
 			} else {
 				if GroupMemberModel.Api_update_type(group_id, user_id, "admin") {
-					api.Sendgroupmsg(self_id, group_id, "恭喜上位"+service.Serv_at(user_id), auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "恭喜上位"+service.Serv_at(user_id), auto_retract)
 					GroupBlackListModel.Api_delete(group_id, user_id)
 					GroupBanPermenentModel.Api_delete(group_id, user_id)
 					Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 				} else {
-					api.Sendgroupmsg(self_id, group_id, "恭喜上位,但是权限变动失败", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "恭喜上位,但是权限变动失败", auto_retract)
 				}
 			}
 
@@ -82,15 +82,15 @@ func NoticeMsg(em Notice, remoteip string) {
 		case "unset":
 			if user_id == self_id {
 				if GroupMemberModel.Api_update_type(group_id, user_id, "member") {
-					api.Sendgroupmsg(self_id, group_id, "Acfur-Off，权限已回收，将在2小时内退群", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "Acfur-Off，权限已回收，将在2小时内退群", auto_retract)
 				} else {
-					api.Sendgroupmsg(self_id, group_id, "Acfur-Off，权限已回收，数据故障", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "Acfur-Off，权限已回收，数据故障", auto_retract)
 				}
 			} else {
 				if GroupMemberModel.Api_update_type(group_id, user_id, "member") {
-					api.Sendgroupmsg(self_id, group_id, "管理员列表更新", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "管理员列表更新", auto_retract)
 				} else {
-					api.Sendgroupmsg(self_id, group_id, "管理员权限变动失败", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "管理员权限变动失败", auto_retract)
 				}
 			}
 			break

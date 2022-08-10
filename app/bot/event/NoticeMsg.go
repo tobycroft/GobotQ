@@ -160,7 +160,7 @@ func NoticeMsg(em Notice, remoteip string) {
 				mb.Nickname = member.Nickname
 				mb.Role = member.Role
 				if !GroupMemberModel.Api_insert(mb) {
-					api.Sendgroupmsg(self_id, group_id, "群成员数据增加失败", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "群成员数据增加失败", auto_retract)
 				}
 			}
 		}
@@ -173,11 +173,11 @@ func NoticeMsg(em Notice, remoteip string) {
 			if groupfunction["exit_to_black"].(int64) == 1 {
 				GroupBlackListModel.Api_insert(group_id, user_id, operator_id)
 				if groupfunction["exit_alert"].(int64) == 1 {
-					api.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"退群，已加入本群黑名单", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"退群，已加入本群黑名单", auto_retract)
 				}
 			} else {
 				if groupfunction["exit_alert"].(int64) == 1 {
-					api.Sendgroupmsg(self_id, group_id, "成员-1", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "成员-1", auto_retract)
 				}
 			}
 			break
@@ -192,15 +192,15 @@ func NoticeMsg(em Notice, remoteip string) {
 			if groupfunction["kick_to_black"].(int64) == 1 {
 				GroupBlackListModel.Api_insert(group_id, user_id, operator_id)
 				if GroupKickModel.Api_insert(self_id, group_id, user_id, jsonmsg) {
-					api.Sendgroupmsg(self_id, group_id, "群成员"+Calc.Any2String(user_id)+"T出报告已经生成，并已加入黑名单，请在APP中查看", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "群成员"+Calc.Any2String(user_id)+"T出报告已经生成，并已加入黑名单，请在APP中查看", auto_retract)
 				} else {
-					api.Sendgroupmsg(self_id, group_id, "群成员"+Calc.Any2String(user_id)+"T出报告生成失败，但已加入黑名单", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "群成员"+Calc.Any2String(user_id)+"T出报告生成失败，但已加入黑名单", auto_retract)
 				}
 			} else {
 				if GroupKickModel.Api_insert(self_id, group_id, user_id, jsonmsg) {
-					api.Sendgroupmsg(self_id, group_id, "群成员T出报告已经生成，请在APP中查看", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "群成员T出报告已经生成，请在APP中查看", auto_retract)
 				} else {
-					api.Sendgroupmsg(self_id, group_id, "群成员T出报告生成失败", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, "群成员T出报告生成失败", auto_retract)
 				}
 			}
 			break
@@ -223,7 +223,7 @@ func NoticeMsg(em Notice, remoteip string) {
 
 				} else {
 					GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
-					api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你进入永久小黑屋，可联系群管解除", auto_retract)
+					go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你进入永久小黑屋，可联系群管解除", auto_retract)
 				}
 			}
 			break
@@ -231,7 +231,7 @@ func NoticeMsg(em Notice, remoteip string) {
 		case "lift_ban":
 			if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 				GroupBanPermenentModel.Api_delete(group_id, user_id)
-				api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了", auto_retract)
+				go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了", auto_retract)
 			}
 			break
 		}

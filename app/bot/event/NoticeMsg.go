@@ -139,15 +139,13 @@ func NoticeMsg(em Notice, remoteip string) {
 					}
 				}
 			}
-			if groupfunction["auto_card"].(int64) == 1 {
-				if groupfunction["auto_card_insert"] == 1 {
-					comment, err := Redis.String_get("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
-					if err != nil {
-						go api.Setgroupcard(self_id, group_id, user_id, comment)
-					}
-				} else {
-					go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
+			if groupfunction["auto_card_insert"] == 1 {
+				comment, err := Redis.String_get("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
+				if err != nil {
+					go api.Setgroupcard(self_id, group_id, user_id, comment)
 				}
+			} else if groupfunction["auto_card"].(int64) == 1 {
+				go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
 			}
 
 			go func(selfId, groupId, userId int64, autoRetract bool) {

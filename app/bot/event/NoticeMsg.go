@@ -147,7 +147,6 @@ func NoticeMsg(em Notice, remoteip string) {
 				} else {
 					go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
 				}
-
 			}
 
 			go func(selfId, groupId, userId int64, autoRetract bool) {

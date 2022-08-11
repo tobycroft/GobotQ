@@ -14,8 +14,8 @@ type Struct_Retract struct {
 	MessageId interface{}
 }
 
-var Retract_chan = make(chan Struct_Retract, 20)
-var Retract_chan_instant = make(chan Struct_Retract, 20)
+var Retract_chan = make(chan Struct_Retract, 100)
+var Retract_chan_instant = make(chan Struct_Retract, 100)
 
 type DefaultRetStruct struct {
 	Data    interface{} `json:"data"`

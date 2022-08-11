@@ -677,7 +677,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				go func(ret api.Struct_Retract) {
 					api.Retract_chan_instant <- ret
 				}(ret)
-				go api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), true)
+				Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
 			} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
 				go func(ret api.Struct_Retract) {
 					api.Retract_chan_instant <- ret

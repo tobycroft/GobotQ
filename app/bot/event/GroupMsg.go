@@ -643,7 +643,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				if int64(num) > groupFunction["repeat_count"].(int64) {
 					go Group.App_ban_user(selfId, groupId, userId, auto_retract, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
 				} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
-					go api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", auto_retract)
+					Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", groupFunction)
 				}
 			}
 		}(self_id, group_id, user_id, groupfunction)

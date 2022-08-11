@@ -144,7 +144,6 @@ func NoticeMsg(em Notice, remoteip string) {
 					comment, err := Redis.String_get("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 					if err != nil {
 						go api.Setgroupcard(self_id, group_id, user_id, comment)
-						Redis.Del("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 					}
 				} else {
 					go api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])

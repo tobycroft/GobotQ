@@ -32,7 +32,7 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	gbl := gpm.Api_find(group_id, user_id)
 	at := service.Serv_at(user_id)
 	str := at + "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
-	api.Sendgroupmsg(self_id, group_id, str, auto_retract)
+	go api.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }
 
 func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
@@ -62,5 +62,5 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 			}
 		}
 	}
-	api.Sendgroupmsg(self_id, group_id, str, auto_retract)
+	go api.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }

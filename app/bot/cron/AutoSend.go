@@ -52,6 +52,6 @@ func auto_send() {
 		if len(group) < 1 {
 			return
 		}
-		api.Sendgroupmsg(group["self_id"], data["group_id"], Calc.Any2String(data["msg"]), auto_retract)
+		go api.Sendgroupmsg(group["self_id"], data["group_id"], Calc.Any2String(data["msg"]), auto_retract)
 	}
 }

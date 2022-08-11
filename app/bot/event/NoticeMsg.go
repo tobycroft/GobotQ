@@ -62,7 +62,7 @@ func NoticeMsg(em Notice, remoteip string) {
 		case "set":
 			if user_id == self_id {
 				if GroupMemberModel.Api_update_type(group_id, user_id, "admin") {
-					go api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，可使用acfurhelp查看功能", auto_retract)
+								go api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，可使用acfurhelp查看功能", auto_retract)
 				} else {
 					go api.Sendgroupmsg(self_id, group_id, "Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息", auto_retract)
 				}

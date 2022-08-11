@@ -141,7 +141,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	switch new_text {
 
 	case "":
-		api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "交易":
@@ -672,12 +672,12 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			go func(ret api.Struct_Retract) {
 				api.Retract_chan_instant <- ret
 			}(ret)
-			api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请尽快输入"+Calc.Any2String(code), true)
+			go api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"请尽快输入"+Calc.Any2String(code), true)
 		} else if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 			go func(ret api.Struct_Retract) {
 				api.Retract_chan_instant <- ret
 			}(ret)
-			//api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
+			//go api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 		}
 		break
 	}

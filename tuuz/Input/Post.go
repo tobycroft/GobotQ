@@ -101,7 +101,7 @@ func PostDateTime(key string, c *gin.Context) (time.Time, bool) {
 		c.Abort()
 		return time.Time{}, false
 	} else {
-		datetime, err := Date.Date_time_parser(in)
+		datetime, err := Date.Date_time_parser(in, nil)
 		if err != nil {
 			c.JSON(RET.Ret_fail(407, err.Error(), key+" should only be a Date(+Time) or RFC3339"))
 			c.Abort()
@@ -331,6 +331,65 @@ func PostIn(key string, c *gin.Context, str_slices []string) (string, bool) {
 			return in, true
 		} else {
 			c.JSON(RET.Ret_fail(407, key+" 's data should in ["+strings.Join(str_slices, ",")+"]", key+" 's data should in ["+strings.Join(str_slices, ",")+"]"))
+			c.Abort()
+			return in, false
+		}
+	}
+}
+
+func PostLike(key string, c *gin.Context, like string) (string, bool) {
+	in, ok := c.GetPostForm(key)
+	if !ok {
+		c.JSON(RET.Ret_fail(400, key, "POST-["+key+"]"))
+		c.Abort()
+		return "", false
+	} else {
+		if strings.Contains(in, like) {
+			return template.JSEscapeString(in), true
+		} else {
+			c.JSON(RET.Ret_fail(407, key+" 's data should contain with"+like+"]", key+" 's data should contain with"+like+"]"))
+			c.Abort()
+			return "", false
+		}
+	}
+}
+
+func PostLikeIn(key string, c *gin.Context, like_all []string) (string, bool) {
+	in, ok := c.GetPostForm(key)
+	if !ok {
+		c.JSON(RET.Ret_fail(400, key, "POST-["+key+"]"))
+		c.Abort()
+		return "", false
+	} else {
+		for _, s := range like_all {
+			if !strings.Contains(in, s) {
+				c.JSON(RET.Ret_fail(407, key+" 's data should like in ["+strings.Join(like_all, ",")+"]", key+" 's data should like in ["+strings.Join(like_all, ",")+"]"))
+				c.Abort()
+				return in, false
+			}
+		}
+		return in, true
+	}
+}
+
+func PostLikeHave(key string, c *gin.Context, like_have []string) (string, bool) {
+	in, ok := c.GetPostForm(key)
+	if !ok {
+		c.JSON(RET.Ret_fail(400, key, "POST-["+key+"]"))
+		c.Abort()
+		return "", false
+	} else {
+		cnt := false
+		for _, s := range like_have {
+			if strings.Contains(in, s) {
+				cnt = true
+				break
+			}
+		}
+		if cnt {
+			return in, true
+		} else {
+			c.JSON(RET.Ret_fail(407, key+" 's data should in ["+strings.Join(like_have, ",")+"]", key+" 's data should in ["+strings.Join(like_have, ",")+"]"))
 			c.Abort()
 			return in, false
 		}

@@ -246,11 +246,11 @@ func NoticeMsg(em Notice, remoteip string) {
 		break
 
 	case "friend_add":
-		fmt.Println(em)
+		//fmt.Println(em)
 		break
 
 	case "friend_recall":
-		fmt.Println(em)
+		//fmt.Println(em)
 		break
 
 	case "group_recall":

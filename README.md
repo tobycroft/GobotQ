@@ -144,10 +144,3 @@ GobotQ吸取了之前版本的经验，在重发保护，交叉发送保护，�
 在前几年的公共机器人中，我们得到了这方面的大量经验
 
 
-
-
-## Jetbrain IdeaInteliJ Support
-
-
-<img src="./jetbrains-variant-4.png">
-

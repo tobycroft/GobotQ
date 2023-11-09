@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/cron"
 	"main.go/config/app_conf"
@@ -49,11 +50,13 @@ func main() {
 
 	go cron.PowerCheck()
 
+	Calc.RefreshBaseNum()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard
+	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
+	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
 	route.OnRoute(mainroute)
-	go mainroute.Run(":81")
-	mainroute.Run(":15081")
+	mainroute.Run(":80")
 
 }

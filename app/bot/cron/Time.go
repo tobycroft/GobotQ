@@ -49,9 +49,7 @@ func BaseCron() {
 }
 
 func BotInfoCron() {
-	tick := time.NewTicker(30 * time.Minute)
-	select {
-	case <-tick.C:
+	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
 			bot_info, err := api.GetLoginInfo(bot["self_id"])
@@ -65,6 +63,6 @@ func BotInfoCron() {
 				}
 			}
 		}
-		break
+		time.Sleep(30 * time.Minute)
 	}
 }

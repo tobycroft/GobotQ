@@ -25,17 +25,17 @@ func init() {
 }
 func main() {
 
-	go cron.BotInfoCron()
+	cron.BotInfoCron()
 	go cron.BaseCron()
 	go cron.Refresh_friend_list()
 
 	go Group.App_refresh_group_member_chan()
 
 	go cron.Refresh_group_chan()
-	go cron.Refresh_group_chan()
-	go cron.Refresh_group_chan()
-	go cron.Refresh_group_chan()
-	go cron.Refresh_group_chan()
+	//go cron.Refresh_group_chan()
+	//go cron.Refresh_group_chan()
+	//go cron.Refresh_group_chan()
+	//go cron.Refresh_group_chan()
 
 	go cron.Retract()
 	go cron.Send_private()

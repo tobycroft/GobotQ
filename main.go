@@ -4,9 +4,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/cron"
+	"main.go/config/app_conf"
 	"main.go/route"
+	"os"
+	"time"
 )
 
+func init() {
+	time.Local = app_conf.TimeZone
+	if app_conf.TestMode == false {
+		s, err := os.Stat("./log/")
+
+		if err != nil {
+			os.Mkdir("./log", 0755)
+		} else if s.IsDir() {
+			os.Mkdir("./log", 0755)
+		}
+	}
+}
 func main() {
 
 	go cron.BotInfoCron()

@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
-	Net "github.com/tobycroft/TuuzNet"
+	"main.go/app/bot/event"
 	"main.go/config/app_conf"
 	"main.go/route"
 	"os"
@@ -58,11 +57,7 @@ func main() {
 	//go cron.BanPermenentCheck()
 	//
 	//go cron.PowerCheck()
-	go func() {
-		for c := range Net.WsServer_ReadChannel {
-			fmt.Println("ws:", string(c.Message))
-		}
-	}()
+	go event.EventListener()
 
 	Calc.RefreshBaseNum()
 	mainroute := gin.Default()
@@ -73,50 +68,4 @@ func main() {
 	route.OnRoute(mainroute)
 	mainroute.Run(":80")
 
-}
-
-type T struct {
-	Time          int    `json:"time"`
-	SelfId        int    `json:"self_id"`
-	PostType      string `json:"post_type"`
-	MetaEventType string `json:"meta_event_type"`
-	SubType       string `json:"sub_type"`
-	Status        struct {
-		Self struct {
-			Platform string `json:"platform"`
-			UserId   int    `json:"user_id"`
-		} `json:"self"`
-		Online   bool   `json:"online"`
-		Good     bool   `json:"good"`
-		QqStatus string `json:"qq.status"`
-	} `json:"status"`
-	Interval int `json:"interval"`
-}
-
-type T2 struct {
-	Time        int    `json:"time"`
-	SelfId      int    `json:"self_id"`
-	PostType    string `json:"post_type"`
-	MessageType string `json:"message_type"`
-	SubType     string `json:"sub_type"`
-	MessageId   int    `json:"message_id"`
-	TargetId    int    `json:"target_id"`
-	PeerId      int    `json:"peer_id"`
-	UserId      int    `json:"user_id"`
-	Message     []struct {
-		Data struct {
-			Text string `json:"text"`
-		} `json:"data"`
-		Type string `json:"type"`
-	} `json:"message"`
-	RawMessage string `json:"raw_message"`
-	Font       int    `json:"font"`
-	Sender     struct {
-		UserId   int    `json:"user_id"`
-		Nickname string `json:"nickname"`
-		Card     string `json:"card"`
-		Role     string `json:"role"`
-		Title    string `json:"title"`
-		Level    string `json:"level"`
-	} `json:"sender"`
 }

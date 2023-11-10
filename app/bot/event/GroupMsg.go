@@ -233,7 +233,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			return
 		}
 		go func(ret api.Struct_Retract) {
-			api.Retract_chan_instant <- ret
+			api.Retract_instant <- ret
 		}(ret)
 		break
 
@@ -572,7 +572,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if groupfunction["ban_url"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
 				go func(ret api.Struct_Retract) {
-					api.Retract_chan_instant <- ret
+					api.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
@@ -583,7 +583,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if groupfunction["ban_group"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
 				go func(ret api.Struct_Retract) {
-					api.Retract_chan_instant <- ret
+					api.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
@@ -594,7 +594,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if groupfunction["ban_wx"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
 				go func(ret api.Struct_Retract) {
-					api.Retract_chan_instant <- ret
+					api.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
@@ -605,7 +605,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if groupfunction["ban_share"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
 				go func(ret api.Struct_Retract) {
-					api.Retract_chan_instant <- ret
+					api.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
@@ -622,7 +622,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 	case "长度限制":
 		go func(ret api.Struct_Retract) {
-			api.Retract_chan_instant <- ret
+			api.Retract_instant <- ret
 		}(ret)
 		go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
 			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
@@ -666,7 +666,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 						str = "\r\n" + Calc.Any2String(groupFunction["welcome_word"])
 					}
 					go func(ret api.Struct_Retract) {
-						api.Retract_chan_instant <- ret
+						api.Retract_instant <- ret
 					}(ret)
 					go api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
 				} else {
@@ -676,12 +676,12 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 			if Redis.CheckExists("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId)) {
 				go func(ret api.Struct_Retract) {
-					api.Retract_chan_instant <- ret
+					api.Retract_instant <- ret
 				}(ret)
 				Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
 			} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
 				go func(ret api.Struct_Retract) {
-					api.Retract_chan_instant <- ret
+					api.Retract_instant <- ret
 				}(ret)
 				//go api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 			}

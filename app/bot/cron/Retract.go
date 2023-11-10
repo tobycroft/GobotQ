@@ -16,7 +16,7 @@ func retract_private() {
 		go func(retract api.Struct_Retract) {
 			time.Sleep(app_conf.Retract_time_second * time.Second)
 			select {
-			case api.Retract_chan_instant <- retract:
+			case api.Retract_instant <- retract:
 
 			case <-time.After(5 * time.Second):
 				return
@@ -26,7 +26,7 @@ func retract_private() {
 }
 
 func retract_instant() {
-	for r := range api.Retract_chan_instant {
+	for r := range api.Retract_instant {
 		api.DeleteMsg(r.Self_id, r.MessageId)
 	}
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
-
 	"main.go/tuuz/Log"
 )
 
@@ -16,7 +15,7 @@ type Struct_Retract struct {
 }
 
 var Retract_chan = make(chan Struct_Retract, 100)
-var Retract_chan_instant = make(chan Struct_Retract, 100)
+var Retract_instant = make(chan Struct_Retract, 100)
 
 type DefaultRetStruct struct {
 	Data    interface{} `json:"data"`

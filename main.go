@@ -21,8 +21,8 @@ func init() {
 }
 
 func main() {
-	var ws Net.WebsocketClient
-	ws.NewWebsocketClient()
+	var ws Net.WsClient
+	err := ws.NewConnect("ws://10.0.1.102:5801")
 	//cron.BotInfoCron()
 	//go cron.BaseCron()
 	//go cron.Refresh_friend_list()

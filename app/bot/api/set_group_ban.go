@@ -25,7 +25,7 @@ func SetGroupBan(self_id, group_id, user_id interface{}, duration float64) (bool
 		Log.Crrs(errors.New("bot:"+Calc.Any2String(self_id)), tuuz.FUNCTION_ALL())
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/set_group_ban", nil, post, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_ban", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

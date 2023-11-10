@@ -16,7 +16,7 @@ require (
 	github.com/shopspring/decimal v1.3.1
 	github.com/tobycroft/Calc v1.3.5
 	github.com/tobycroft/gorose-pro v1.12.12
-	github.com/tobycroft/TuuzNet v1.1.1
+	github.com/tobycroft/TuuzNet v1.1.4
 )
 
 require (

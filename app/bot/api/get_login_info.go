@@ -26,7 +26,7 @@ func GetLoginInfo(self_id interface{}) (LoginInfo, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return LoginInfo{}, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/get_login_info", nil, nil, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_login_info", nil, nil, nil, nil).RetString()
 	if err != nil {
 		return LoginInfo{}, err
 	}

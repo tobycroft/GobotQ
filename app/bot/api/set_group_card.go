@@ -21,7 +21,7 @@ func Setgroupcard(self_id, group_id, user_id, card interface{}) (bool, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/set_group_card", nil, post, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_card", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

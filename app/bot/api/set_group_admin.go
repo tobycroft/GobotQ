@@ -21,7 +21,7 @@ func SetGroupAdmin(self_id, group_id, user_id interface{}, enable bool) (bool, e
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/set_group_admin", nil, post, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_admin", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

@@ -21,7 +21,7 @@ func SetFriendAddRequest(self_id, flag interface{}, approve bool, remark interfa
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/set_friend_add_request", nil, post, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_friend_add_request", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

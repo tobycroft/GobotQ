@@ -49,7 +49,7 @@ func GetGroupInfo(self_id, group_id interface{}) (GroupInfo, error) {
 		return GroupInfo{}, errors.New("botinfo_notfound")
 	}
 
-	data, err := Net.Post{}.Post(botinfo["url"].(string)+"/get_group_info", nil, post, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_group_info", nil, post, nil, nil).RetString()
 	if err != nil {
 		return GroupInfo{}, err
 	}

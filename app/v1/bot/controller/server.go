@@ -47,8 +47,10 @@ func server_add(c *gin.Context) {
 		RET.Fail(c, 400, nil, "secret应该大于6位小于16位")
 		return
 	}
-	//ret, err := Net.Post("docker.tuuz.cc:5701/get_status", nil, nil, nil, nil)
-	ret, err := Net.Post("http://"+address+":"+Calc.Any2String(port)+"/get_login_info", nil, nil, nil, nil)
+	//ret, err := Net.Post{}.PostUrlXEncode{}.PostUrlXEncode("docker.tuuz.cc:5701/get_status", nil, nil, nil, nil)
+	ret, err := Net.Post{}.PostUrlXEncode
+	{
+	}.PostUrlXEncode("http://"+address+":"+Calc.Any2String(port)+"/get_login_info", nil, nil, nil, nil)
 	if err != nil {
 		RET.Fail(c, 300, nil, "无法访问远程服务器，请确认您的机器人接口已经对外开放，请稍后再试")
 		return
@@ -122,7 +124,9 @@ func server_update(c *gin.Context) {
 		RET.Fail(c, 403, nil, "您没有权限修改这个账号")
 		return
 	}
-	ret, err := Net.Post("http://"+address+":"+Calc.Any2String(port)+"/get_login_info", nil, nil, nil, nil)
+	ret, err := Net.Post{}.PostUrlXEncode
+	{
+	}.PostUrlXEncode("http://"+address+":"+Calc.Any2String(port)+"/get_login_info", nil, nil, nil, nil)
 	if err != nil {
 		RET.Fail(c, 300, nil, "无法访问远程服务器，请确认您的机器人接口已经对外开放，请稍后再试")
 		return

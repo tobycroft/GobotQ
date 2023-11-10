@@ -43,7 +43,7 @@ func Getgroupmemberlist(self_id, group_id interface{}) ([]GroupMemberList, error
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return nil, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/get_group_member_list", nil, post, nil, nil)
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_group_member_list", nil, post, nil, nil).RetString()
 	if err != nil {
 		return nil, err
 	}

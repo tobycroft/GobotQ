@@ -2,6 +2,7 @@ package Group
 
 import (
 	"errors"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -59,7 +60,10 @@ func reverify(self_id, group_id, user_id interface{}, send_to_message string, ki
 		}
 		num := Calc.Rand(1000, 9999)
 		Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, app_conf.Retract_time_second+10)
-		Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, 3600)
+		err := Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, 3600)
+		if err != nil {
+			return "", err
+		}
 		at := service.Serv_at(member["user_id"])
 		go api.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 		go func(self_id, group_id, user_id interface{}, kick bool) {

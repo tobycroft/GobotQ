@@ -97,7 +97,7 @@ func (self *Interface) Api_count_userId(group_id, user_id interface{}) int64 {
 	}
 }
 
-func (self *Interface)Api_count_userIdandDate(group_id, user_id, date interface{}) int64 {
+func (self *Interface) Api_count_userIdandDate(group_id, user_id, date interface{}) int64 {
 	db := self.Db.Table(table)
 	where := map[string]interface{}{
 		"group_id": group_id,

@@ -2,6 +2,7 @@ package Group
 
 import (
 	"fmt"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupBalanceModel"
@@ -52,7 +53,7 @@ func App_ban_user(self_id, group_id, user_id interface{}, auto_retract bool, gro
 			fmt.Println("当前积分", bal, balance_decr, balance_left)
 			if balance_left >= 0 {
 				balance.Api_decr(group_id, user_id, math.Abs(balance_decr))
-				go api.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次扣分，扣除"+Calc.Any2String(balance_decr)+"分\n"+"本次扣分原因："+reason+"\n你还剩下："+
+				go api.Sendgroupmsg(self_id, group_id, at+Calc.Any2String(time+1)+"这是你第:"+"次扣分，扣除"+Calc.Any2String(balance_decr)+"分\n"+"本次扣分原因："+reason+"\n你还剩下："+
 					""+Calc.Any2String(balance_left)+"分", auto_retract)
 				return
 			}

@@ -6,7 +6,7 @@ import (
 	"main.go/app/bot/event"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Redis"
 	"time"
 )

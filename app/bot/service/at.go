@@ -1,7 +1,7 @@
 package service
 
 import (
-	"main.go/tuuz/Calc"
+	"github.com/tobycroft/Calc"
 	"regexp"
 	"strings"
 )

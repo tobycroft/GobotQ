@@ -7,7 +7,7 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Redis"
 	"strings"
 	"time"

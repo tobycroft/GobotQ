@@ -11,7 +11,7 @@ import (
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"

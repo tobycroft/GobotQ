@@ -1,8 +1,9 @@
 package service
 
 import (
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/model/GroupAutoReplyModel"
-	"main.go/tuuz/Calc"
+
 	"strings"
 )
 

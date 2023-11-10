@@ -2,6 +2,7 @@ package Group
 
 import (
 	"errors"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupBalanceAction"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/DaojuModel"
@@ -10,7 +11,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/tuuz"
 	"main.go/tuuz/Array"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Log"
 	"math"
 	"regexp"

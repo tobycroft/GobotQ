@@ -1,10 +1,10 @@
 package Private
 
 import (
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/UserMemberModel"
 	"main.go/config/app_default"
-	"main.go/tuuz/Calc"
 )
 
 func App_userLogin(self_id int64, user_id, group_id int64, message string) {

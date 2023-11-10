@@ -5,7 +5,7 @@ import (
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/v1/group/model/AutoSendModel"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
+
 	"time"
 )
 

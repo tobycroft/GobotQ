@@ -2,13 +2,14 @@ package Group
 
 import (
 	"errors"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupBalanceAction"
 	"main.go/app/bot/model/CoinModel"
 	"main.go/app/bot/model/GroupCoinModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
+
 	"math"
 	"strings"
 )

@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Log"
 )
 

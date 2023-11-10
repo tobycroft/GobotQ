@@ -1,13 +1,13 @@
 package Group
 
 import (
+	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
 )
 
 type Interface struct {

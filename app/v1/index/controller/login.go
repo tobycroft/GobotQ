@@ -2,10 +2,11 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/model/UserMemberModel"
 	"main.go/app/bot/model/UserTokenModel"
 	"main.go/common/BaseController"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
 )

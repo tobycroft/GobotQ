@@ -1,9 +1,10 @@
 package Group
 
 import (
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
-	"main.go/tuuz/Calc"
+
 	"strings"
 )
 

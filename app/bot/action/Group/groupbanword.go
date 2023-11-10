@@ -1,10 +1,11 @@
 package Group
 
 import (
+	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBanWordModel"
-	"main.go/tuuz/Calc"
+
 	"strings"
 )
 

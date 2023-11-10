@@ -12,7 +12,7 @@ import (
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Jsong"
 	"main.go/tuuz/Redis"
 	"time"

@@ -2,6 +2,7 @@ package Group
 
 import (
 	"errors"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupBanModel"
@@ -9,7 +10,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/tuuz"
-	"main.go/tuuz/Calc"
+
 	"main.go/tuuz/Date"
 	"main.go/tuuz/Log"
 )

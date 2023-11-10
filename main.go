@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"github.com/bytedance/sonic"
-	Net "github.com/tobycroft/TuuzNet"
 	"main.go/config/app_conf"
 	"os"
 	"time"
@@ -32,25 +29,7 @@ type Send struct {
 }
 
 func main() {
-	var ws Net.WsClient
-	ws.NewConnect("ws://10.0.1.102:5801")
 
-	send := Send{Action: "send_private_msg", Params: struct {
-		UserId  int    `json:"user_id"`
-		Message string `json:"message"`
-	}(struct {
-		UserId  int
-		Message string
-	}{UserId: 710209520, Message: "test"}), Echo: "test",
-	}
-	bt, _ := sonic.Marshal(send)
-	go func() {
-		time.Sleep(3 * time.Second)
-		ws.WriteChannel <- bt
-	}()
-	for {
-		fmt.Println(string(<-ws.ReadChannel))
-	}
 	//cron.BotInfoCron()
 	//go cron.BaseCron()
 	//go cron.Refresh_friend_list()

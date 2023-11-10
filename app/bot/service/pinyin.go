@@ -13,9 +13,7 @@ type py struct {
 }
 
 func Serv_pinyin(chinese interface{}) (string, error) {
-	data, err := Net.Post{}.PostUrlXEncode
-	{
-	}.PostUrlXEncodeRaw("http://www.box3.cn/developtoolbox/pinyin.php", Calc.Any2String(chinese))
+	data, err := Net.Post{}.PostRaw("http://www.box3.cn/developtoolbox/pinyin.php", Calc.Any2String(chinese)).RetString()
 	if err != nil {
 		return "", err
 	}

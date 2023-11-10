@@ -1,7 +1,7 @@
 package main
 
 import (
-	"main.go/app/bot/api"
+	"main.go/app/bot/cron"
 	"main.go/config/app_conf"
 	"os"
 	"time"
@@ -30,8 +30,7 @@ type Send struct {
 }
 
 func main() {
-	api.Getgrouplist(123)
-	//cron.BotInfoCron()
+	cron.BotInfoCron()
 	//go cron.BaseCron()
 	//go cron.Refresh_friend_list()
 	//

@@ -2,6 +2,7 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/event"
 	v1 "main.go/route/v1"
 )
@@ -13,6 +14,12 @@ func OnRoute(router *gin.Engine) {
 		event.EventRouter(string(data), context.ClientIP())
 		context.String(200, "ok")
 	})
+
+	router.Any("/ws", func(c *gin.Context) {
+		ws := Net.WsServer{}
+		ws.NewServer(c.Writer, c.Request, nil)
+	})
+
 	version1 := router.Group("/v1")
 	{
 		version1.Use(func(context *gin.Context) {

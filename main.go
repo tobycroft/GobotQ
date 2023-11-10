@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/cron"
 	"main.go/config/app_conf"
 	"main.go/route"
 	"os"
@@ -33,7 +32,7 @@ type Send struct {
 }
 
 func main() {
-	cron.BotInfoCron()
+	//cron.BotInfoCron()
 	//go cron.BaseCron()
 	//go cron.Refresh_friend_list()
 	//
@@ -57,7 +56,7 @@ func main() {
 	//go cron.BanPermenentCheck()
 	//
 	//go cron.PowerCheck()
-	//
+
 	Calc.RefreshBaseNum()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)

@@ -3,10 +3,10 @@ package api
 import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
-	"main.go/tuuz/Net"
 )
 
 /*
@@ -48,7 +48,8 @@ func GetGroupInfo(self_id, group_id interface{}) (GroupInfo, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return GroupInfo{}, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post(botinfo["url"].(string)+"/get_group_info", nil, post, nil, nil)
+
+	data, err := Net.Post{}.Post(botinfo["url"].(string)+"/get_group_info", nil, post, nil, nil)
 	if err != nil {
 		return GroupInfo{}, err
 	}

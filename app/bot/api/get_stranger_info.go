@@ -3,10 +3,10 @@ package api
 import (
 	"errors"
 	jsoniter "github.com/json-iterator/go"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
-	"main.go/tuuz/Net"
 )
 
 type UserInfoRet struct {

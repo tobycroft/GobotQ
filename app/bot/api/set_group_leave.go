@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Calc"
 	"main.go/tuuz/Log"
-	"main.go/tuuz/Net"
 )
 
 func SetGroupLeave(self_id, group_id interface{}) (bool, error) {

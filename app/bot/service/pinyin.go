@@ -2,8 +2,8 @@ package service
 
 import (
 	jsoniter "github.com/json-iterator/go"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/tuuz/Calc"
-	"main.go/tuuz/Net"
 )
 
 type py struct {

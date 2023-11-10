@@ -1,7 +1,6 @@
 package service
 
 import (
-	jsoniter "github.com/json-iterator/go"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 )
@@ -18,8 +17,8 @@ func Serv_pinyin(chinese interface{}) (string, error) {
 		return "", err
 	}
 	var ret py
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &ret)
+
+	err = sonic.UnmarshalString(data, &ret)
 	if err != nil {
 		return "", err
 	}

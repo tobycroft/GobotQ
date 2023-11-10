@@ -95,32 +95,6 @@ type T struct {
 
 type T2 struct {
 	Time        int    `json:"time"`
-	Time        int    `json:"time"`
-	SelfId      int    `json:"self_id"`
-	PostType    string `json:"post_type"`
-	MessageType string `json:"message_type"`
-	SubType     string `json:"sub_type"`
-	MessageId   int    `json:"message_id"`
-	TargetId    int    `json:"target_id"`
-	PeerId      int    `json:"peer_id"`
-	UserId      int    `json:"user_id"`
-	Message     []struct {
-		Data struct {
-			Text string `json:"text"`
-		} `json:"data"`
-		Type string `json:"type"`
-	} `json:"message"`
-	RawMessage string `json:"raw_message"`
-	Font       int    `json:"font"`
-	Sender     struct {
-		UserId   int    `json:"user_id"`
-		Nickname string `json:"nickname"`
-		Card     string `json:"card"`
-		Role     string `json:"role"`
-		Title    string `json:"title"`
-		Level    string `json:"level"`
-	} `json:"sender"`
-
 	SelfId      int    `json:"self_id"`
 	PostType    string `json:"post_type"`
 	MessageType string `json:"message_type"`

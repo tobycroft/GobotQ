@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -31,8 +30,8 @@ func SetGroupKick(self_id, group_id, user_id interface{}, reject_add_request boo
 		return false, err
 	}
 	var dls DefaultRetStruct
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &dls)
+
+	err = sonic.UnmarshalString(data, &dls)
 	if err != nil {
 		return false, err
 	}

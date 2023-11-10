@@ -3,7 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -78,8 +78,8 @@ func sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		return Message{}, err
 	}
 	var gm MessageRet
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &gm)
+
+	err = sonic.UnmarshalString(data, &gm)
 	if err != nil {
 		return Message{}, err
 	}

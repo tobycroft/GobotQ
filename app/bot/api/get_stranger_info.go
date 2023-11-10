@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -41,8 +41,8 @@ func GetStrangerInfo(self_id, user_id interface{}, no_cache bool) (UserInfo, err
 		return UserInfo{}, err
 	}
 	var ret1 UserInfoRet
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &ret1)
+
+	err = sonic.UnmarshalString(data, &ret1)
 	if err != nil {
 		return UserInfo{}, err
 	}

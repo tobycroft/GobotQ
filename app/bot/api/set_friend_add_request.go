@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -27,8 +27,8 @@ func SetFriendAddRequest(self_id, flag interface{}, approve bool, remark interfa
 		return false, err
 	}
 	var dls DefaultRetStruct
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &dls)
+
+	err = sonic.UnmarshalString(data, &dls)
 	if err != nil {
 		return false, err
 	}

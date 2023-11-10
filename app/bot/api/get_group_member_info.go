@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -32,8 +32,8 @@ func GetGroupMemberInfo(self_id, group_id, user_id interface{}) (GroupMemberList
 		return GroupMemberList{}, err
 	}
 	var gms GroupMemberInfoRet
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &gms)
+
+	err = sonic.UnmarshalString(data, &gms)
 	if err != nil {
 		return GroupMemberList{}, err
 	}

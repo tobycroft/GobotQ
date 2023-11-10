@@ -3,6 +3,7 @@ package event
 import (
 	"errors"
 	"fmt"
+	"github.com/bytedance/sonic"
 	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
@@ -23,7 +24,6 @@ func EventRouter(json string, remoteip string) {
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {
-		jsr := jsoniter.ConfigCompatibleWithStandardLibrary
 
 		switch data.PostType {
 		case "message":
@@ -31,7 +31,7 @@ func EventRouter(json string, remoteip string) {
 			switch message_type {
 			case "private":
 				var pm PM
-				err = jsr.UnmarshalFromString(json, &pm)
+				err = sonic.UnmarshalString(json, &pm)
 				if err != nil {
 					fmt.Println(err)
 				} else {
@@ -41,7 +41,7 @@ func EventRouter(json string, remoteip string) {
 
 			case "group":
 				var gm GM
-				err = jsr.UnmarshalFromString(json, &gm)
+				err = sonic.UnmarshalString(json, &gm)
 				if err != nil {
 					fmt.Println(err)
 				} else {
@@ -58,7 +58,7 @@ func EventRouter(json string, remoteip string) {
 		case "notice":
 			//fmt.Println(json)
 			var notice Notice
-			err = jsr.UnmarshalFromString(json, &notice)
+			err = sonic.UnmarshalString(json, &notice)
 			if err != nil {
 				fmt.Println(err)
 			} else {
@@ -68,7 +68,7 @@ func EventRouter(json string, remoteip string) {
 
 		case "request":
 			var req Request
-			err = jsr.UnmarshalFromString(json, &req)
+			err = sonic.UnmarshalString(json, &req)
 			if err != nil {
 				fmt.Println(err)
 			} else {

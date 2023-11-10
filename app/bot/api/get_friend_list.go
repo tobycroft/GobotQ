@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -33,8 +33,8 @@ func Getfriendlist(self_id interface{}) ([]FriendList, error) {
 		return nil, err
 	}
 	var gfl FriendListRet
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &gfl)
+
+	err = sonic.UnmarshalString(data, &gfl)
 	if err != nil {
 		return nil, err
 	}

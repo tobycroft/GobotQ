@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -86,8 +86,8 @@ func sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		return Message{}, err
 	}
 	var pmr MessageRet
-	jsr := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = jsr.UnmarshalFromString(data, &pmr)
+
+	err = sonic.UnmarshalString(data, &pmr)
 	if err != nil {
 		return Message{}, err
 	}

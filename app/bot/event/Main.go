@@ -14,6 +14,7 @@ import (
 
 func EventListener() {
 	for c := range Net.WsServer_ReadChannel {
+		fmt.Println(string(c.Message))
 		EventRouter(string(c.Message), c.Conn.RemoteAddr().String())
 	}
 }
@@ -27,29 +28,29 @@ func EventRouter(json string, remoteip string) {
 	go LogsModel.Api_insert(json, "main", remoteip)
 	var data EventStruct
 	err := sonic.UnmarshalString(json, &data)
+
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {
-
 		switch data.PostType {
 		case "message":
 			message_type := data.MessageType
 			switch message_type {
 			case "private":
-				var pm PM
+				var pm PrivateMessageStruct
 				err = sonic.UnmarshalString(json, &pm)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println(err, json)
 				} else {
 					PrivateMsg(pm, remoteip)
 				}
 				break
 
 			case "group":
-				var gm GM
+				var gm GroupMessageStruct
 				err = sonic.UnmarshalString(json, &gm)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println(err, json)
 				} else {
 					GroupMsg(gm, remoteip)
 				}

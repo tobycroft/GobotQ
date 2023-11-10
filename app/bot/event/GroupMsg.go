@@ -30,7 +30,7 @@ type RefreshGroupStruct struct {
 
 var RefreshGroupChan = make(chan RefreshGroupStruct, 100)
 
-type GM struct {
+type GroupMessageStruct struct {
 	Anonymous   interface{} `json:"anonymous"`
 	Font        int64       `json:"font"`
 	GroupID     int64       `json:"group_id"`
@@ -59,10 +59,10 @@ type _Sender struct {
 	UserID   int64  `json:"user_id"`
 }
 
-var GroupMsgChan = make(chan GM, 99)
+var GroupMsgChan = make(chan GroupMessageStruct, 99)
 
-func GroupMsg(gm GM, remoteip string) {
-	go func(gm GM) {
+func GroupMsg(gm GroupMessageStruct, remoteip string) {
+	go func(gm GroupMessageStruct) {
 		GroupMsgChan <- gm
 	}(gm)
 	is_self := false

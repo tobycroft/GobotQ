@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
+	"main.go/app/bot/cron"
 	"main.go/app/bot/event"
 	"main.go/config/app_conf"
 	"main.go/route"
@@ -49,8 +50,8 @@ func main() {
 	//go cron.Send_private()
 	//go cron.Send_group()
 	//
-	//go cron.GroupMsgRecv()
-	//go cron.PrivateMsgRecv()
+	go cron.GroupMsgRecv()
+	go cron.PrivateMsgRecv()
 	//
 	//go cron.Cron_auto_send()
 	//

@@ -21,46 +21,51 @@ import (
 	"time"
 )
 
-type PM struct {
-	Font        int            `json:"font"`
-	Message     string         `json:"message"`
-	MessageID   int64          `json:"message_id"`
-	MessageType string         `json:"message_type"`
-	PostType    string         `json:"post_type"`
-	RawMessage  string         `json:"rawMessage"`
-	SelfID      int64          `json:"self_id"`
-	Sender      _PrivateSender `json:"sender"`
-	SubType     string         `json:"sub_type"`
-	TempSource  int            `json:"temp_source"`
-	Time        int64          `json:"time"`
-	UserID      int64          `json:"user_id"`
+type PrivateMessageStruct struct {
+	Time        int64  `json:"time"`
+	SelfId      int64  `json:"self_id"`
+	PostType    string `json:"post_type"`
+	MessageType string `json:"message_type"`
+	SubType     string `json:"sub_type"`
+	MessageId   int64  `json:"message_id"`
+	TargetId    int64  `json:"target_id"`
+	PeerId      int64  `json:"peer_id"`
+	UserId      int64  `json:"user_id"`
+	Message     []struct {
+		Data struct {
+			Text string `json:"text"`
+		} `json:"data"`
+		Type string `json:"type"`
+	} `json:"message"`
+	RawMessage string        `json:"raw_message"`
+	Font       int64         `json:"font"`
+	Sender     PrivateSender `json:"sender"`
 }
-
-type _PrivateSender struct {
-	Age      int    `json:"age"`
-	GroupID  int64  `json:"group_id"`
+type PrivateSender struct {
+	UserId   int64  `json:"user_id"`
 	Nickname string `json:"nickname"`
-	Sex      string `json:"sex"`
-	UserID   int64  `json:"user_id"`
+	Card     string `json:"card"`
+	Role     string `json:"role"`
+	Title    string `json:"title"`
+	Level    string `json:"level"`
 }
 
-var PrivateMsgChan = make(chan PM, 99)
+var PrivateMsgChan = make(chan PrivateMessageStruct, 99)
 
-func PrivateMsg(pm PM, remoteip string) {
-
+func PrivateMsg(pm PrivateMessageStruct, remoteip string) {
 	PrivateMsgChan <- pm
-	selfId := pm.SelfID
-	user_id := pm.UserID
-	group_id := pm.Sender.GroupID
+	selfId := pm.SelfId
+	user_id := pm.UserId
+	group_id := int64(0)
 	user_idString := Calc.Int642String(user_id)
-	message := pm.Message
+	message := pm.RawMessage
 	rawMessage := pm.RawMessage
 
 	if Redis.CheckExists("PrivateMsg:" + user_idString) {
 		return
 	}
 
-	Redis.String_set("PrivateMsg:"+user_idString, Calc.Md5(message), 1)
+	Redis.String_set("PrivateMsg:"+user_idString, Calc.Md5(message), 1*time.Second)
 
 	PrivateHandle(selfId, user_id, group_id, message, rawMessage, remoteip)
 }

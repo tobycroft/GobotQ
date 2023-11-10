@@ -95,3 +95,4 @@
 2021/04/10 16:18:36 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
 2021/04/10 16:25:29 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
 2021/04/10 16:25:31 main.go/app/bot/model/GroupListModel.Api_select_InGid  Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+2023/11/10 23:34:03 main.go/app/bot/model/BotModel.Api_select  Error 1054 (42S22): Unknown column 'url' in 'where clause'

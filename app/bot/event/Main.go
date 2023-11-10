@@ -4,12 +4,19 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 )
+
+func EventListener() {
+	for c := range Net.WsServer_ReadChannel {
+		EventRouter(string(c.Message), c.Conn.RemoteAddr().String())
+	}
+}
 
 type EventStruct struct {
 	MessageType string `json:"message_type"`

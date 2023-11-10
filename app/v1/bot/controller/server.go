@@ -1,8 +1,8 @@
 package controller
 
 import (
+	"github.com/bytedance/sonic"
 	"github.com/gin-gonic/gin"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -55,7 +55,7 @@ func server_add(c *gin.Context) {
 		return
 	} else {
 		var ret_struct get_login_info
-		jsoniter.UnmarshalFromString(ret, &ret_struct)
+		sonic.UnmarshalString(ret, &ret_struct)
 		if ret_struct.Retcode != 0 {
 			RET.Fail(c, 202, nil, "您的机器人没有准备好，请先登录并按照提示操作后再使用APP绑定")
 			return
@@ -129,7 +129,7 @@ func server_update(c *gin.Context) {
 		return
 	} else {
 		var ret_struct get_login_info
-		jsoniter.UnmarshalFromString(ret, &ret_struct)
+		sonic.UnmarshalString(ret, &ret_struct)
 		if ret_struct.Retcode != 0 {
 			RET.Fail(c, 202, nil, "您的机器人没有准备好，请先登录并按照提示操作后再使用APP绑定")
 			return

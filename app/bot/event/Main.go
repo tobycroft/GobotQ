@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
-	jsoniter "github.com/json-iterator/go"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/app/bot/model/LogsModel"
@@ -20,7 +19,7 @@ type EventStruct struct {
 func EventRouter(json string, remoteip string) {
 	go LogsModel.Api_insert(json, "main", remoteip)
 	var data EventStruct
-	err := jsoniter.UnmarshalFromString(json, &data)
+	err := sonic.UnmarshalString(json, &data)
 	if err != nil {
 		LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 	} else {

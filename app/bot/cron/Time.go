@@ -2,6 +2,7 @@ package cron
 
 import (
 	"errors"
+	"fmt"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/api"
 	"main.go/app/bot/model/BotModel"
@@ -60,6 +61,8 @@ func BotInfoCron() {
 				name := bot_info.Nickname
 				if !BotModel.Api_update_cname(self_id, name) {
 					Log.Crrs(errors.New("机器人用户名无法更新"), tuuz.FUNCTION_ALL())
+				} else {
+					fmt.Println("机器人更新：", bot_info)
 				}
 			}
 		}

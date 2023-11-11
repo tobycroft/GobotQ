@@ -17,7 +17,7 @@ func BaseCron() {
 	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
-			gl, err := iapi.Api{}.Getgrouplist(bot["self_id"])
+			gl, err := api.Getgrouplist(bot["self_id"])
 			if err != nil {
 
 			} else {
@@ -49,12 +49,14 @@ func BaseCron() {
 	}
 }
 
+var api = iapi.IfaceApi(iapi.Api{})
+
 func BotInfoCron() {
 
 	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
-			bot_info, err := iapi.Api{}.GetLoginInfo(bot["self_id"])
+			bot_info, err := api.GetLoginInfo(bot["self_id"])
 			if err != nil {
 
 			} else {

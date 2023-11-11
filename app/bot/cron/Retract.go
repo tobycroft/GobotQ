@@ -27,6 +27,6 @@ func retract_private() {
 
 func retract_instant() {
 	for r := range iapi.Retract_instant {
-		iapi.Api{}.DeleteMsg(r.Self_id, r.MessageId)
+		api.DeleteMsg(r.Self_id, r.MessageId)
 	}
 }

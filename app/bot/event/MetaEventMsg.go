@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"main.go/app/bot/iapi"
 	"net"
 )
 
@@ -27,6 +28,7 @@ type MetaEventStruct struct {
 func (self MetaEventStruct) MetaEvent() {
 	switch self.MetaEventType {
 	case "lifecycle":
+		iapi.Api.GetLoginInfo(self.SelfId)
 		fmt.Println(self.MetaEventType, self.SelfId)
 		break
 

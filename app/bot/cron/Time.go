@@ -50,7 +50,6 @@ func BaseCron() {
 }
 
 func BotInfoCron() {
-
 	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {

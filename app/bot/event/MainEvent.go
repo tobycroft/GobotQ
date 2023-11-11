@@ -5,17 +5,14 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"net"
-	"sync"
 )
-
-var ClientToConn = new(sync.Map)
-var ConnToClient = new(sync.Map)
 
 func EventListener() {
 	for c := range Net.WsServer_ReadChannel {
@@ -28,16 +25,16 @@ func EventListener() {
 				continue
 			}
 			if c.Status {
-				ClientToConn.Store(es.SelfId, c.Conn)
-				ConnToClient.Store(c.Conn, es.SelfId)
+				iapi.ClientToConn.Store(es.SelfId, c.Conn)
+				iapi.ConnToClient.Store(c.Conn, es.SelfId)
 			}
 			es.remoteaddr = c.Conn.RemoteAddr()
 			es.EventRouter()
 		} else {
 			fmt.Println(c.Conn.RemoteAddr(), "断开链接")
-			client, ok := ConnToClient.Load(c.Conn)
+			client, ok := iapi.ConnToClient.Load(c.Conn)
 			if ok {
-				ClientToConn.Delete(client)
+				iapi.ClientToConn.Delete(client)
 			}
 		}
 	}
@@ -53,12 +50,12 @@ type EventStruct struct {
 
 func (es EventStruct) EventRouter() {
 	go LogsModel.Api_insert(es.json, "main", es.remoteaddr.String())
-
 	switch es.PostType {
 	case "message":
 		message_type := es.MessageType
 		switch message_type {
 		case "private":
+			fmt.Println(es.PostType, es.json)
 			var pm PrivateMessageStruct
 			pm.remoteaddr = es.remoteaddr
 			err := sonic.UnmarshalString(es.json, &pm)
@@ -70,6 +67,7 @@ func (es EventStruct) EventRouter() {
 			break
 
 		case "group":
+			fmt.Println(es.PostType, es.json)
 			var gm GroupMessageStruct
 			gm.remoteaddr = es.remoteaddr
 			err := sonic.UnmarshalString(es.json, &gm)
@@ -87,6 +85,7 @@ func (es EventStruct) EventRouter() {
 		break
 
 	case "notice":
+		fmt.Println(es.PostType, es.json)
 		var notice Notice
 		notice.remoteaddr = es.remoteaddr
 		err := sonic.UnmarshalString(es.json, &notice)
@@ -98,6 +97,7 @@ func (es EventStruct) EventRouter() {
 		break
 
 	case "request":
+		fmt.Println(es.PostType, es.json)
 		var req Request
 		req.remoteaddr = es.remoteaddr
 		err := sonic.UnmarshalString(es.json, &req)
@@ -122,6 +122,16 @@ func (es EventStruct) EventRouter() {
 		break
 
 	default:
+		var op OperationEvent
+		op.json = es.json
+		op.remoteaddr = es.remoteaddr
+		err := sonic.UnmarshalString(es.json, &op)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			op.OperationRouter()
+		}
+		fmt.Println("event-notfound:", es.json)
 		LogRecvModel.Api_insert(es.json)
 		break
 	}

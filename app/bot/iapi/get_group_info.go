@@ -67,3 +67,31 @@ func (api Api) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
 	}
 
 }
+func (api Ws) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
+	post := map[string]any{
+		"group_id": group_id,
+		"no_cache": false,
+	}
+	botinfo := BotModel.Api_find(self_id)
+	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
+		return GroupInfo{}, errors.New("botinfo_notfound")
+	}
+
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_group_info", nil, post, nil, nil).RetString()
+	if err != nil {
+		return GroupInfo{}, err
+	}
+	var ret1 GroupInfoRet
+
+	err = sonic.UnmarshalString(data, &ret1)
+	if err != nil {
+		return GroupInfo{}, err
+	}
+	if ret1.Retcode == 0 {
+		return ret1.Data, nil
+	} else {
+		return GroupInfo{}, errors.New(ret1.Status)
+	}
+
+}

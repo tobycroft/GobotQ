@@ -44,3 +44,21 @@ func (api Api) Getgrouplist(self_id any) ([]GroupList, error) {
 	}
 	return gls.Data, nil
 }
+func (api Ws) Getgrouplist(self_id any) ([]GroupList, error) {
+	botinfo := BotModel.Api_find(self_id)
+	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
+		return nil, errors.New("botinfo_notfound")
+	}
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_group_list", nil, nil, nil, nil).RetString()
+	if err != nil {
+		return nil, err
+	}
+	var gls GroupListRet
+
+	err = sonic.UnmarshalString(data, &gls)
+	if err != nil {
+		return nil, err
+	}
+	return gls.Data, nil
+}

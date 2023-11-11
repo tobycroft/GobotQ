@@ -48,3 +48,25 @@ func (api Api) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, e
 	}
 	return ret1.Data, nil
 }
+func (api Ws) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, error) {
+	post := map[string]any{
+		"user_id":  user_id,
+		"no_cache": no_cache,
+	}
+	botinfo := BotModel.Api_find(self_id)
+	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
+		return UserInfo{}, errors.New("botinfo_notfound")
+	}
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_stranger_info", nil, post, nil, nil).RetString()
+	if err != nil {
+		return UserInfo{}, err
+	}
+	var ret1 UserInfoRet
+
+	err = sonic.UnmarshalString(data, &ret1)
+	if err != nil {
+		return UserInfo{}, err
+	}
+	return ret1.Data, nil
+}

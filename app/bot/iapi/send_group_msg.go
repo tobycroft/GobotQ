@@ -1,4 +1,4 @@
-package apipost
+package iapi
 
 import (
 	"errors"

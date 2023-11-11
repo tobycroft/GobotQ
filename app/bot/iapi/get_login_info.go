@@ -1,4 +1,4 @@
-package apipost
+package iapi
 
 import (
 	"errors"
@@ -21,7 +21,7 @@ type LoginInfo struct {
 	UserID   int64  `json:"user_id"`
 }
 
-func (api ApiPost) GetLoginInfo(self_id any) (LoginInfo, error) {
+func (api Api) GetLoginInfo(self_id any) (LoginInfo, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

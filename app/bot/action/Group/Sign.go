@@ -3,7 +3,7 @@ package Group
 import (
 	"errors"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupSignModel"
@@ -27,10 +27,10 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	//}
 	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret apipost.Struct_Retract
+			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			apipost.Retract_chan <- ret
+			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	if len(sign) > 0 {

@@ -1,4 +1,4 @@
-package apipost
+package iapi
 
 import (
 	"errors"
@@ -11,22 +11,20 @@ import (
 	"main.go/tuuz/Log"
 )
 
-type SetGroupWholeMuteRet struct {
-	Ret string `json:"ret"`
-}
-
-func (api Api) SetGroupWholeBan(self_id, group_id any, enable bool) (bool, error) {
+func (api Api) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error) {
 	post := map[string]any{
-		"self_id":  self_id,
-		"group_id": group_id,
-		"enable":   enable,
+		"flag":     flag,
+		"sub_type": sub_type,
+		"type":     sub_type,
+		"approve":  approve,
+		"reason":   reason,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_whole_ban", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_add_request", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

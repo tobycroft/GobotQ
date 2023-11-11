@@ -1,4 +1,4 @@
-package apipost
+package iapi
 
 import (
 	"errors"
@@ -25,7 +25,33 @@ type DefaultRetStruct struct {
 	Wording string `json:"wording"`
 }
 
-func (api ApiPost) DeleteMsg(self_id, message_id any) (bool, error) {
+func (api Api) DeleteMsg(self_id, message_id any) (bool, error) {
+	post := map[string]any{
+		"message_id": message_id,
+	}
+	botinfo := BotModel.Api_find(self_id)
+	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
+		return false, errors.New("botinfo_notfound")
+	}
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/delete_msg", nil, post, nil, nil).RetString()
+	if err != nil {
+		return false, err
+	}
+	var dls DefaultRetStruct
+
+	err = sonic.UnmarshalString(data, &dls)
+	if err != nil {
+		return false, err
+	}
+	if dls.Retcode == 0 {
+		return true, nil
+	} else {
+		Log.Crrs(errors.New(dls.Wording), "message:"+Calc.Any2String(message_id))
+		return false, errors.New(dls.Wording)
+	}
+}
+func (api Ws) DeleteMsg(self_id, message_id any) (bool, error) {
 	post := map[string]any{
 		"message_id": message_id,
 	}

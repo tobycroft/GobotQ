@@ -3,7 +3,7 @@ package Group
 import (
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
-	apipost2 "main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -21,10 +21,10 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	}
 	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret apipost2.Struct_Retract
+			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			apipost2.Retract_chan <- ret
+			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
@@ -32,7 +32,7 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	gbl := gpm.Api_find(group_id, user_id)
 	at := service.Serv_at(user_id)
 	str := at + "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
-	go apipost2.Api{}.Sendgroupmsg(self_id, group_id, str, auto_retract)
+	go iapi.Api{}.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }
 
 func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
@@ -42,10 +42,10 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 	}
 	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret apipost2.Struct_Retract
+			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			apipost2.Retract_chan <- ret
+			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
@@ -62,5 +62,5 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 			}
 		}
 	}
-	go apipost2.Api{}.Sendgroupmsg(self_id, group_id, str, auto_retract)
+	go iapi.Api{}.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }

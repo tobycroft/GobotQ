@@ -1,7 +1,7 @@
 package Private
 
 import (
-	"main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/FriendListModel"
 )
@@ -14,7 +14,7 @@ func App_refresh_friend_list_all() {
 }
 
 func App_refresh_friend_list(self_id any) {
-	fl, err := apipost.Api{}.Getfriendlist(self_id)
+	fl, err := iapi.Api{}.Getfriendlist(self_id)
 	if err != nil {
 
 	} else {

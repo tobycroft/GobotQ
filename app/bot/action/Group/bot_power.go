@@ -1,7 +1,7 @@
 package Group
 
 import (
-	"main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupMemberModel"
 )
 
@@ -14,7 +14,7 @@ func BotPower(group_id, self_id any) string {
 }
 
 func BotPowerRefresh(group_id, self_id any) string {
-	gm, err := apipost.Api{}.GetGroupMemberInfo(self_id, group_id, self_id)
+	gm, err := iapi.Api{}.GetGroupMemberInfo(self_id, group_id, self_id)
 	if err != nil {
 
 	} else {

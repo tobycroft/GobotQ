@@ -1,7 +1,8 @@
-package apipost
+package iapi
 
 import (
 	"errors"
+	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
@@ -11,20 +12,17 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Api) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error) {
+func (api Api) SetGroupLeave(self_id, group_id any) (bool, error) {
 	post := map[string]any{
-		"flag":     flag,
-		"sub_type": sub_type,
-		"type":     sub_type,
-		"approve":  approve,
-		"reason":   reason,
+		"group_id":   group_id,
+		"is_dismiss": true,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_add_request", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_leave", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}
@@ -37,6 +35,7 @@ func (api Api) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, 
 	if dls.Retcode == 0 {
 		return true, nil
 	} else {
+		fmt.Println(dls)
 		Log.Crrs(errors.New(dls.Wording), tuuz.FUNCTION_ALL())
 		return false, errors.New(dls.Wording)
 	}

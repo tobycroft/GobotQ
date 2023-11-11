@@ -1,4 +1,4 @@
-package apipost
+package iapi
 
 type Ws struct {
 }

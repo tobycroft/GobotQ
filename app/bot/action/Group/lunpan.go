@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupBalanceAction"
-	"main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupLunpanModel"
@@ -26,10 +26,10 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 	sign := glm.Api_find(group_id, user_id)
 	go func(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret apipost.Struct_Retract
+			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			apipost.Retract_chan <- ret
+			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 	mode := regexp.MustCompile("[A-Za-z]")

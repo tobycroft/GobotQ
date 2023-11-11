@@ -2,7 +2,7 @@ package Group
 
 import (
 	"fmt"
-	"main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/tuuz"
@@ -24,7 +24,7 @@ func App_refresh_group_member_chan() {
 func App_refresh_group_member() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		gl, err := apipost.Api{}.Getgrouplist(bot["self_id"])
+		gl, err := iapi.Api{}.Getgrouplist(bot["self_id"])
 		if err != nil {
 
 		} else {
@@ -39,7 +39,7 @@ func App_refresh_group_member() {
 }
 
 func App_refresh_group_member_one(self_id, group_id any) {
-	gm, err := apipost.Api{}.Getgroupmemberlist(self_id, group_id)
+	gm, err := iapi.Api{}.Getgroupmemberlist(self_id, group_id)
 	if err != nil {
 		fmt.Println(tuuz.FUNCTION_ALL(), err)
 	} else {

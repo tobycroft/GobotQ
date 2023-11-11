@@ -1,7 +1,7 @@
 package Group
 
 import (
-	"main.go/app/bot/iapi/apipost"
+	"main.go/app/bot/iapi"
 )
 
 func AutoMessage(self_id, group_id, user_id any, message string, groupfunction map[string]any) {
@@ -10,8 +10,8 @@ func AutoMessage(self_id, group_id, user_id any, message string, groupfunction m
 		AutoRetract = true
 	}
 	if groupfunction["all_send_private"].(int64) == 1 {
-		go apipost.Api{}.Sendprivatemsg(self_id, user_id, group_id, message, AutoRetract)
+		go iapi.Api{}.Sendprivatemsg(self_id, user_id, group_id, message, AutoRetract)
 	} else {
-		go apipost.Api{}.Sendgroupmsg(self_id, group_id, message, AutoRetract)
+		go iapi.Api{}.Sendgroupmsg(self_id, group_id, message, AutoRetract)
 	}
 }

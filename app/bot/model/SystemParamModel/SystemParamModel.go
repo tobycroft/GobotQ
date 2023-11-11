@@ -7,9 +7,9 @@ import (
 
 const table = "system_param"
 
-func Api_value(key interface{}) interface{} {
+func Api_value(key any) any {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"key": key,
 	}
 	db.Where(where)

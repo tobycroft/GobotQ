@@ -8,9 +8,9 @@ import (
 
 const table = "private_msg"
 
-func Api_insert(self_id, user_id, message_id, message, raw_message, sub_type, time interface{}) bool {
+func Api_insert(self_id, user_id, message_id, message, raw_message, sub_type, time any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"self_id":     self_id,
 		"user_id":     user_id,
 		"message_id":  message_id,
@@ -29,9 +29,9 @@ func Api_insert(self_id, user_id, message_id, message, raw_message, sub_type, ti
 	}
 }
 
-func Api_select(self_id interface{}) []gorose.Data {
+func Api_select(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)

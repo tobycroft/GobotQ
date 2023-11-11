@@ -15,13 +15,13 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
+func App_single_balance(uid any, order_id any, amount float64, remark string) error {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.App_single_balance(uid, order_id, amount, remark)
 }
 
-func (self *Interface) App_single_balance(uid interface{}, order_id interface{}, amount float64, remark string) error {
+func (self *Interface) App_single_balance(uid any, order_id any, amount float64, remark string) error {
 	self.Db.Begin()
 	userbalance, err := self.App_check_balance(uid)
 	if err != nil {
@@ -65,7 +65,7 @@ func (self *Interface) App_single_balance(uid interface{}, order_id interface{},
 	return nil
 }
 
-func (self *Interface) App_check_balance(uid interface{}) (float64, error) {
+func (self *Interface) App_check_balance(uid any) (float64, error) {
 	var ub UserBalanceModel.Interface
 	self.Db.Begin()
 	ub.Db = self.Db

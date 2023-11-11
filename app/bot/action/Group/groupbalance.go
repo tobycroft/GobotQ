@@ -3,7 +3,7 @@ package Group
 import (
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -14,17 +14,17 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
 	}
-	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret api.Struct_Retract
+			var ret apipost.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			api.Retract_chan <- ret
+			apipost.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
@@ -32,20 +32,20 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	gbl := gpm.Api_find(group_id, user_id)
 	at := service.Serv_at(user_id)
 	str := at + "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
-	go api.Sendgroupmsg(self_id, group_id, str, auto_retract)
+	go apipost.ApiPost{}.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }
 
-func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 	auto_retract := false
 	if groupfunction["sign_send_retract"].(int64) == 1 {
 		auto_retract = true
 	}
-	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret api.Struct_Retract
+			var ret apipost.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			api.Retract_chan <- ret
+			apipost.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
@@ -62,5 +62,5 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 			}
 		}
 	}
-	go api.Sendgroupmsg(self_id, group_id, str, auto_retract)
+	go apipost.ApiPost{}.Sendgroupmsg(self_id, group_id, str, auto_retract)
 }

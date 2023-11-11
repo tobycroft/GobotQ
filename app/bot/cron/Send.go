@@ -1,11 +1,11 @@
 package cron
 
-import "main.go/app/bot/api"
+import "main.go/app/bot/apipost"
 
 func Send_private() {
-	api.Send_private()
+	apipost.ApiPost{}.Send_private()
 }
 
 func Send_group() {
-	api.Send_group()
+	apipost.ApiPost{}.Send_group()
 }

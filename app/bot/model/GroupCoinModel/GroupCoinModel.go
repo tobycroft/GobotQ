@@ -12,9 +12,9 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(group_id, user_id, cid, amount interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id, cid, amount any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"cid":      cid,
@@ -30,9 +30,9 @@ func (self *Interface) Api_insert(group_id, user_id, cid, amount interface{}) bo
 	}
 }
 
-func (self *Interface) Api_find(group_id, user_id, cid interface{}) gorose.Data {
+func (self *Interface) Api_find(group_id, user_id, cid any) gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"cid":      cid,
@@ -47,9 +47,9 @@ func (self *Interface) Api_find(group_id, user_id, cid interface{}) gorose.Data 
 	}
 }
 
-func (self *Interface) Api_select(group_id, user_id interface{}) []gorose.Data {
+func (self *Interface) Api_select(group_id, user_id any) []gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -63,9 +63,9 @@ func (self *Interface) Api_select(group_id, user_id interface{}) []gorose.Data {
 	}
 }
 
-func (self *Interface) Api_sum_byCid(cid interface{}) float64 {
+func (self *Interface) Api_sum_byCid(cid any) float64 {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"cid": cid,
 	}
 	db.Where(where)
@@ -82,9 +82,9 @@ func (self *Interface) Api_sum_byCid(cid interface{}) float64 {
 	}
 }
 
-func (self *Interface) Api_join_select(group_id, user_id interface{}) []gorose.Data {
+func (self *Interface) Api_join_select(group_id, user_id any) []gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -100,9 +100,9 @@ func (self *Interface) Api_join_select(group_id, user_id interface{}) []gorose.D
 	}
 }
 
-func (self *Interface) Api_incr(group_id, user_id, cid, amount interface{}) bool {
+func (self *Interface) Api_incr(group_id, user_id, cid, amount any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"cid":      cid,

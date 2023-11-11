@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-func App_trade_center(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_trade_center(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 	switch message {
 
 	case "我的", "列表", "背包":
@@ -74,7 +74,7 @@ func list_coin() string {
 	return str
 }
 
-func buy_coin(group_id, user_id interface{}, message string) (string, error) {
+func buy_coin(group_id, user_id any, message string) (string, error) {
 	temp_amount := service.Serv_get_num(message)
 	amount, err := Calc.Any2Float64_2(temp_amount)
 	if err != nil {
@@ -134,7 +134,7 @@ func buy_coin(group_id, user_id interface{}, message string) (string, error) {
 		"\r\n" + str, nil
 }
 
-func sell_coin(group_id, user_id interface{}, message string) (string, error) {
+func sell_coin(group_id, user_id any, message string) (string, error) {
 	temp_amount := service.Serv_get_num(message)
 	amount, err := Calc.Any2Float64_2(temp_amount)
 	if err != nil {
@@ -196,7 +196,7 @@ func sell_coin(group_id, user_id interface{}, message string) (string, error) {
 		"\r\n 获得了" + Calc.Any2String(coin_reward) + "个威望\r\n" + str, nil
 }
 
-func list_my_coin(group_id, user_id interface{}) string {
+func list_my_coin(group_id, user_id any) string {
 	var gc GroupCoinModel.Interface
 	gc.Db = tuuz.Db()
 	datas := gc.Api_join_select(group_id, user_id)

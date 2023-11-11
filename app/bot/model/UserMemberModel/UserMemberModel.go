@@ -8,9 +8,9 @@ import (
 
 const table = "user_member"
 
-func Api_insert(qq, uname, password interface{}) bool {
+func Api_insert(qq, uname, password any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"qq":       qq,
 		"uname":    uname,
 		"password": password,
@@ -25,9 +25,9 @@ func Api_insert(qq, uname, password interface{}) bool {
 	}
 }
 
-func Api_find(qq interface{}) gorose.Data {
+func Api_find(qq any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -40,9 +40,9 @@ func Api_find(qq interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byQqandPassword(qq, password interface{}) gorose.Data {
+func Api_find_byQqandPassword(qq, password any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq":       qq,
 		"password": password,
 	}
@@ -56,9 +56,9 @@ func Api_find_byQqandPassword(qq, password interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(qq interface{}) bool {
+func Api_delete(qq any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -71,13 +71,13 @@ func Api_delete(qq interface{}) bool {
 	}
 }
 
-func Api_update_uname(qq, uname interface{}) bool {
+func Api_update_uname(qq, uname any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"uname": uname,
 	}
 	db.Data(data)
@@ -90,13 +90,13 @@ func Api_update_uname(qq, uname interface{}) bool {
 	}
 }
 
-func Api_update_password(qq, password interface{}) bool {
+func Api_update_password(qq, password any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"password": password,
 	}
 	db.Data(data)
@@ -109,13 +109,13 @@ func Api_update_password(qq, password interface{}) bool {
 	}
 }
 
-func Api_update_all(qq, uname, password interface{}) bool {
+func Api_update_all(qq, uname, password any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"uname":    uname,
 		"password": password,
 	}

@@ -12,9 +12,9 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(uid, bot, password, owner, secret, time interface{}) bool {
+func (self *Interface) Api_insert(uid, bot, password, owner, secret, time any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"uid":      uid,
 		"bot":      bot,
 		"password": password,
@@ -32,9 +32,9 @@ func (self *Interface) Api_insert(uid, bot, password, owner, secret, time interf
 	}
 }
 
-func Api_find(bot interface{}) gorose.Data {
+func Api_find(bot any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot": bot,
 	}
 	db.Where(where)
@@ -58,9 +58,9 @@ func Api_select() []gorose.Data {
 	}
 }
 
-func Api_select_byUid(uid interface{}) []gorose.Data {
+func Api_select_byUid(uid any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"uid": uid,
 	}
 	db.Where(where)
@@ -73,9 +73,9 @@ func Api_select_byUid(uid interface{}) []gorose.Data {
 	}
 }
 
-func (self *Interface) Api_delete(bot interface{}) bool {
+func (self *Interface) Api_delete(bot any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot": bot,
 	}
 	db.Where(where)
@@ -88,9 +88,9 @@ func (self *Interface) Api_delete(bot interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_delete_byUid(uid, bot interface{}) bool {
+func (self *Interface) Api_delete_byUid(uid, bot any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot": bot,
 		"uid": uid,
 	}

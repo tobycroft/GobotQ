@@ -5,7 +5,7 @@ import (
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/action/Group"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupFunctionModel"
@@ -14,6 +14,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
+	"net"
 
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -31,20 +32,21 @@ type RefreshGroupStruct struct {
 var RefreshGroupChan = make(chan RefreshGroupStruct, 100)
 
 type GroupMessageStruct struct {
-	Anonymous   interface{} `json:"anonymous"`
-	Font        int64       `json:"font"`
-	GroupID     int64       `json:"group_id"`
-	Message     string      `json:"message"`
-	MessageID   int64       `json:"message_id"`
-	MessageSeq  int64       `json:"message_seq"`
-	MessageType string      `json:"message_type"`
-	PostType    string      `json:"post_type"`
-	RawMessage  string      `json:"raw_message"`
-	SelfID      int64       `json:"self_id"`
-	Sender      _Sender     `json:"sender"`
-	SubType     string      `json:"sub_type"`
-	Time        int64       `json:"time"`
-	UserID      int64       `json:"user_id"`
+	remoteaddr  net.Addr
+	Anonymous   any     `json:"anonymous"`
+	Font        int64   `json:"font"`
+	GroupID     int64   `json:"group_id"`
+	Message     string  `json:"message"`
+	MessageID   int64   `json:"message_id"`
+	MessageSeq  int64   `json:"message_seq"`
+	MessageType string  `json:"message_type"`
+	PostType    string  `json:"post_type"`
+	RawMessage  string  `json:"raw_message"`
+	SelfID      int64   `json:"self_id"`
+	Sender      _Sender `json:"sender"`
+	SubType     string  `json:"sub_type"`
+	Time        int64   `json:"time"`
+	UserID      int64   `json:"user_id"`
 }
 
 type _Sender struct {
@@ -61,7 +63,7 @@ type _Sender struct {
 
 var GroupMsgChan = make(chan GroupMessageStruct, 99)
 
-func GroupMsg(gm GroupMessageStruct, remoteip string) {
+func (gm GroupMessageStruct) GroupMsg() {
 	go func(gm GroupMessageStruct) {
 		GroupMsgChan <- gm
 	}(gm)
@@ -128,7 +130,7 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 	}
 }
 
-func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender _Sender, groupmember map[string]any, groupfunction map[string]any) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -143,7 +145,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	switch new_text {
 
 	case "":
-		go api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go apipost.ApiPost{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "交易":
@@ -226,14 +228,14 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "测试撤回":
-		var ret api.Struct_Retract
+		var ret apipost.Struct_Retract
 		ret.MessageId = message_id
 		ret.Self_id = self_id
 		if !admin {
 			return
 		}
-		go func(ret api.Struct_Retract) {
-			api.Retract_instant <- ret
+		go func(ret apipost.Struct_Retract) {
+			apipost.Retract_instant <- ret
 		}(ret)
 		break
 
@@ -342,7 +344,7 @@ const group_function_number = 19
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting",
 	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易", "重新验证", "死亡验证", "活人验证"}
 
-func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]any, groupfunction map[string]any) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
@@ -472,7 +474,7 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	groupHandle_acfur_other(group_function_type[function_route], self_id, group_id, user_id, message_id, new_text[function_route], raw_message, sender, groupmember, groupfunction)
 }
 
-func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]any, groupfunction map[string]any) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -488,7 +490,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	if groupfunction["auto_retract"].(int64) == 0 {
 		auto_retract = false
 	}
-	var ret api.Struct_Retract
+	var ret apipost.Struct_Retract
 	ret.MessageId = message_id
 	ret.Self_id = self_id
 
@@ -533,7 +535,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "atme":
-		go api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go apipost.ApiPost{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "sign":
@@ -571,8 +573,8 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "url_detect":
 		if groupfunction["ban_url"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret api.Struct_Retract) {
-					api.Retract_instant <- ret
+				go func(ret apipost.Struct_Retract) {
+					apipost.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
@@ -582,8 +584,8 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "ban_group":
 		if groupfunction["ban_group"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret api.Struct_Retract) {
-					api.Retract_instant <- ret
+				go func(ret apipost.Struct_Retract) {
+					apipost.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
@@ -593,8 +595,8 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "ban_weixin":
 		if groupfunction["ban_wx"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret api.Struct_Retract) {
-					api.Retract_instant <- ret
+				go func(ret apipost.Struct_Retract) {
+					apipost.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
@@ -604,8 +606,8 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	case "ban_share":
 		if groupfunction["ban_share"].(int64) == 1 {
 			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret api.Struct_Retract) {
-					api.Retract_instant <- ret
+				go func(ret apipost.Struct_Retract) {
+					apipost.Retract_instant <- ret
 				}(ret)
 			}
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
@@ -621,20 +623,20 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "长度限制":
-		go func(ret api.Struct_Retract) {
-			api.Retract_instant <- ret
+		go func(ret apipost.Struct_Retract) {
+			apipost.Retract_instant <- ret
 		}(ret)
 		go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
 			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
 		break
 
 	case "自动回复":
-		go api.Sendgroupmsg(self_id, group_id, message, auto_retract)
+		go apipost.ApiPost{}.Sendgroupmsg(self_id, group_id, message, auto_retract)
 		break
 
 	default:
 
-		go func(selfId, groupId, userId interface{}, groupFunction gorose.Data) {
+		go func(selfId, groupId, userId any, groupFunction gorose.Data) {
 			if groupFunction["ban_repeat"].(int64) == 1 {
 				num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(userId) + "_" + raw_message))
 				if err != nil {
@@ -649,7 +651,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			}
 		}(self_id, group_id, user_id, groupfunction)
 
-		go func(selfId, groupId, userId interface{}, groupFunction gorose.Data) {
+		go func(selfId, groupId, userId any, groupFunction gorose.Data) {
 			//验证程序
 			code, err := Redis.String_get("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
 			if err != nil {
@@ -665,25 +667,25 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					if groupFunction["auto_welcome"] == 1 {
 						str = "\r\n" + Calc.Any2String(groupFunction["welcome_word"])
 					}
-					go func(ret api.Struct_Retract) {
-						api.Retract_instant <- ret
+					go func(ret apipost.Struct_Retract) {
+						apipost.Retract_instant <- ret
 					}(ret)
-					go api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
+					go apipost.ApiPost{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
 				} else {
-					go api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+					go apipost.ApiPost{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 				}
 			}
 
 			if Redis.CheckExists("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId)) {
-				go func(ret api.Struct_Retract) {
-					api.Retract_instant <- ret
+				go func(ret apipost.Struct_Retract) {
+					apipost.Retract_instant <- ret
 				}(ret)
 				Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
 			} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
-				go func(ret api.Struct_Retract) {
-					api.Retract_instant <- ret
+				go func(ret apipost.Struct_Retract) {
+					apipost.Retract_instant <- ret
 				}(ret)
-				//go api.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
+				//go api.ApiPost{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 			}
 		}(self_id, group_id, user_id, groupfunction)
 

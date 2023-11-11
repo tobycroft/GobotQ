@@ -1,7 +1,7 @@
 package Group
 
 import (
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupListModel"
 )
@@ -9,7 +9,7 @@ import (
 func App_refresh_group_list() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		gl, err := api.Getgrouplist(bot["self_id"])
+		gl, err := apipost.ApiPost{}.Getgrouplist(bot["self_id"])
 		if err != nil {
 
 		} else {

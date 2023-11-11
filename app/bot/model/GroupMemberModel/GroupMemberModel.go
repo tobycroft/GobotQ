@@ -9,16 +9,16 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	SelfId       interface{} `gorose:"self_id"`
-	Card         string      `gorose:"card"`
-	GroupID      interface{} `gorose:"group_id"`
-	JoinTime     int64       `gorose:"join_time"`
-	LastSentTime int64       `gorose:"last_sent_time"`
-	Level        string      `gorose:"level"`
-	Nickname     string      `gorose:"nickname"`
-	Role         string      `gorose:"role"`
-	Title        string      `gorose:"title"`
-	UserID       int64       `gorose:"user_id"`
+	SelfId       any    `gorose:"self_id"`
+	Card         string `gorose:"card"`
+	GroupID      any    `gorose:"group_id"`
+	JoinTime     int64  `gorose:"join_time"`
+	LastSentTime int64  `gorose:"last_sent_time"`
+	Level        string `gorose:"level"`
+	Nickname     string `gorose:"nickname"`
+	Role         string `gorose:"role"`
+	Title        string `gorose:"title"`
+	UserID       int64  `gorose:"user_id"`
 }
 
 func Api_insert(gm GroupMember) bool {
@@ -45,9 +45,9 @@ func Api_insert_more(gms []GroupMember) bool {
 	}
 }
 
-func Api_update(group_id, user_id interface{}, gm GroupMember) bool {
+func Api_update(group_id, user_id any, gm GroupMember) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -62,9 +62,9 @@ func Api_update(group_id, user_id interface{}, gm GroupMember) bool {
 	}
 }
 
-func Api_select(self_id, group_id interface{}) []gorose.Data {
+func Api_select(self_id, group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,
 	}
@@ -78,10 +78,10 @@ func Api_select(self_id, group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_byGroupId(group_id interface{}, order string, limit, page int) []gorose.Data {
+func Api_select_byGroupId(group_id any, order string, limit, page int) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Fields("*", "FROM_UNIXTIME(last_sent_time) as last_date")
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"role":     "member",
 	}
@@ -98,9 +98,9 @@ func Api_select_byGroupId(group_id interface{}, order string, limit, page int) [
 	}
 }
 
-func Api_count_byGroupId(group_id interface{}) int64 {
+func Api_count_byGroupId(group_id any) int64 {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"role":     "member",
 	}
@@ -114,9 +114,9 @@ func Api_count_byGroupId(group_id interface{}) int64 {
 	}
 }
 
-func Api_select_groupBy_groupId(self_id interface{}) []gorose.Data {
+func Api_select_groupBy_groupId(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.GroupBy("group_id")
@@ -130,9 +130,9 @@ func Api_select_groupBy_groupId(self_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_byUid(user_id interface{}, role []interface{}) []gorose.Data {
+func Api_select_byUid(user_id any, role []any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"user_id": user_id,
 	}
 	db.Where(where)
@@ -146,9 +146,9 @@ func Api_select_byUid(user_id interface{}, role []interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete_byGid(self_id, group_id interface{}) bool {
+func Api_delete_byGid(self_id, group_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,
 	}
@@ -162,9 +162,9 @@ func Api_delete_byGid(self_id, group_id interface{}) bool {
 	}
 }
 
-func Api_delete_byUid(self_id, group_id, user_id interface{}) bool {
+func Api_delete_byUid(self_id, group_id, user_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"user_id":  user_id,
 		"self_id":  self_id,
 		"group_id": group_id,
@@ -179,9 +179,9 @@ func Api_delete_byUid(self_id, group_id, user_id interface{}) bool {
 	}
 }
 
-func Api_delete(self_id interface{}) bool {
+func Api_delete(self_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)
@@ -194,9 +194,9 @@ func Api_delete(self_id interface{}) bool {
 	}
 }
 
-func Api_find(group_id, user_id interface{}) gorose.Data {
+func Api_find(group_id, user_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -210,9 +210,9 @@ func Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byUid(user_id interface{}) gorose.Data {
+func Api_find_byUid(user_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"user_id": user_id,
 	}
 	db.Where(where)
@@ -225,14 +225,14 @@ func Api_find_byUid(user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_update_type(group_id, user_id, role interface{}) bool {
+func Api_update_type(group_id, user_id, role any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"role": role,
 	}
 	db.Data(data)
@@ -245,9 +245,9 @@ func Api_update_type(group_id, user_id, role interface{}) bool {
 	}
 }
 
-func Api_find_owner(self_id, group_id interface{}) gorose.Data {
+func Api_find_owner(self_id, group_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,
 		"role":     "owner",
@@ -262,9 +262,9 @@ func Api_find_owner(self_id, group_id interface{}) gorose.Data {
 	}
 }
 
-func Api_select_admin(self_id, group_id interface{}) []gorose.Data {
+func Api_select_admin(self_id, group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,
 		"role":     "admin",

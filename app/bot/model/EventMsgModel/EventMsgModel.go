@@ -7,9 +7,9 @@ import (
 
 const table = "event_msg"
 
-func Api_insert(bot, uid, gid, operator, text, Type, subtype interface{}) bool {
+func Api_insert(bot, uid, gid, operator, text, Type, subtype any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"bot":      bot,
 		"uid":      uid,
 		"gid":      gid,

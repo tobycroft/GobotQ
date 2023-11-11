@@ -9,9 +9,9 @@ import (
 
 const table = "group_ban_permenent"
 
-func Api_insert(group_id, user_id interface{}, next_time int64) bool {
+func Api_insert(group_id, user_id any, next_time int64) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"group_id":  group_id,
 		"user_id":   user_id,
 		"next_time": next_time,
@@ -26,14 +26,14 @@ func Api_insert(group_id, user_id interface{}, next_time int64) bool {
 	}
 }
 
-func Api_update_nextTime(group_id, user_id, next_time interface{}) bool {
+func Api_update_nextTime(group_id, user_id, next_time any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"next_time": next_time,
 	}
 	db.Data(data)
@@ -58,9 +58,9 @@ func Api_select() []gorose.Data {
 	}
 }
 
-func Api_find(group_id, user_id interface{}) gorose.Data {
+func Api_find(group_id, user_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -74,9 +74,9 @@ func Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_select_byGroupId(group_id interface{}) []gorose.Data {
+func Api_select_byGroupId(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -89,9 +89,9 @@ func Api_select_byGroupId(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(group_id, user_id interface{}) bool {
+func Api_delete(group_id, user_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -105,9 +105,9 @@ func Api_delete(group_id, user_id interface{}) bool {
 	}
 }
 
-func Api_delete_byGroupId(group_id interface{}) bool {
+func Api_delete_byGroupId(group_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)

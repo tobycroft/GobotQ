@@ -30,7 +30,7 @@ func login(c *gin.Context) {
 	if len(user) > 0 {
 		token := Calc.GenerateToken()
 		UserTokenModel.Api_insert(qq, token, c.ClientIP())
-		RET.Success(c, 0, map[string]interface{}{
+		RET.Success(c, 0, map[string]any{
 			"uid":   qq,
 			"token": token,
 			"uname": user["uname"],

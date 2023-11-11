@@ -1,11 +1,11 @@
 package Group
 
 import (
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/GroupMemberModel"
 )
 
-func BotPower(group_id, self_id interface{}) string {
+func BotPower(group_id, self_id any) string {
 	member_bot := GroupMemberModel.Api_find(group_id, self_id)
 	if len(member_bot) > 0 {
 		return member_bot["role"].(string)
@@ -13,8 +13,8 @@ func BotPower(group_id, self_id interface{}) string {
 	return "member"
 }
 
-func BotPowerRefresh(group_id, self_id interface{}) string {
-	gm, err := api.GetGroupMemberInfo(self_id, group_id, self_id)
+func BotPowerRefresh(group_id, self_id any) string {
+	gm, err := apipost.ApiPost{}.GetGroupMemberInfo(self_id, group_id, self_id)
 	if err != nil {
 
 	} else {

@@ -24,16 +24,8 @@ func init() {
 	}
 }
 
-type Send struct {
-	Action string `json:"action"`
-	Params struct {
-		UserId  int    `json:"user_id"`
-		Message string `json:"message"`
-	} `json:"params"`
-	Echo string `json:"echo"`
-}
-
 func main() {
+	go event.EventListener()
 	//cron.BotInfoCron()
 	//go cron.BaseCron()
 	//go cron.Refresh_friend_list()
@@ -58,7 +50,6 @@ func main() {
 	//go cron.BanPermenentCheck()
 	//
 	//go cron.PowerCheck()
-	go event.EventListener()
 
 	Calc.RefreshBaseNum()
 	mainroute := gin.Default()

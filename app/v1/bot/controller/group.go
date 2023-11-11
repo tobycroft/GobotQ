@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/common/BaseController"
@@ -74,7 +74,7 @@ func bot_group_exit(c *gin.Context) {
 	if !ok {
 		return
 	}
-	ret, _ := api.SetGroupLeave(bot, gid)
+	ret, _ := apipost.ApiPost{}.SetGroupLeave(bot, gid)
 	if ret {
 		if GroupListModel.Api_delete_byBotandGid(bot, gid) {
 			RET.Success(c, 0, nil, nil)

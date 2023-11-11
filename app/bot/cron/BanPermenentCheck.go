@@ -1,7 +1,7 @@
 package cron
 
 import (
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/config/app_conf"
@@ -25,7 +25,7 @@ func ban_permenent_check() {
 		gm := GroupMemberModel.Api_find(group_id, user_id)
 		//如果这个用户不在群里面就不执行了
 		if len(gm) > 0 {
-			ok, _ := api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
+			ok, _ := apipost.ApiPost{}.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
 			if ok {
 				//如果禁言成功了就把这个人的禁言时间延长即可
 				GroupBanPermenentModel.Api_update_nextTime(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)

@@ -20,9 +20,9 @@ type
 date
 */
 
-func Api_insert(self_id, log, data, Type interface{}) bool {
+func Api_insert(self_id, log, data, Type any) bool {
 	db := tuuz.Db().Table(table)
-	db.Data(map[string]interface{}{
+	db.Data(map[string]any{
 		"log":     log,
 		"self_id": self_id,
 		"data":    data,
@@ -38,9 +38,9 @@ func Api_insert(self_id, log, data, Type interface{}) bool {
 
 }
 
-func Api_select(self_id interface{}, page, limit int) []gorose.Data {
+func Api_select(self_id any, page, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)
@@ -55,9 +55,9 @@ func Api_select(self_id interface{}, page, limit int) []gorose.Data {
 	}
 }
 
-func Api_get(self_id, id interface{}) gorose.Data {
+func Api_get(self_id, id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 		"id":      id,
 	}

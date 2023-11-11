@@ -8,9 +8,9 @@ import (
 
 const table = "group_auto_reply"
 
-func Api_insert(Type, group_id, user_id, key, value, percent interface{}) bool {
+func Api_insert(Type, group_id, user_id, key, value, percent any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"type":     Type,
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -28,9 +28,9 @@ func Api_insert(Type, group_id, user_id, key, value, percent interface{}) bool {
 	}
 }
 
-func Api_select(group_id interface{}) []gorose.Data {
+func Api_select(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -43,9 +43,9 @@ func Api_select(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_semi(group_id interface{}) []gorose.Data {
+func Api_select_semi(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"type":     "semi",
 	}
@@ -59,9 +59,9 @@ func Api_select_semi(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_semi_byPercent(group_id, percent interface{}) []gorose.Data {
+func Api_select_semi_byPercent(group_id, percent any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"type":     "semi",
 	}
@@ -76,9 +76,9 @@ func Api_select_semi_byPercent(group_id, percent interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_full(group_id interface{}) []gorose.Data {
+func Api_select_full(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"type":     "full",
 	}
@@ -92,9 +92,9 @@ func Api_select_full(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(group_id, key, percent interface{}) gorose.Data {
+func Api_find(group_id, key, percent any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"key":      key,
 		"percent":  percent,
@@ -109,9 +109,9 @@ func Api_find(group_id, key, percent interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(group_id, id interface{}) bool {
+func Api_delete(group_id, id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"id":       id,
 	}

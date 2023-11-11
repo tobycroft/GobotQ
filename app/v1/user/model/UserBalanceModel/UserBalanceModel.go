@@ -8,15 +8,15 @@ import (
 
 const table = "user_balance"
 
-func Api_insert(qq, balance interface{}) bool {
+func Api_insert(qq, balance any) bool {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_insert(qq, balance)
 }
 
-func (self *Interface) Api_insert(qq, balance interface{}) bool {
+func (self *Interface) Api_insert(qq, balance any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"qq":      qq,
 		"balance": balance,
 	}
@@ -31,15 +31,15 @@ func (self *Interface) Api_insert(qq, balance interface{}) bool {
 	}
 }
 
-func Api_find_balance(qq interface{}) interface{} {
+func Api_find_balance(qq any) any {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_find_balance(qq)
 }
 
-func (self *Interface) Api_find_balance(qq interface{}) float64 {
+func (self *Interface) Api_find_balance(qq any) float64 {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -53,15 +53,15 @@ func (self *Interface) Api_find_balance(qq interface{}) float64 {
 	}
 }
 
-func Api_find(qq interface{}) gorose.Data {
+func Api_find(qq any) gorose.Data {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_find(qq)
 }
 
-func (self *Interface) Api_find(qq interface{}) gorose.Data {
+func (self *Interface) Api_find(qq any) gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -79,15 +79,15 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func Api_dec_balance(qq interface{}, balance_dec float64) bool {
+func Api_dec_balance(qq any, balance_dec float64) bool {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_dec_balance(qq, balance_dec)
 }
 
-func (self *Interface) Api_dec_balance(qq interface{}, balance_dec float64) bool {
+func (self *Interface) Api_dec_balance(qq any, balance_dec float64) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -101,15 +101,15 @@ func (self *Interface) Api_dec_balance(qq interface{}, balance_dec float64) bool
 	}
 }
 
-func Api_inc_balance(qq interface{}, balance_inc float64) bool {
+func Api_inc_balance(qq any, balance_inc float64) bool {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_inc_balance(qq, balance_inc)
 }
 
-func (self *Interface) Api_inc_balance(qq interface{}, balance_inc float64) bool {
+func (self *Interface) Api_inc_balance(qq any, balance_inc float64) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)

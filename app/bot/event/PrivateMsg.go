@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
+	"net"
 
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -22,6 +23,7 @@ import (
 )
 
 type PrivateMessageStruct struct {
+	remoteaddr  net.Addr
 	Time        int64  `json:"time"`
 	SelfId      int64  `json:"self_id"`
 	PostType    string `json:"post_type"`
@@ -52,7 +54,7 @@ type PrivateSender struct {
 
 var PrivateMsgChan = make(chan PrivateMessageStruct, 99)
 
-func PrivateMsg(pm PrivateMessageStruct, remoteip string) {
+func (pm PrivateMessageStruct) PrivateMsg() {
 	PrivateMsgChan <- pm
 	selfId := pm.SelfId
 	user_id := pm.UserId
@@ -67,7 +69,7 @@ func PrivateMsg(pm PrivateMessageStruct, remoteip string) {
 
 	Redis.String_set("PrivateMsg:"+user_idString, Calc.Md5(message), 1*time.Second)
 
-	PrivateHandle(selfId, user_id, group_id, message, rawMessage, remoteip)
+	PrivateHandle(selfId, user_id, group_id, message, rawMessage, pm.remoteaddr.String())
 }
 
 func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remoteip string) {
@@ -89,7 +91,7 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 		return
 	}
 	if botinfo["end_time"].(int64) < time.Now().Unix() {
-		api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_over_time, false)
+		apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_over_time, false)
 		return
 	}
 	if active {
@@ -105,7 +107,7 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 			if auto_reply["value"] == nil {
 				return
 			}
-			api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
 		} else {
 			private_auto_reply(selfId, user_id, group_id, message)
 		}
@@ -122,7 +124,7 @@ func private_default_reply(selfId, user_id, group_id int64, message string) bool
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
 			return true
 		}
 	}
@@ -139,7 +141,7 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), true)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), true)
 			break
 		}
 	}
@@ -149,19 +151,19 @@ func privateHandle_acfur(selfId, user_id, group_id int64, message, origin_text s
 	switch message {
 
 	case "app", "下载":
-		api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_app_download_url, true)
+		apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_app_download_url, true)
 		break
 
 	case "help":
 		botinfo := BotModel.Api_find(selfId)
 		if len(botinfo) > 0 {
 			if botinfo["owner"].(int64) == int64(user_id) {
-				api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
+				apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
 			} else {
-				api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_private_help, false)
+				apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_private_help, false)
 			}
 		} else {
-			api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_private_help, false)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_private_help, false)
 		}
 		break
 
@@ -178,7 +180,7 @@ func privateHandle_acfur(selfId, user_id, group_id int64, message, origin_text s
 		break
 
 	case "绑定":
-		api.Sendprivatemsg(selfId, user_id, group_id, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
+		apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
 		break
 
 	case "绑定群":
@@ -187,7 +189,7 @@ func privateHandle_acfur(selfId, user_id, group_id int64, message, origin_text s
 		for _, groupbind := range groupbinds {
 			groups = append(groups, Calc.Any2String(groupbind["group_id"]))
 		}
-		api.Sendprivatemsg(selfId, user_id, group_id, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+
+		apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+
 			"\r\n您可以使用：acfur绑定群:群号，来绑定新群，\r\n使用：acfur解绑群:群号，解绑", false)
 		break
 
@@ -255,7 +257,7 @@ func privateHandle_acfur_other(Type string, selfId int64, user_id, group_id int6
 		if int64(user_id) == botinfo["owner"].(int64) {
 			Private.App_userChangePassword(selfId, user_id, group_id, message)
 		} else {
-			api.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -267,7 +269,7 @@ func privateHandle_acfur_other(Type string, selfId int64, user_id, group_id int6
 		if int64(user_id) == botinfo["owner"].(int64) {
 			Private.App_change_bot_secret(selfId, user_id, group_id, message)
 		} else {
-			api.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -275,7 +277,7 @@ func privateHandle_acfur_other(Type string, selfId int64, user_id, group_id int6
 		if int64(user_id) == botinfo["owner"].(int64) {
 			Private.App_bind_group(selfId, user_id, group_id, message)
 		} else {
-			api.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
@@ -283,12 +285,12 @@ func privateHandle_acfur_other(Type string, selfId int64, user_id, group_id int6
 		if int64(user_id) == botinfo["owner"].(int64) {
 			Private.App_unbind_group(selfId, user_id, group_id, message)
 		} else {
-			api.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+			apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
 		}
 		break
 
 	default:
-		api.Sendprivatemsg(selfId, user_id, group_id, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
+		apipost.ApiPost{}.Sendprivatemsg(selfId, user_id, group_id, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
 		break
 	}
 }

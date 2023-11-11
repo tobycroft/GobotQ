@@ -1,6 +1,7 @@
 package route
 
 import (
+	"github.com/bytedance/sonic"
 	"github.com/gin-gonic/gin"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/event"
@@ -11,7 +12,11 @@ func OnRoute(router *gin.Engine) {
 	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
 		//fmt.Println(string(data))
-		event.EventRouter(string(data), context.ClientIP())
+		var ev event.EventStruct
+		err := sonic.Unmarshal(data, &ev)
+		if err == nil {
+			ev.EventRouter()
+		}
 		context.String(200, "ok")
 	})
 

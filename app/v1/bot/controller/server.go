@@ -78,9 +78,9 @@ func server_add(c *gin.Context) {
 type get_login_info struct {
 	Data struct {
 		Nickname string `json:"nickname"`
-		UserID   int    `json:"user_id"`
+		UserID   int64  `json:"user_id"`
 	} `json:"data"`
-	Retcode int    `json:"retcode"`
+	Retcode int64  `json:"retcode"`
 	Status  string `json:"status"`
 }
 

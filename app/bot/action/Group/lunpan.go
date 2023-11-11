@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupBalanceAction"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupLunpanModel"
@@ -18,18 +18,18 @@ import (
 	"strings"
 )
 
-func App_group_lunpan(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_group_lunpan(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 	db := tuuz.Db()
 	db.Begin()
 	var glm GroupLunpanModel.Interface
 	glm.Db = db
 	sign := glm.Api_find(group_id, user_id)
-	go func(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	go func(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret api.Struct_Retract
+			var ret apipost.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			api.Retract_chan <- ret
+			apipost.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 	mode := regexp.MustCompile("[A-Za-z]")
@@ -72,7 +72,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 			possible := int64(0)
 			var gd GroupDaojuModel.Interface
 			gd.Db = db
-			user_daoju := gd.Api_find_in_djId(group_id, user_id, []interface{}{4, 5, 6, 7})
+			user_daoju := gd.Api_find_in_djId(group_id, user_id, []any{4, 5, 6, 7})
 			if len(user_daoju) > 0 {
 				daoju := DaojuModel.Api_find_canUse(user_daoju["dj_id"])
 				if len(daoju) > 0 {

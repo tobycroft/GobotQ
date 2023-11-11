@@ -7,12 +7,12 @@ import (
 )
 
 type py struct {
-	Errno  int    `json:"errno"`
+	Errno  int64  `json:"errno"`
 	Errmsg string `json:"errmsg"`
 	Data   string `json:"data"`
 }
 
-func Serv_pinyin(chinese interface{}) (string, error) {
+func Serv_pinyin(chinese any) (string, error) {
 	data, err := Net.Post{}.PostRaw("http://www.box3.cn/developtoolbox/pinyin.php", Calc.Any2String(chinese)).RetString()
 	if err != nil {
 		return "", err

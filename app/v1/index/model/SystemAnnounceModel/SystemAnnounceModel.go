@@ -10,7 +10,7 @@ const table = "system_announce"
 
 func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"type": 1,
 	}
 	db.Where(where)

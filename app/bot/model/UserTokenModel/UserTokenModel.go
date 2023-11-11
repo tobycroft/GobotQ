@@ -8,9 +8,9 @@ import (
 
 const table = "user_token"
 
-func Api_insert(qq, token, ip interface{}) bool {
+func Api_insert(qq, token, ip any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"qq":    qq,
 		"token": token,
 		"ip":    ip,
@@ -25,9 +25,9 @@ func Api_insert(qq, token, ip interface{}) bool {
 	}
 }
 
-func Api_find(qq interface{}) gorose.Data {
+func Api_find(qq any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -40,9 +40,9 @@ func Api_find(qq interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byToken(qq, token interface{}) gorose.Data {
+func Api_find_byToken(qq, token any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq":    qq,
 		"token": token,
 	}
@@ -56,9 +56,9 @@ func Api_find_byToken(qq, token interface{}) gorose.Data {
 	}
 }
 
-func Api_select(qq interface{}) []gorose.Data {
+func Api_select(qq any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -71,9 +71,9 @@ func Api_select(qq interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(qq interface{}) bool {
+func Api_delete(qq any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -86,9 +86,9 @@ func Api_delete(qq interface{}) bool {
 	}
 }
 
-func Api_delete_byToken(qq, token interface{}) bool {
+func Api_delete_byToken(qq, token any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq":    qq,
 		"token": token,
 	}
@@ -102,9 +102,9 @@ func Api_delete_byToken(qq, token interface{}) bool {
 	}
 }
 
-func Api_delete_byId(qq, id interface{}) bool {
+func Api_delete_byId(qq, id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 		"id": id,
 	}

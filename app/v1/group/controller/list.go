@@ -24,8 +24,8 @@ func ListController(route *gin.RouterGroup) {
 
 func group_control(c *gin.Context) {
 	uid := c.PostForm("uid")
-	con_group := GroupMemberModel.Api_select_byUid(uid, []interface{}{"owner", "admin"})
-	gids := []interface{}{}
+	con_group := GroupMemberModel.Api_select_byUid(uid, []any{"owner", "admin"})
+	gids := []any{}
 	for _, data := range con_group {
 		gids = append(gids, data["group_id"])
 	}
@@ -38,8 +38,8 @@ func group_control(c *gin.Context) {
 
 func group_joined(c *gin.Context) {
 	uid := c.PostForm("uid")
-	con_group := GroupMemberModel.Api_select_byUid(uid, []interface{}{"member"})
-	gids := []interface{}{}
+	con_group := GroupMemberModel.Api_select_byUid(uid, []any{"member"})
+	gids := []any{}
 	for _, data := range con_group {
 		gids = append(gids, data["group_id"])
 	}
@@ -52,7 +52,7 @@ func group_joined(c *gin.Context) {
 
 func group_member(c *gin.Context) {
 	uid := c.PostForm("uid")
-	usergroup := GroupMemberModel.Api_select_byUid(uid, []interface{}{"owner", "admin"})
+	usergroup := GroupMemberModel.Api_select_byUid(uid, []any{"owner", "admin"})
 	RET.Success(c, 0, usergroup, nil)
 }
 
@@ -68,7 +68,7 @@ func group_setting_get(c *gin.Context) {
 			RET.Fail(c, 404, nil, "本群不存在")
 		} else {
 			function := GroupFunctionDetailModel.Api_select_kv()
-			arr := make(map[string]map[string]interface{})
+			arr := make(map[string]map[string]any)
 			for k, v := range group_setting {
 				if function[k] != nil {
 					function[k]["value"] = v

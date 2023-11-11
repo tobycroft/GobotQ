@@ -9,12 +9,12 @@ import (
 const table = "group_list"
 
 type GroupList struct {
-	Self_id          interface{} `gorose:"self_id"`
-	Group_id         int64       `gorose:"group_id"`
-	Group_name       string      `gorose:"group_name"`
-	Group_memo       string      `gorose:"group_memo"`
-	Member_count     int64       `gorose:"member_count"`
-	Max_member_count int64       `gorose:"max_member_count"`
+	Self_id          any    `gorose:"self_id"`
+	Group_id         int64  `gorose:"group_id"`
+	Group_name       string `gorose:"group_name"`
+	Group_memo       string `gorose:"group_memo"`
+	Member_count     int64  `gorose:"member_count"`
+	Max_member_count int64  `gorose:"max_member_count"`
 }
 
 func Api_insert(gl GroupList) bool {
@@ -41,9 +41,9 @@ func Api_insert_more(gls []GroupList) bool {
 	}
 }
 
-func Api_select(self_id interface{}) []gorose.Data {
+func Api_select(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)
@@ -56,7 +56,7 @@ func Api_select(self_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_InGid(group_id []interface{}) []gorose.Data {
+func Api_select_InGid(group_id []any) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.WhereIn("group_id", group_id)
 	ret, err := db.Get()
@@ -68,9 +68,9 @@ func Api_select_InGid(group_id []interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(group_id interface{}) gorose.Data {
+func Api_find(group_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -83,9 +83,9 @@ func Api_find(group_id interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(self_id interface{}) bool {
+func Api_delete(self_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)
@@ -98,9 +98,9 @@ func Api_delete(self_id interface{}) bool {
 	}
 }
 
-func Api_delete_byGid(group_id interface{}) bool {
+func Api_delete_byGid(group_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -113,9 +113,9 @@ func Api_delete_byGid(group_id interface{}) bool {
 	}
 }
 
-func Api_delete_byBotandGid(self_id, group_id interface{}) bool {
+func Api_delete_byBotandGid(self_id, group_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,
 	}

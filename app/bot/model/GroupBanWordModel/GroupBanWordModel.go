@@ -8,9 +8,9 @@ import (
 
 const table = "group_ban_word"
 
-func Api_insert(group_id, user_id, word, mode, is_kick, is_ban, is_retract, share interface{}) bool {
+func Api_insert(group_id, user_id, word, mode, is_kick, is_ban, is_retract, share any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"group_id":   group_id,
 		"user_id":    user_id,
 		"word":       word,
@@ -30,9 +30,9 @@ func Api_insert(group_id, user_id, word, mode, is_kick, is_ban, is_retract, shar
 	}
 }
 
-func Api_select_byKV(group_id interface{}, key string, value interface{}) []gorose.Data {
+func Api_select_byKV(group_id any, key string, value any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		key:        value,
 	}
@@ -46,9 +46,9 @@ func Api_select_byKV(group_id interface{}, key string, value interface{}) []goro
 	}
 }
 
-func Api_select(group_id interface{}) []gorose.Data {
+func Api_select(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -61,9 +61,9 @@ func Api_select(group_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(group_id, word interface{}) gorose.Data {
+func Api_find(group_id, word any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"word":     word,
 	}
@@ -77,9 +77,9 @@ func Api_find(group_id, word interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(group_id, word interface{}) bool {
+func Api_delete(group_id, word any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"word":     word,
 	}
@@ -92,9 +92,9 @@ func Api_delete(group_id, word interface{}) bool {
 		return true
 	}
 }
-func Api_delete_byId(group_id, id interface{}) bool {
+func Api_delete_byId(group_id, id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"id":       id,
 	}
@@ -108,14 +108,14 @@ func Api_delete_byId(group_id, id interface{}) bool {
 	}
 }
 
-func Api_update(group_id, word, is_kick, is_ban, is_retract interface{}) bool {
+func Api_update(group_id, word, is_kick, is_ban, is_retract any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"word":     word,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"is_kick":    is_kick,
 		"is_ban":     is_ban,
 		"is_retract": is_retract,

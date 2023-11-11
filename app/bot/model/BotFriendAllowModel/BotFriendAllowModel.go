@@ -8,9 +8,9 @@ import (
 
 const table = "bot_friend_allow"
 
-func Api_insert(bot, uid interface{}) bool {
+func Api_insert(bot, uid any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"bot": bot,
 		"uid": uid,
 	}
@@ -24,9 +24,9 @@ func Api_insert(bot, uid interface{}) bool {
 	}
 }
 
-func Api_find(bot, uid interface{}) gorose.Data {
+func Api_find(bot, uid any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot": bot,
 		"uid": uid,
 	}
@@ -40,9 +40,9 @@ func Api_find(bot, uid interface{}) gorose.Data {
 	}
 }
 
-func Api_delete(bot, uid interface{}) bool {
+func Api_delete(bot, uid any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot": bot,
 		"uid": uid,
 	}
@@ -56,9 +56,9 @@ func Api_delete(bot, uid interface{}) bool {
 	}
 }
 
-func Api_select(bot interface{}) []gorose.Data {
+func Api_select(bot any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot": bot,
 	}
 	db.Where(where)

@@ -12,9 +12,9 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -28,9 +28,9 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_select(group_id interface{}, limit int) []gorose.Data {
+func (self *Interface) Api_select(group_id any, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -45,9 +45,9 @@ func (self *Interface) Api_select(group_id interface{}, limit int) []gorose.Data
 	}
 }
 
-func Api_select_gt(group_id, balance interface{}) []gorose.Data {
+func Api_select_gt(group_id, balance any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -63,9 +63,9 @@ func Api_select_gt(group_id, balance interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_lt(group_id, balance interface{}) []gorose.Data {
+func Api_select_lt(group_id, balance any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -81,9 +81,9 @@ func Api_select_lt(group_id, balance interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_uid(user_id interface{}) []gorose.Data {
+func Api_select_uid(user_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"user_id": user_id,
 	}
 	db.Where(where)
@@ -96,9 +96,9 @@ func Api_select_uid(user_id interface{}) []gorose.Data {
 	}
 }
 
-func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
+func (self *Interface) Api_find(group_id, user_id any) gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -113,9 +113,9 @@ func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func (self *Interface) Api_count_gt_balance(group_id, balance interface{}) int64 {
+func (self *Interface) Api_count_gt_balance(group_id, balance any) int64 {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where("balance", ">", balance)
@@ -129,14 +129,14 @@ func (self *Interface) Api_count_gt_balance(group_id, balance interface{}) int64
 	}
 }
 
-func (self *Interface) Api_update(group_id, user_id, balance interface{}) bool {
+func (self *Interface) Api_update(group_id, user_id, balance any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
 	db.Where(where)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"balance": balance,
 	}
 	db.Data(data)
@@ -150,9 +150,9 @@ func (self *Interface) Api_update(group_id, user_id, balance interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_incr(group_id, user_id, balance_inc interface{}) bool {
+func (self *Interface) Api_incr(group_id, user_id, balance_inc any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -167,9 +167,9 @@ func (self *Interface) Api_incr(group_id, user_id, balance_inc interface{}) bool
 	}
 }
 
-func (self *Interface) Api_decr(group_id, user_id, balance_decr interface{}) bool {
+func (self *Interface) Api_decr(group_id, user_id, balance_decr any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -184,9 +184,9 @@ func (self *Interface) Api_decr(group_id, user_id, balance_decr interface{}) boo
 	}
 }
 
-func (self *Interface) Api_value_balance(group_id, user_id interface{}) interface{} {
+func (self *Interface) Api_value_balance(group_id, user_id any) any {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}

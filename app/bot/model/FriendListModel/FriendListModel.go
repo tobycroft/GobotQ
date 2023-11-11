@@ -8,9 +8,9 @@ import (
 
 const table = "friend_list"
 
-func Api_delete(self_id interface{}) bool {
+func Api_delete(self_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)
@@ -23,9 +23,9 @@ func Api_delete(self_id interface{}) bool {
 	}
 }
 
-func Api_delete_byUid(self_id, user_id interface{}) bool {
+func Api_delete_byUid(self_id, user_id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 		"user_id": user_id,
 	}
@@ -39,9 +39,9 @@ func Api_delete_byUid(self_id, user_id interface{}) bool {
 	}
 }
 
-func Api_find(user_id interface{}) gorose.Data {
+func Api_find(user_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"user_id": user_id,
 	}
 	db.Where(where)
@@ -54,9 +54,9 @@ func Api_find(user_id interface{}) gorose.Data {
 	}
 }
 
-func Api_select(self_id interface{}) []gorose.Data {
+func Api_select(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 	}
 	db.Where(where)
@@ -69,9 +69,9 @@ func Api_select(self_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_insert(self_id, user_id, nickname interface{}) bool {
+func Api_insert(self_id, user_id, nickname any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"self_id":  self_id,
 		"user_id":  user_id,
 		"nickname": nickname,
@@ -87,10 +87,10 @@ func Api_insert(self_id, user_id, nickname interface{}) bool {
 }
 
 type FriendList struct {
-	SelfId   interface{} `gorose:"self_id"`
-	UserId   interface{} `gorose:"user_id"`
-	Nickname string      `gorose:"nickname"`
-	Remark   string      `gorose:"remark"`
+	SelfId   any    `gorose:"self_id"`
+	UserId   any    `gorose:"user_id"`
+	Nickname string `gorose:"nickname"`
+	Remark   string `gorose:"remark"`
 }
 
 func Api_insert_more(fl []FriendList) bool {

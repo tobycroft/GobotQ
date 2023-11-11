@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func App_group_function_get_all(self_id, group_id, user_id int64, message string, groupfunction map[string]interface{}) {
+func App_group_function_get_all(self_id, group_id, user_id int64, message string, groupfunction map[string]any) {
 	settings := group_function_attach(group_id)
 	str := "您的群设定为：\r\n"
 	for _, v := range settings {
@@ -41,7 +41,7 @@ func App_group_function_get_all(self_id, group_id, user_id int64, message string
 	AutoMessage(self_id, group_id, user_id, str, groupfunction)
 }
 
-func App_group_function_set(self_id, group_id, user_id interface{}, message string, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_group_function_set(self_id, group_id, user_id any, message string, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 	i1 := strings.Index(message, ":")
 	i2 := strings.Index(message, "：")
 	if i1 == i2 {
@@ -65,7 +65,7 @@ func App_group_function_set(self_id, group_id, user_id interface{}, message stri
 	}
 	detail := GroupFunctionDetailModel.Api_find_byName(name)
 	if len(detail) > 0 {
-		var value interface{}
+		var value any
 		switch detail["type"].(string) {
 		case "bool":
 			if set == "开" || set == "是" || set == "on" || set == "1" || set == "true" {
@@ -112,14 +112,14 @@ func App_group_function_set(self_id, group_id, user_id interface{}, message stri
 	}
 }
 
-func group_function_attach(group_id interface{}) map[string]map[string]interface{} {
+func group_function_attach(group_id any) map[string]map[string]any {
 	group_setting := GroupFunctionModel.Api_find(group_id)
 	if len(group_setting) < 1 {
 		GroupFunctionModel.Api_insert(group_id)
 		return group_function_attach(group_id)
 	}
 	function := GroupFunctionDetailModel.Api_select_kv()
-	arr := make(map[string]map[string]interface{})
+	arr := make(map[string]map[string]any)
 	for k, v := range group_setting {
 		if function[k] != nil {
 			function[k]["value"] = v

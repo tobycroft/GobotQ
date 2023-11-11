@@ -8,9 +8,9 @@ import (
 
 const table = "version"
 
-func Api_find(platform interface{}) gorose.Data {
+func Api_find(platform any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"platform": platform,
 	}
 	db.Where(where)
@@ -24,9 +24,9 @@ func Api_find(platform interface{}) gorose.Data {
 	}
 }
 
-func Api_select(platform interface{}) []gorose.Data {
+func Api_select(platform any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"platform": platform,
 	}
 	db.Where(where)

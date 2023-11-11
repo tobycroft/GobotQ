@@ -21,7 +21,7 @@ func Api_select() []gorose.Data {
 
 func Api_select_canShow() []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"can_show": 1,
 	}
 	db.Where(where)
@@ -34,9 +34,9 @@ func Api_select_canShow() []gorose.Data {
 	}
 }
 
-func Api_find(id interface{}) gorose.Data {
+func Api_find(id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"id": id,
 	}
 	db.Where(where)
@@ -49,9 +49,9 @@ func Api_find(id interface{}) gorose.Data {
 	}
 }
 
-func Api_find_canUse(id interface{}) gorose.Data {
+func Api_find_canUse(id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"id":      id,
 		"can_use": true,
 	}
@@ -65,9 +65,9 @@ func Api_find_canUse(id interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byCname(cname interface{}) gorose.Data {
+func Api_find_byCname(cname any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"cname": cname,
 	}
 	db.Where(where)
@@ -80,9 +80,9 @@ func Api_find_byCname(cname interface{}) gorose.Data {
 	}
 }
 
-func Api_find_byName(name interface{}) gorose.Data {
+func Api_find_byName(name any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"name": name,
 	}
 	db.Where(where)

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Serv_auto_reply(gid interface{}, text string) (string, bool) {
+func Serv_auto_reply(gid any, text string) (string, bool) {
 	rand := Calc.Rand(1, 99)
 	data := GroupAutoReplyModel.Api_find(gid, text, rand)
 	if len(data) > 0 {

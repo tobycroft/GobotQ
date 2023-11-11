@@ -3,7 +3,7 @@ package Group
 import (
 	"errors"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupSignModel"
@@ -15,7 +15,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 	var gsm GroupSignModel.Interface
 	db := tuuz.Db()
 	db.Begin()
@@ -25,12 +25,12 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	//if groupfunction["sign_send_private"].(int64) == 1 {
 	//	private_mode = true
 	//}
-	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret api.Struct_Retract
+			var ret apipost.Struct_Retract
 			ret.MessageId = message_id
 			ret.Self_id = self_id
-			api.Retract_chan <- ret
+			apipost.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	if len(sign) > 0 {

@@ -7,9 +7,9 @@ import (
 
 const table = "logs"
 
-func Api_insert(log, discript, ip interface{}) bool {
+func Api_insert(log, discript, ip any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"log":      log,
 		"discript": discript,
 		"ip":       ip,

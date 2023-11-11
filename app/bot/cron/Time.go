@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"main.go/app/bot/action/Group"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupListModel"
@@ -17,7 +17,7 @@ func BaseCron() {
 	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
-			gl, err := api.Getgrouplist(bot["self_id"])
+			gl, err := apipost.ApiPost{}.Getgrouplist(bot["self_id"])
 			if err != nil {
 
 			} else {
@@ -50,10 +50,11 @@ func BaseCron() {
 }
 
 func BotInfoCron() {
+
 	for {
 		bots := BotModel.Api_select()
 		for _, bot := range bots {
-			bot_info, err := api.GetLoginInfo(bot["self_id"])
+			bot_info, err := apipost.ApiPost{}.GetLoginInfo(bot["self_id"])
 			if err != nil {
 
 			} else {

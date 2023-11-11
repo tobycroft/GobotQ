@@ -7,9 +7,9 @@ import (
 
 const table = "log_error"
 
-func Api_insert(error, discript interface{}) bool {
+func Api_insert(error, discript any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"error":    error,
 		"discript": discript,
 	}

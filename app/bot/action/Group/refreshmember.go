@@ -5,5 +5,5 @@ func App_refreshmember(self_id, group_id int64) {
 	apm.SelfId = self_id
 	apm.GroupId = group_id
 	Chan_refresh_group_member <- apm
-	//go api.Sendgroupmsg(*bot, *gid, "群用户已经刷新", true)
+	//go api.Api{}.Sendgroupmsg(*bot, *gid, "群用户已经刷新", true)
 }

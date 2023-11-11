@@ -12,9 +12,9 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func Api_select(group_id, user_id interface{}) []gorose.Data {
+func Api_select(group_id, user_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -28,9 +28,9 @@ func Api_select(group_id, user_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_have(group_id, user_id interface{}) []gorose.Data {
+func Api_select_have(group_id, user_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -45,15 +45,15 @@ func Api_select_have(group_id, user_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(group_id, user_id, dj_id interface{}) gorose.Data {
+func Api_find(group_id, user_id, dj_id any) gorose.Data {
 	var self Interface
 	self.Db = tuuz.Db()
 	return Api_find(group_id, user_id, dj_id)
 }
 
-func (self *Interface) Api_find(group_id, user_id, dj_id interface{}) gorose.Data {
+func (self *Interface) Api_find(group_id, user_id, dj_id any) gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"dj_id":    dj_id,
@@ -68,15 +68,15 @@ func (self *Interface) Api_find(group_id, user_id, dj_id interface{}) gorose.Dat
 	}
 }
 
-func Api_value(group_id, user_id, dj_id interface{}) interface{} {
+func Api_value(group_id, user_id, dj_id any) any {
 	var self Interface
 	self.Db = tuuz.Db()
 	return Api_value(group_id, user_id, dj_id)
 }
 
-func (self *Interface) Api_value_num(group_id, user_id, dj_id interface{}) int64 {
+func (self *Interface) Api_value_num(group_id, user_id, dj_id any) int64 {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"dj_id":    dj_id,
@@ -96,9 +96,9 @@ func (self *Interface) Api_value_num(group_id, user_id, dj_id interface{}) int64
 	}
 }
 
-func (self *Interface) Api_decr(group_id, user_id, dj_id interface{}) bool {
+func (self *Interface) Api_decr(group_id, user_id, dj_id any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"dj_id":    dj_id,
@@ -114,9 +114,9 @@ func (self *Interface) Api_decr(group_id, user_id, dj_id interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}, num int64) bool {
+func (self *Interface) Api_incr(group_id, user_id, dj_id any, num int64) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"dj_id":    dj_id,
@@ -132,9 +132,9 @@ func (self *Interface) Api_incr(group_id, user_id, dj_id interface{}, num int64)
 	}
 }
 
-func (self *Interface) Api_insert(group_id, user_id, dj_id, num interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id, dj_id, num any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 		"dj_id":    dj_id,
@@ -150,9 +150,9 @@ func (self *Interface) Api_insert(group_id, user_id, dj_id, num interface{}) boo
 	}
 }
 
-func (self *Interface) Api_delete(group_id, user_id interface{}) bool {
+func (self *Interface) Api_delete(group_id, user_id any) bool {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -166,9 +166,9 @@ func (self *Interface) Api_delete(group_id, user_id interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_find_in_djId(group_id, user_id interface{}, dj_id []interface{}) gorose.Data {
+func (self *Interface) Api_find_in_djId(group_id, user_id any, dj_id []any) gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}

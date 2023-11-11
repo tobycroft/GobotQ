@@ -8,9 +8,9 @@ import (
 
 const table = "group_kick"
 
-func Api_insert(self_id, group_id, user_id, last_msg interface{}) bool {
+func Api_insert(self_id, group_id, user_id, last_msg any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -26,9 +26,9 @@ func Api_insert(self_id, group_id, user_id, last_msg interface{}) bool {
 	}
 }
 
-func Api_select(group_id interface{}) []gorose.Data {
+func Api_select(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)

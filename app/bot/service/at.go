@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Serv_at(qq interface{}) string {
+func Serv_at(qq any) string {
 	return "[CQ:at,qq=" + Calc.Any2String(qq) + "]"
 }
 
@@ -14,7 +14,7 @@ func Serv_at_all() string {
 	return "[CQ:at,qq=all]"
 }
 
-func Serv_is_at_me(self_id interface{}, message string) bool {
+func Serv_is_at_me(self_id any, message string) bool {
 	return strings.Contains(message, Serv_at(self_id))
 }
 

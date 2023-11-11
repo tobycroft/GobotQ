@@ -8,9 +8,9 @@ import (
 
 const table = "group_function_detail"
 
-func Api_find_byK(key interface{}) interface{} {
+func Api_find_byK(key any) any {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"key": key,
 	}
 	db.Where(where)
@@ -23,9 +23,9 @@ func Api_find_byK(key interface{}) interface{} {
 	}
 }
 
-func Api_find_type_byName(name interface{}) interface{} {
+func Api_find_type_byName(name any) any {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"name": name,
 	}
 	db.Where(where)
@@ -38,9 +38,9 @@ func Api_find_type_byName(name interface{}) interface{} {
 	}
 }
 
-func Api_find_byName(name interface{}) gorose.Data {
+func Api_find_byName(name any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"name": name,
 	}
 	db.Where(where)
@@ -64,9 +64,9 @@ func Api_select() []gorose.Data {
 	}
 }
 
-func Api_select_kv() map[string]map[string]interface{} {
+func Api_select_kv() map[string]map[string]any {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"show": true,
 	}
 	db.Where(where)
@@ -75,9 +75,9 @@ func Api_select_kv() map[string]map[string]interface{} {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return nil
 	} else {
-		datas := map[string]map[string]interface{}{}
+		datas := map[string]map[string]any{}
 		for _, data := range ret {
-			datas[data["key"].(string)] = map[string]interface{}{
+			datas[data["key"].(string)] = map[string]any{
 				"name": data["name"],
 				"type": data["type"],
 				"show": data["show"],

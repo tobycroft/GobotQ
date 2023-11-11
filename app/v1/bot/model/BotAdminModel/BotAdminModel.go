@@ -8,9 +8,9 @@ import (
 
 const table = "bot_admin"
 
-func Api_insert(bot, qq, end_time interface{}) bool {
+func Api_insert(bot, qq, end_time any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"bot":      bot,
 		"admin":    qq,
 		"end_time": end_time,
@@ -25,9 +25,9 @@ func Api_insert(bot, qq, end_time interface{}) bool {
 	}
 }
 
-func Api_delete(bot, qq interface{}) bool {
+func Api_delete(bot, qq any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot":   bot,
 		"admin": qq,
 	}
@@ -41,9 +41,9 @@ func Api_delete(bot, qq interface{}) bool {
 	}
 }
 
-func Api_inc_endTime(bot, qq interface{}, endTime_incr int) bool {
+func Api_inc_endTime(bot, qq any, endTime_incr int) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"bot":   bot,
 		"admin": qq,
 	}
@@ -57,10 +57,10 @@ func Api_inc_endTime(bot, qq interface{}, endTime_incr int) bool {
 	}
 }
 
-func Api_select(qq interface{}) []gorose.Data {
+func Api_select(qq any) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Fields("id,cname,img,owner,admin,type,active,end_time")
-	where := map[string]interface{}{
+	where := map[string]any{
 		"admin": qq,
 	}
 	db.Where(where)

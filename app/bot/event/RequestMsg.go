@@ -4,28 +4,30 @@ import (
 	"fmt"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/tuuz/Redis"
+	"net"
 	"time"
 )
 
 type Request struct {
+	remoteaddr  net.Addr
 	Comment     string `json:"comment"`
 	Flag        string `json:"flag"`
-	GroupID     int    `json:"group_id"`
+	GroupID     int64  `json:"group_id"`
 	PostType    string `json:"post_type"`
 	RequestType string `json:"request_type"`
-	SelfID      int    `json:"self_id"`
+	SelfID      int64  `json:"self_id"`
 	SubType     string `json:"sub_type"`
-	Time        int    `json:"time"`
-	UserID      int    `json:"user_id"`
+	Time        int64  `json:"time"`
+	UserID      int64  `json:"user_id"`
 }
 
-func RequestMsg(em Request, remoteip string) {
+func (em Request) RequestMsg() {
 
 	self_id := em.SelfID
 	user_id := em.UserID
@@ -45,13 +47,13 @@ func RequestMsg(em Request, remoteip string) {
 	case "friend":
 		botinfo := BotModel.Api_find_byOwnerandBot(user_id, self_id)
 		if len(botinfo) > 0 {
-			api.SetFriendAddRequest(self_id, flag, true, nil)
+			apipost.ApiPost{}.SetFriendAddRequest(self_id, flag, true, nil)
 			go func() {
 				time.Sleep(5 * time.Second)
 				Private.App_refresh_friend_list(self_id)
 			}()
 		} else {
-			go api.SetFriendAddRequest(self_id, flag, false, "你不在机器人的允许列表中")
+			go apipost.ApiPost{}.SetFriendAddRequest(self_id, flag, false, "你不在机器人的允许列表中")
 		}
 		break
 
@@ -60,10 +62,10 @@ func RequestMsg(em Request, remoteip string) {
 		case "add":
 			if groupfunction["auto_join"].(int64) == 1 {
 				if len(GroupBlackListModel.Api_find(group_id, user_id)) > 0 {
-					go api.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
+					go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
 				} else {
 					Redis.String_set("__request_comment__"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), comment, 86400)
-					go api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
+					go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 				}
 			}
 			//auto_verify := true
@@ -78,9 +80,9 @@ func RequestMsg(em Request, remoteip string) {
 
 		case "invite":
 			if len(BotGroupAllowModel.Api_find(self_id, group_id)) > 0 {
-				go api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
+				go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 			} else {
-				go api.SetGroupAddRequestRet(self_id, flag, sub_type, false, "不在群列表中")
+				go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, false, "不在群列表中")
 			}
 			break
 

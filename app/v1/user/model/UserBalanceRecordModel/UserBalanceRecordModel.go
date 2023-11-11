@@ -12,15 +12,15 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func Api_insert(qq, before_balance, amount, after_balance, remark interface{}) bool {
+func Api_insert(qq, before_balance, amount, after_balance, remark any) bool {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_insert(qq, before_balance, amount, after_balance, remark)
 }
 
-func (self *Interface) Api_insert(qq, before_balance, amount, after_balance, remark interface{}) bool {
+func (self *Interface) Api_insert(qq, before_balance, amount, after_balance, remark any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"qq":             qq,
 		"before_balance": before_balance,
 		"amount":         amount,
@@ -38,9 +38,9 @@ func (self *Interface) Api_insert(qq, before_balance, amount, after_balance, rem
 	}
 }
 
-func Api_select(qq interface{}) []gorose.Data {
+func Api_select(qq any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)
@@ -53,15 +53,15 @@ func Api_select(qq interface{}) []gorose.Data {
 	}
 }
 
-func Api_find(qq interface{}) gorose.Data {
+func Api_find(qq any) gorose.Data {
 	var self Interface
 	self.Db = tuuz.Db()
 	return self.Api_find(qq)
 }
 
-func (self *Interface) Api_find(qq interface{}) gorose.Data {
+func (self *Interface) Api_find(qq any) gorose.Data {
 	db := self.Db.Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)

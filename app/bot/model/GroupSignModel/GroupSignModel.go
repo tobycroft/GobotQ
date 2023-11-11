@@ -12,9 +12,9 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
+func (self *Interface) Api_insert(group_id, user_id any) bool {
 	db := self.Db.Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -29,9 +29,9 @@ func (self *Interface) Api_insert(group_id, user_id interface{}) bool {
 	}
 }
 
-func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
+func (self *Interface) Api_find(group_id, user_id any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}
@@ -47,9 +47,9 @@ func (self *Interface) Api_find(group_id, user_id interface{}) gorose.Data {
 	}
 }
 
-func (self *Interface) Api_count(group_id interface{}) int64 {
+func (self *Interface) Api_count(group_id any) int64 {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -64,9 +64,9 @@ func (self *Interface) Api_count(group_id interface{}) int64 {
 	}
 }
 
-func Api_select(group_id interface{}) []gorose.Data {
+func Api_select(group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 	}
 	db.Where(where)
@@ -80,9 +80,9 @@ func Api_select(group_id interface{}) []gorose.Data {
 	}
 }
 
-func (self *Interface) Api_count_userId(group_id, user_id, date interface{}) int64 {
+func (self *Interface) Api_count_userId(group_id, user_id, date any) int64 {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}

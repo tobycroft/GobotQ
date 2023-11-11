@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/bot/api"
+	"main.go/app/bot/apipost"
 	"main.go/app/bot/model/BotFriendAllowModel"
 	"main.go/app/bot/model/FriendListModel"
 	"main.go/common/BaseController"
@@ -30,7 +30,7 @@ func bot_white_friend_list(c *gin.Context) {
 		if len(user_info) > 0 {
 			data[k]["user_info"] = user_info
 		} else {
-			ui, err := api.GetStrangerInfo(self_id, v["user_id"], false)
+			ui, err := apipost.ApiPost{}.GetStrangerInfo(self_id, v["user_id"], false)
 			if err != nil {
 
 			} else {

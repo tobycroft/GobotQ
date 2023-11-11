@@ -8,9 +8,9 @@ import (
 
 const table = "private_auto_reply"
 
-func Api_insert(self_id, qq, mode, key, value interface{}) bool {
+func Api_insert(self_id, qq, mode, key, value any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"self_id": self_id,
 		"qq":      qq,
 		"mode":    mode,
@@ -27,9 +27,9 @@ func Api_insert(self_id, qq, mode, key, value interface{}) bool {
 	}
 }
 
-func Api_find_byKey(key interface{}) gorose.Data {
+func Api_find_byKey(key any) gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"key": key,
 	}
 	db.Where(where)
@@ -42,9 +42,9 @@ func Api_find_byKey(key interface{}) gorose.Data {
 	}
 }
 
-func Api_select_byKey(key interface{}) []gorose.Data {
+func Api_select_byKey(key any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"key": key,
 	}
 	db.Where(where)
@@ -57,9 +57,9 @@ func Api_select_byKey(key interface{}) []gorose.Data {
 	}
 }
 
-func Api_select_semi(self_id interface{}) []gorose.Data {
+func Api_select_semi(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 		"mode":    "semi",
 	}
@@ -73,9 +73,9 @@ func Api_select_semi(self_id interface{}) []gorose.Data {
 	}
 }
 
-func Api_delete(self_id, id interface{}) bool {
+func Api_delete(self_id, id any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"self_id": self_id,
 		"id":      id,
 	}
@@ -89,9 +89,9 @@ func Api_delete(self_id, id interface{}) bool {
 	}
 }
 
-func Api_delete_byQq(qq interface{}) bool {
+func Api_delete_byQq(qq any) bool {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"qq": qq,
 	}
 	db.Where(where)

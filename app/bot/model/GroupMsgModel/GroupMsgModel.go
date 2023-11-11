@@ -8,9 +8,9 @@ import (
 
 const table = "group_msg"
 
-func Api_insert(self_id, user_id, group_id, message, raw_message, message_id, sub_type interface{}) bool {
+func Api_insert(self_id, user_id, group_id, message, raw_message, message_id, sub_type any) bool {
 	db := tuuz.Db().Table(table)
-	data := map[string]interface{}{
+	data := map[string]any{
 		"self_id":     self_id,
 		"user_id":     user_id,
 		"group_id":    group_id,
@@ -29,9 +29,9 @@ func Api_insert(self_id, user_id, group_id, message, raw_message, message_id, su
 	}
 }
 
-func Api_select(group_id, user_id interface{}, limit int) []gorose.Data {
+func Api_select(group_id, user_id any, limit int) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]interface{}{
+	where := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
 	}

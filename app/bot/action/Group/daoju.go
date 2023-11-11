@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func App_group_daoju(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]interface{}, groupfunction map[string]interface{}) {
+func App_group_daoju(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 	switch message {
 	case "清空我的背包":
 		str := clear_backpack(group_id, user_id)
@@ -79,7 +79,7 @@ func list_daoju() string {
 	return str
 }
 
-func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
+func buy_daoju(group_id, user_id, cname any) (string, error) {
 	data := DaojuModel.Api_find_byCname(cname)
 	if len(data) < 1 {
 		return "", errors.New(app_default.Daoju_notfound)
@@ -118,7 +118,7 @@ func buy_daoju(group_id, user_id, cname interface{}) (string, error) {
 		"\r\n" + str, nil
 }
 
-func clear_backpack(group_id, user_id interface{}) string {
+func clear_backpack(group_id, user_id any) string {
 	datas := GroupDaojuModel.Api_select(group_id, user_id)
 	str := "您已经清空了您的背包，如下道具被丢弃："
 	for i, data := range datas {
@@ -138,7 +138,7 @@ func clear_backpack(group_id, user_id interface{}) string {
 	}
 }
 
-func list_my_daoju(group_id, user_id interface{}) string {
+func list_my_daoju(group_id, user_id any) string {
 	datas := GroupDaojuModel.Api_select_have(group_id, user_id)
 	if len(datas) > 0 {
 		str := "您拥有如下道具："
@@ -156,7 +156,7 @@ func list_my_daoju(group_id, user_id interface{}) string {
 	}
 }
 
-func send_daoju(group_id, user_id interface{}, send_to_message string) (string, error) {
+func send_daoju(group_id, user_id any, send_to_message string) (string, error) {
 	qq := service.Serv_get_qq(send_to_message)
 	cq_mess, to_user_id := service.Serv_at_who(send_to_message)
 	qq_num := ""

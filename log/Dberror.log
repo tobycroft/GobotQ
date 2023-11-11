@@ -98,3 +98,5 @@
 2023/11/10 23:34:03 main.go/app/bot/model/BotModel.Api_select  Error 1054 (42S22): Unknown column 'url' in 'where clause'
 2023/11/11 13:35:29 main.go/app/bot/model/BotModel.Api_select  Error 1054 (42S22): Unknown column 'url' in 'where clause'
 2023/11/11 13:42:27 main.go/app/bot/model/BotModel.Api_select  Error 1054 (42S22): Unknown column 'url' in 'where clause'
+2023/11/11 14:22:48 main.go/app/bot/model/BotModel.Api_select  Error 1054 (42S22): Unknown column 'url' in 'where clause'
+2023/11/11 22:52:12 main.go/app/bot/model/BotModel.Api_select  Error 1054 (42S22): Unknown column 'url' in 'where clause'

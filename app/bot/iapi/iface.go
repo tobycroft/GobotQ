@@ -1,6 +1,7 @@
 package iapi
 
-var Api = IfaceApi(Post{})
+// Api : 是IfaceApi的接口实例模式，使用Ws来启用websocket发送模式，接口化操作
+var Api = IfaceApi(Ws{})
 
 type Post struct{}
 type Ws struct{}

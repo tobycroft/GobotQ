@@ -26,7 +26,7 @@ func init() {
 
 func main() {
 	go event.EventListener()
-	cron.BotInfoCron()
+	//cron.BotInfoCron()
 	//go cron.BaseCron()
 	//go cron.Refresh_friend_list()
 	//

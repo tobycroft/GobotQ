@@ -27,10 +27,11 @@ type MetaEventStruct struct {
 func (self MetaEventStruct) MetaEvent() {
 	switch self.MetaEventType {
 	case "lifecycle":
-		//self.SelfId
+		fmt.Println(self.MetaEventType, self.SelfId)
 		break
 
 	case "heartbeat":
+		fmt.Println(self.MetaEventType, self.SelfId)
 		break
 
 	default:

@@ -11,11 +11,10 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.7.1
-	github.com/json-iterator/go v1.1.12
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/tobycroft/Calc v1.3.5
-	github.com/tobycroft/TuuzNet v1.2.3
+	github.com/tobycroft/TuuzNet v1.2.4
 	github.com/tobycroft/gorose-pro v1.12.12
 )
 
@@ -36,6 +35,7 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

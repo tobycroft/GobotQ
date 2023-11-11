@@ -3,6 +3,7 @@ package iapi
 import (
 	"errors"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -52,28 +53,32 @@ func (api Post) DeleteMsg(self_id, message_id any) (bool, error) {
 	}
 }
 func (api Ws) DeleteMsg(self_id, message_id any) (bool, error) {
-	post := map[string]any{
-		"message_id": message_id,
-	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/delete_msg", nil, post, nil, nil).RetString()
+	post := map[string]any{
+		"message_id": message_id,
+	}
+	data, err := sonic.Marshal(sendStruct{
+		Action: "delete_msg",
+		Params: post,
+		Echo: echo{
+			Action: "delete_msg",
+			SelfId: Calc.Any2Int64(self_id),
+		},
+	})
 	if err != nil {
 		return false, err
 	}
-	var dls DefaultRetStruct
+	conn, ok := ClientToConn.Load(self_id)
+	if !ok {
+		return false, err
+	}
+	Net.WsServer_WriteChannel <- Net.WsData{
+		Conn: conn.(*websocket.Conn), Message: data,
+	}
+	return true, nil
 
-	err = sonic.UnmarshalString(data, &dls)
-	if err != nil {
-		return false, err
-	}
-	if dls.Retcode == 0 {
-		return true, nil
-	} else {
-		Log.Crrs(errors.New(dls.Wording), "message:"+Calc.Any2String(message_id))
-		return false, errors.New(dls.Wording)
-	}
 }

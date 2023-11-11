@@ -74,11 +74,10 @@ func (api Ws) DeleteMsg(self_id, message_id any) (bool, error) {
 	}
 	conn, ok := ClientToConn.Load(self_id)
 	if !ok {
-		return false, err
+		return false, errors.New("ClientNotFound")
 	}
 	Net.WsServer_WriteChannel <- Net.WsData{
 		Conn: conn.(*websocket.Conn), Message: data,
 	}
 	return true, nil
-
 }

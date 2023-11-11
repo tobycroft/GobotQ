@@ -3,6 +3,7 @@ package iapi
 import (
 	"errors"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -46,15 +47,23 @@ func (api Ws) Getfriendlist(self_id any) ([]FriendList, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return nil, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_friend_list", nil, nil, nil, nil).RetString()
+	data, err := sonic.Marshal(sendStruct{
+		Action: "get_friend_list",
+		Params: nil,
+		Echo: echo{
+			Action: "get_friend_list",
+			SelfId: Calc.Any2Int64(self_id),
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
-	var gfl FriendListRet
-
-	err = sonic.UnmarshalString(data, &gfl)
-	if err != nil {
-		return nil, err
+	conn, ok := ClientToConn.Load(self_id)
+	if !ok {
+		return nil, errors.New("ClientNotFound")
 	}
-	return gfl.Data, nil
+	Net.WsServer_WriteChannel <- Net.WsData{
+		Conn: conn.(*websocket.Conn), Message: data,
+	}
+	return nil, err
 }

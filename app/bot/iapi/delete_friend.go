@@ -59,7 +59,7 @@ func (api Ws) DeleteFriend(self_id, user_id any) (bool, error) {
 	}
 	conn, ok := ClientToConn.Load(self_id)
 	if !ok {
-		return false, err
+		return false, errors.New("ClientNotFound")
 	}
 	Net.WsServer_WriteChannel <- Net.WsData{
 		Conn: conn.(*websocket.Conn), Message: data,

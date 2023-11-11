@@ -10,7 +10,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Api) DeleteFriend(self_id, friend_id any) (bool, error) {
+func (api Post) DeleteFriend(self_id, friend_id any) (bool, error) {
 	post := map[string]any{
 		"friend_id": friend_id,
 	}

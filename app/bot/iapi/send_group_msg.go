@@ -16,7 +16,7 @@ import (
 
 var Group_send_chan = make(chan GroupSendStruct, 100)
 
-func (api Api) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool) {
+func (api Post) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.Self_id = Self_id
 	gss.Group_id = Group_id
@@ -52,7 +52,7 @@ type GroupSendStruct struct {
 	AutoRetract bool
 }
 
-func (api Api) Send_group() {
+func (api Post) Send_group() {
 	for gss := range Group_send_chan {
 		if Redis.CheckExists("SendCheck:" + gss.Message) {
 			continue
@@ -97,7 +97,7 @@ func (api Ws) Send_group() {
 	}
 }
 
-func (api Api) sendgroupmsg(gss GroupSendStruct) (Message, error) {
+func (api Post) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 	msg := url.QueryEscape(gss.Message)
 	post := map[string]any{
 		"group_id":    gss.Group_id,

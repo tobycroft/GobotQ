@@ -15,7 +15,7 @@ type KickGroupMemberRet struct {
 	Ret string `json:"ret"`
 }
 
-func (api Api) SetGroupKick(self_id, group_id, user_id any, reject_add_request bool) (bool, error) {
+func (api Post) SetGroupKick(self_id, group_id, user_id any, reject_add_request bool) (bool, error) {
 	post := map[string]any{
 		"group_id":           group_id,
 		"user_id":            user_id,

@@ -11,7 +11,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Api) Setgroupcard(self_id, group_id, user_id, card any) (bool, error) {
+func (api Post) Setgroupcard(self_id, group_id, user_id, card any) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,

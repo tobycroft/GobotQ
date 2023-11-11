@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"main.go/app/bot/action/Group"
-	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupListModel"
@@ -48,8 +47,6 @@ func BaseCron() {
 		time.Sleep(3600 * time.Second)
 	}
 }
-
-var api = iapi.IfaceApi(iapi.Api{})
 
 func BotInfoCron() {
 

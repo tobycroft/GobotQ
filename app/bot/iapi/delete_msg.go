@@ -25,7 +25,7 @@ type DefaultRetStruct struct {
 	Wording string `json:"wording"`
 }
 
-func (api Api) DeleteMsg(self_id, message_id any) (bool, error) {
+func (api Post) DeleteMsg(self_id, message_id any) (bool, error) {
 	post := map[string]any{
 		"message_id": message_id,
 	}

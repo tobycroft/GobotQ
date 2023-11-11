@@ -53,13 +53,13 @@ func App_ban_user(self_id, group_id, user_id any, auto_retract bool, groupfuncti
 			fmt.Println("当前积分", bal, balance_decr, balance_left)
 			if balance_left >= 0 {
 				balance.Api_decr(group_id, user_id, math.Abs(balance_decr))
-				go iapi.Api{}.Sendgroupmsg(self_id, group_id, at+Calc.Any2String(time+1)+"这是你第:"+"次扣分，扣除"+Calc.Any2String(balance_decr)+"分\n"+"本次扣分原因："+reason+"\n你还剩下："+
+				go iapi.Post{}.Sendgroupmsg(self_id, group_id, at+Calc.Any2String(time+1)+"这是你第:"+"次扣分，扣除"+Calc.Any2String(balance_decr)+"分\n"+"本次扣分原因："+reason+"\n你还剩下："+
 					""+Calc.Any2String(balance_left)+"分", auto_retract)
 				return
 			}
 		}
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次，接受惩罚\n"+"本次惩罚原因："+reason+"\n你还剩下："+Calc.Any2String(left_time)+"点生命值", auto_retract)
-		iapi.Api{}.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, at+"这是你第:"+Calc.Any2String(time+1)+"次，接受惩罚\n"+"本次惩罚原因："+reason+"\n你还剩下："+Calc.Any2String(left_time)+"点生命值", auto_retract)
+		iapi.Post{}.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 	} else {
 		App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, reason+"\n且他已经没有生命值了")
 	}
@@ -89,12 +89,12 @@ func App_kick_user(self_id, group_id, user_id any, auto_retract bool, groupfunct
 			GroupBlackListModel.Api_insert(group_id, user_id, self_id)
 		}
 		gm := GroupMemberModel.Api_find(group_id, user_id)
-		iapi.Api{}.SetGroupKick(self_id, group_id, user_id, false)
+		iapi.Post{}.SetGroupKick(self_id, group_id, user_id, false)
 		if len(gm) > 0 {
 			nickname := Calc.Any2String(gm["nickname"])
-			go iapi.Api{}.Sendgroupmsg(self_id, group_id, nickname+"被T出"+str+"，原因为："+reason, auto_retract)
+			go iapi.Post{}.Sendgroupmsg(self_id, group_id, nickname+"被T出"+str+"，原因为："+reason, auto_retract)
 		} else {
-			go iapi.Api{}.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"被T出"+str+"，原因为："+reason, auto_retract)
+			go iapi.Post{}.Sendgroupmsg(self_id, group_id, Calc.Any2String(user_id)+"被T出"+str+"，原因为："+reason, auto_retract)
 		}
 	} else {
 		if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
@@ -102,8 +102,8 @@ func App_kick_user(self_id, group_id, user_id any, auto_retract bool, groupfunct
 		} else {
 			if GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400) {
 				at := service.Serv_at(user_id)
-				iapi.Api{}.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
-				go iapi.Api{}.Sendgroupmsg(self_id, group_id, at+"你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁", auto_retract)
+				iapi.Post{}.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
+				go iapi.Post{}.Sendgroupmsg(self_id, group_id, at+"你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁", auto_retract)
 			}
 		}
 	}
@@ -120,13 +120,13 @@ func App_drcrease_member(self_id, group_id, user_id any, groupfunction map[strin
 		if group_list_data["max_member_count"].(int64) < group_member_count {
 			group_member_datas := GroupMemberModel.Api_select_byGroupId(group_id, "last_sent_time desc", int(group_list_data["max_member_count"].(int64)-20), 2)
 			if len(group_member_datas) > 0 {
-				go iapi.Api{}.Sendgroupmsg(self_id, group_id, "本群将被清除"+Calc.Any2String(len(group_member_datas))+
+				go iapi.Post{}.Sendgroupmsg(self_id, group_id, "本群将被清除"+Calc.Any2String(len(group_member_datas))+
 					"人，\n第一个被T出的人为:"+Calc.Any2String(group_member_datas[0]["nickname"])+"，他最后一次说话是在："+
 					Date.Date_format_second(group_member_datas[0]["last_date"].(time.Time))+
 					"\n最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"])+
 					"，他最后一次说话是在："+Date.Date_format_second(group_member_datas[len(group_member_datas)-1]["last_date"].(time.Time)), false)
 				for _, data := range group_member_datas {
-					ok, err := iapi.Api{}.SetGroupKick(self_id, group_id, data["user_id"], false)
+					ok, err := iapi.Post{}.SetGroupKick(self_id, group_id, data["user_id"], false)
 					if err != nil {
 						fmt.Println(err)
 					} else {
@@ -136,12 +136,12 @@ func App_drcrease_member(self_id, group_id, user_id any, groupfunction map[strin
 					}
 				}
 			} else {
-				go iapi.Api{}.Sendgroupmsg(self_id, group_id, "没有需要清理的人", true)
+				go iapi.Post{}.Sendgroupmsg(self_id, group_id, "没有需要清理的人", true)
 			}
 		} else {
-			go iapi.Api{}.Sendgroupmsg(self_id, group_id, "未达到清理下限无需调用", true)
+			go iapi.Post{}.Sendgroupmsg(self_id, group_id, "未达到清理下限无需调用", true)
 		}
 	} else {
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, "未找到当前群信息", true)
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, "未找到当前群信息", true)
 	}
 }

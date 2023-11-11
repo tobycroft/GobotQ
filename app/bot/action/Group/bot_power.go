@@ -14,7 +14,7 @@ func BotPower(group_id, self_id any) string {
 }
 
 func BotPowerRefresh(group_id, self_id any) string {
-	gm, err := iapi.Api{}.GetGroupMemberInfo(self_id, group_id, self_id)
+	gm, err := iapi.Post{}.GetGroupMemberInfo(self_id, group_id, self_id)
 	if err != nil {
 
 	} else {

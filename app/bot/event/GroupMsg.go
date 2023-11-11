@@ -145,7 +145,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	switch new_text {
 
 	case "":
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "交易":
@@ -535,7 +535,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "atme":
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "sign":
@@ -631,7 +631,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "自动回复":
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, message, auto_retract)
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, message, auto_retract)
 		break
 
 	default:
@@ -670,9 +670,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					go func(ret iapi.Struct_Retract) {
 						iapi.Retract_instant <- ret
 					}(ret)
-					go iapi.Api{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
+					go iapi.Post{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
 				} else {
-					go iapi.Api{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+					go iapi.Post{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 				}
 			}
 
@@ -685,7 +685,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				go func(ret iapi.Struct_Retract) {
 					iapi.Retract_instant <- ret
 				}(ret)
-				//go api.Api{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
+				//go api.Post{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 			}
 		}(self_id, group_id, user_id, groupfunction)
 

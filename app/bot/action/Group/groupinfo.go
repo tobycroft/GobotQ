@@ -6,7 +6,7 @@ import (
 )
 
 func App_refresh_groupinfo(self_id, group_id int64) {
-	gl, err := iapi.Api{}.Getgrouplist(self_id)
+	gl, err := iapi.Post{}.Getgrouplist(self_id)
 	if err != nil {
 
 	} else {

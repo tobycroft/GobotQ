@@ -1,5 +1,10 @@
 package iapi
 
+var Api = IfaceApi(Post{})
+
+type Post struct{}
+type Ws struct{}
+
 type IfaceApi interface {
 	DeleteFriend(self_id, friend_id any) (bool, error)
 	DeleteMsg(self_id, message_id any) (bool, error)
@@ -11,7 +16,9 @@ type IfaceApi interface {
 	GetLoginInfo(self_id any) (LoginInfo, error)
 	GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, error)
 	Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool)
+	Send_group()
 	Sendprivatemsg(Self_id, UserId, GroupId any, Message string, AutoRetract bool)
+	Send_private()
 	SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error)
 	SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error)
 	SetGroupAdmin(self_id, group_id, user_id any, enable bool) (bool, error)

@@ -15,7 +15,7 @@ type SetGroupWholeMuteRet struct {
 	Ret string `json:"ret"`
 }
 
-func (api Api) SetGroupWholeBan(self_id, group_id any, enable bool) (bool, error) {
+func (api Post) SetGroupWholeBan(self_id, group_id any, enable bool) (bool, error) {
 	post := map[string]any{
 		"self_id":  self_id,
 		"group_id": group_id,

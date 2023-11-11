@@ -39,7 +39,7 @@ type GroupInfo struct {
 	MemberCount     int64  `json:"member_count"`
 }
 
-func (api Api) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
+func (api Post) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"no_cache": false,

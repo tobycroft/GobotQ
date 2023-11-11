@@ -12,7 +12,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Api) SetGroupLeave(self_id, group_id any) (bool, error) {
+func (api Post) SetGroupLeave(self_id, group_id any) (bool, error) {
 	post := map[string]any{
 		"group_id":   group_id,
 		"is_dismiss": true,

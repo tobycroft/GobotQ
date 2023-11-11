@@ -34,7 +34,7 @@ type GroupMemberList struct {
 	UserID          int64  `json:"user_id"`
 }
 
-func (api Api) Getgroupmemberlist(self_id, group_id any) ([]GroupMemberList, error) {
+func (api Post) Getgroupmemberlist(self_id, group_id any) ([]GroupMemberList, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"no_cache": true,

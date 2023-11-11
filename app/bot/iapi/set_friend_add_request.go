@@ -11,7 +11,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Api) SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error) {
+func (api Post) SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error) {
 	post := map[string]any{
 		"flag":    flag,
 		"approve": approve,

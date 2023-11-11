@@ -26,7 +26,7 @@ type GroupList struct {
 	MemberCount     int64  `json:"member_count"`
 }
 
-func (api Api) Getgrouplist(self_id any) ([]GroupList, error) {
+func (api Post) Getgrouplist(self_id any) ([]GroupList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

@@ -53,7 +53,7 @@ func reverify(self_id, group_id, user_id any, send_to_message string, kick, forc
 		return "", errors.New("群成员不在群内")
 	}
 	user := GroupBanPermenentModel.Api_find(group_id, member["user_id"])
-	go iapi.Api{}.SetGroupBan(self_id, group_id, member["user_id"], 0)
+	go iapi.Post{}.SetGroupBan(self_id, group_id, member["user_id"], 0)
 	if len(user) > 0 || force {
 		if len(user) < 1 {
 			GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
@@ -65,18 +65,18 @@ func reverify(self_id, group_id, user_id any, send_to_message string, kick, forc
 			return "", err
 		}
 		at := service.Serv_at(member["user_id"])
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 		go func(self_id, group_id, user_id any, kick bool) {
 			time.Sleep(120 * time.Second)
 			ok, err := Redis.String_getBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 			if err != nil {
 			} else {
 				if ok {
-					go iapi.Api{}.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
+					go iapi.Post{}.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
 					if kick {
-						iapi.Api{}.SetGroupKick(self_id, group_id, user_id, false)
+						iapi.Post{}.SetGroupKick(self_id, group_id, user_id, false)
 					} else {
-						iapi.Api{}.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
+						iapi.Post{}.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
 					}
 				}
 			}

@@ -24,7 +24,7 @@ type Message struct {
 	MessageId int64 `json:"message_id"`
 }
 
-func (api Api) Sendprivatemsg(Self_id, UserId, GroupId any, Message string, AutoRetract bool) {
+func (api Post) Sendprivatemsg(Self_id, UserId, GroupId any, Message string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.Self_id = Self_id
 	pss.UserId = UserId
@@ -63,7 +63,7 @@ type PrivateSendStruct struct {
 	AutoRetract bool
 }
 
-func (api Api) Send_private() {
+func (api Post) Send_private() {
 	for pss := range Private_send_chan {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			continue
@@ -102,7 +102,7 @@ func (api Ws) Send_private() {
 	}
 }
 
-func (api Api) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
+func (api Post) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	post := map[string]any{
 		"user_id":     pss.UserId,
 		"message":     pss.Message,

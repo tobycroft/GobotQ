@@ -10,8 +10,8 @@ func AutoMessage(self_id, group_id, user_id any, message string, groupfunction m
 		AutoRetract = true
 	}
 	if groupfunction["all_send_private"].(int64) == 1 {
-		go iapi.Api{}.Sendprivatemsg(self_id, user_id, group_id, message, AutoRetract)
+		go iapi.Post{}.Sendprivatemsg(self_id, user_id, group_id, message, AutoRetract)
 	} else {
-		go iapi.Api{}.Sendgroupmsg(self_id, group_id, message, AutoRetract)
+		go iapi.Post{}.Sendgroupmsg(self_id, group_id, message, AutoRetract)
 	}
 }

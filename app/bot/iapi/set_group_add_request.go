@@ -11,7 +11,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Api) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error) {
+func (api Post) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error) {
 	post := map[string]any{
 		"flag":     flag,
 		"sub_type": sub_type,

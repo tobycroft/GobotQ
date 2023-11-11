@@ -96,5 +96,4 @@ func (api Ws) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
 		Conn: conn.(*websocket.Conn), Message: data,
 	}
 	return GroupInfo{}, err
-
 }

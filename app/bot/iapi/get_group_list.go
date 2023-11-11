@@ -3,6 +3,7 @@ package iapi
 import (
 	"errors"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -50,15 +51,23 @@ func (api Ws) Getgrouplist(self_id any) ([]GroupList, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return nil, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_group_list", nil, nil, nil, nil).RetString()
+	data, err := sonic.Marshal(sendStruct{
+		Action: "get_group_list",
+		Params: nil,
+		Echo: echo{
+			Action: "get_group_list",
+			SelfId: Calc.Any2Int64(self_id),
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
-	var gls GroupListRet
-
-	err = sonic.UnmarshalString(data, &gls)
-	if err != nil {
-		return nil, err
+	conn, ok := ClientToConn.Load(self_id)
+	if !ok {
+		return nil, errors.New("ClientNotFound")
 	}
-	return gls.Data, nil
+	Net.WsServer_WriteChannel <- Net.WsData{
+		Conn: conn.(*websocket.Conn), Message: data,
+	}
+	return nil, err
 }

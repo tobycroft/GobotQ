@@ -3,7 +3,7 @@ package Group
 import (
 	"errors"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/apipost"
+	"main.go/app/bot/iapi/apipost"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupBanModel"
 	"main.go/app/bot/model/GroupSignModel"

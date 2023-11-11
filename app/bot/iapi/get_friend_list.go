@@ -1,4 +1,4 @@
-package iface
+package iapi
 
 type FriendListRet struct {
 	Data    []FriendList `json:"data"`

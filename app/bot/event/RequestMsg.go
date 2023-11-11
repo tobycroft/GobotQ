@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
-	"main.go/app/bot/apipost"
+	"main.go/app/bot/iapi/apipost"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBlackListModel"
@@ -47,13 +47,13 @@ func (em Request) RequestMsg() {
 	case "friend":
 		botinfo := BotModel.Api_find_byOwnerandBot(user_id, self_id)
 		if len(botinfo) > 0 {
-			apipost.ApiPost{}.SetFriendAddRequest(self_id, flag, true, nil)
+			apipost.Api{}.SetFriendAddRequest(self_id, flag, true, nil)
 			go func() {
 				time.Sleep(5 * time.Second)
 				Private.App_refresh_friend_list(self_id)
 			}()
 		} else {
-			go apipost.ApiPost{}.SetFriendAddRequest(self_id, flag, false, "你不在机器人的允许列表中")
+			go apipost.Api{}.SetFriendAddRequest(self_id, flag, false, "你不在机器人的允许列表中")
 		}
 		break
 
@@ -62,10 +62,10 @@ func (em Request) RequestMsg() {
 		case "add":
 			if groupfunction["auto_join"].(int64) == 1 {
 				if len(GroupBlackListModel.Api_find(group_id, user_id)) > 0 {
-					go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
+					go apipost.Api{}.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
 				} else {
 					Redis.String_set("__request_comment__"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), comment, 86400)
-					go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
+					go apipost.Api{}.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 				}
 			}
 			//auto_verify := true
@@ -80,9 +80,9 @@ func (em Request) RequestMsg() {
 
 		case "invite":
 			if len(BotGroupAllowModel.Api_find(self_id, group_id)) > 0 {
-				go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
+				go apipost.Api{}.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 			} else {
-				go apipost.ApiPost{}.SetGroupAddRequestRet(self_id, flag, sub_type, false, "不在群列表中")
+				go apipost.Api{}.SetGroupAddRequestRet(self_id, flag, sub_type, false, "不在群列表中")
 			}
 			break
 

@@ -26,7 +26,7 @@ type UserInfo struct {
 	UserID    int64  `json:"user_id"`
 }
 
-func (api ApiPost) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, error) {
+func (api Api) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, error) {
 	post := map[string]any{
 		"user_id":  user_id,
 		"no_cache": no_cache,

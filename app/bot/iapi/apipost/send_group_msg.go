@@ -1,4 +1,4 @@
-package api
+package apipost
 
 import (
 	"errors"
@@ -16,7 +16,7 @@ import (
 
 var Group_send_chan = make(chan GroupSendStruct, 100)
 
-func (ws Ws) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool) {
+func (api Api) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.Self_id = Self_id
 	gss.Group_id = Group_id
@@ -38,13 +38,13 @@ type GroupSendStruct struct {
 	AutoRetract bool
 }
 
-func (ws Ws) Send_group() {
+func (api Api) Send_group() {
 	for gss := range Group_send_chan {
 		if Redis.CheckExists("SendCheck:" + gss.Message) {
 			continue
 		}
 		Redis.String_set("SendCheck:"+gss.Message, true, 110)
-		gmr, err := sendgroupmsg(gss)
+		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 
 		} else {
@@ -61,7 +61,7 @@ func (ws Ws) Send_group() {
 	}
 }
 
-func sendgroupmsg(gss GroupSendStruct) (Message, error) {
+func (api Api) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 	msg := url.QueryEscape(gss.Message)
 	post := map[string]any{
 		"group_id":    gss.Group_id,

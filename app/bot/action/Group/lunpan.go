@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupBalanceAction"
-	"main.go/app/bot/apipost"
+	"main.go/app/bot/iapi/apipost"
 	"main.go/app/bot/model/DaojuModel"
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupLunpanModel"

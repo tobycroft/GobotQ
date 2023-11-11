@@ -22,7 +22,7 @@ type FriendList struct {
 	UserID   int64  `json:"user_id"`
 }
 
-func (api ApiPost) Getfriendlist(self_id any) ([]FriendList, error) {
+func (api Api) Getfriendlist(self_id any) ([]FriendList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

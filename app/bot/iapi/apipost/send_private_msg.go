@@ -1,4 +1,4 @@
-package api
+package apipost
 
 import (
 	"errors"
@@ -24,7 +24,7 @@ type Message struct {
 	MessageId int64 `json:"message_id"`
 }
 
-func (ws Ws) Sendprivatemsg(Self_id, UserId, GroupId any, Message string, AutoRetract bool) {
+func (api Api) Sendprivatemsg(Self_id, UserId, GroupId any, Message string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.Self_id = Self_id
 	pss.UserId = UserId
@@ -48,7 +48,7 @@ type PrivateSendStruct struct {
 	AutoRetract bool
 }
 
-func Send_private() {
+func (api Api) Send_private() {
 	for pss := range Private_send_chan {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			continue

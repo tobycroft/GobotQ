@@ -1,4 +1,4 @@
-package api
+package apipost
 
 import (
 	"errors"
@@ -11,22 +11,18 @@ import (
 	"main.go/tuuz/Log"
 )
 
-type MuteGroupmeMberRet struct {
-	Ret string `json:"ret"`
-}
-
-func (ws Ws) SetGroupBan(self_id, group_id, user_id any, duration float64) (bool, error) {
+func (api Api) SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error) {
 	post := map[string]any{
-		"group_id": group_id,
-		"user_id":  user_id,
-		"duration": duration,
+		"flag":    flag,
+		"approve": approve,
+		"remark":  remark,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
-		Log.Crrs(errors.New("bot:"+Calc.Any2String(self_id)), tuuz.FUNCTION_ALL())
+		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_ban", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_friend_add_request", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

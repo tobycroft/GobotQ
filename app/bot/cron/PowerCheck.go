@@ -2,7 +2,7 @@ package cron
 
 import (
 	"main.go/app/bot/action/Group"
-	"main.go/app/bot/apipost"
+	"main.go/app/bot/iapi/apipost"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"time"
@@ -24,16 +24,16 @@ func power_check() {
 			group_id := group["group_id"]
 			role := Group.BotPowerRefresh(group_id, self_id)
 			if role == "member" {
-				go apipost.ApiPost{}.Sendgroupmsg(self_id, group_id, "额，如果以后有需要管理，可以再叫我来啊？", false)
-				apipost.ApiPost{}.SetGroupLeave(self_id, group_id)
+				go apipost.Api{}.Sendgroupmsg(self_id, group_id, "额，如果以后有需要管理，可以再叫我来啊？", false)
+				apipost.Api{}.SetGroupLeave(self_id, group_id)
 				GroupMemberModel.Api_delete_byGid(self_id, group_id)
 			} else if role == "owner" {
 				gms := GroupMemberModel.Api_select_admin(self_id, group_id)
 				for _, gm := range gms {
-					apipost.ApiPost{}.SetGroupAdmin(self_id, group_id, gm["user_id"], false)
+					apipost.Api{}.SetGroupAdmin(self_id, group_id, gm["user_id"], false)
 				}
-				apipost.ApiPost{}.SetGroupWholeBan(self_id, group_id, true)
-				apipost.ApiPost{}.SetGroupLeave(self_id, group_id)
+				apipost.Api{}.SetGroupWholeBan(self_id, group_id, true)
+				apipost.Api{}.SetGroupLeave(self_id, group_id)
 			}
 		}
 	}

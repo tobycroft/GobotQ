@@ -1,12 +1,12 @@
 package Group
 
 import (
-	"main.go/app/bot/apipost"
+	"main.go/app/bot/iapi/apipost"
 	"main.go/app/bot/model/GroupListModel"
 )
 
 func App_refresh_groupinfo(self_id, group_id int64) {
-	gl, err := apipost.ApiPost{}.Getgrouplist(self_id)
+	gl, err := apipost.Api{}.Getgrouplist(self_id)
 	if err != nil {
 
 	} else {

@@ -11,18 +11,18 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api ApiPost) SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error) {
+func (api Api) Setgroupcard(self_id, group_id, user_id, card any) (bool, error) {
 	post := map[string]any{
-		"flag":    flag,
-		"approve": approve,
-		"remark":  remark,
+		"group_id": group_id,
+		"user_id":  user_id,
+		"card":     card,
 	}
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_friend_add_request", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_card", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

@@ -127,11 +127,10 @@ func (es EventStruct) EventRouter() {
 		op.remoteaddr = es.remoteaddr
 		err := sonic.UnmarshalString(es.json, &op)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("event-notfound:", es.json)
 		} else {
 			op.OperationRouter()
 		}
-		fmt.Println("event-notfound:", es.json)
 		LogRecvModel.Api_insert(es.json)
 		break
 	}

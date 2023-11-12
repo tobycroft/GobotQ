@@ -57,7 +57,7 @@ func (api Ws) Getgrouplist(self_id any) ([]GroupList, error) {
 	}
 	data, err := sonic.Marshal(sendStruct{
 		Action: "get_group_list",
-		Params: nil,
+		Params: map[string]any{},
 		Echo: echo{
 			Action: "get_group_list",
 			SelfId: Calc.Any2Int64(self_id),

@@ -19,6 +19,7 @@ func EventListener() {
 		if c.Status {
 			var es EventStruct
 			es.json = string(c.Message)
+			//fmt.Println(es.json)
 			err := sonic.UnmarshalString(es.json, &es)
 			if err != nil {
 				go LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())

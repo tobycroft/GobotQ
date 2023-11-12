@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"main.go/app/bot/iapi"
 	"net"
 )
@@ -28,19 +29,19 @@ type MetaEventStruct struct {
 func (self MetaEventStruct) MetaEvent() {
 	switch self.MetaEventType {
 	case "lifecycle":
-		iapi.Api.GetLoginInfo(self.SelfId)
+		_, err := iapi.Api.GetLoginInfo(self.SelfId)
+		if err != nil {
+			log.Println(err)
+		}
 		fmt.Println(self.MetaEventType, self.SelfId)
 		break
 
 	case "heartbeat":
-		//iapi.Api.GetLoginInfo(self.SelfId)
 		fmt.Println(self.MetaEventType, self.SelfId)
 		break
 
 	default:
 		fmt.Println("request no route", self)
 		break
-
 	}
-
 }

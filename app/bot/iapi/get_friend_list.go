@@ -55,7 +55,7 @@ func (api Ws) Getfriendlist(self_id any) ([]FriendList, error) {
 	}
 	data, err := sonic.Marshal(sendStruct{
 		Action: "get_friend_list",
-		Params: nil,
+		Params: map[string]any{},
 		Echo: echo{
 			Action: "get_friend_list",
 			SelfId: Calc.Any2Int64(self_id),

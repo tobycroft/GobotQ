@@ -52,7 +52,7 @@ func (api Ws) GetLoginInfo(self_id any) (LoginInfo, error) {
 	}
 	data, err := sonic.Marshal(sendStruct{
 		Action: "get_login_info",
-		Params: nil,
+		Params: map[string]any{},
 		Echo: echo{
 			Action: "get_login_info",
 			SelfId: Calc.Any2Int64(self_id),
@@ -63,7 +63,7 @@ func (api Ws) GetLoginInfo(self_id any) (LoginInfo, error) {
 	}
 	conn, ok := ClientToConn.Load(self_id)
 	if !ok {
-		return LoginInfo{}, err
+		return LoginInfo{}, errors.New("ClientNotFound")
 	}
 	Net.WsServer_WriteChannel <- Net.WsData{
 		Conn: conn.(*websocket.Conn), Message: data,

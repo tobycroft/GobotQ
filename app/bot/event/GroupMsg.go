@@ -35,7 +35,7 @@ type GroupMessageStruct struct {
 	remoteaddr  net.Addr
 	Anonymous   any     `json:"anonymous"`
 	Font        int64   `json:"font"`
-	GroupID     int64   `json:"group_id"`
+	GroupId     int64   `json:"group_id"`
 	Message     string  `json:"message"`
 	MessageID   int64   `json:"message_id"`
 	MessageSeq  int64   `json:"message_seq"`
@@ -71,7 +71,7 @@ func (gm GroupMessageStruct) GroupMsg() {
 
 	self_id := gm.SelfID
 	user_id := gm.UserID
-	group_id := gm.GroupID
+	group_id := gm.GroupId
 	message_id := gm.MessageID
 	message := gm.Message
 	raw_message := gm.RawMessage
@@ -145,7 +145,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	switch new_text {
 
 	case "":
-		go iapi.Post{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "交易":
@@ -535,7 +535,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "atme":
-		go iapi.Post{}.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+		go iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
 		break
 
 	case "sign":
@@ -631,7 +631,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "自动回复":
-		go iapi.Post{}.Sendgroupmsg(self_id, group_id, message, auto_retract)
+		go iapi.Api.Sendgroupmsg(self_id, group_id, message, auto_retract)
 		break
 
 	default:
@@ -670,9 +670,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					go func(ret iapi.Struct_Retract) {
 						iapi.Retract_instant <- ret
 					}(ret)
-					go iapi.Post{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
+					go iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
 				} else {
-					go iapi.Post{}.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+					go iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 				}
 			}
 

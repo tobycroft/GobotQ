@@ -11,10 +11,10 @@ const table = "group_member"
 type GroupMember struct {
 	SelfId       any    `gorose:"self_id"`
 	Card         string `gorose:"card"`
-	GroupID      any    `gorose:"group_id"`
+	GroupId      any    `gorose:"group_id"`
 	JoinTime     int64  `gorose:"join_time"`
 	LastSentTime int64  `gorose:"last_sent_time"`
-	Level        string `gorose:"level"`
+	Level        int64  `gorose:"level"`
 	Nickname     string `gorose:"nickname"`
 	Role         string `gorose:"role"`
 	Title        string `gorose:"title"`

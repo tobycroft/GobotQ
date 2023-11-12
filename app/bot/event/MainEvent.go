@@ -128,10 +128,10 @@ func (es EventStruct) EventRouter() {
 		err := sonic.UnmarshalString(es.json, &op)
 		if err != nil {
 			fmt.Println("event-notfound:", es.json)
+			LogRecvModel.Api_insert(es.json)
 		} else {
 			op.OperationRouter()
 		}
-		LogRecvModel.Api_insert(es.json)
 		break
 	}
 }

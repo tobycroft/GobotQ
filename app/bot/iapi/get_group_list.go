@@ -18,17 +18,17 @@ type GroupListRet struct {
 }
 
 type GroupList struct {
-	GroupId        int    `json:"group_id"`
+	GroupId        int64  `json:"group_id"`
 	GroupName      string `json:"group_name"`
 	GroupRemark    string `json:"group_remark"`
-	GroupUin       int    `json:"group_uin"`
+	GroupUin       int64  `json:"group_uin"`
 	Admins         []int  `json:"admins"`
 	ClassText      string `json:"class_text"`
 	IsFrozen       bool   `json:"is_frozen"`
-	MaxMember      int    `json:"max_member"`
-	MemberNum      int    `json:"member_num"`
-	MemberCount    int    `json:"member_count"`
-	MaxMemberCount int    `json:"max_member_count"`
+	MaxMember      int64  `json:"max_member"`
+	MemberNum      int64  `json:"member_num"`
+	MemberCount    int64  `json:"member_count"`
+	MaxMemberCount int64  `json:"max_member_count"`
 }
 
 func (api Post) Getgrouplist(self_id any) ([]GroupList, error) {

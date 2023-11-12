@@ -26,18 +26,18 @@ func BaseCron() {
 				for _, gll := range gl {
 					var gs GroupListModel.GroupList
 					gs.Self_id = bot["self_id"]
-					gs.Group_id = gll.GroupID
+					gs.Group_id = gll.GroupId
 					gs.Group_name = gll.GroupName
-					gs.Group_memo = gll.GroupMemo
+					gs.Group_memo = gll.GroupRemark
 					gs.Member_count = gll.MemberCount
 					gs.Max_member_count = gll.MaxMemberCount
 					gss = append(gss, gs)
 					var gm Group.App_group_member
-					gm.GroupId = gll.GroupID
+					gm.GroupId = gll.GroupId
 					gm.SelfId = bot["self_id"]
 					Group.Chan_refresh_group_member <- gm
-					if len(GroupFunctionModel.Api_find(gll.GroupID)) < 1 {
-						GroupFunctionModel.Api_insert(gll.GroupID)
+					if len(GroupFunctionModel.Api_find(gll.GroupId)) < 1 {
+						GroupFunctionModel.Api_insert(gll.GroupId)
 					}
 				}
 				if len(gss) > 0 {

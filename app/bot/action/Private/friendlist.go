@@ -14,20 +14,24 @@ func App_refresh_friend_list_all() {
 }
 
 func App_refresh_friend_list(self_id any) {
-	fl, err := iapi.Post{}.Getfriendlist(self_id)
+	fl, err := iapi.Api.Getfriendlist(self_id)
 	if err != nil {
 
 	} else {
-		FriendListModel.Api_delete(self_id)
-		var fss []FriendListModel.FriendList
-		for _, fll := range fl {
-			var fs FriendListModel.FriendList
-			fs.SelfId = self_id
-			fs.UserId = fll.UserID
-			fs.Nickname = fll.Nickname
-			fs.Remark = fll.Remark
-			fss = append(fss, fs)
-		}
-		FriendListModel.Api_insert_more(fss)
+		App_refresh_friend_list_action(self_id, fl)
 	}
+}
+
+func App_refresh_friend_list_action(self_id any, fl []iapi.FriendList) {
+	FriendListModel.Api_delete(self_id)
+	var fss []FriendListModel.FriendList
+	for _, fll := range fl {
+		var fs FriendListModel.FriendList
+		fs.SelfId = self_id
+		fs.UserId = fll.UserId
+		fs.Nickname = fll.UserName
+		fs.Remark = fll.UserRemark
+		fss = append(fss, fs)
+	}
+	FriendListModel.Api_insert_more(fss)
 }

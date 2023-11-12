@@ -18,22 +18,22 @@ type GroupMemberListRet struct {
 }
 
 type GroupMemberList struct {
-	UserId          int    `json:"user_id"`
-	GroupId         int    `json:"group_id"`
+	UserId          int64  `json:"user_id"`
+	GroupId         int64  `json:"group_id"`
 	UserName        string `json:"user_name"`
 	Sex             string `json:"sex"`
 	Title           string `json:"title"`
-	TitleExpireTime int    `json:"title_expire_time"`
+	TitleExpireTime int64  `json:"title_expire_time"`
 	Nickname        string `json:"nickname"`
 	UserDisplayname string `json:"user_displayname"`
-	Distance        int    `json:"distance"`
+	Distance        int64  `json:"distance"`
 	Honor           []int  `json:"honor"`
-	JoinTime        int    `json:"join_time"`
-	LastActiveTime  int    `json:"last_active_time"`
-	LastSentTime    int    `json:"last_sent_time"`
+	JoinTime        int64  `json:"join_time"`
+	LastActiveTime  int64  `json:"last_active_time"`
+	LastSentTime    int64  `json:"last_sent_time"`
 	UniqueName      string `json:"unique_name"`
 	Area            string `json:"area"`
-	Level           int    `json:"level"`
+	Level           int64  `json:"level"`
 	Role            string `json:"role"`
 	Unfriendly      bool   `json:"unfriendly"`
 	CardChangeable  bool   `json:"card_changeable"`

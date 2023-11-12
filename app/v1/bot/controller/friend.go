@@ -30,11 +30,11 @@ func bot_white_friend_list(c *gin.Context) {
 		if len(user_info) > 0 {
 			data[k]["user_info"] = user_info
 		} else {
-			ui, err := iapi.Post{}.GetStrangerInfo(self_id, v["user_id"], false)
+			ui, err := iapi.Api.GetStrangerInfo(self_id, v["user_id"], false)
 			if err != nil {
 
 			} else {
-				FriendListModel.Api_insert(self_id, ui.UserID, ui.Nickname)
+				FriendListModel.Api_insert(self_id, ui.UserId, ui.Nickname)
 				data[k]["user_info"] = FriendListModel.Api_find(v["user_id"])
 			}
 		}

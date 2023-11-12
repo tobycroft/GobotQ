@@ -7,6 +7,6 @@ import (
 
 func GroupMsgRecv() {
 	for gm := range event.GroupMsgChan {
-		GroupMsgModel.Api_insert(gm.SelfID, gm.UserID, gm.GroupID, gm.Message, gm.RawMessage, gm.MessageID, gm.SubType)
+		GroupMsgModel.Api_insert(gm.SelfID, gm.UserID, gm.GroupId, gm.Message, gm.RawMessage, gm.MessageID, gm.SubType)
 	}
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func App_refresh_groupinfo(self_id, group_id int64) {
-	gl, err := iapi.Post{}.Getgrouplist(self_id)
+	gl, err := iapi.Api.Getgrouplist(self_id)
 	if err != nil {
 
 	} else {
@@ -14,13 +14,13 @@ func App_refresh_groupinfo(self_id, group_id int64) {
 		var gss []GroupListModel.GroupList
 		for _, gll := range gl {
 			var gs GroupListModel.GroupList
-			if gll.GroupID != group_id {
+			if gll.GroupId != group_id {
 				continue
 			}
 			gs.Self_id = self_id
-			gs.Group_id = gll.GroupID
+			gs.Group_id = gll.GroupId
 			gs.Group_name = gll.GroupName
-			gs.Group_memo = gll.GroupMemo
+			gs.Group_memo = gll.GroupRemark
 			gs.Member_count = gll.MemberCount
 			gs.Max_member_count = gll.MaxMemberCount
 			gss = append(gss, gs)

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
+	"main.go/app/bot/action/Group"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
@@ -42,14 +43,26 @@ func (oe OperationEvent) OperationRouter() {
 		break
 
 	case "get_friend_list":
-		friend_list := []iapi.FriendList{}
-		err := sonic.UnmarshalString(oe.json, &friend_list)
+		data := iapi.FriendListRet{}
+		err := sonic.UnmarshalString(oe.json, &data)
 		if err != nil {
-			fmt.Println(oe.json)
+			fmt.Println(err, oe.json)
 			return
 		}
-		Private.App_refresh_friend_list_action(self_id, friend_list)
+		Private.App_refresh_friend_list_action(self_id, data.Data)
 		fmt.Println("好友列表更新完毕：", oe.Echo.SelfId)
+		iapi.Api.Getgrouplist(self_id)
+		break
+
+	case "get_group_list":
+		data := iapi.GroupListRet{}
+		err := sonic.UnmarshalString(oe.json, &data)
+		if err != nil {
+			fmt.Println(err, oe.json)
+			return
+		}
+		Group.App_refresh_group_list_action(self_id, data.Data)
+		fmt.Println("群列表更新完毕：", oe.Echo.SelfId)
 		break
 
 	default:

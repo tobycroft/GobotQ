@@ -11,19 +11,6 @@ import (
 	"main.go/tuuz/Log"
 )
 
-/*
-{
-    "ret": "true",
-    "Info": {
-        "Name": "云机器人小组",
-        "Pos": "西洪小区",
-        "Type": "IT/互联网",
-        "Tag": "火线兔|头条程序员|B站程序员|狙神|哔哩哔哩助手|golang|个人狙|逆战火线兔|头条程序员|B站程序员|狙神|哔哩哔哩助手|golang|个人狙|逆战开发|技术|计算机|运维|云机器人|acfur机器人",
-        "Introduction": "Acfur云机器人群"
-    }
-}
-*/
-
 type GroupInfoRet struct {
 	Data    GroupInfo `json:"data"`
 	Retcode int64     `json:"retcode"`

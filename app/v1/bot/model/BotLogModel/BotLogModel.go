@@ -8,18 +8,6 @@ import (
 
 const table = "bot_log"
 
-/*
-table:bot_log
-
-collection:
-
-self_id
-log
-data
-type
-date
-*/
-
 func Api_insert(self_id, log, data, Type any) bool {
 	db := tuuz.Db().Table(table)
 	db.Data(map[string]any{

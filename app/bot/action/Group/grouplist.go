@@ -28,7 +28,7 @@ func App_refresh_group_list_action(self_id any, gl []iapi.GroupList) {
 		gs.Group_name = gll.GroupName
 		gs.Group_memo = gll.GroupRemark
 		gs.Max_member_count = gll.MaxMemberCount
-		gs.Member_count = gll.MemberCount
+		gs.Member_count = gll.MemberNum
 		gss = append(gss, gs)
 	}
 	if len(gss) > 0 {

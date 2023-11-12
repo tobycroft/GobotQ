@@ -116,7 +116,7 @@ func Api_retract_send(bot, gid, uid int, req int, random int, groupmember map[st
 func App_drcrease_member(self_id, group_id, user_id any, groupfunction map[string]any, reason string) {
 	group_list_data := GroupListModel.Api_find(group_id)
 	if len(group_list_data) > 0 {
-		group_member_count := GroupMemberModel.Api_count_byGroupId(group_id)
+		group_member_count := GroupMemberModel.Api_count_byGroupIdAndRole(group_id, nil)
 		if group_list_data["max_member_count"].(int64) < group_member_count {
 			group_member_datas := GroupMemberModel.Api_select_byGroupId(group_id, "last_sent_time desc", int(group_list_data["max_member_count"].(int64)-20), 2)
 			if len(group_member_datas) > 0 {

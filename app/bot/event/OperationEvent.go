@@ -67,7 +67,7 @@ func (oe OperationEvent) OperationRouter() {
 		Group.App_refresh_group_list_action(self_id, data.Data)
 		fmt.Println("群列表更新完毕：", oe.Echo.SelfId)
 		for _, datum := range data.Data {
-			if GroupMemberModel.Api_count_byGroupId(datum.GroupId) != datum.MemberCount {
+			if GroupMemberModel.Api_count_byGroupIdAndRole(datum.GroupId, nil) != datum.MemberNum {
 				Group.Chan_refresh_group_member <- Group.App_group_member{
 					SelfId: self_id, GroupId: datum.GroupId,
 				}

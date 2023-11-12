@@ -98,13 +98,14 @@ func Api_select_byGroupId(group_id any, order string, limit, page int) []gorose.
 	}
 }
 
-func Api_count_byGroupId(group_id any) int64 {
+func Api_count_byGroupIdAndRole(group_id, role any) int64 {
 	db := tuuz.Db().Table(table)
-	where := map[string]any{
-		"group_id": group_id,
-		"role":     "member",
+	if group_id != nil {
+		db.Where("group_id", group_id)
 	}
-	db.Where(where)
+	if role != nil {
+		db.Where("role", role)
+	}
 	ret, err := db.Count()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

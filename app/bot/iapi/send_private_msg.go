@@ -69,7 +69,7 @@ func (api Post) Send_private() {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			continue
 		}
-		Redis.String_set("SendCheck:"+pss.Message, true, 110)
+		Redis.String_set("SendCheck:"+pss.Message, true, 110*time.Second)
 		pmr, err := api.sendprivatemsg(pss)
 		if err != nil {
 
@@ -88,7 +88,7 @@ func (api Ws) Send_private() {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			continue
 		}
-		Redis.String_set("SendCheck:"+pss.Message, true, 110)
+		Redis.String_set("SendCheck:"+pss.Message, true, 110*time.Second)
 		pmr, err := api.sendprivatemsg(pss)
 		if err != nil {
 

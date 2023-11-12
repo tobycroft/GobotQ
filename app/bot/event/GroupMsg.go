@@ -33,47 +33,47 @@ var RefreshGroupChan = make(chan RefreshGroupStruct, 100)
 
 type GroupMessageStruct struct {
 	remoteaddr  net.Addr
-	Anonymous   any     `json:"anonymous"`
-	Font        int64   `json:"font"`
-	GroupId     int64   `json:"group_id"`
-	Message     string  `json:"message"`
-	MessageID   int64   `json:"message_id"`
-	MessageSeq  int64   `json:"message_seq"`
-	MessageType string  `json:"message_type"`
-	PostType    string  `json:"post_type"`
-	RawMessage  string  `json:"raw_message"`
-	SelfID      int64   `json:"self_id"`
-	Sender      _Sender `json:"sender"`
-	SubType     string  `json:"sub_type"`
-	Time        int64   `json:"time"`
-	UserID      int64   `json:"user_id"`
+	Time        int64  `json:"time"`
+	SelfId      int64  `json:"self_id"`
+	PostType    string `json:"post_type"`
+	MessageType string `json:"message_type"`
+	SubType     string `json:"sub_type"`
+	MessageId   int64  `json:"message_id"`
+	GroupId     int64  `json:"group_id"`
+	PeerId      int64  `json:"peer_id"`
+	UserId      int64  `json:"user_id"`
+	Message     []struct {
+		Data struct {
+			Text string `json:"text"`
+		} `json:"data"`
+		Type string `json:"type"`
+	} `json:"message"`
+	RawMessage string      `json:"raw_message"`
+	Font       int64       `json:"font"`
+	Sender     GroupSender `json:"sender"`
 }
 
-type _Sender struct {
-	Age      int64  `json:"age"`
-	Area     string `json:"area"`
-	Card     string `json:"card"`
-	Level    string `json:"level"`
+type GroupSender struct {
+	UserId   int64  `json:"user_id"`
 	Nickname string `json:"nickname"`
+	Card     string `json:"card"`
 	Role     string `json:"role"`
-	Sex      string `json:"sex"`
 	Title    string `json:"title"`
-	UserID   int64  `json:"user_id"`
+	Level    string `json:"level"`
 }
 
 var GroupMsgChan = make(chan GroupMessageStruct, 99)
 
 func (gm GroupMessageStruct) GroupMsg() {
-	go func(gm GroupMessageStruct) {
-		GroupMsgChan <- gm
-	}(gm)
+	GroupMsgChan <- gm
 	is_self := false
 
-	self_id := gm.SelfID
-	user_id := gm.UserID
+	self_id := gm.SelfId
+	user_id := gm.UserId
 	group_id := gm.GroupId
-	message_id := gm.MessageID
-	message := gm.Message
+	message_id := gm.MessageId
+	//message := gm.Message
+	message := gm.RawMessage
 	raw_message := gm.RawMessage
 
 	if user_id == self_id {
@@ -102,7 +102,7 @@ func (gm GroupMessageStruct) GroupMsg() {
 	}
 }
 
-func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender) {
+func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender) {
 	text := message
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)
@@ -130,7 +130,7 @@ func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_mess
 	}
 }
 
-func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender _Sender, groupmember map[string]any, groupfunction map[string]any) {
+func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -328,7 +328,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		if Redis.CheckExists("__lock__group_id__" + Calc.Any2String(group_id)) {
 			Group.AutoMessage(self_id, group_id, user_id, "执行中请稍等", groupfunction)
 		} else {
-			Redis.String_set("__lock__group_id__"+Calc.Any2String(group_id), 1, 60)
+			Redis.String_set("__lock__group_id__"+Calc.Any2String(group_id), 1, 60*time.Second)
 			go Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "")
 		}
 		break
@@ -344,7 +344,7 @@ const group_function_number = 19
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting",
 	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易", "重新验证", "死亡验证", "活人验证"}
 
-func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]any, groupfunction map[string]any) {
+func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
 	function := make([]bool, group_function_number+1, group_function_number+1)
 	new_text := make([]string, group_function_number+1, group_function_number+1)
 	var wg sync.WaitGroup
@@ -474,7 +474,7 @@ func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, mess
 	groupHandle_acfur_other(group_function_type[function_route], self_id, group_id, user_id, message_id, new_text[function_route], raw_message, sender, groupmember, groupfunction)
 }
 
-func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id int64, message, raw_message string, sender _Sender, groupmember map[string]any, groupfunction map[string]any) {
+func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
 	admin := false
 	owner := false
 	if len(groupmember) > 0 {
@@ -642,7 +642,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				if err != nil {
 					//Log.Crrs(err, tuuz.FUNCTION_ALL())
 				}
-				Redis.String_set(Calc.Md5(Calc.Any2String(userId)+"_"+raw_message), num+1, time.Duration(groupFunction["repeat_time"].(int64)))
+				Redis.String_set(Calc.Md5(Calc.Any2String(userId)+"_"+raw_message), num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
 				if int64(num) > groupFunction["repeat_count"].(int64) {
 					go Group.App_ban_user(selfId, groupId, userId, auto_retract, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
 				} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {

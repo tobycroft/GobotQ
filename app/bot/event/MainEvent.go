@@ -56,7 +56,6 @@ func (es EventStruct) EventRouter() {
 		message_type := es.MessageType
 		switch message_type {
 		case "private":
-			fmt.Println(es.PostType, es.json)
 			var pm PrivateMessageStruct
 			pm.remoteaddr = es.remoteaddr
 			err := sonic.UnmarshalString(es.json, &pm)
@@ -68,7 +67,6 @@ func (es EventStruct) EventRouter() {
 			break
 
 		case "group":
-			fmt.Println(es.PostType, es.json)
 			var gm GroupMessageStruct
 			gm.remoteaddr = es.remoteaddr
 			err := sonic.UnmarshalString(es.json, &gm)

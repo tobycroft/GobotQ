@@ -58,7 +58,7 @@ func (api Post) Send_group() {
 		if Redis.CheckExists("SendCheck:" + gss.Message) {
 			continue
 		}
-		Redis.String_set("SendCheck:"+gss.Message, true, 110)
+		Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
 		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 
@@ -80,7 +80,7 @@ func (api Ws) Send_group() {
 		if Redis.CheckExists("SendCheck:" + gss.Message) {
 			continue
 		}
-		Redis.String_set("SendCheck:"+gss.Message, true, 110)
+		Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
 		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 

@@ -64,7 +64,7 @@ func (em Request) RequestMsg() {
 				if len(GroupBlackListModel.Api_find(group_id, user_id)) > 0 {
 					go iapi.Api.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
 				} else {
-					Redis.String_set("__request_comment__"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), comment, 86400)
+					Redis.String_set("__request_comment__"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), comment, 86400*time.Second)
 					go iapi.Api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 				}
 			}

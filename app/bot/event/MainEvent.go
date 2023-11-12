@@ -50,7 +50,9 @@ type EventStruct struct {
 }
 
 func (es EventStruct) EventRouter() {
-	go LogsModel.Api_insert(es.json, "main", es.remoteaddr.String())
+	if es.PostType != "meta_event" {
+		go LogsModel.Api_insert(es.json, "main", es.remoteaddr.String())
+	}
 	switch es.PostType {
 	case "message":
 		message_type := es.MessageType

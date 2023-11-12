@@ -146,6 +146,7 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		Echo: echo{
 			Action: "send_private_msg",
 			SelfId: Calc.Any2Int64(pss.Self_id),
+			Extra:  pss.UserId,
 		},
 	})
 	if err != nil {

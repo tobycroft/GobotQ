@@ -64,6 +64,7 @@ func (pm PrivateMessageStruct) PrivateMsg() {
 	rawMessage := pm.RawMessage
 
 	if Redis.CheckExists("PrivateMsg:" + user_idString) {
+		fmt.Println("PrivateMsgExist")
 		return
 	}
 
@@ -78,11 +79,11 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 	new_text := reg.ReplaceAllString(message, "")
 
 	botinfo := BotModel.Api_find(selfId)
-	if botinfo["url"] == nil {
+	if botinfo["allow_ip"] == nil {
 		return
 	}
-
-	if strings.Contains(remoteip, botinfo["url"].(string)) {
+	if !strings.Contains(remoteip, botinfo["allow_ip"].(string)) {
+		Log.Errs(errors.New(fmt.Sprint(remoteip, botinfo["allow_ip"].(string))), "不允许的ip")
 		return
 	}
 
@@ -98,6 +99,7 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 		fmt.Println("privateHandle_acfur")
 		privateHandle_acfur(selfId, user_id, group_id, new_text, message)
 	} else {
+		fmt.Println("unprivateHandle_acfur")
 		//在未激活acfur的情况下应该对原始内容进行还原
 		if private_default_reply(selfId, user_id, group_id, message) {
 			return

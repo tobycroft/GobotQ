@@ -141,6 +141,7 @@ func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		Echo: echo{
 			Action: "send_group_msg",
 			SelfId: Calc.Any2Int64(gss.Self_id),
+			Extra:  gss.Group_id,
 		},
 	})
 	if err != nil {

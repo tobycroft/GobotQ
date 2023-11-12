@@ -33,6 +33,7 @@ func (self MetaEventStruct) MetaEvent() {
 		break
 
 	case "heartbeat":
+		//iapi.Api.GetLoginInfo(self.SelfId)
 		fmt.Println(self.MetaEventType, self.SelfId)
 		break
 

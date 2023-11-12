@@ -18,9 +18,15 @@ type FriendListRet struct {
 }
 
 type FriendList struct {
-	Nickname string `json:"nickname"`
-	Remark   string `json:"remark"`
-	UserID   int64  `json:"user_id"`
+	UserId          int64  `json:"user_id"`
+	UserName        string `json:"user_name"`
+	UserDisplayname string `json:"user_displayname"`
+	UserRemark      string `json:"user_remark"`
+	Age             int64  `json:"age"`
+	Gender          int64  `json:"gender"`
+	GroupId         int64  `json:"group_id"`
+	Platform        string `json:"platform"`
+	TermType        int64  `json:"term_type"`
 }
 
 func (api Post) Getfriendlist(self_id any) ([]FriendList, error) {

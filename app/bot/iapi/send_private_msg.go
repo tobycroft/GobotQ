@@ -3,6 +3,7 @@ package iapi
 import (
 	"errors"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -139,16 +140,23 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
 		return Message{}, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/send_private_msg", nil, post, nil, nil).RetString()
-
+	data, err := sonic.Marshal(sendStruct{
+		Action: "send_private_msg",
+		Params: post,
+		Echo: echo{
+			Action: "send_private_msg",
+			SelfId: Calc.Any2Int64(pss.Self_id),
+		},
+	})
 	if err != nil {
 		return Message{}, err
 	}
-	var pmr MessageRet
-
-	err = sonic.UnmarshalString(data, &pmr)
-	if err != nil {
-		return Message{}, err
+	conn, ok := ClientToConn.Load(pss.Self_id)
+	if !ok {
+		return Message{}, errors.New("ClientNotFound")
 	}
-	return pmr.Data, nil
+	Net.WsServer_WriteChannel <- Net.WsData{
+		Conn: conn.(*websocket.Conn), Message: data,
+	}
+	return Message{}, err
 }

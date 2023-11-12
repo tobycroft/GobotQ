@@ -52,7 +52,7 @@ func (api Ws) GetLoginInfo(self_id any) (LoginInfo, error) {
 	}
 	data, err := sonic.Marshal(sendStruct{
 		Action: "get_login_info",
-		Params: map[string]any{},
+		Params: nil,
 		Echo: echo{
 			Action: "get_login_info",
 			SelfId: Calc.Any2Int64(self_id),

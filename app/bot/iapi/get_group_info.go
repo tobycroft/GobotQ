@@ -31,13 +31,17 @@ type GroupInfoRet struct {
 }
 
 type GroupInfo struct {
-	GroupCreateTime int64  `json:"group_create_time"`
-	GroupID         int64  `json:"group_id"`
-	GroupLevel      int64  `json:"group_level"`
-	GroupMemo       string `json:"group_memo"`
-	GroupName       string `json:"group_name"`
-	MaxMemberCount  int64  `json:"max_member_count"`
-	MemberCount     int64  `json:"member_count"`
+	GroupId        int64   `json:"group_id"`
+	GroupName      string  `json:"group_name"`
+	GroupRemark    string  `json:"group_remark"`
+	GroupUin       int64   `json:"group_uin"`
+	Admins         []int64 `json:"admins"`
+	ClassText      string  `json:"class_text"`
+	IsFrozen       bool    `json:"is_frozen"`
+	MaxMember      int64   `json:"max_member"`
+	MemberNum      int64   `json:"member_num"`
+	MemberCount    int64   `json:"member_count"`
+	MaxMemberCount int64   `json:"max_member_count"`
 }
 
 func (api Post) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {

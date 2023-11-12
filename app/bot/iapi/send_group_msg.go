@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
@@ -134,16 +135,23 @@ func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(gss.Self_id))
 		return Message{}, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/send_group_msg", nil, post, nil, nil).RetString()
+	data, err := sonic.Marshal(sendStruct{
+		Action: "send_group_msg",
+		Params: post,
+		Echo: echo{
+			Action: "send_group_msg",
+			SelfId: Calc.Any2Int64(gss.Self_id),
+		},
+	})
 	if err != nil {
 		return Message{}, err
 	}
-	var gm MessageRet
-
-	err = sonic.UnmarshalString(data, &gm)
-	if err != nil {
-		return Message{}, err
+	conn, ok := ClientToConn.Load(gss.Self_id)
+	if !ok {
+		return Message{}, errors.New("ClientNotFound")
 	}
-
-	return gm.Data, nil
+	Net.WsServer_WriteChannel <- Net.WsData{
+		Conn: conn.(*websocket.Conn), Message: data,
+	}
+	return Message{}, err
 }

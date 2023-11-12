@@ -18,21 +18,25 @@ type GroupMemberListRet struct {
 }
 
 type GroupMemberList struct {
-	Age             int64  `json:"age"`
-	Area            string `json:"area"`
-	Card            string `json:"card"`
-	CardChangeable  bool   `json:"card_changeable"`
-	GroupID         int64  `json:"group_id"`
-	JoinTime        int64  `json:"join_time"`
-	LastSentTime    int64  `json:"last_sent_time"`
-	Level           string `json:"level"`
-	Nickname        string `json:"nickname"`
-	Role            string `json:"role"`
+	UserId          int    `json:"user_id"`
+	GroupId         int    `json:"group_id"`
+	UserName        string `json:"user_name"`
 	Sex             string `json:"sex"`
 	Title           string `json:"title"`
-	TitleExpireTime int64  `json:"title_expire_time"`
+	TitleExpireTime int    `json:"title_expire_time"`
+	Nickname        string `json:"nickname"`
+	UserDisplayname string `json:"user_displayname"`
+	Distance        int    `json:"distance"`
+	Honor           []int  `json:"honor"`
+	JoinTime        int    `json:"join_time"`
+	LastActiveTime  int    `json:"last_active_time"`
+	LastSentTime    int    `json:"last_sent_time"`
+	UniqueName      string `json:"unique_name"`
+	Area            string `json:"area"`
+	Level           int    `json:"level"`
+	Role            string `json:"role"`
 	Unfriendly      bool   `json:"unfriendly"`
-	UserID          int64  `json:"user_id"`
+	CardChangeable  bool   `json:"card_changeable"`
 }
 
 func (api Post) Getgroupmemberlist(self_id, group_id any) ([]GroupMemberList, error) {

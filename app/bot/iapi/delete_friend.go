@@ -37,6 +37,8 @@ func (api Post) DeleteFriend(self_id, friend_id any) (bool, error) {
 		return false, errors.New(dls.Wording)
 	}
 }
+
+// DeleteFriend incomplete
 func (api Ws) DeleteFriend(self_id, user_id any) (bool, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {

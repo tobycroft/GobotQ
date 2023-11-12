@@ -85,10 +85,11 @@ func (api Post) Send_private() {
 }
 func (api Ws) Send_private() {
 	for pss := range Private_send_chan {
-		if Redis.CheckExists("SendCheck:" + pss.Message) {
-			continue
-		}
-		Redis.String_set("SendCheck:"+pss.Message, true, 110*time.Second)
+		//if Redis.CheckExists("SendCheck:" + pss.Message) {
+		//	log.Println("SendCheck:" + pss.Message)
+		//	continue
+		//}
+		//Redis.String_set("SendCheck:"+pss.Message, true, 110*time.Second)
 		pmr, err := api.sendprivatemsg(pss)
 		if err != nil {
 
@@ -107,7 +108,7 @@ func (api Post) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	post := map[string]any{
 		"user_id":     pss.UserId,
 		"message":     pss.Message,
-		"group_id":    pss.GroupId,
+		"group_id":    pss.GroupId, //如果没加群不要使用群ID
 		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)
@@ -130,9 +131,9 @@ func (api Post) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 }
 func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	post := map[string]any{
-		"user_id":     pss.UserId,
-		"message":     pss.Message,
-		"group_id":    pss.GroupId,
+		"user_id": pss.UserId,
+		"message": pss.Message,
+		//"group_id":    pss.GroupId,
 		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)

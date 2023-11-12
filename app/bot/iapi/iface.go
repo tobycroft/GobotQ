@@ -20,6 +20,7 @@ type sendStruct struct {
 type echo struct {
 	Action string `json:"action"`
 	SelfId int64  `json:"self_id"`
+	Extra  any    `json:"extra"`
 }
 
 type IfaceApi interface {

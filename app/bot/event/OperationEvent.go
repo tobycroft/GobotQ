@@ -8,6 +8,7 @@ import (
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"net"
@@ -19,6 +20,7 @@ type OperationEvent struct {
 	Echo       struct {
 		Action string `json:"action"`
 		SelfId int64  `json:"self_id"`
+		Extra  any    `json:"extra"`
 	} `json:"echo"`
 }
 
@@ -61,8 +63,27 @@ func (oe OperationEvent) OperationRouter() {
 			fmt.Println(err, oe.json)
 			return
 		}
+
 		Group.App_refresh_group_list_action(self_id, data.Data)
 		fmt.Println("群列表更新完毕：", oe.Echo.SelfId)
+		for _, datum := range data.Data {
+			if GroupMemberModel.Api_count_byGroupId(datum.GroupId) != datum.MemberCount {
+				Group.Chan_refresh_group_member <- Group.App_group_member{
+					SelfId: self_id, GroupId: datum.GroupId,
+				}
+			}
+		}
+		break
+
+	case "get_group_member_list":
+		data := iapi.GroupMemberListRet{}
+		err := sonic.UnmarshalString(oe.json, &data)
+		if err != nil {
+			fmt.Println(err, oe.json)
+			return
+		}
+		Group.App_refresh_group_member_one_action(self_id, data.Data)
+		fmt.Println("群成员更新完毕：", oe.Echo.SelfId, oe.Echo.Extra)
 		break
 
 	default:

@@ -77,6 +77,7 @@ func (api Ws) Getgroupmemberlist(self_id, group_id any) ([]GroupMemberList, erro
 		Echo: echo{
 			Action: "get_group_member_list",
 			SelfId: Calc.Any2Int64(self_id),
+			Extra:  group_id,
 		},
 	})
 	if err != nil {

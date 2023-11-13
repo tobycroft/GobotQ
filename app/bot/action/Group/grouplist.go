@@ -4,6 +4,7 @@ import (
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupListModel"
+	"main.go/app/bot/redis/GroupListRedis"
 )
 
 func App_refresh_group_list() {
@@ -19,19 +20,22 @@ func App_refresh_group_list() {
 }
 
 func App_refresh_group_list_action(self_id any, gl []iapi.GroupList) {
+	GroupListRedis.Cac_del(self_id, "*")
 	GroupListModel.Api_delete(self_id)
 	var gss []GroupListModel.GroupList
 	for _, gll := range gl {
 		var gs GroupListModel.GroupList
-		gs.Self_id = self_id
-		gs.Group_id = gll.GroupId
-		gs.Group_name = gll.GroupName
-		gs.Group_memo = gll.GroupRemark
-		gs.Max_member_count = gll.MaxMemberCount
-		gs.Member_count = gll.MemberNum
+		gs.SelfId = self_id
+		gs.GroupId = gll.GroupId
+		gs.GroupName = gll.GroupName
+		gs.GroupMemo = gll.GroupRemark
+		gs.MaxMemberCount = gll.MaxMemberCount
+		gs.MemberCount = gll.MemberNum
 		gss = append(gss, gs)
+		GroupListRedis.Cac_set(self_id, gs.GroupId, gs)
 	}
 	if len(gss) > 0 {
 		GroupListModel.Api_insert_more(gss)
 	}
+
 }

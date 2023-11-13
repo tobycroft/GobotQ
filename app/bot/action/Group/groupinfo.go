@@ -17,12 +17,12 @@ func App_refresh_groupinfo(self_id, group_id int64) {
 			if gll.GroupId != group_id {
 				continue
 			}
-			gs.Self_id = self_id
-			gs.Group_id = gll.GroupId
-			gs.Group_name = gll.GroupName
-			gs.Group_memo = gll.GroupRemark
-			gs.Member_count = gll.MemberCount
-			gs.Max_member_count = gll.MaxMemberCount
+			gs.SelfId = self_id
+			gs.GroupId = gll.GroupId
+			gs.GroupName = gll.GroupName
+			gs.GroupMemo = gll.GroupRemark
+			gs.MemberCount = gll.MemberCount
+			gs.MaxMemberCount = gll.MaxMemberCount
 			gss = append(gss, gs)
 		}
 		if len(gss) > 0 {

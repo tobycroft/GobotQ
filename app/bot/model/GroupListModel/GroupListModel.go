@@ -9,12 +9,12 @@ import (
 const table = "group_list"
 
 type GroupList struct {
-	Self_id          any    `gorose:"self_id"`
-	Group_id         int64  `gorose:"group_id"`
-	Group_name       string `gorose:"group_name"`
-	Group_memo       string `gorose:"group_memo"`
-	Member_count     int64  `gorose:"member_count"`
-	Max_member_count int64  `gorose:"max_member_count"`
+	SelfId         any    `gorose:"self_id" redis:"self_id"`
+	GroupId        int64  `gorose:"group_id" redis:"group_id"`
+	GroupName      string `gorose:"group_name" redis:"group_name"`
+	GroupMemo      string `gorose:"group_memo" redis:"group_memo"`
+	MemberCount    int64  `gorose:"member_count" redis:"member_count"`
+	MaxMemberCount int64  `gorose:"max_member_count" redis:"max_member_count"`
 }
 
 func Api_insert(gl GroupList) bool {

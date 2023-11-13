@@ -279,3 +279,45 @@ func Api_select_admin(self_id, group_id any) []gorose.Data {
 		return ret
 	}
 }
+
+func Api_find_struct[T GroupMember](self_id, user_id, group_id any) T {
+	db := tuuz.Db().Table(table)
+	if self_id != nil {
+		db.Where("self_id", self_id)
+	}
+	if user_id != nil {
+		db.Where("user_id", user_id)
+	}
+	if group_id != nil {
+		db.Where("group_id", group_id)
+	}
+	ret := T{}
+	err := db.Scan(&ret)
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return T{}
+	} else {
+		return ret
+	}
+}
+
+func Api_select_struct[T GroupMember](self_id, user_id, group_id any) []T {
+	db := tuuz.Db().Table(table)
+	if self_id != nil {
+		db.Where("self_id", self_id)
+	}
+	if user_id != nil {
+		db.Where("user_id", user_id)
+	}
+	if group_id != nil {
+		db.Where("group_id", group_id)
+	}
+	ret := []T{}
+	err := db.Scan(&ret)
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return []T{}
+	} else {
+		return ret
+	}
+}

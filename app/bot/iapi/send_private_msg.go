@@ -7,8 +7,8 @@ import (
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/action/FriendListAction"
+	"main.go/app/bot/action/GroupMemberAction"
 	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"time"
@@ -138,9 +138,11 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	}
 	_, err := FriendListAction.App_find_friendList(pss.Self_id, pss.UserId)
 	if err != nil {
-		group := GroupMemberModel.Api_find_byUid(pss.UserId)
-		if len(group) > 0 {
-			post["group_id"] = group["group_id"]
+		data, err := GroupMemberAction.App_find_groupMember(pss.Self_id, pss.UserId, nil)
+		if err != nil {
+			return Message{}, err
+		} else {
+			post["group_id"] = data.GroupId
 		}
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)

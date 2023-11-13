@@ -128,3 +128,39 @@ func Api_delete_byBotandGid(self_id, group_id any) bool {
 		return true
 	}
 }
+
+func Api_find_struct[T GroupList](self_id, group_id any) T {
+	db := tuuz.Db().Table(table)
+	if self_id != nil {
+		db.Where("self_id", self_id)
+	}
+	if group_id != nil {
+		db.Where("group_id", group_id)
+	}
+	ret := T{}
+	err := db.Scan(&ret)
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return T{}
+	} else {
+		return ret
+	}
+}
+
+func Api_select_struct[T GroupList](self_id, group_id any) []T {
+	db := tuuz.Db().Table(table)
+	if self_id != nil {
+		db.Where("self_id", self_id)
+	}
+	if group_id != nil {
+		db.Where("group_id", group_id)
+	}
+	ret := []T{}
+	err := db.Scan(&ret)
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return []T{}
+	} else {
+		return ret
+	}
+}

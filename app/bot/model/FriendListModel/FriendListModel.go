@@ -101,7 +101,7 @@ func Api_select(self_id any) []gorose.Data {
 }
 
 type FriendList struct {
-	Id       int64  `json:"id"`
+	Id       int64  `gorose:"id" redis:"id"`
 	SelfId   int64  `gorose:"self_id" redis:"self_id"`
 	UserId   int64  `gorose:"user_id" redis:"user_id"`
 	Nickname string `gorose:"nickname" redis:"nickname"`

@@ -7,6 +7,7 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/bot/redis/GroupMemberRedis"
 	"main.go/tuuz"
 )
 
@@ -44,6 +45,7 @@ func App_refresh_group_member_action(self_id any, grouplist []gorose.Data) {
 
 func App_refresh_group_member_one(self_id, group_id any) {
 	GroupMemberModel.Api_delete_byGid(self_id, group_id)
+	GroupMemberRedis.Cac_del(self_id, "*", group_id)
 	gm, err := iapi.Api.Getgroupmemberlist(self_id, group_id)
 	if err != nil {
 		fmt.Println(tuuz.FUNCTION_ALL(), err)
@@ -55,22 +57,21 @@ func App_refresh_group_member_one(self_id, group_id any) {
 }
 
 func App_refresh_group_member_one_action(self_id any, gm []iapi.GroupMemberList) {
+	var gss []GroupMemberModel.GroupMember
 	for _, gmm := range gm {
-		var g GroupMemberModel.GroupMember
-		g.SelfId = self_id
-		g.GroupId = gmm.GroupId
-		g.UserID = gmm.UserId
-		g.Nickname = gmm.Nickname
-		g.Card = gmm.UserDisplayname
-		g.Level = gmm.Level
-		g.JoinTime = gmm.JoinTime
-		g.Title = gmm.Title
-		g.LastSentTime = gmm.LastSentTime
-		g.Role = gmm.Role
-		if len(GroupMemberModel.Api_find(gmm.GroupId, gmm.UserId)) > 0 {
-			GroupMemberModel.Api_update(gmm.GroupId, gmm.UserId, g)
-		} else {
-			GroupMemberModel.Api_insert(g)
-		}
+		var gs GroupMemberModel.GroupMember
+		gs.SelfId = self_id
+		gs.GroupId = gmm.GroupId
+		gs.UserId = gmm.UserId
+		gs.Nickname = gmm.Nickname
+		gs.Card = gmm.UserDisplayname
+		gs.Level = gmm.Level
+		gs.JoinTime = gmm.JoinTime
+		gs.Title = gmm.Title
+		gs.LastSentTime = gmm.LastSentTime
+		gs.Role = gmm.Role
+		gss = append(gss, gs)
+		GroupMemberRedis.Cac_set(self_id, gs.UserId, gs.GroupId, gs)
 	}
+	GroupMemberModel.Api_insert_more(gss)
 }

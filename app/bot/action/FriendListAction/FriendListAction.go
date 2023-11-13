@@ -9,7 +9,7 @@ func App_find_friendList[T FriendListModel.FriendList](self_id, user_id any) (T,
 	data, err := FriendListRedis.Cac_find[T](self_id, user_id)
 	if err != nil {
 		data = FriendListModel.Api_find_struct[T](user_id)
-		if data != nil {
+		if data != *new(T) {
 			FriendListRedis.Cac_set(self_id, user_id, data)
 			return data, nil
 		}

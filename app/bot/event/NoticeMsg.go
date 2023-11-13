@@ -160,7 +160,7 @@ func (em Notice) NoticeMsg() {
 				} else {
 					var mb GroupMemberModel.GroupMember
 					mb.SelfId = selfId
-					mb.UserID = userId
+					mb.UserId = userId
 					mb.GroupId = groupId
 					mb.Card = member.UserDisplayname
 					mb.Title = member.Title

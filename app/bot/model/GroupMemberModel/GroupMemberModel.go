@@ -9,16 +9,16 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	SelfId       any    `gorose:"self_id"`
-	Card         string `gorose:"card"`
-	GroupId      any    `gorose:"group_id"`
-	JoinTime     int64  `gorose:"join_time"`
-	LastSentTime int64  `gorose:"last_sent_time"`
-	Level        int64  `gorose:"level"`
-	Nickname     string `gorose:"nickname"`
-	Role         string `gorose:"role"`
-	Title        string `gorose:"title"`
-	UserID       int64  `gorose:"user_id"`
+	SelfId       any    `gorose:"self_id" redis:"self_id"`
+	Card         string `gorose:"card" redis:"card"`
+	GroupId      any    `gorose:"group_id" redis:"group_id"`
+	JoinTime     int64  `gorose:"join_time" redis:"join_time"`
+	LastSentTime int64  `gorose:"last_sent_time" redis:"last_sent_time"`
+	Level        int64  `gorose:"level" redis:"level"`
+	Nickname     string `gorose:"nickname" redis:"nickname"`
+	Role         string `gorose:"role" redis:"role"`
+	Title        string `gorose:"title" redis:"title"`
+	UserId       int64  `gorose:"user_id" redis:"user_id"`
 }
 
 func Api_insert(gm GroupMember) bool {

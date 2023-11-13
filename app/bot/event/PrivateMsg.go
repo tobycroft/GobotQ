@@ -96,10 +96,8 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 		return
 	}
 	if active {
-		fmt.Println("privateHandle_acfur")
 		privateHandle_acfur(selfId, user_id, group_id, new_text, message)
 	} else {
-		fmt.Println("unprivateHandle_acfur")
 		//在未激活acfur的情况下应该对原始内容进行还原
 		if private_default_reply(selfId, user_id, group_id, message) {
 			return

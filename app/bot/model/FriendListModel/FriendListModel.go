@@ -69,23 +69,6 @@ func Api_select(self_id any) []gorose.Data {
 	}
 }
 
-func Api_insert(self_id, user_id, nickname any) bool {
-	db := tuuz.Db().Table(table)
-	data := map[string]any{
-		"self_id":  self_id,
-		"user_id":  user_id,
-		"nickname": nickname,
-	}
-	db.Data(data)
-	_, err := db.Insert()
-	if err != nil {
-		Log.Dbrr(err, tuuz.FUNCTION_ALL())
-		return false
-	} else {
-		return true
-	}
-}
-
 type FriendList struct {
 	SelfId   any    `gorose:"self_id"`
 	UserId   any    `gorose:"user_id"`

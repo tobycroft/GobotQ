@@ -20,57 +20,57 @@ type UserInfoRet struct {
 type UserInfo struct {
 	UserId    string      `json:"user_id"`
 	Nickname  string      `json:"nickname"`
-	Age       int         `json:"age"`
+	Age       int64       `json:"age"`
 	Sex       string      `json:"sex"`
-	Level     int         `json:"level"`
-	LoginDays int         `json:"login_days"`
+	Level     int64       `json:"level"`
+	LoginDays int64       `json:"login_days"`
 	Qid       string      `json:"qid"`
-	Vote      int         `json:"vote"`
+	Vote      int64       `json:"vote"`
 	WzryHonor interface{} `json:"wzry_honor"`
 	Ext       struct {
-		AddSrcId                   int         `json:"add_src_id"`
+		AddSrcId                   int64       `json:"add_src_id"`
 		AddSrcName                 string      `json:"add_src_name"`
-		AddSubSrcId                int         `json:"add_sub_src_id"`
+		AddSubSrcId                int64       `json:"add_sub_src_id"`
 		AllowCalInteractive        bool        `json:"allow_cal_interactive"`
 		AllowClick                 bool        `json:"allow_click"`
 		AllowPeopleSee             bool        `json:"allow_people_see"`
-		AuthState                  int         `json:"auth_state"`
-		BigClubVipOpen             int         `json:"big_club_vip_open"`
-		HollywoodVipOpen           int         `json:"hollywood_vip_open"`
-		QqVipOpen                  int         `json:"qq_vip_open"`
-		SuperQqOpen                int         `json:"super_qq_open"`
-		SuperVipOpen               int         `json:"super_vip_open"`
-		Voted                      int         `json:"voted"`
+		AuthState                  int64       `json:"auth_state"`
+		BigClubVipOpen             int64       `json:"big_club_vip_open"`
+		HollywoodVipOpen           int64       `json:"hollywood_vip_open"`
+		QqVipOpen                  int64       `json:"qq_vip_open"`
+		SuperQqOpen                int64       `json:"super_qq_open"`
+		SuperVipOpen               int64       `json:"super_vip_open"`
+		Voted                      int64       `json:"voted"`
 		BabyQSwitch                bool        `json:"baby_q_switch"`
 		BindPhoneInfo              string      `json:"bind_phone_info"`
-		CardId                     int         `json:"card_id"`
-		CardType                   int         `json:"card_type"`
-		Category                   int         `json:"category"`
-		ClothesId                  int         `json:"clothes_id"`
+		CardId                     int64       `json:"card_id"`
+		CardType                   int64       `json:"card_type"`
+		Category                   int64       `json:"category"`
+		ClothesId                  int64       `json:"clothes_id"`
 		CoverUrl                   string      `json:"cover_url"`
 		Declaration                interface{} `json:"declaration"`
-		DefaultCardId              int         `json:"default_card_id"`
+		DefaultCardId              int64       `json:"default_card_id"`
 		DiyComplicatedInfo         interface{} `json:"diy_complicated_info"`
 		DiyDefaultText             interface{} `json:"diy_default_text"`
 		DiyText                    interface{} `json:"diy_text"`
 		DiyTextDegree              float64     `json:"diy_text_degree"`
-		DiyTextFontId              int         `json:"diy_text_font_id"`
+		DiyTextFontId              int64       `json:"diy_text_font_id"`
 		DiyTextHeight              float64     `json:"diy_text_height"`
 		DiyTextWidth               float64     `json:"diy_text_width"`
 		DiyTextLocX                float64     `json:"diy_text_loc_x"`
 		DiyTextLocY                float64     `json:"diy_text_loc_y"`
 		DressUpIsOn                bool        `json:"dress_up_is_on"`
 		EncId                      interface{} `json:"enc_id"`
-		EnlargeQzonePic            int         `json:"enlarge_qzone_pic"`
-		ExtendFriendEntryAddFriend int         `json:"extend_friend_entry_add_friend"`
-		ExtendFriendEntryContact   int         `json:"extend_friend_entry_contact"`
-		ExtendFriendFlag           int         `json:"extend_friend_flag"`
-		ExtendFriendQuestion       int         `json:"extend_friend_question"`
-		ExtendFriendVoiceDuration  int         `json:"extend_friend_voice_duration"`
-		FavoriteSource             int         `json:"favorite_source"`
-		FeedPreviewTime            int         `json:"feed_preview_time"`
-		FontId                     int         `json:"font_id"`
-		FontType                   int         `json:"font_type"`
+		EnlargeQzonePic            int64       `json:"enlarge_qzone_pic"`
+		ExtendFriendEntryAddFriend int64       `json:"extend_friend_entry_add_friend"`
+		ExtendFriendEntryContact   int64       `json:"extend_friend_entry_contact"`
+		ExtendFriendFlag           int64       `json:"extend_friend_flag"`
+		ExtendFriendQuestion       int64       `json:"extend_friend_question"`
+		ExtendFriendVoiceDuration  int64       `json:"extend_friend_voice_duration"`
+		FavoriteSource             int64       `json:"favorite_source"`
+		FeedPreviewTime            int64       `json:"feed_preview_time"`
+		FontId                     int64       `json:"font_id"`
+		FontType                   int64       `json:"font_type"`
 		QidBgUrl                   string      `json:"qid_bg_url"`
 		QidColor                   string      `json:"qid_color"`
 		QidLogoUrl                 string      `json:"qid_logo_url"`
@@ -80,7 +80,7 @@ type UserInfo struct {
 		SchoolVerifiedFlag         bool        `json:"school_verified_flag"`
 		ShowPublishButton          bool        `json:"show_publish_button"`
 		Singer                     string      `json:"singer"`
-		SongDura                   int         `json:"song_dura"`
+		SongDura                   int64       `json:"song_dura"`
 		SongId                     string      `json:"song_id"`
 		SongName                   string      `json:"song_name"`
 	} `json:"ext"`

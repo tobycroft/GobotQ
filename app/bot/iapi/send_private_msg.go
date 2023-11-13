@@ -6,8 +6,8 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/app/bot/action/FriendListAction"
 	"main.go/app/bot/model/BotModel"
-
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"time"
@@ -130,10 +130,11 @@ func (api Post) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	return pmr.Data, nil
 }
 func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
+	FriendListAction.App_find_friendList(pss.UserId)
 	post := map[string]any{
-		"user_id": pss.UserId,
-		"message": pss.Message,
-		//"group_id":    pss.GroupId,
+		"user_id":     pss.UserId,
+		"message":     pss.Message,
+		"group_id":    542749156,
 		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)

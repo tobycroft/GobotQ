@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/tobycroft/Calc"
+	"log"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
@@ -67,7 +69,9 @@ func (oe OperationEvent) OperationRouter() {
 		Group.App_refresh_group_list_action(self_id, data.Data)
 		fmt.Println("群列表更新完毕：", oe.Echo.SelfId)
 		for _, datum := range data.Data {
-			if GroupMemberModel.Api_count_byGroupIdAndRole(datum.GroupId, nil) != datum.MemberNum {
+			num := GroupMemberModel.Api_count_byGroupIdAndRole(datum.GroupId, nil)
+			if num < datum.MemberNum {
+				log.Println("需要更新的群：", self_id, datum.GroupId, num, datum.MemberNum, datum.MemberCount)
 				Group.Chan_refresh_group_member <- Group.App_group_member{
 					SelfId: self_id, GroupId: datum.GroupId,
 				}
@@ -83,7 +87,7 @@ func (oe OperationEvent) OperationRouter() {
 			return
 		}
 		Group.App_refresh_group_member_one_action(self_id, data.Data)
-		fmt.Println("群成员更新完毕：", oe.Echo.SelfId, oe.Echo.Extra)
+		fmt.Println("群成员更新完毕：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
 		break
 
 	default:

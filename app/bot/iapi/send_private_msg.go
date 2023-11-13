@@ -8,6 +8,7 @@ import (
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/action/FriendListAction"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"time"
@@ -130,12 +131,17 @@ func (api Post) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 	return pmr.Data, nil
 }
 func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
-	FriendListAction.App_find_friendList(pss.UserId)
 	post := map[string]any{
 		"user_id":     pss.UserId,
 		"message":     pss.Message,
-		"group_id":    542749156,
 		"auto_escape": false,
+	}
+	_, err := FriendListAction.App_find_friendList(pss.UserId)
+	if err != nil {
+		group := GroupMemberModel.Api_find_byUid(pss.UserId)
+		if len(group) > 0 {
+			post["group_id"] = group["group_id"]
+		}
 	}
 	botinfo := BotModel.Api_find(pss.Self_id)
 	if len(botinfo) < 1 {

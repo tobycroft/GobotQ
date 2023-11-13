@@ -2,7 +2,6 @@ package FriendListRedis
 
 import (
 	"github.com/tobycroft/Calc"
-	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/model/FriendListModel"
 	"main.go/tuuz/Redis"
 )
@@ -12,11 +11,11 @@ const FriendInfo = "FriendInfo:"
 func table(user_id any) string {
 	return FriendInfo + Calc.Any2String(user_id)
 }
-func Cac_set[T FriendListModel.FriendList | gorose.Data](user_id any, data T) error {
+func Cac_set[T FriendListModel.FriendList](user_id any, data T) error {
 	return Redis.Hash_set_struct(table(user_id), data)
 }
 
-func Cac_find[T FriendListModel.FriendList | gorose.Data](user_id any) (T, error) {
+func Cac_find[T FriendListModel.FriendList](user_id any) (T, error) {
 	var data T
 	err := Redis.Hash_get_struct(table(user_id), &data)
 	return data, err

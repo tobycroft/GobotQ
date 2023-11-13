@@ -54,6 +54,36 @@ func Api_find(user_id any) gorose.Data {
 	}
 }
 
+func Api_find_struct[T FriendList](user_id any) T {
+	db := tuuz.Db().Table(table)
+	if user_id != nil {
+		db.Where("user_id", user_id)
+	}
+	ret := T{}
+	err := db.Scan(&ret)
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return T{}
+	} else {
+		return ret
+	}
+}
+
+func Api_select_struct[T FriendList](user_id any) []T {
+	db := tuuz.Db().Table(table)
+	if user_id != nil {
+		db.Where("user_id", user_id)
+	}
+	ret := []T{}
+	err := db.Scan(&ret)
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return []T{}
+	} else {
+		return ret
+	}
+}
+
 func Api_select(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]any{
@@ -70,10 +100,11 @@ func Api_select(self_id any) []gorose.Data {
 }
 
 type FriendList struct {
-	SelfId   any    `gorose:"self_id"`
-	UserId   any    `gorose:"user_id"`
-	Nickname string `gorose:"nickname"`
-	Remark   string `gorose:"remark"`
+	Id       int64
+	SelfId   int64
+	UserId   int64
+	Nickname string
+	Remark   string
 }
 
 func Api_insert_more(fl []FriendList) bool {

@@ -1,6 +1,7 @@
 package Private
 
 import (
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/FriendListModel"
@@ -9,11 +10,11 @@ import (
 func App_refresh_friend_list_all() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		App_refresh_friend_list(bot["self_id"])
+		App_refresh_friend_list(Calc.Any2Int64(bot["self_id"]))
 	}
 }
 
-func App_refresh_friend_list(self_id any) {
+func App_refresh_friend_list(self_id int64) {
 	fl, err := iapi.Api.Getfriendlist(self_id)
 	if err != nil {
 
@@ -22,7 +23,7 @@ func App_refresh_friend_list(self_id any) {
 	}
 }
 
-func App_refresh_friend_list_action(self_id any, fl []iapi.FriendList) {
+func App_refresh_friend_list_action(self_id int64, fl []iapi.FriendList) {
 	FriendListModel.Api_delete(self_id)
 	var fss []FriendListModel.FriendList
 	for _, fll := range fl {

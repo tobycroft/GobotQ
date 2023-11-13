@@ -30,7 +30,7 @@ func EventListener() {
 				iapi.ConnToClient.Store(c.Conn, es.SelfId)
 			}
 			es.remoteaddr = c.Conn.RemoteAddr()
-			es.EventRouter()
+			go es.EventRouter()
 		} else {
 			fmt.Println(c.Conn.RemoteAddr(), "断开链接")
 			client, ok := iapi.ConnToClient.Load(c.Conn)

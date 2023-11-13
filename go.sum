@@ -149,16 +149,8 @@ github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcU
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/tobycroft/Calc v1.3.5 h1:b/xn6Bizt6pgC3mMiKgIpfQLLQE3SQMfxPN0j7fdjak=
 github.com/tobycroft/Calc v1.3.5/go.mod h1:Rtbth5rVSBICUCh2tH0tQwB1x2SHzhtkyB1FndlETEA=
-github.com/tobycroft/TuuzNet v1.2.4 h1:hmPSR+xreuDJInrYcULcclzYFz7RldUmT2KUookJrHU=
-github.com/tobycroft/TuuzNet v1.2.4/go.mod h1:OfiYrT8lQbonb/R7zRuW81qk2mjV0R83XedXqFAw1xc=
 github.com/tobycroft/TuuzNet v1.2.5 h1:2Cl3OjY9KD1AcQKOARqsw+EnicHUc3S6h6GUuKktvsw=
 github.com/tobycroft/TuuzNet v1.2.5/go.mod h1:OfiYrT8lQbonb/R7zRuW81qk2mjV0R83XedXqFAw1xc=
-github.com/tobycroft/gorose-pro v1.12.12 h1:4C0gqSpidWveKDHApggbiUa857SkShwpHWpZEJvNd2s=
-github.com/tobycroft/gorose-pro v1.12.12/go.mod h1:dgkEvC/YbvQKdrwCDac5Xy/OllbuERFz5Q1+QNRs3lQ=
-github.com/tobycroft/gorose-pro v1.13.0 h1:6XicZnuZvfpZGNaqcmt7OUwD7pbz2KZeEqbuZoMAomQ=
-github.com/tobycroft/gorose-pro v1.13.0/go.mod h1:dgkEvC/YbvQKdrwCDac5Xy/OllbuERFz5Q1+QNRs3lQ=
-github.com/tobycroft/gorose-pro v1.13.1 h1:kK7LV6rwHqRpvbSz4o/5+P1Hah/gf/II9hqqpVUIlEw=
-github.com/tobycroft/gorose-pro v1.13.1/go.mod h1:dgkEvC/YbvQKdrwCDac5Xy/OllbuERFz5Q1+QNRs3lQ=
 github.com/tobycroft/gorose-pro v1.13.2 h1:Zq8NC8eEa4f7EteMRcZnJyCUkw/CzfPqa6c2NSNPrus=
 github.com/tobycroft/gorose-pro v1.13.2/go.mod h1:dgkEvC/YbvQKdrwCDac5Xy/OllbuERFz5Q1+QNRs3lQ=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=

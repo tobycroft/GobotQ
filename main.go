@@ -26,6 +26,7 @@ func init() {
 }
 
 func main() {
+
 	go event.EventListener()
 	/*Cron which no needed
 	cron.BotInfoCron()
@@ -57,4 +58,9 @@ func main() {
 	route.OnRoute(mainroute)
 	mainroute.Run(":80")
 
+}
+
+type Per struct {
+	Name string
+	Age  int `redis:"age"`
 }

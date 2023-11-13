@@ -1,6 +1,7 @@
 package FriendListModel
 
 import (
+	"encoding/json"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
@@ -100,13 +101,16 @@ func Api_select(self_id any) []gorose.Data {
 }
 
 type FriendList struct {
-	Id       int64
-	SelfId   int64
-	UserId   int64
-	Nickname string
-	Remark   string
+	Id       int64  `json:"id"`
+	SelfId   int64  `gorose:"self_id" redis:"self_id"`
+	UserId   int64  `gorose:"user_id" redis:"user_id"`
+	Nickname string `gorose:"nickname" redis:"nickname"`
+	Remark   string `gorose:"remark" redis:"remark"`
 }
 
+func (i *FriendList) MarshalBinary() ([]byte, error) {
+	return json.Marshal(i)
+}
 func Api_insert_more(fl []FriendList) bool {
 	db := tuuz.Db().Table(table)
 	db.Data(fl)

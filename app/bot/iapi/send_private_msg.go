@@ -136,7 +136,7 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		"message":     pss.Message,
 		"auto_escape": false,
 	}
-	_, err := FriendListAction.App_find_friendList(pss.UserId)
+	_, err := FriendListAction.App_find_friendList(pss.Self_id, pss.UserId)
 	if err != nil {
 		group := GroupMemberModel.Api_find_byUid(pss.UserId)
 		if len(group) > 0 {

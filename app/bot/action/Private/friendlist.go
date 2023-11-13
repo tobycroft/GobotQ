@@ -1,10 +1,12 @@
 package Private
 
 import (
+	"fmt"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/FriendListModel"
+	"main.go/app/bot/redis/FriendListRedis"
 )
 
 func App_refresh_friend_list_all() {
@@ -24,6 +26,7 @@ func App_refresh_friend_list(self_id int64) {
 }
 
 func App_refresh_friend_list_action(self_id int64, fl []iapi.FriendList) {
+	fmt.Println("del", FriendListRedis.Cac_del(self_id, "*"))
 	FriendListModel.Api_delete(self_id)
 	var fss []FriendListModel.FriendList
 	for _, fll := range fl {
@@ -33,6 +36,7 @@ func App_refresh_friend_list_action(self_id int64, fl []iapi.FriendList) {
 		fs.Nickname = fll.UserName
 		fs.Remark = fll.UserRemark
 		fss = append(fss, fs)
+		fmt.Println(FriendListRedis.Cac_set(self_id, fs.UserId, fs))
 	}
 	FriendListModel.Api_insert_more(fss)
 }

@@ -89,6 +89,12 @@ func (oe OperationEvent) OperationRouter() {
 		fmt.Println("群成员更新完毕：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
 		break
 
+	case "send_group_msg":
+		break
+
+	case "send_private_msg":
+		break
+
 	default:
 		fmt.Println(oe)
 		break

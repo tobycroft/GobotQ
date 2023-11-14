@@ -75,11 +75,13 @@ func (api Post) Send_private() {
 		if err != nil {
 
 		} else {
-			if pss.AutoRetract {
-				var r Struct_Retract
-				r.Self_id = pss.Self_id
-				r.MessageId = pmr.MessageId
-				Retract_chan <- r
+			if pmr.MessageId != 0 {
+				if pss.AutoRetract {
+					var r Struct_Retract
+					r.Self_id = pss.Self_id
+					r.MessageId = pmr.MessageId
+					Retract_chan <- r
+				}
 			}
 		}
 	}
@@ -156,7 +158,7 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		Echo: echo{
 			Action: "send_private_msg",
 			SelfId: Calc.Any2Int64(pss.Self_id),
-			Extra:  pss.UserId,
+			Extra:  pss.AutoRetract,
 		},
 	})
 	if err != nil {

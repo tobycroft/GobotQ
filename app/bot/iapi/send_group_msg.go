@@ -84,14 +84,16 @@ func (api Ws) Send_group() {
 		if err != nil {
 
 		} else {
-			if gss.AutoRetract {
-				if gmr.MessageId < 2 {
-					fmt.Println("gmr.MessageId:", gmr.MessageId)
+			if gmr.MessageId != 0 {
+				if gss.AutoRetract {
+					if gmr.MessageId < 2 {
+						fmt.Println("gmr.MessageId:", gmr.MessageId)
+					}
+					var r Struct_Retract
+					r.Self_id = gss.Self_id
+					r.MessageId = gmr.MessageId
+					Retract_chan <- r
 				}
-				var r Struct_Retract
-				r.Self_id = gss.Self_id
-				r.MessageId = gmr.MessageId
-				Retract_chan <- r
 			}
 		}
 	}
@@ -140,7 +142,7 @@ func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		Echo: echo{
 			Action: "send_group_msg",
 			SelfId: Calc.Any2Int64(gss.Self_id),
-			Extra:  gss.Group_id,
+			Extra:  gss.AutoRetract,
 		},
 	})
 	if err != nil {

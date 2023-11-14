@@ -10,7 +10,6 @@ import (
 	"main.go/app/bot/model/BotModel"
 
 	"main.go/tuuz/Log"
-	"main.go/tuuz/Redis"
 	"net/url"
 	"time"
 )
@@ -55,10 +54,10 @@ type GroupSendStruct struct {
 
 func (api Post) Send_group() {
 	for gss := range Group_send_chan {
-		if Redis.CheckExists("SendCheck:" + gss.Message) {
-			continue
-		}
-		Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
+		//if Redis.CheckExists("SendCheck:" + gss.Message) {
+		//	continue
+		//}
+		//Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
 		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 
@@ -77,10 +76,10 @@ func (api Post) Send_group() {
 }
 func (api Ws) Send_group() {
 	for gss := range Group_send_chan {
-		if Redis.CheckExists("SendCheck:" + gss.Message) {
-			continue
-		}
-		Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
+		//if Redis.CheckExists("SendCheck:" + gss.Message) {
+		//	continue
+		//}
+		//Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
 		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 
@@ -124,10 +123,10 @@ func (api Post) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 	return gm.Data, nil
 }
 func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
-	msg := url.QueryEscape(gss.Message)
+	//msg := url.QueryEscape(gss.Message)
 	post := map[string]any{
 		"group_id":    gss.Group_id,
-		"message":     msg,
+		"message":     gss.Message,
 		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(gss.Self_id)

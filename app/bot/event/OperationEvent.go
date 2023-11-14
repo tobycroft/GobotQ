@@ -98,6 +98,10 @@ func (oe OperationEvent) OperationRouter() {
 				return
 			}
 			iapi.Retract_chan <- iapi.Struct_Retract{MessageId: data.Data.MessageId}
+			fmt.Println("发送消息，有撤回", oe.Echo.SelfId, data.Data.MessageId)
+		} else {
+			fmt.Println("发送消息，无撤回", oe.Echo.SelfId)
+
 		}
 		break
 

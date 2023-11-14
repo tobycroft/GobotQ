@@ -67,6 +67,7 @@ func (api Ws) DeleteMsg(self_id, message_id any) (bool, error) {
 		Echo: echo{
 			Action: "delete_msg",
 			SelfId: Calc.Any2Int64(self_id),
+			Extra:  message_id,
 		},
 	})
 	if err != nil {

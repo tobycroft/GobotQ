@@ -23,7 +23,7 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 		if groupfunction["sign_send_retract"].(int64) == 1 {
 			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
-			ret.Self_id = self_id
+			ret.SelfId = self_id
 			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
@@ -44,7 +44,7 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 		if groupfunction["sign_send_retract"].(int64) == 1 {
 			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
-			ret.Self_id = self_id
+			ret.SelfId = self_id
 			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)

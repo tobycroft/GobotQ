@@ -230,7 +230,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "测试撤回":
 		var ret iapi.Struct_Retract
 		ret.MessageId = message_id
-		ret.Self_id = self_id
+		ret.SelfId = self_id
 		if !admin {
 			return
 		}
@@ -490,7 +490,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	}
 	var ret iapi.Struct_Retract
 	ret.MessageId = message_id
-	ret.Self_id = self_id
+	ret.SelfId = self_id
 
 	switch Type {
 

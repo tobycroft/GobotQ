@@ -67,7 +67,7 @@ func (api Post) Send_group() {
 					fmt.Println("gmr.MessageId:", gmr.MessageId)
 				}
 				var r Struct_Retract
-				r.Self_id = gss.Self_id
+				r.SelfId = gss.Self_id
 				r.MessageId = gmr.MessageId
 				Retract_chan <- r
 			}
@@ -90,7 +90,7 @@ func (api Ws) Send_group() {
 						fmt.Println("gmr.MessageId:", gmr.MessageId)
 					}
 					var r Struct_Retract
-					r.Self_id = gss.Self_id
+					r.SelfId = gss.Self_id
 					r.MessageId = gmr.MessageId
 					Retract_chan <- r
 				}

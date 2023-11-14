@@ -11,7 +11,7 @@ import (
 )
 
 type Struct_Retract struct {
-	Self_id   any
+	SelfId    any
 	MessageId any
 }
 

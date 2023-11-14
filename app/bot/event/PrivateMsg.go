@@ -151,7 +151,7 @@ func (pm PrivateMessageStruct) active_main_function(self_id, user_id, group_id i
 	case "help":
 		botinfo := BotModel.Api_find(self_id)
 		if len(botinfo) > 0 {
-			if botinfo["owner"].(int64) == int64(user_id) {
+			if botinfo["owner"].(int64) == user_id {
 				iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
 			} else {
 				iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_private_help, false)

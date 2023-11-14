@@ -28,7 +28,7 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 		if groupfunction["sign_send_retract"].(int64) == 1 {
 			var ret iapi.Struct_Retract
 			ret.MessageId = message_id
-			ret.Self_id = self_id
+			ret.SelfId = self_id
 			iapi.Retract_chan <- ret
 		}
 	}(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)

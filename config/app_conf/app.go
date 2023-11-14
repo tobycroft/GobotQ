@@ -7,7 +7,7 @@ const TestMode = true
 
 //撤回秒数
 
-const Retract_time_second = 100
+const Retract_time_second = 1
 
 // 每日签到威望
 const Group_Sign_incr = 10

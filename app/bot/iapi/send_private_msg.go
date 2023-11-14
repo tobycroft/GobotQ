@@ -75,13 +75,11 @@ func (api Post) Send_private() {
 		if err != nil {
 
 		} else {
-			if pmr.MessageId != 0 {
-				if pss.AutoRetract {
-					var r Struct_Retract
-					r.Self_id = pss.Self_id
-					r.MessageId = pmr.MessageId
-					Retract_chan <- r
-				}
+			if pss.AutoRetract {
+				var r Struct_Retract
+				r.SelfId = pss.Self_id
+				r.MessageId = pmr.MessageId
+				Retract_chan <- r
 			}
 		}
 	}
@@ -98,10 +96,10 @@ func (api Ws) Send_private() {
 
 		} else {
 			if pss.AutoRetract {
-				var r Struct_Retract
-				r.Self_id = pss.Self_id
-				r.MessageId = pmr.MessageId
-				Retract_chan <- r
+				Retract_chan <- Struct_Retract{
+					SelfId:    pss.Self_id,
+					MessageId: pmr.MessageId,
+				}
 			}
 		}
 	}

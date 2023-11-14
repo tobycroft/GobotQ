@@ -15,7 +15,7 @@ require (
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/tobycroft/Calc v1.3.5
-	github.com/tobycroft/TuuzNet v1.2.5
+	github.com/tobycroft/TuuzNet v1.2.6
 	github.com/tobycroft/gorose-pro v1.13.2
 )
 

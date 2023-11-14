@@ -2,7 +2,6 @@ package event
 
 import (
 	"errors"
-	"fmt"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
@@ -15,7 +14,6 @@ import (
 	"net"
 
 	"main.go/tuuz/Log"
-	"main.go/tuuz/Redis"
 	"regexp"
 	"strings"
 	"sync"
@@ -59,33 +57,25 @@ func (pm PrivateMessageStruct) PrivateMsg() {
 	selfId := pm.SelfId
 	user_id := pm.UserId
 	group_id := int64(0)
-	user_idString := Calc.Int642String(user_id)
 	message := pm.RawMessage
 	rawMessage := pm.RawMessage
 
-	if Redis.CheckExists("PrivateMsg:" + user_idString) {
-		fmt.Println("PrivateMsgExist")
-		return
-	}
-
-	Redis.String_set("PrivateMsg:"+user_idString, Calc.Md5(message), 1*time.Second)
-
-	PrivateHandle(selfId, user_id, group_id, message, rawMessage, pm.remoteaddr.String())
+	pm.PrivateHandle(selfId, user_id, group_id, message, rawMessage)
 }
 
-func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remoteip string) {
+func (pm PrivateMessageStruct) PrivateHandle(selfId, user_id, group_id int64, message, rawMessage string) {
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(message)
 	new_text := reg.ReplaceAllString(message, "")
 
 	botinfo := BotModel.Api_find(selfId)
-	if botinfo["allow_ip"] == nil {
-		return
-	}
-	if !strings.Contains(remoteip, botinfo["allow_ip"].(string)) {
-		Log.Errs(errors.New(fmt.Sprint(remoteip, botinfo["allow_ip"].(string))), "不允许的ip")
-		return
-	}
+	//if botinfo["allow_ip"] == nil {
+	//	return
+	//}
+	//if !strings.Contains(remoteip, botinfo["allow_ip"].(string)) {
+	//	Log.Errs(errors.New(fmt.Sprint(remoteip, botinfo["allow_ip"].(string))), "不允许的ip")
+	//	return
+	//}
 
 	if len(botinfo) < 1 {
 		Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(selfId))
@@ -96,7 +86,7 @@ func PrivateHandle(selfId, user_id, group_id int64, message, rawMessage, remotei
 		return
 	}
 	if active {
-		privateHandle_acfur(selfId, user_id, group_id, new_text, message)
+		pm.active_main_function(selfId, user_id, group_id, new_text, message)
 	} else {
 		//在未激活acfur的情况下应该对原始内容进行还原
 		if private_default_reply(selfId, user_id, group_id, message) {
@@ -147,8 +137,12 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 	}
 }
 
-func privateHandle_acfur(selfId, user_id, group_id int64, message, origin_text string) {
+func (pm PrivateMessageStruct) active_main_function(selfId, user_id, group_id int64, message, origin_text string) {
 	switch message {
+
+	case "ip":
+		iapi.Api.Sendprivatemsg(selfId, user_id, group_id, pm.remoteaddr.String(), true)
+		break
 
 	case "app", "下载":
 		iapi.Api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_app_download_url, true)

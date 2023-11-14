@@ -240,11 +240,11 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		break
 
 	case "测试T出测试":
-		go Group.App_kick_user(self_id, group_id, user_id, true, groupfunction, "测试")
+		Group.App_kick_user(self_id, group_id, user_id, true, groupfunction, "测试")
 		break
 
 	case "测试禁言测试":
-		go Group.App_ban_user(self_id, group_id, user_id, true, groupfunction, "测试")
+		Group.App_ban_user(self_id, group_id, user_id, true, groupfunction, "测试")
 		break
 
 	case "测试拼音":
@@ -277,7 +277,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		go Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 1, groupmember, groupfunction)
+		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 1, groupmember, groupfunction)
 		break
 
 	case "T出词":
@@ -285,7 +285,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		go Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 2, groupmember, groupfunction)
+		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 2, groupmember, groupfunction)
 		break
 
 	case "撤回词":
@@ -293,7 +293,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			service.Not_admin(self_id, group_id, user_id)
 			return
 		}
-		go Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 3, groupmember, groupfunction)
+		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 3, groupmember, groupfunction)
 		break
 
 	case "清除小黑屋":
@@ -329,26 +329,24 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 			Group.AutoMessage(self_id, group_id, user_id, "执行中请稍等", groupfunction)
 		} else {
 			Redis.String_set("__lock__group_id__"+Calc.Any2String(group_id), 1, 60*time.Second)
-			go Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "")
+			Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "")
 		}
 		break
 
 	default:
-		go groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
+		groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
 		break
 	}
 }
-
-const group_function_number = 19
 
 var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting",
 	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易", "重新验证", "死亡验证", "活人验证"}
 
 func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
-	function := make([]bool, group_function_number+1, group_function_number+1)
-	new_text := make([]string, group_function_number+1, group_function_number+1)
+	function := make([]bool, len(group_function_type)+1, len(group_function_type)+1)
+	new_text := make([]string, len(group_function_type)+1, len(group_function_type)+1)
 	var wg sync.WaitGroup
-	wg.Add(group_function_number)
+	wg.Add(len(group_function_type))
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		new_text[idx] = message

@@ -96,7 +96,7 @@ func (gm GroupMessageStruct) GroupMsg() {
 			group.UserId = user_id
 			RefreshGroupChan <- group
 		}
-		go GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
+		GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 	} else {
 
 	}

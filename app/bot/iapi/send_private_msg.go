@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
+	"log"
 	"main.go/app/bot/action/FriendListAction"
 	"main.go/app/bot/action/GroupMemberAction"
 	"main.go/app/bot/model/BotModel"
@@ -86,11 +87,11 @@ func (api Post) Send_private() {
 }
 func (api Ws) Send_private() {
 	for pss := range Private_send_chan {
-		//if Redis.CheckExists("SendCheck:" + pss.Message) {
-		//	log.Println("SendCheck:" + pss.Message)
-		//	continue
-		//}
-		//Redis.String_set("SendCheck:"+pss.Message, true, 110*time.Second)
+		if Redis.CheckExists("SendCheck:" + pss.Message) {
+			log.Println("SendCheck:" + pss.Message)
+			continue
+		}
+		Redis.String_set("SendCheck:"+pss.Message, true, 110*time.Second)
 		pmr, err := api.sendprivatemsg(pss)
 		if err != nil {
 

@@ -8,6 +8,7 @@ import (
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
+	"main.go/tuuz/Redis"
 
 	"main.go/tuuz/Log"
 	"net/url"
@@ -76,10 +77,10 @@ func (api Post) Send_group() {
 }
 func (api Ws) Send_group() {
 	for gss := range Group_send_chan {
-		//if Redis.CheckExists("SendCheck:" + gss.Message) {
-		//	continue
-		//}
-		//Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
+		if Redis.CheckExists("SendCheck:" + gss.Message) {
+			continue
+		}
+		Redis.String_set("SendCheck:"+gss.Message, true, 110*time.Second)
 		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 

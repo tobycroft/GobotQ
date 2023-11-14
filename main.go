@@ -47,7 +47,7 @@ func main() {
 
 	//go cron.BanPermenentCheck()
 
-	go cron.PowerCheck()
+	//go cron.PowerCheck()
 
 	Calc.RefreshBaseNum()
 	mainroute := gin.Default()
@@ -58,9 +58,4 @@ func main() {
 	route.OnRoute(mainroute)
 	mainroute.Run(":80")
 
-}
-
-type Per struct {
-	Name string
-	Age  int `redis:"age"`
 }

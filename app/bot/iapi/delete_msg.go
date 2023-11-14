@@ -8,13 +8,11 @@ import (
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Log"
-	"time"
 )
 
 type Struct_Retract struct {
 	Self_id   any
 	MessageId any
-	Delay     time.Duration
 }
 
 var Retract_chan = make(chan Struct_Retract, 100)

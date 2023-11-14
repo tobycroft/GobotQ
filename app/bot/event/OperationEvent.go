@@ -89,10 +89,16 @@ func (oe OperationEvent) OperationRouter() {
 		fmt.Println("群成员更新完毕：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
 		break
 
-	case "send_group_msg":
-		break
-
-	case "send_private_msg":
+	case "send_private_msg", "send_group_msg":
+		if oe.Echo.Extra.(bool) {
+			data := iapi.MessageRet{}
+			err := sonic.UnmarshalString(oe.json, &data)
+			if err != nil {
+				fmt.Println(err, oe.json)
+				return
+			}
+			iapi.Retract_chan <- iapi.Struct_Retract{MessageId: data.Data.MessageId}
+		}
 		break
 
 	default:

@@ -47,7 +47,7 @@ func main() {
 
 	//go cron.BanPermenentCheck()
 
-	//go cron.PowerCheck()
+	go cron.PowerCheck()
 
 	Calc.RefreshBaseNum()
 	mainroute := gin.Default()

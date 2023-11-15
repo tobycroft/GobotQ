@@ -6,6 +6,7 @@ import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/cron"
 	"main.go/app/bot/event"
+	"main.go/common/BaseController"
 	"main.go/config/app_conf"
 	"main.go/route"
 	"os"
@@ -53,6 +54,7 @@ func main() {
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	//gin.DefaultWriter = ioutil.Discard
+	mainroute.Use(BaseController.CommonController())
 	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
 	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
 	route.OnRoute(mainroute)

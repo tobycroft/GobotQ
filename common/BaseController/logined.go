@@ -2,22 +2,83 @@ package BaseController
 
 import (
 	"github.com/gin-gonic/gin"
-	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupMemberModel"
-	"main.go/app/bot/model/UserTokenModel"
+	"main.go/common/BaseModel/TokenModel"
 	"main.go/config/app_conf"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
+	"net/http"
 )
 
 func LoginedController() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Header("S-P-I", c.ClientIP())
-		c.Header("S-P-P", app_conf.Project)
+		header_handler(c)
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+		uid := ""
+		token := ""
+		debug := ""
+		ok := false
+		if app_conf.HeaderAuthMode {
+			ok, uid, token, debug = header_auth(c)
+			if !ok {
+				c.Abort()
+				return
+			}
+		} else {
+			ok, uid, token, debug = post_auth(c)
+			if !ok {
+				c.Abort()
+				return
+			}
+		}
+		if app_conf.TestMode {
+			if debug == app_conf.Debug {
+				c.Next()
+				return
+			}
+		}
+		if len(TokenModel.Api_find(uid, token)) > 0 {
+			c.Next()
+			return
+		} else {
+			RET.Fail(c, -1, "Auth_fail", "未登录")
+			c.Abort()
+			return
+		}
+	}
+}
+
+func post_auth(c *gin.Context) (ok bool, uid string, token string, debug string) {
+	uid, ok = c.GetPostForm("uid")
+	if !ok {
+		c.JSON(RET.Ret_fail(-1, nil, "POST-[uid]"))
+		return
+	}
+	token, ok = c.GetPostForm("token")
+	if !ok {
+		c.JSON(RET.Ret_fail(-1, nil, "POST-[token]"))
+		return
+	}
+	debug = c.PostForm("debug")
+	return
+}
+
+func LoginWSController() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		header_handler(c)
 		uid, ok := Input.Post("uid", c, false)
 		if !ok {
 			c.Abort()
 			return
+		}
+		ws, ok := c.GetPostForm("wskey")
+		if ok {
+			if ws == app_conf.WebsocketKey {
+				c.Next()
+				return
+			}
 		}
 		token, ok := Input.Post("token", c, false)
 		if !ok {
@@ -31,55 +92,11 @@ func LoginedController() gin.HandlerFunc {
 				return
 			}
 		}
-		if len(UserTokenModel.Api_find_byToken(uid, token)) > 0 {
+		if len(TokenModel.Api_find(uid, token)) > 0 {
 			c.Next()
 			return
 		} else {
 			RET.Fail(c, -1, "Auth_fail", "未登录")
-			c.Abort()
-			return
-		}
-	}
-}
-
-func CheckBotPower() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		uid := c.PostForm("uid")
-		bot, ok := Input.PostInt("self_id", c)
-		if !ok {
-			return
-		}
-		data := BotModel.Api_find_byOwnerandBot(uid, bot)
-		if len(data) > 0 {
-			c.Next()
-			return
-		} else {
-			RET.Fail(c, 403, nil, "你并不拥有这个机器人")
-			c.Abort()
-			return
-		}
-	}
-}
-
-func CheckGroupAdmin() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		uid := c.PostForm("uid")
-		gid, ok := Input.PostInt64("group_id", c)
-		if !ok {
-			return
-		}
-		data := GroupMemberModel.Api_find(gid, uid)
-		if len(data) > 0 {
-			if data["role"].(string) == "admin" || data["role"].(string) == "owner" {
-				c.Next()
-				return
-			} else {
-				RET.Fail(c, 403, nil, "你不是本群的管理员")
-				c.Abort()
-				return
-			}
-		} else {
-			RET.Fail(c, 403, nil, "未找到该群，请检查机器人是否有加入本群")
 			c.Abort()
 			return
 		}

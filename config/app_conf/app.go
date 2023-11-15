@@ -1,18 +1,42 @@
 package app_conf
 
-const Project = "gobotq"
+import (
+	"fmt"
+	"github.com/Unknwon/goconfig"
+)
 
-const Debug = "65535"
-const TestMode = true
+var Project = "gobotq"
+var Debug = "65535"
+var TestMode = false
+var AppMode = "debug"
+var WebsocketKey = ""
 
-//撤回秒数
+func init() {
+	_ready()
+}
 
-const Retract_time_second = 100
+func _ready() {
+	cfg, err := goconfig.LoadConfigFile("conf.ini")
+	if err != nil {
+		goconfig.SaveConfigFile(&goconfig.ConfigFile{}, "conf.ini")
+		_ready()
+	} else {
+		value, err := cfg.GetSection("app")
+		if err != nil {
+			cfg.SetValue("app", "Project", Project)
+			cfg.SetValue("app", "Debug", Debug)
+			cfg.SetValue("app", "TestMode", "false")
+			cfg.SetValue("app", "AppMode", AppMode)
+			cfg.SetValue("app", "WebsocketKey", WebsocketKey)
+			goconfig.SaveConfigFile(cfg, "conf.ini")
+			fmt.Println("app_ready")
+			_ready()
+		}
+		Project = value["Project"]
+		Debug = value["Debug"]
 
-// 每日签到威望
-const Group_Sign_incr = 10
-
-const Qq = 710209520
-
-// 设定永久小黑屋禁言时间
-const Auto_ban_time = 2419200
+		TestMode = value["TestMode"] == "true"
+		AppMode = value["AppMode"]
+		WebsocketKey = value["WebsocketKey"]
+	}
+}

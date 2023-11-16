@@ -23,7 +23,7 @@ func ListController(route *gin.RouterGroup) {
 }
 
 func group_control(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	con_group := GroupMemberModel.Api_select_byUid(uid, []any{"owner", "admin"})
 	gids := []any{}
 	for _, data := range con_group {
@@ -37,7 +37,7 @@ func group_control(c *gin.Context) {
 }
 
 func group_joined(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	con_group := GroupMemberModel.Api_select_byUid(uid, []any{"member"})
 	gids := []any{}
 	for _, data := range con_group {
@@ -51,13 +51,13 @@ func group_joined(c *gin.Context) {
 }
 
 func group_member(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	usergroup := GroupMemberModel.Api_select_byUid(uid, []any{"owner", "admin"})
 	RET.Success(c, 0, usergroup, nil)
 }
 
 func group_setting_get(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return

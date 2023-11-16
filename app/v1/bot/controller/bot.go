@@ -24,7 +24,7 @@ func BotController(route *gin.RouterGroup) {
 }
 
 func bot_info(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bot, ok := Input.PostInt64("self_id", c)
 	if !ok {
 		return
@@ -38,7 +38,7 @@ func bot_info(c *gin.Context) {
 }
 
 func bot_add(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bot, ok := Input.PostInt("bot", c)
 	if !ok {
 		return
@@ -90,13 +90,13 @@ func bot_add(c *gin.Context) {
 }
 
 func bot_list(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	data := BotRequestModel.Api_select_byUid(uid)
 	RET.Success(c, 0, data, nil)
 }
 
 func bot_delete(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bot, ok := Input.PostInt("bot", c)
 	if !ok {
 		return

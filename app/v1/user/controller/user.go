@@ -21,7 +21,7 @@ func UserController(route *gin.RouterGroup) {
 }
 
 func user_info(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	user := UserMemberModel.Api_find(uid)
 	if len(user) > 0 {
 		delete(user, "password")
@@ -32,7 +32,7 @@ func user_info(c *gin.Context) {
 }
 
 func user_balance(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	ub := UserBalanceModel.Api_find(uid)
 	if len(ub) > 0 {
 		RET.Success(c, 0, ub, nil)
@@ -47,19 +47,19 @@ func user_balance(c *gin.Context) {
 }
 
 func user_balance_record(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	balances := UserBalanceRecordModel.Api_select(uid)
 	RET.Success(c, 0, balances, nil)
 }
 
 func login_record(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	data := UserTokenModel.Api_select(uid)
 	RET.Success(c, 0, data, nil)
 }
 
 func login_delete(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	id, ok := Input.PostInt64("id", c)
 	if !ok {
 		return

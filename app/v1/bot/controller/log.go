@@ -14,7 +14,7 @@ func LogController(route *gin.RouterGroup) {
 }
 
 func log_list_common(c *gin.Context) {
-	//self_id := c.PostForm("uid")
+	//self_id := c.GetHeader("uid")
 	//page, ok := Input.PostInt("page", c)
 	//if !ok {
 	//	return

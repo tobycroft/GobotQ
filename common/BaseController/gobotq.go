@@ -10,7 +10,7 @@ import (
 
 func CheckBotPower() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		uid := c.PostForm("uid")
+		uid := c.GetHeader("uid")
 		bot, ok := Input.PostInt("self_id", c)
 		if !ok {
 			return
@@ -29,7 +29,7 @@ func CheckBotPower() gin.HandlerFunc {
 
 func CheckGroupAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		uid := c.PostForm("uid")
+		uid := c.GetHeader("uid")
 		gid, ok := Input.PostInt64("group_id", c)
 		if !ok {
 			return

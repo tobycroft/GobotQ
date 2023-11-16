@@ -21,13 +21,13 @@ func list_unbind(c *gin.Context) {
 }
 
 func list_yours_own(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bots := BotModel.Api_select_byOwner(uid)
 	RET.Success(c, 0, bots, nil)
 }
 
 func list_your_admin_group(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bots := BotAdminModel.Api_select(uid)
 	RET.Success(c, 0, bots, nil)
 }

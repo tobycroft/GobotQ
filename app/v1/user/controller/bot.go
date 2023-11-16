@@ -15,7 +15,7 @@ func BotController(route *gin.RouterGroup) {
 }
 
 func bot_list(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bots := BotModel.Api_select_byOwner(uid)
 	RET.Success(c, 0, bots, nil)
 }

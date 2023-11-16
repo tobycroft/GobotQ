@@ -20,7 +20,7 @@ func EditController(route *gin.RouterGroup) {
 }
 
 func edit_change_img(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	bot := c.PostForm("self_id")
 	img, ok := Input.Post("img", c, true)
 	if !ok {

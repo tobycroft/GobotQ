@@ -56,7 +56,7 @@ func autosend_delete(c *gin.Context) {
 
 func autosend_add(c *gin.Context) {
 	gid := c.PostForm("group_id")
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	ident, ok := Input.Post("ident", c, true)
 	if !ok {
 		return
@@ -113,7 +113,7 @@ func autosend_add(c *gin.Context) {
 
 func autosend_update(c *gin.Context) {
 	gid := c.PostForm("group_id")
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	id, ok := Input.PostInt("id", c)
 	if !ok {
 		return

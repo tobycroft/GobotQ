@@ -23,7 +23,7 @@ func ServerController(route *gin.RouterGroup) {
 }
 
 func server_add(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	address, ok := Input.Post("address", c, false)
 	if !ok {
 		return
@@ -85,7 +85,7 @@ type get_login_info struct {
 }
 
 func server_update(c *gin.Context) {
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	self_id, ok := Input.PostInt64("self_id", c)
 	if !ok {
 		return

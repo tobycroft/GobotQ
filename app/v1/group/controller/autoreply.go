@@ -26,7 +26,7 @@ func autoreply_list(c *gin.Context) {
 
 func autoreply_add(c *gin.Context) {
 	gid := c.PostForm("group_id")
-	uid := c.PostForm("uid")
+	uid := c.GetHeader("uid")
 	Type, ok := Input.Post("type", c, false)
 	if !ok {
 		return

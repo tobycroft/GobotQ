@@ -9,6 +9,7 @@ import (
 	"main.go/app/v1/user/action/BalanceAction"
 	"main.go/common/BaseController"
 	"main.go/tuuz"
+	"main.go/tuuz/Date"
 
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
@@ -72,7 +73,8 @@ func bot_add(c *gin.Context) {
 	db := tuuz.Db()
 	db.Begin()
 	br.Db = db
-	if br.Api_insert(uid, bot, password, uid, secret, month*3600*30) {
+	end_date := Date.Date_offset_month_todayWithTimeZero(month)
+	if br.Api_insert(uid, bot, password, uid, secret, end_date) {
 		var ba BalanceAction.Interface
 		ba.Db = db
 		err := ba.App_single_balance(uid, nil, -float64(month)*Calc.Any2Float64(price), "预定了"+Calc.Any2String("month")+"月的服务")

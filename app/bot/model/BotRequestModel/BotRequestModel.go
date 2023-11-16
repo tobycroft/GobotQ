@@ -12,7 +12,7 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func (self *Interface) Api_insert(uid, bot, password, owner, secret, time any) bool {
+func (self *Interface) Api_insert(uid, bot, password, owner, secret, end_date any) bool {
 	db := self.Db.Table(table)
 	data := map[string]any{
 		"uid":      uid,
@@ -20,7 +20,7 @@ func (self *Interface) Api_insert(uid, bot, password, owner, secret, time any) b
 		"password": password,
 		"owner":    owner,
 		"secret":   secret,
-		"time":     time,
+		"end_date": end_date,
 	}
 	db.Data(data)
 	_, err := db.Insert()

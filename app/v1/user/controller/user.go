@@ -3,10 +3,10 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/UserMemberModel"
-	"main.go/app/bot/model/UserTokenModel"
 	"main.go/app/v1/user/model/UserBalanceModel"
 	"main.go/app/v1/user/model/UserBalanceRecordModel"
 	"main.go/common/BaseController"
+	"main.go/common/BaseModel/TokenModel"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
 )
@@ -54,7 +54,7 @@ func user_balance_record(c *gin.Context) {
 
 func login_record(c *gin.Context) {
 	uid := c.GetHeader("uid")
-	data := UserTokenModel.Api_select(uid)
+	data := TokenModel.Api_select(uid)
 	RET.Success(c, 0, data, nil)
 }
 
@@ -64,7 +64,7 @@ func login_delete(c *gin.Context) {
 	if !ok {
 		return
 	}
-	if UserTokenModel.Api_delete_byId(uid, id) {
+	if TokenModel.Api_delete_byId(uid, id) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

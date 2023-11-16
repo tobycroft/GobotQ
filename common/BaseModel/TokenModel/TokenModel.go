@@ -88,3 +88,32 @@ func Api_find_type(uid, token, Type interface{}) gorose.Data {
 		return ret
 	}
 }
+func Api_delete_byId(qq, id any) bool {
+	db := tuuz.Db().Table(table)
+	where := map[string]any{
+		"qq": qq,
+		"id": id,
+	}
+	db.Where(where)
+	_, err := db.Delete()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+func Api_select(qq any) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	where := map[string]any{
+		"qq": qq,
+	}
+	db.Where(where)
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}

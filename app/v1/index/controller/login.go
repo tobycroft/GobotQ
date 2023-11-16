@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/model/UserMemberModel"
-	"main.go/app/bot/model/UserTokenModel"
 	"main.go/common/BaseController"
+	"main.go/common/BaseModel/TokenModel"
 
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
@@ -29,7 +29,7 @@ func login(c *gin.Context) {
 	user := UserMemberModel.Api_find_byQqandPassword(qq, password)
 	if len(user) > 0 {
 		token := Calc.GenerateToken()
-		UserTokenModel.Api_insert(qq, token, c.ClientIP())
+		TokenModel.Api_insert(qq, token, c.ClientIP())
 		RET.Success(c, 0, map[string]any{
 			"uid":   qq,
 			"token": token,

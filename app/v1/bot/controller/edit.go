@@ -41,11 +41,7 @@ func edit_clear_owner(c *gin.Context) {
 	if !ok {
 		return
 	}
-	secret, ok := Input.Post("secret", c, false)
-	if !ok {
-		return
-	}
-	if BotModel.Api_update_owner(self_id, secret) {
+	if BotModel.Api_update_owner(self_id, 0) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -57,7 +53,11 @@ func edit_change_secret(c *gin.Context) {
 	if !ok {
 		return
 	}
-	if BotModel.Api_update_secret(self_id, 0) {
+	secret, ok := Input.Post("secret", c, false)
+	if !ok {
+		return
+	}
+	if BotModel.Api_update_secret(self_id, secret) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

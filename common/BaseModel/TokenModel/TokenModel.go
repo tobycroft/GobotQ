@@ -39,11 +39,12 @@ func Api_delete_byType(uid, Type interface{}) bool {
 	}
 }
 
-func Api_insert(uid, token, Type interface{}) bool {
+func Api_insert(uid, token, Type, ip interface{}) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]interface{}{
 		"uid":   uid,
 		"token": token,
+		"ip":    ip,
 		"type":  Type,
 	}
 	db.Data(data)

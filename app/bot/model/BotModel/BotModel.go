@@ -12,14 +12,14 @@ type Interface struct {
 	Db gorose.IOrm
 }
 
-func Api_insert(self_id, cname, Type, owner, secret, password, end_time, url any) bool {
+func Api_insert(self_id, cname, Type, owner, secret, password, end_date, url any) bool {
 	db := tuuz.Db()
 	var self Interface
 	self.Db = db
-	return self.Api_insert(self_id, cname, Type, owner, secret, password, end_time, url)
+	return self.Api_insert(self_id, cname, Type, owner, secret, password, end_date, url)
 }
 
-func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password, end_time, url any) bool {
+func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password, end_date, url any) bool {
 	db := self.Db.Table(table)
 	data := map[string]any{
 		"self_id":  self_id,
@@ -28,7 +28,7 @@ func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password,
 		"owner":    owner,
 		"secret":   secret,
 		"password": password,
-		"end_time": end_time,
+		"end_date": end_date,
 		"url":      url,
 	}
 	db.Data(data)
@@ -43,7 +43,7 @@ func (self *Interface) Api_insert(self_id, cname, Type, owner, secret, password,
 
 func Api_select() []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Where("end_time>UNIX_TIMESTAMP(CURRENT_TIMESTAMP)")
+	db.Where("end_date>UNIX_TIMESTAMP(CURRENT_TIMESTAMP)")
 	db.Where("active", "=", 1)
 	db.Where("url IS NOT NULL")
 	db.Where("url != ''")
@@ -89,7 +89,7 @@ func Api_find_byOwnerandBot(owner, self_id any) gorose.Data {
 
 func Api_find_byBot_WithoutPassword(self_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Fields("self_id,cname,img,type,owner,end_time,active,date")
+	db.Fields("self_id,cname,img,type,owner,end_date,active,date")
 	where := map[string]any{
 		"self_id": self_id,
 	}
@@ -105,7 +105,7 @@ func Api_find_byBot_WithoutPassword(self_id any) []gorose.Data {
 
 func Api_select_byOwner(owner any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Fields("self_id,cname,img,type,owner,end_time,active,date")
+	db.Fields("self_id,cname,img,type,owner,end_date,active,date")
 	where := map[string]any{
 		"owner": owner,
 	}

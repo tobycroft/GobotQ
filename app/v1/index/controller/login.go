@@ -29,7 +29,7 @@ func login(c *gin.Context) {
 	user := UserMemberModel.Api_find_byQqandPassword(qq, password)
 	if len(user) > 0 {
 		token := Calc.GenerateToken()
-		TokenModel.Api_insert(qq, token, c.ClientIP())
+		TokenModel.Api_insert(qq, token, "web", c.ClientIP())
 		RET.Success(c, 0, map[string]any{
 			"uid":   qq,
 			"token": token,

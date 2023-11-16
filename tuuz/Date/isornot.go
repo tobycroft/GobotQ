@@ -4,11 +4,11 @@ import (
 	"time"
 )
 
-func Date_between_time(the_time time.Time, start_time time.Time, end_time time.Time) bool {
+func Date_between_time(the_time time.Time, start_time time.Time, end_date time.Time) bool {
 	if the_time.Before(start_time) {
 		return false
 	}
-	if the_time.After(end_time) {
+	if the_time.After(end_date) {
 		return false
 	}
 	return true

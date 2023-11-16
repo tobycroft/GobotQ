@@ -8,12 +8,12 @@ import (
 
 const table = "bot_admin"
 
-func Api_insert(bot, qq, end_time any) bool {
+func Api_insert(bot, qq, end_date any) bool {
 	db := tuuz.Db().Table(table)
 	data := map[string]any{
 		"bot":      bot,
 		"admin":    qq,
-		"end_time": end_time,
+		"end_date": end_date,
 	}
 	db.Data(data)
 	_, err := db.Insert()
@@ -59,7 +59,7 @@ func Api_inc_endTime(bot, qq any, endTime_incr int) bool {
 
 func Api_select(qq any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	db.Fields("id,cname,img,owner,admin,type,active,end_time")
+	db.Fields("id,cname,img,owner,admin,type,active,end_date")
 	where := map[string]any{
 		"admin": qq,
 	}

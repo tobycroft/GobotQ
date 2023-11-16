@@ -81,7 +81,7 @@ func (pm PrivateMessageStruct) PrivateHandle(selfId, user_id, group_id int64, me
 		Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(selfId))
 		return
 	}
-	if botinfo["end_time"].(int64) < time.Now().Unix() {
+	if botinfo["end_date"].(time.Time).Before(time.Now()) {
 		iapi.Api.Sendprivatemsg(selfId, user_id, group_id, app_default.Default_over_time, false)
 		return
 	}

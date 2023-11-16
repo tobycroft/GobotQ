@@ -15,16 +15,16 @@ import (
 	"main.go/tuuz/RET"
 )
 
-func BotController(route *gin.RouterGroup) {
+func InfoController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-	route.Any("info", bot_info)
-	route.Any("add", bot_add)
-	route.Any("list", bot_list)
-	route.Any("del", bot_delete)
+	route.Any("info", info_info)
+	route.Any("add", info_add)
+	route.Any("list", info_list)
+	route.Any("del", info_delete)
 }
 
-func bot_info(c *gin.Context) {
+func info_info(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	bot, ok := Input.PostInt64("self_id", c)
 	if !ok {
@@ -38,13 +38,13 @@ func bot_info(c *gin.Context) {
 	}
 }
 
-func bot_add(c *gin.Context) {
+func info_add(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	bot, ok := Input.PostInt("bot", c)
 	if !ok {
 		return
 	}
-	password, ok := Input.Post("password", c, false)
+	password, ok := Input.Post("owner", c, false)
 	if !ok {
 		return
 	}
@@ -91,13 +91,13 @@ func bot_add(c *gin.Context) {
 	}
 }
 
-func bot_list(c *gin.Context) {
+func info_list(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	data := BotRequestModel.Api_select_byUid(uid)
 	RET.Success(c, 0, data, nil)
 }
 
-func bot_delete(c *gin.Context) {
+func info_delete(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	bot, ok := Input.PostInt("bot", c)
 	if !ok {

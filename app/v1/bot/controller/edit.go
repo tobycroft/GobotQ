@@ -16,7 +16,7 @@ func EditController(route *gin.RouterGroup) {
 	route.Any("clear_owner", edit_clear_owner)
 	route.Any("secret", edit_change_secret)
 	route.Any("password", edit_change_password)
-	route.Any("url", edit_change_url)
+	route.Any("ip", edit_change_ip)
 }
 
 func edit_change_img(c *gin.Context) {
@@ -81,16 +81,16 @@ func edit_change_password(c *gin.Context) {
 	}
 }
 
-func edit_change_url(c *gin.Context) {
+func edit_change_ip(c *gin.Context) {
 	self_id, ok := Input.PostInt("self_id", c)
 	if !ok {
 		return
 	}
-	url, ok := Input.Post("url", c, false)
+	allow_ip, ok := Input.Post("allow_ip", c, false)
 	if !ok {
 		return
 	}
-	if BotModel.Api_update_url(self_id, url) {
+	if BotModel.Api_update_allowIp(self_id, allow_ip) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

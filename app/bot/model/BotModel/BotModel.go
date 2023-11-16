@@ -215,25 +215,11 @@ func Api_update_cname(self_id, cname any) bool {
 	}
 }
 
-func Api_find_url(self_id any) gorose.Data {
+func Api_update_allowIp(self_id, allow_ip any) bool {
 	db := tuuz.Db().Table(table)
-	db.Fields("url")
-	db.Where("self_id", self_id)
-	ret, err := db.First()
-	if err != nil {
-		Log.Dbrr(err, tuuz.FUNCTION_ALL())
-		return nil
-	} else {
-		return ret
-	}
-}
-
-func Api_update_url(self_id, url any) bool {
-	db := tuuz.Db().Table(table)
-	db.Fields("url")
 	db.Where("self_id", self_id)
 	db.Data(map[string]any{
-		"url": url,
+		"allow_ip": allow_ip,
 	})
 	_, err := db.Update()
 	if err != nil {

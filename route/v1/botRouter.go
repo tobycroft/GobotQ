@@ -13,7 +13,7 @@ func BotRouter(route *gin.RouterGroup) {
 	controller.BindController(route.Group("bind"))
 	controller.EditController(route.Group("edit"))
 	controller.ListController(route.Group("list"))
-	controller.InfoController(route.Group("bot"))
+	controller.InfoController(route.Group("info"))
 	controller.GroupController(route.Group("group"))
 	controller.ServerController(route.Group("server"))
 	controller.LogController(route.Group("log"))

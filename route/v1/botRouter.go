@@ -10,7 +10,6 @@ func BotRouter(route *gin.RouterGroup) {
 		context.String(0, route.BasePath())
 	})
 
-	controller.BindController(route.Group("bind"))
 	controller.EditController(route.Group("edit"))
 	controller.InfoController(route.Group("info"))
 	controller.RequestController(route.Group("request"))

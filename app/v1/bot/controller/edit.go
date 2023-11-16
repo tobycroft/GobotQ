@@ -70,9 +70,10 @@ func edit_change_password(c *gin.Context) {
 		return
 	}
 	password, ok := Input.Post("password", c, false)
-	if ok {
+	if !ok {
 		return
 	}
+
 	if BotModel.Api_update_password(self_id, password) {
 		RET.Success(c, 0, nil, nil)
 	} else {

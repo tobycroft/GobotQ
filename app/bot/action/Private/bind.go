@@ -1,6 +1,7 @@
 package Private
 
 import (
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
@@ -15,7 +16,7 @@ func App_bind_robot(self_id, user_id, group_id int64, message string) {
 	}
 	data := BotModel.Api_find(self_id)
 	if len(data) > 0 {
-		if data["owner"].(int64) != 0 {
+		if Calc.Any2Int64(data["owner"]) != 0 {
 			iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "本机器人已经被绑定，如果需要清除绑定，请让号主解除本机器人的绑定", true)
 			return
 		}
@@ -27,7 +28,7 @@ func App_bind_robot(self_id, user_id, group_id int64, message string) {
 			db.Rollback()
 			return
 		}
-		if data["secret"].(string) != message {
+		if Calc.Any2String(data["secret"]) != message {
 			db.Rollback()
 			iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "绑定密码不正确", false)
 			return
@@ -50,7 +51,7 @@ func App_unbind_bot(self_id int64, user_id, group_id int64, message string) {
 		iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "未找到当前机器人的信息，请稍后再试"+app_default.Default_error_alert, false)
 		return
 	}
-	if data["owner"].(int64) != int64(user_id) {
+	if Calc.Any2Int64(data["owner"]) != user_id {
 		iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
 		return
 	}
@@ -71,7 +72,7 @@ func App_change_bot_secret(self_id int64, user_id, group_id int64, message strin
 		iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "请使用\"acfur修改密码(+)密码\"来修改您机器人的绑定密码", false)
 		return
 	}
-	if data["owner"].(int64) != int64(user_id) {
+	if Calc.Any2Int64(data["owner"]) != int64(user_id) {
 		iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "对不起您不是当前机器人的拥有人，请联系拥有人先行解绑", true)
 		return
 	}

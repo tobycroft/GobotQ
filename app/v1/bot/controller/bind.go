@@ -28,7 +28,7 @@ func bind_bot_add(c *gin.Context) {
 	}
 	data := BotModel.Api_find(bot)
 	if len(data) > 0 {
-		if data["owner"].(int64) != 0 {
+		if Calc.Any2Int64(data["owner"]) != 0 {
 			RET.Fail(c, 407, "该机器人已经被绑定", "该机器人已经被绑定")
 			return
 		}

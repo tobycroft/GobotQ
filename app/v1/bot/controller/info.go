@@ -10,6 +10,7 @@ import (
 )
 
 func InfoController(route *gin.RouterGroup) {
+	route.Any("list", info_list)
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 	route.Any("bind", info_bind)
 	route.Any("get", info_get)
@@ -17,6 +18,10 @@ func InfoController(route *gin.RouterGroup) {
 	route.Any("owned", info_yours_own)
 }
 
+func info_list(c *gin.Context) {
+	datas := BotModel.Api_select_public("public")
+	RET.Success(c, 0, datas, nil)
+}
 func info_unbind(c *gin.Context) {
 	unbinds := BotModel.Api_select_byOwner(0)
 	RET.Success(c, 0, unbinds, nil)

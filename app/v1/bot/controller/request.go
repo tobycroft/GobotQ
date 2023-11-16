@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotRequestModel"
 	"main.go/app/bot/model/SystemParamModel"
 	"main.go/app/v1/user/action/BalanceAction"
@@ -18,24 +17,9 @@ import (
 func RequestController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-	route.Any("info", request_info)
 	route.Any("add", request_add)
 	route.Any("list", request_list)
 	route.Any("del", request_delete)
-}
-
-func request_info(c *gin.Context) {
-	uid := c.GetHeader("uid")
-	bot, ok := Input.PostInt64("self_id", c)
-	if !ok {
-		return
-	}
-	botinfo := BotModel.Api_find_byOwnerandBot(uid, bot)
-	if len(botinfo) > 0 {
-		RET.Success(c, 0, botinfo, nil)
-	} else {
-		RET.Fail(c, 404, nil, nil)
-	}
 }
 
 func request_add(c *gin.Context) {

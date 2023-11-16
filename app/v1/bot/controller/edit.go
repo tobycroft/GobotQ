@@ -21,12 +21,15 @@ func EditController(route *gin.RouterGroup) {
 
 func edit_change_img(c *gin.Context) {
 	uid := c.GetHeader("uid")
-	bot := c.PostForm("self_id")
+	self_id, ok := Input.PostInt("self_id", c)
+	if !ok {
+		return
+	}
 	img, ok := Input.Post("img", c, true)
 	if !ok {
 		return
 	}
-	if BotModel.Api_update_img(uid, bot, img) {
+	if BotModel.Api_update_img(uid, self_id, img) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -34,8 +37,11 @@ func edit_change_img(c *gin.Context) {
 }
 
 func edit_clear_owner(c *gin.Context) {
-	bot := c.PostForm("self_id")
-	if BotModel.Api_update_owner(bot, 0) {
+	self_id, ok := Input.PostInt("self_id", c)
+	if !ok {
+		return
+	}
+	if BotModel.Api_update_owner(self_id, 0) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -43,8 +49,11 @@ func edit_clear_owner(c *gin.Context) {
 }
 
 func edit_change_secret(c *gin.Context) {
-	bot := c.PostForm("self_id")
-	if BotModel.Api_update_secret(bot, 0) {
+	self_id, ok := Input.PostInt("self_id", c)
+	if !ok {
+		return
+	}
+	if BotModel.Api_update_secret(self_id, 0) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -52,12 +61,15 @@ func edit_change_secret(c *gin.Context) {
 }
 
 func edit_change_password(c *gin.Context) {
-	bot := c.PostForm("self_id")
+	self_id, ok := Input.PostInt("self_id", c)
+	if !ok {
+		return
+	}
 	password, ok := Input.Post("password", c, false)
 	if ok {
 		return
 	}
-	if BotModel.Api_update_password(bot, password) {
+	if BotModel.Api_update_password(self_id, password) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)
@@ -65,7 +77,10 @@ func edit_change_password(c *gin.Context) {
 }
 
 func edit_change_url(c *gin.Context) {
-	self_id := c.PostForm("self_id")
+	self_id, ok := Input.PostInt("self_id", c)
+	if !ok {
+		return
+	}
 	url, ok := Input.Post("url", c, false)
 	if !ok {
 		return

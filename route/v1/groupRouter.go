@@ -18,5 +18,6 @@ func GroupRouter(route *gin.RouterGroup) {
 	controller.BanController(route.Group("ban"))
 	controller.WordController(route.Group("word"))
 
+	controller.MemberController(route.Group("member"))
 	controller.InfoController(route.Group("info"))
 }

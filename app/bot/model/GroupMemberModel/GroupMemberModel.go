@@ -133,10 +133,7 @@ func Api_select_groupBy_groupId(self_id any) []gorose.Data {
 
 func Api_select_byUid(user_id any, role []any) []gorose.Data {
 	db := tuuz.Db().Table(table)
-	where := map[string]any{
-		"user_id": user_id,
-	}
-	db.Where(where)
+	db.Where("user_id", user_id)
 	db.WhereIn("role", role)
 	ret, err := db.Get()
 	if err != nil {

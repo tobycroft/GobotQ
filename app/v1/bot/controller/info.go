@@ -19,7 +19,11 @@ func InfoController(route *gin.RouterGroup) {
 }
 
 func info_list(c *gin.Context) {
-	datas := BotModel.Api_select_public("public")
+	Type, ok := Input.PostIn("type", c, []string{"public", "share"})
+	if !ok {
+		return
+	}
+	datas := BotModel.Api_select_public(Type)
 	RET.Success(c, 0, datas, nil)
 }
 func info_unbind(c *gin.Context) {

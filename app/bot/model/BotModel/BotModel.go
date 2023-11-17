@@ -230,6 +230,19 @@ func Api_update_allowIp(self_id, allow_ip any) bool {
 	}
 }
 
+func Api_update_manual(self_id, data any) bool {
+	db := tuuz.Db().Table(table)
+	db.Where("self_id", self_id)
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_select_public(Type any) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Fields("self_id,cname,img,type,owner,end_date,active,date")

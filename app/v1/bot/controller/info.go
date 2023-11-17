@@ -12,10 +12,12 @@ import (
 func InfoController(route *gin.RouterGroup) {
 	route.Any("list", info_list)
 	route.Use(BaseController.LoginedController(), gin.Recovery())
+	route.Any("edit", info_edit)
 	route.Any("bind", info_bind)
 	route.Any("get", info_get)
 	route.Any("unbind", info_unbind)
-	route.Any("owned", info_yours_own)
+	route.Any("owned", info_own)
+
 }
 
 func info_list(c *gin.Context) {
@@ -26,12 +28,36 @@ func info_list(c *gin.Context) {
 	datas := BotModel.Api_select_public(Type)
 	RET.Success(c, 0, datas, nil)
 }
+func info_edit(c *gin.Context) {
+	self_id, ok := Input.PostInt64("self_id", c)
+	if !ok {
+		return
+	}
+	mp := Input.ModelPost{}
+	mp.PostString("allow_ip")
+	mp.PostIn("type", []string{"public", "share", "private"})
+	mp.PostInt64("owner")
+	mp.PostInt64("secret")
+	mp.PostInt64("password")
+	mp.Xss(true)
+	err, errs := mp.Error()
+	if err != nil {
+		RET.Fail(c, 400, errs, err.Error())
+		return
+	}
+	data := mp.Select()
+	if BotModel.Api_update_manual(self_id, data) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
+}
 func info_unbind(c *gin.Context) {
 	unbinds := BotModel.Api_select_byOwner(0)
 	RET.Success(c, 0, unbinds, nil)
 }
 
-func info_yours_own(c *gin.Context) {
+func info_own(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	bots := BotModel.Api_select_byOwner(uid)
 	RET.Success(c, 0, bots, nil)

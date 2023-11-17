@@ -134,7 +134,26 @@ func Api_select_groupBy_groupId(self_id any) []gorose.Data {
 func Api_select_byUid(user_id any, role []any) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	db.Where("user_id", user_id)
-	db.WhereIn("role", role)
+	if len(role) > 0 {
+		db.WhereIn("role", role)
+	}
+	ret, err := db.Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
+func Api_select_inUids(user_ids, role []any) []gorose.Data {
+	db := tuuz.Db().Table(table)
+	if len(user_ids) > 0 {
+		db.WhereIn("user_id", user_ids)
+	}
+	if len(role) > 0 {
+		db.WhereIn("role", role)
+	}
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

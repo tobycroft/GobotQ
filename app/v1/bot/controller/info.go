@@ -33,7 +33,7 @@ func info_edit(c *gin.Context) {
 	if !ok {
 		return
 	}
-	mp := Input.ModelPost{}
+	mp := Input.NewModelPost(c)
 	mp.PostString("allow_ip")
 	mp.PostIn("type", []string{"public", "share", "private"})
 	mp.PostInt64("owner")
@@ -46,6 +46,10 @@ func info_edit(c *gin.Context) {
 		return
 	}
 	data := mp.Select()
+	if len(data) < 1 {
+		RET.Fail(c, 400, nil, nil)
+		return
+	}
 	if BotModel.Api_update_manual(self_id, data) {
 		RET.Success(c, 0, nil, nil)
 	} else {

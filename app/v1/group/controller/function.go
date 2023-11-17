@@ -40,6 +40,10 @@ func function_edit(c *gin.Context) {
 	if !ok {
 		return
 	}
+	group_id, ok := Input.PostInt64("group_id", c)
+	if !ok {
+		return
+	}
 
 	mp := Input.NewModelPost(c)
 	mp.PostBool("sign")
@@ -83,7 +87,7 @@ func function_edit(c *gin.Context) {
 		return
 	}
 	data := mp.Select()
-	if GroupFunctionModel.Api_update_more(self_id, data) {
+	if GroupFunctionModel.Api_update_more(group_id, data) {
 		RET.Success(c, 0, nil, nil)
 	} else {
 		RET.Fail(c, 500, nil, nil)

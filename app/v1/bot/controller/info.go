@@ -39,6 +39,7 @@ func info_edit(c *gin.Context) {
 	mp.PostInt64("owner")
 	mp.PostInt64("secret")
 	mp.PostInt64("password")
+	mp.PostBool("active")
 	mp.Xss(true)
 	err, errs := mp.Error()
 	if err != nil {

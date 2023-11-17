@@ -279,6 +279,20 @@ func Api_find_owner(self_id, group_id any) gorose.Data {
 	}
 }
 
+func Api_find_byRoles(group_id, user_id any, role []any) gorose.Data {
+	db := tuuz.Db().Table(table)
+	db.Where("group_id", group_id)
+	db.Where("user_id", user_id)
+	db.WhereIn("role", role)
+	ret, err := db.First()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return nil
+	} else {
+		return ret
+	}
+}
+
 func Api_select_admin(self_id, group_id any) []gorose.Data {
 	db := tuuz.Db().Table(table)
 	where := map[string]any{

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/common/BaseController"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
@@ -36,12 +37,14 @@ func function_detail(c *gin.Context) {
 }
 
 func function_edit(c *gin.Context) {
-	self_id, ok := Input.PostInt64("self_id", c)
+	uid := c.GetHeader("uid")
+	group_id, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return
 	}
-	group_id, ok := Input.PostInt64("group_id", c)
-	if !ok {
+	data := GroupMemberModel.Api_find_byRoles(group_id, uid, []any{"admin", "owner"})
+	if len(data) < 1 {
+		RET.Fail(c, 403, nil, "你不是管理员，没有权限修改群设定")
 		return
 	}
 

@@ -56,3 +56,16 @@ func Api_update(group_id, key, value any) bool {
 		return true
 	}
 }
+
+func Api_update_more(group_id, data any) bool {
+	db := tuuz.Db().Table(table)
+	db.Where("group_id", group_id)
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}

@@ -20,4 +20,5 @@ func GroupRouter(route *gin.RouterGroup) {
 
 	controller.MemberController(route.Group("member"))
 	controller.InfoController(route.Group("info"))
+	controller.FunctionController(route.Group("function"))
 }

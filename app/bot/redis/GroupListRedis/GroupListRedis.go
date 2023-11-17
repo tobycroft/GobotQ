@@ -32,8 +32,8 @@ func Cac_set[T GroupListModel.GroupList](self_id, group_id any, data T) error {
 	return Redis.Hash_set_struct(table(self_id, group_id), data)
 }
 
-func Cac_find[T GroupListModel.GroupList](self_id, group_id any) (T, error) {
-	var data T
+func Cac_find(self_id, group_id any) (GroupListModel.GroupList, error) {
+	var data GroupListModel.GroupList
 	err := Redis.Hash_get_struct(table(self_id, group_id), &data)
 	return data, err
 }

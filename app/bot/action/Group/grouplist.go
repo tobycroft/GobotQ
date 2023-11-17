@@ -16,12 +16,12 @@ func App_refresh_group_list() {
 		if err != nil {
 
 		} else {
-			App_refresh_group_list_action(bot["self_id"], gl)
+			App_refresh_group_list_action(bot["self_id"].(int64), gl)
 		}
 	}
 }
 
-func App_refresh_group_list_action(self_id any, gl []iapi.GroupList) {
+func App_refresh_group_list_action(self_id int64, gl []iapi.GroupList) {
 	GroupListRedis.Cac_del(self_id, "*")
 	GroupListModel.Api_delete(self_id)
 	GroupAdminModel.Api_delete_bySelfIdAndGroupId(self_id, nil)
@@ -41,7 +41,7 @@ func App_refresh_group_list_action(self_id any, gl []iapi.GroupList) {
 			gas = append(gas, GroupAdminModel.GroupAdmins{
 				SelfId:  self_id,
 				GroupId: gll.GroupId,
-				UserId:  admin,
+				UserId:  int64(admin),
 			})
 		}
 	}

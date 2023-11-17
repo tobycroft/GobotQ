@@ -9,13 +9,14 @@ import (
 const table = "group_list"
 
 type GroupList struct {
-	SelfId         any    `gorose:"self_id" redis:"self_id"`
-	GroupId        int64  `gorose:"group_id" redis:"group_id"`
-	GroupName      string `gorose:"group_name" redis:"group_name"`
-	GroupMemo      string `gorose:"group_memo" redis:"group_memo"`
-	MemberCount    int64  `gorose:"member_count" redis:"member_count"`
-	MaxMemberCount int64  `gorose:"max_member_count" redis:"max_member_count"`
-	Admins         string `gorose:"admins" redis:"admins"`
+	Id             int64  `json:"id,omitempty"`
+	SelfId         int64  `gorose:"self_id" redis:"self_id" json:"self_id,omitempty"`
+	GroupId        int64  `gorose:"group_id" redis:"group_id" json:"group_id,omitempty"`
+	GroupName      string `gorose:"group_name" redis:"group_name" json:"group_name,omitempty"`
+	GroupMemo      string `gorose:"group_memo" redis:"group_memo" json:"group_memo,omitempty"`
+	MemberCount    int64  `gorose:"member_count" redis:"member_count" json:"member_count,omitempty"`
+	MaxMemberCount int64  `gorose:"max_member_count" redis:"max_member_count" json:"max_member_count,omitempty"`
+	Admins         string `gorose:"admins" redis:"admins" json:"admins,omitempty"`
 }
 
 func Api_insert(gl GroupList) bool {
@@ -130,7 +131,7 @@ func Api_delete_byBotandGid(self_id, group_id any) bool {
 	}
 }
 
-func Api_find_struct[T GroupList](self_id, group_id any) T {
+func Api_find_struct(self_id, group_id any) GroupList {
 	db := tuuz.Db().Table(table)
 	if self_id != nil {
 		db.Where("self_id", self_id)
@@ -138,11 +139,11 @@ func Api_find_struct[T GroupList](self_id, group_id any) T {
 	if group_id != nil {
 		db.Where("group_id", group_id)
 	}
-	ret := T{}
+	ret := GroupList{}
 	err := db.Scan(&ret)
 	if err != nil {
 		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
-		return T{}
+		return GroupList{}
 	} else {
 		return ret
 	}

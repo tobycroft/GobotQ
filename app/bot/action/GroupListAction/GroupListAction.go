@@ -5,16 +5,16 @@ import (
 	"main.go/app/bot/redis/GroupListRedis"
 )
 
-func App_find_groupList[T GroupListModel.GroupList](self_id, group_id any) (T, error) {
-	data, err := GroupListRedis.Cac_find[T](self_id, group_id)
+func App_find_groupList(self_id, group_id any) GroupListModel.GroupList {
+	data, err := GroupListRedis.Cac_find(self_id, group_id)
 	if err != nil {
-		data = GroupListModel.Api_find_struct[T](self_id, group_id)
-		if data != nil {
+		data = GroupListModel.Api_find_struct(self_id, group_id)
+		if data.GroupId != 0 {
 			GroupListRedis.Cac_set(self_id, group_id, data)
-			return data, nil
+			return data
 		}
-		return data, err
+		return data
 	} else {
-		return data, err
+		return data
 	}
 }

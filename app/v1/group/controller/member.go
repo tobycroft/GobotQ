@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/app/bot/action/GroupListAction"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/common/BaseController"
@@ -25,6 +26,9 @@ func member_list(c *gin.Context) {
 		return
 	}
 	datas := GroupMemberModel.Api_select_byUid(user_id, role)
+	for _, data := range datas {
+		data["group_info"] = GroupListAction.App_find_groupList(data["self_id"], data["group_id"])
+	}
 	RET.Success(c, 0, datas, nil)
 }
 

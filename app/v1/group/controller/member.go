@@ -40,5 +40,8 @@ func member_bot(c *gin.Context) {
 		user_ids = append(user_ids, data["self_id"])
 	}
 	datas := GroupMemberModel.Api_select_inUids(user_ids, nil)
+	for _, data := range datas {
+		data["group_info"] = GroupListAction.App_find_groupList(data["self_id"], data["group_id"])
+	}
 	RET.Success(c, 0, datas, nil)
 }

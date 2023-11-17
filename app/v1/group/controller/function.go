@@ -42,8 +42,8 @@ func function_edit(c *gin.Context) {
 	if !ok {
 		return
 	}
-	data := GroupMemberModel.Api_find_byRoles(group_id, uid, []any{"admin", "owner"})
-	if len(data) < 1 {
+	gm := GroupMemberModel.Api_find_byRoles(group_id, uid, []any{"admin", "owner"})
+	if len(gm) < 1 {
 		RET.Fail(c, 403, nil, "你不是管理员，没有权限修改群设定")
 		return
 	}

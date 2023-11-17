@@ -1,71 +1,64 @@
 package cron
 
-import (
-	"errors"
-	"fmt"
-	"main.go/app/bot/action/Group"
-	"main.go/app/bot/iapi"
-	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupFunctionModel"
-	"main.go/app/bot/model/GroupListModel"
-	"main.go/tuuz"
-	"main.go/tuuz/Log"
-	"time"
-)
-
-func BaseCron() {
-	for {
-		bots := BotModel.Api_select()
-		for _, bot := range bots {
-			gl, err := iapi.Api.Getgrouplist(bot["self_id"])
-			if err != nil {
-
-			} else {
-				GroupListModel.Api_delete(bot["self_id"])
-				var gss []GroupListModel.GroupList
-				for _, gll := range gl {
-					var gs GroupListModel.GroupList
-					gs.SelfId = bot["self_id"]
-					gs.GroupId = gll.GroupId
-					gs.GroupName = gll.GroupName
-					gs.GroupMemo = gll.GroupRemark
-					gs.MemberCount = gll.MemberCount
-					gs.MaxMemberCount = gll.MaxMemberCount
-					gss = append(gss, gs)
-					var gm Group.App_group_member
-					gm.GroupId = gll.GroupId
-					gm.SelfId = bot["self_id"]
-					Group.Chan_refresh_group_member <- gm
-					if len(GroupFunctionModel.Api_find(gll.GroupId)) < 1 {
-						GroupFunctionModel.Api_insert(gll.GroupId)
-					}
-				}
-				if len(gss) > 0 {
-					GroupListModel.Api_insert_more(gss)
-				}
-			}
-		}
-		time.Sleep(3600 * time.Second)
-	}
-}
-
-func BotInfoCron() {
-	for {
-		bots := BotModel.Api_select()
-		for _, bot := range bots {
-			bot_info, err := iapi.Api.GetLoginInfo(bot["self_id"])
-			if err != nil {
-
-			} else {
-				self_id := bot_info.UserID
-				name := bot_info.Nickname
-				if !BotModel.Api_update_cname(self_id, name) {
-					Log.Crrs(errors.New("机器人用户名无法更新"), tuuz.FUNCTION_ALL())
-				} else {
-					fmt.Println("机器人更新：", bot_info)
-				}
-			}
-		}
-		time.Sleep(30 * time.Minute)
-	}
-}
+//func BaseCron() {
+//	for {
+//		bots := BotModel.Api_select()
+//		for _, bot := range bots {
+//			self_id := bot["self_id"]
+//			gl, err := iapi.Api.Getgrouplist(bot["self_id"])
+//			if err != nil {
+//
+//			} else {
+//
+//				GroupListRedis.Cac_del(self_id, "*")
+//				GroupListModel.Api_delete(self_id)
+//				GroupAdminModel.Api_delete_bySelfIdAndGroupId(self_id, nil)
+//				var gss []GroupListModel.GroupList
+//				var gas []GroupAdminModel.GroupAdmins
+//				for _, gll := range gl {
+//					var gs GroupListModel.GroupList
+//					gs.SelfId = self_id
+//					gs.GroupId = gll.GroupId
+//					gs.GroupName = gll.GroupName
+//					gs.GroupMemo = gll.GroupRemark
+//					gs.MemberCount = gll.MemberCount
+//					gs.MaxMemberCount = gll.MaxMemberCount
+//					gs.Admins, _ = Jsong.Encode(gll.Admins)
+//					gss = append(gss, gs)
+//					for _, admin := range gll.Admins {
+//						gas = append(gas, GroupAdminModel.GroupAdmins{
+//							SelfId:  self_id,
+//							GroupId: gll.GroupId,
+//							UserId:  admin,
+//						})
+//					}
+//				}
+//				if len(gss) > 0 && len(gas) > 0 {
+//					GroupListModel.Api_insert_more(gss)
+//					GroupAdminModel.Api_insert_more(gas)
+//				}
+//			}
+//		}
+//		time.Sleep(3600 * time.Second)
+//	}
+//}
+//func BotInfoCron() {
+//	for {
+//		bots := BotModel.Api_select()
+//		for _, bot := range bots {
+//			bot_info, err := iapi.Api.GetLoginInfo(bot["self_id"])
+//			if err != nil {
+//
+//			} else {
+//				self_id := bot_info.UserID
+//				name := bot_info.Nickname
+//				if !BotModel.Api_update_cname(self_id, name) {
+//					Log.Crrs(errors.New("机器人用户名无法更新"), tuuz.FUNCTION_ALL())
+//				} else {
+//					fmt.Println("机器人更新：", bot_info)
+//				}
+//			}
+//		}
+//		time.Sleep(30 * time.Minute)
+//	}
+//}

@@ -17,4 +17,6 @@ func GroupRouter(route *gin.RouterGroup) {
 	controller.AutosendController(route.Group("autosend"))
 	controller.BanController(route.Group("ban"))
 	controller.WordController(route.Group("word"))
+
+	controller.InfoController(route.Group("info"))
 }

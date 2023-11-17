@@ -15,6 +15,7 @@ type GroupList struct {
 	GroupMemo      string `gorose:"group_memo" redis:"group_memo"`
 	MemberCount    int64  `gorose:"member_count" redis:"member_count"`
 	MaxMemberCount int64  `gorose:"max_member_count" redis:"max_member_count"`
+	Admins         string `gorose:"admins" redis:"admins"`
 }
 
 func Api_insert(gl GroupList) bool {

@@ -13,12 +13,12 @@ func InfoController(route *gin.RouterGroup) {
 	route.Any("list", info_list)
 	route.Use(BaseController.LoginedController(), gin.Recovery())
 
-	route.Any("bind", info_bind)
 	route.Any("get", info_get)
 	route.Any("unbind", info_unbind)
 	route.Any("owned", info_own)
 
 	route.Use(BaseController.CheckBotPower(), gin.Recovery())
+	route.Any("bind", info_bind)
 	route.Any("edit", info_edit)
 	route.Any("active", info_active)
 

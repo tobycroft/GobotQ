@@ -137,6 +137,7 @@ func Api_select_byUid(user_id any, role []any) []gorose.Data {
 	if len(role) > 0 {
 		db.WhereIn("role", role)
 	}
+	db.GroupBy("group_id")
 	ret, err := db.Get()
 	if err != nil {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())

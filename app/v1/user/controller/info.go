@@ -11,16 +11,16 @@ import (
 	"main.go/tuuz/RET"
 )
 
-func UserController(route *gin.RouterGroup) {
+func InfoController(route *gin.RouterGroup) {
 	route.Use(BaseController.LoginedController(), gin.Recovery())
-	route.Any("info", user_info)
-	route.Any("balance", user_balance)
-	route.Any("balance_record", user_balance_record)
+	route.Any("get", info_info)
+	route.Any("balance", info_balance)
+	route.Any("balance_record", info_balance_record)
 	route.Any("login_record", login_record)
 	route.Any("login_delete", login_delete)
 }
 
-func user_info(c *gin.Context) {
+func info_info(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	user := UserMemberModel.Api_find(uid)
 	if len(user) > 0 {
@@ -31,7 +31,7 @@ func user_info(c *gin.Context) {
 	}
 }
 
-func user_balance(c *gin.Context) {
+func info_balance(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	ub := UserBalanceModel.Api_find(uid)
 	if len(ub) > 0 {
@@ -46,7 +46,7 @@ func user_balance(c *gin.Context) {
 	}
 }
 
-func user_balance_record(c *gin.Context) {
+func info_balance_record(c *gin.Context) {
 	uid := c.GetHeader("uid")
 	balances := UserBalanceRecordModel.Api_select(uid)
 	RET.Success(c, 0, balances, nil)

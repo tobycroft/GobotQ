@@ -230,6 +230,21 @@ func Api_update_allowIp(self_id, allow_ip any) bool {
 	}
 }
 
+func Api_update_active(self_id, active any) bool {
+	db := tuuz.Db().Table(table)
+	db.Where("self_id", self_id)
+	db.Data(map[string]any{
+		"active": active,
+	})
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_update_manual(self_id, data any) bool {
 	db := tuuz.Db().Table(table)
 	db.Where("self_id", self_id)

@@ -12,14 +12,31 @@ import (
 func InfoController(route *gin.RouterGroup) {
 	route.Any("list", info_list)
 	route.Use(BaseController.LoginedController(), gin.Recovery())
+	route.Use(BaseController.CheckBotPower(), gin.Recovery())
 	route.Any("edit", info_edit)
 	route.Any("bind", info_bind)
 	route.Any("get", info_get)
 	route.Any("unbind", info_unbind)
 	route.Any("owned", info_own)
+	route.Any("active", info_active)
 
 }
 
+func info_active(c *gin.Context) {
+	active, ok := Input.PostBool("active", c)
+	if !ok {
+		return
+	}
+	self_id, ok := Input.PostInt64("self_id", c)
+	if !ok {
+		return
+	}
+	if BotModel.Api_update_active(self_id, active) {
+		RET.Success(c, 0, nil, nil)
+	} else {
+		RET.Fail(c, 500, nil, nil)
+	}
+}
 func info_list(c *gin.Context) {
 	Type, ok := Input.PostIn("type", c, []string{"public", "share"})
 	if !ok {

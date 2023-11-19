@@ -33,7 +33,7 @@ func login(c *gin.Context) {
 		RET.Success(c, 0, map[string]any{
 			"uid":   qq,
 			"token": token,
-			"uname": user["uname"],
+			"admin": user["admin"],
 		}, "登录成功")
 	} else {
 		RET.Fail(c, -1, nil, "登录信息不存在")

@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/iapi"
@@ -11,6 +12,7 @@ import (
 	"main.go/app/bot/model/GroupKickModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/GroupMsgModel"
+	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"net"
@@ -22,29 +24,57 @@ import (
 
 type Notice struct {
 	remoteaddr net.Addr
+	json       string
 	Time       int64  `json:"time"`
 	SelfId     int64  `json:"self_id"`
-	PostType   string `json:"post_type"`
 	NoticeType string `json:"notice_type"`
 	SubType    string `json:"sub_type"`
 	GroupId    int64  `json:"group_id"`
+}
+
+type groupApply struct {
 	OperatorId int64  `json:"operator_id"`
 	Flag       string `json:"flag"`
 }
 
+type groupAdmin struct {
+	TargetId int64 `json:"target_id"`
+}
+
+type groupIncrease struct {
+	OperatorId int64 `json:"operator_id"`
+	UserId     int64 `json:"user_id"`
+	SenderId   int64 `json:"sender_id"`
+	TargetId   int64 `json:"target_id"`
+}
+
+type groupDecrease struct {
+	OperatorId int64 `json:"operator_id"`
+	GroupId    int   `json:"group_id"`
+	UserId     int   `json:"user_id"`
+	TargetId   int   `json:"target_id"`
+}
+
+type groupBan struct {
+	OperatorId int64 `json:"operator_id"`
+	UserId     int64 `json:"user_id"`
+	SenderId   int64 `json:"sender_id"`
+	Duration   int64 `json:"duration"`
+	TargetId   int64 `json:"target_id"`
+}
+
+type groupLiftBan struct {
+	OperatorId int64 `json:"operator_id"`
+	UserId     int64 `json:"user_id"`
+	SenderId   int64 `json:"sender_id"`
+	TargetId   int64 `json:"target_id"`
+}
+
 func (em Notice) NoticeMsg() {
-	self_id := em.SelfId
-	user_id := em.UserId
-	group_id := em.GroupId
 	notice_type := em.NoticeType
 	sub_type := em.SubType
-	operator_id := em.OperatorId
-
-	var group RefreshGroupStruct
-	group.GroupId = group_id
-	group.SelfId = self_id
-	group.UserId = user_id
-	RefreshGroupChan <- group
+	group_id := em.GroupId
+	self_id := em.SelfId
 
 	groupfunction := GroupFunctionModel.Api_find(group_id)
 	if len(groupfunction) < 1 {
@@ -60,6 +90,18 @@ func (em Notice) NoticeMsg() {
 	switch notice_type {
 	//取消管理
 	case "group_admin":
+		var ga groupAdmin
+		err := sonic.UnmarshalString(em.json, &ga)
+		if err != nil {
+			LogErrorModel.Api_insert(err, em.json)
+			return
+		}
+		user_id := ga.TargetId
+		var group RefreshGroupStruct
+		group.GroupId = group_id
+		group.SelfId = self_id
+		group.UserId = user_id
+		RefreshGroupChan <- group
 		switch sub_type {
 		case "set":
 			if user_id == self_id {
@@ -104,6 +146,13 @@ func (em Notice) NoticeMsg() {
 		break
 
 	case "group_increase":
+		var ga groupIncrease
+		err := sonic.UnmarshalString(em.json, &ga)
+		if err != nil {
+			LogErrorModel.Api_insert(err, em.json)
+			return
+		}
+		user_id := ga.UserId
 		if user_id == self_id {
 			go Group.App_refreshmember(self_id, group_id)
 		} else {
@@ -177,6 +226,14 @@ func (em Notice) NoticeMsg() {
 		break
 
 	case "group_decrease":
+		var ga groupDecrease
+		err := sonic.UnmarshalString(em.json, &ga)
+		if err != nil {
+			LogErrorModel.Api_insert(err, em.json)
+			return
+		}
+		operator_id := ga.OperatorId
+		user_id := ga.UserId
 		GroupMemberModel.Api_delete_byUid(self_id, group_id, user_id)
 		switch sub_type {
 		case "leave":
@@ -228,7 +285,14 @@ func (em Notice) NoticeMsg() {
 	case "group_ban":
 		switch sub_type {
 		case "ban":
-			if em.Duration >= 2505600 {
+			var ga groupBan
+			err := sonic.UnmarshalString(em.json, &ga)
+			if err != nil {
+				LogErrorModel.Api_insert(err, em.json)
+				return
+			}
+			user_id := ga.TargetId
+			if ga.Duration >= 2505600 {
 				if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 
 				} else {
@@ -239,6 +303,13 @@ func (em Notice) NoticeMsg() {
 			break
 
 		case "lift_ban":
+			var ga groupLiftBan
+			err := sonic.UnmarshalString(em.json, &ga)
+			if err != nil {
+				LogErrorModel.Api_insert(err, em.json)
+				return
+			}
+			user_id := ga.TargetId
 			if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 				GroupBanPermenentModel.Api_delete(group_id, user_id)
 				go iapi.Api.Sendgroupmsg(self_id, group_id, service.Serv_at(user_id)+"你已经脱离永久小黑屋了", auto_retract)

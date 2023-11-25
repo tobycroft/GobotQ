@@ -89,6 +89,7 @@ func (es EventStruct) EventRouter() {
 		fmt.Println(es.PostType, es.json)
 		var notice Notice
 		notice.remoteaddr = es.remoteaddr
+		notice.json = es.json
 		err := sonic.UnmarshalString(es.json, &notice)
 		if err != nil {
 			fmt.Println(err)

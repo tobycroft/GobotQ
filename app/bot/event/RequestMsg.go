@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
@@ -9,6 +10,7 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
+	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/tuuz/Redis"
 	"net"
@@ -18,35 +20,38 @@ import (
 type RequestMessage struct {
 	remoteaddr  net.Addr
 	json        string
-	Comment     string `json:"comment"`
-	Flag        string `json:"flag"`
-	GroupId     int64  `json:"group_id"`
-	PostType    string `json:"post_type"`
-	RequestType string `json:"request_type"`
-	SelfID      int64  `json:"self_id"`
-	SubType     string `json:"sub_type"`
 	Time        int64  `json:"time"`
-	UserID      int64  `json:"user_id"`
+	SelfId      int64  `json:"self_id"`
+	RequestType string `json:"request_type"`
+}
+
+type requestFriend struct {
+	UserId  int64  `json:"user_id"`
+	Comment string `json:"comment"`
+	Flag    string `json:"flag"`
+}
+
+type requestGroup struct {
+	SubType string `json:"sub_type"`
+	GroupId int    `json:"group_id"`
+	UserId  int    `json:"user_id"`
+	Flag    string `json:"flag"`
 }
 
 func (em RequestMessage) RequestMsg() {
-
-	self_id := em.SelfID
-	user_id := em.UserID
-	group_id := em.GroupId
+	self_id := em.SelfId
 	request_type := em.RequestType
-	sub_type := em.SubType
-	flag := em.Flag
-	comment := em.Comment
-
-	groupfunction := GroupFunctionModel.Api_find(group_id)
-	if len(groupfunction) < 1 {
-		GroupFunctionModel.Api_insert(group_id)
-		groupfunction = GroupFunctionModel.Api_find(group_id)
-	}
 
 	switch request_type {
 	case "friend":
+		var rr requestFriend
+		err := sonic.UnmarshalString(em.json, &rr)
+		if err != nil {
+			LogErrorModel.Api_insert(err, em.json)
+			return
+		}
+		user_id := rr.UserId
+		flag := rr.Flag
 		botinfo := BotModel.Api_find_byOwnerandBot(user_id, self_id)
 		if len(botinfo) > 0 {
 			iapi.Api.SetFriendAddRequest(self_id, flag, true, nil)
@@ -60,13 +65,28 @@ func (em RequestMessage) RequestMsg() {
 		break
 
 	case "group":
+		var rr requestGroup
+		err := sonic.UnmarshalString(em.json, &rr)
+		if err != nil {
+			LogErrorModel.Api_insert(err, em.json)
+			return
+		}
+		user_id := rr.UserId
+		flag := rr.Flag
+		group_id := rr.GroupId
+		sub_type := rr.SubType
+		groupfunction := GroupFunctionModel.Api_find(group_id)
+		if len(groupfunction) < 1 {
+			GroupFunctionModel.Api_insert(group_id)
+			groupfunction = GroupFunctionModel.Api_find(group_id)
+		}
 		switch sub_type {
 		case "add":
 			if groupfunction["auto_join"].(int64) == 1 {
 				if len(GroupBlackListModel.Api_find(group_id, user_id)) > 0 {
 					go iapi.Api.SetGroupAddRequestRet(self_id, flag, sub_type, false, "您在黑名单中请联系管理")
 				} else {
-					Redis.String_set("__request_comment__"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), comment, 86400*time.Second)
+					Redis.String_set("__request_comment__"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), "", 86400*time.Second)
 					go iapi.Api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 				}
 			}
@@ -99,7 +119,6 @@ func (em RequestMessage) RequestMsg() {
 	default:
 		fmt.Println("request no route", em)
 		LogRecvModel.Api_insert(em.json)
-
 		break
 
 	}

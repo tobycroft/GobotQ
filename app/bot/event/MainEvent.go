@@ -100,14 +100,14 @@ func (es EventStruct) EventRouter() {
 
 	case "request":
 		fmt.Println(es.PostType, es.json)
-		var req Request
+		var req RequestMessage
 		req.remoteaddr = es.remoteaddr
 		req.json = es.json
 		err := sonic.UnmarshalString(es.json, &req)
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			req.RequestMessage()
+			req.RequestMsg()
 		}
 		break
 

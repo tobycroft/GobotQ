@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-type Request struct {
+type RequestMessage struct {
 	remoteaddr  net.Addr
 	json        string
 	Comment     string `json:"comment"`
@@ -29,7 +29,7 @@ type Request struct {
 	UserID      int64  `json:"user_id"`
 }
 
-func (em Request) RequestMessage() {
+func (em RequestMessage) RequestMsg() {
 
 	self_id := em.SelfID
 	user_id := em.UserID

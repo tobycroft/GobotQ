@@ -24,6 +24,19 @@ func Api_insert(self_id, add_friend, add_group any) bool {
 	}
 }
 
+func Api_update(self_id, data any) bool {
+	db := tuuz.Db().Table(Table)
+	db.Where("self_id", self_id)
+	db.Data(data)
+	_, err := db.Update()
+	if err != nil {
+		Log.DBrrsql(err, db, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_find(self_id any) gorose.Data {
 	db := tuuz.Db().Table(Table)
 	db.Where("self_id", self_id)

@@ -28,3 +28,24 @@ func setting_get(c *gin.Context) {
 		RET.Success(c, 0, data, nil)
 	}
 }
+
+func setting_edit(c *gin.Context) {
+	self_id, ok := Input.PostInt64("self_id", c)
+	if !ok {
+		return
+	}
+	mp := Input.NewModelPost(c)
+	mp.PostInt64("add_friend")
+	mp.PostInt64("add_group")
+	data := mp.Select()
+	if err, errs := mp.Error(); err != nil {
+		RET.Fail(c, 400, errs, err.Error())
+		return
+	}
+	BotSettingModel.Api_update(self_id, data)
+	if BotSettingModel.Api_update(self_id, data) {
+		RET.Success(c, 0, data, nil)
+	} else {
+		RET.Fail(c, 404, nil, nil)
+	}
+}

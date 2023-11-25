@@ -61,7 +61,7 @@ func (em RequestMessage) RequestMsg() {
 				Private.App_refresh_friend_list(self_id)
 			}()
 		} else {
-			go iapi.Api.SetFriendAddRequest(self_id, flag, false, "你不在机器人的允许列表中")
+			iapi.Api.SetFriendAddRequest(self_id, flag, false, "你不在机器人的允许列表中")
 		}
 		break
 

@@ -102,6 +102,7 @@ func (es EventStruct) EventRouter() {
 		fmt.Println(es.PostType, es.json)
 		var req Request
 		req.remoteaddr = es.remoteaddr
+		req.json = es.json
 		err := sonic.UnmarshalString(es.json, &req)
 		if err != nil {
 			fmt.Println(err)

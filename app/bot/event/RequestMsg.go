@@ -9,6 +9,7 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
+	"main.go/app/bot/model/LogRecvModel"
 	"main.go/tuuz/Redis"
 	"net"
 	"time"
@@ -16,6 +17,7 @@ import (
 
 type Request struct {
 	remoteaddr  net.Addr
+	json        string
 	Comment     string `json:"comment"`
 	Flag        string `json:"flag"`
 	GroupId     int64  `json:"group_id"`
@@ -88,6 +90,7 @@ func (em Request) RequestMsg() {
 
 		default:
 			fmt.Println("request no route sub_type", em)
+			LogRecvModel.Api_insert(em.json)
 			break
 
 		}
@@ -95,6 +98,8 @@ func (em Request) RequestMsg() {
 
 	default:
 		fmt.Println("request no route", em)
+		LogRecvModel.Api_insert(em.json)
+
 		break
 
 	}

@@ -13,6 +13,7 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/GroupMsgModel"
 	"main.go/app/bot/model/LogErrorModel"
+	"main.go/app/bot/model/LogRecvModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"net"
@@ -318,22 +319,23 @@ func (em Notice) NoticeMsg() {
 		}
 		break
 
-	case "friend_add":
-		//fmt.Println(em)
-		break
-
-	case "friend_recall":
-		//fmt.Println(em)
-		break
-
-	case "group_recall":
-		break
-
-	case "notice":
-		break
+	//case "friend_add":
+	//	//fmt.Println(em)
+	//	break
+	//
+	//case "friend_recall":
+	//	//fmt.Println(em)
+	//	break
+	//
+	//case "group_recall":
+	//	break
+	//
+	//case "notice":
+	//	break
 
 	default:
 		fmt.Println("notice no route", em)
+		LogRecvModel.Api_insert(em.json)
 		break
 	}
 

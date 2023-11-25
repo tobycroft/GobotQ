@@ -1,13 +1,13 @@
 package service
 
 import (
-	"github.com/tobycroft/Calc"
 	"regexp"
 	"strings"
 )
 
 func Serv_at(qq any) string {
-	return "[CQ:at,qq=" + Calc.Any2String(qq) + "]"
+	return ""
+	//return "[CQ:at,qq=" + Calc.Any2String(qq) + "]"
 }
 
 func Serv_at_all() string {

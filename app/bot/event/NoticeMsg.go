@@ -22,24 +22,23 @@ import (
 
 type Notice struct {
 	remoteaddr net.Addr
-	Duration   int64  `json:"duration"`
-	GroupId    int64  `json:"group_id"`
-	NoticeType string `json:"notice_type"`
-	OperatorID int64  `json:"operator_id"`
-	PostType   string `json:"post_type"`
-	SelfID     int64  `json:"self_id"`
-	SubType    string `json:"sub_type"`
 	Time       int64  `json:"time"`
-	UserID     int64  `json:"user_id"`
+	SelfId     int64  `json:"self_id"`
+	PostType   string `json:"post_type"`
+	NoticeType string `json:"notice_type"`
+	SubType    string `json:"sub_type"`
+	GroupId    int64  `json:"group_id"`
+	OperatorId int64  `json:"operator_id"`
+	Flag       string `json:"flag"`
 }
 
 func (em Notice) NoticeMsg() {
-	self_id := em.SelfID
-	user_id := em.UserID
+	self_id := em.SelfId
+	user_id := em.UserId
 	group_id := em.GroupId
 	notice_type := em.NoticeType
 	sub_type := em.SubType
-	operator_id := em.OperatorID
+	operator_id := em.OperatorId
 
 	var group RefreshGroupStruct
 	group.GroupId = group_id

@@ -8,6 +8,7 @@ import (
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/BotSettingModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/LogErrorModel"
@@ -101,7 +102,8 @@ func (em RequestMessage) RequestMsg() {
 			break
 
 		case "invite":
-			if len(BotGroupAllowModel.Api_find(self_id, group_id)) > 0 {
+			bot_setting := BotSettingModel.Api_find(self_id)
+			if len(BotGroupAllowModel.Api_find(self_id, group_id)) > 0 || bot_setting["add_group"] == 1 {
 				go iapi.Api.SetGroupAddRequestRet(self_id, flag, sub_type, true, "")
 			} else {
 				go iapi.Api.SetGroupAddRequestRet(self_id, flag, sub_type, false, "不在群列表中")

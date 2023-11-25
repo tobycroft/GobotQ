@@ -14,6 +14,7 @@ func SettingController(route *gin.RouterGroup) {
 	route.Use(BaseController.CheckBotPower(), gin.Recovery())
 
 	route.Any("get", setting_get)
+	route.Any("edit", setting_edit)
 }
 
 func setting_get(c *gin.Context) {

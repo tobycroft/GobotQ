@@ -10,6 +10,7 @@ import (
 	"main.go/app/bot/action/FriendListAction"
 	"main.go/app/bot/action/GroupMemberAction"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/LogSendModel"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"time"
@@ -137,6 +138,13 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		"message":     pss.Message,
 		"auto_escape": false,
 	}
+
+	botinfo := BotModel.Api_find(pss.Self_id)
+	if len(botinfo) < 1 {
+		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
+		return Message{}, errors.New("botinfo_notfound")
+	}
+	LogSendModel.Api_insert(pss.Self_id, "private", 0, pss.Message)
 	_, err := FriendListAction.App_find_friendList(pss.Self_id, pss.UserId)
 	if err != nil {
 		data, err := GroupMemberAction.App_find_groupMember(pss.Self_id, pss.UserId, nil)
@@ -145,11 +153,6 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		} else {
 			post["group_id"] = data.GroupId
 		}
-	}
-	botinfo := BotModel.Api_find(pss.Self_id)
-	if len(botinfo) < 1 {
-		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.Self_id))
-		return Message{}, errors.New("botinfo_notfound")
 	}
 	data, err := sonic.Marshal(sendStruct{
 		Action: "send_private_msg",

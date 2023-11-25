@@ -8,6 +8,7 @@ import (
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/LogSendModel"
 	"main.go/tuuz/Redis"
 
 	"main.go/tuuz/Log"
@@ -137,6 +138,7 @@ func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(gss.Self_id))
 		return Message{}, errors.New("botinfo_notfound")
 	}
+	LogSendModel.Api_insert(gss.Self_id, "private", 0, gss.Message)
 	data, err := sonic.Marshal(sendStruct{
 		Action: "send_group_msg",
 		Params: post,

@@ -10,6 +10,7 @@ import (
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/BotSettingModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
@@ -42,6 +43,9 @@ func (oe OperationEvent) OperationRouter() {
 			Log.Crrs(errors.New("机器人用户名无法更新"), tuuz.FUNCTION_ALL())
 		} else {
 			fmt.Println("机器人更新完毕：", logininfo.Data)
+		}
+		if len(BotSettingModel.Api_find(self_id)) < 1 {
+			BotSettingModel.Api_insert(self_id, 0, 0)
 		}
 		iapi.Api.Getfriendlist(self_id)
 		break

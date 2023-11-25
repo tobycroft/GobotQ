@@ -43,7 +43,6 @@ func setting_edit(c *gin.Context) {
 		RET.Fail(c, 400, errs, err.Error())
 		return
 	}
-	BotSettingModel.Api_update(self_id, data)
 	if BotSettingModel.Api_update(self_id, data) {
 		RET.Success(c, 0, data, nil)
 	} else {

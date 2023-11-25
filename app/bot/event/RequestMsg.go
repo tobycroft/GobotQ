@@ -29,7 +29,7 @@ type Request struct {
 	UserID      int64  `json:"user_id"`
 }
 
-func (em Request) RequestMsg() {
+func (em Request) RequestMessage() {
 
 	self_id := em.SelfID
 	user_id := em.UserID

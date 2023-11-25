@@ -107,7 +107,7 @@ func (es EventStruct) EventRouter() {
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			req.RequestMsg()
+			req.RequestMessage()
 		}
 		break
 

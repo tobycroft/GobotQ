@@ -57,11 +57,12 @@ func (es EventStruct) EventRouter() {
 	}
 	bot := BotModel.Api_find(es.SelfId)
 	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", es.json)
 		return
 	}
 	ip := netip.MustParseAddrPort(es.remoteaddr.String())
-	if bot["allow_ip"] != ip.Addr() {
-		LogErrorModel.Api_insert(errors.New("invalid ip address"), es.SelfId)
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), es.SelfId)
 		return
 	}
 	switch es.PostType {

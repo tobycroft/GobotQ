@@ -11,6 +11,7 @@ import (
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
@@ -636,11 +637,11 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 
 		go func(selfId, groupId, userId any, groupFunction gorose.Data) {
 			if groupFunction["ban_repeat"].(int64) == 1 {
-				num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(userId) + "_" + raw_message))
+				num, err := BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_find()
 				if err != nil {
 					num = 0
 				}
-				Redis.String_set(Calc.Md5(Calc.Any2String(userId)+"_"+raw_message), num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
+				BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_set(num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
 				if num > groupFunction["repeat_count"].(int64) {
 					Group.App_ban_user(selfId, groupId, userId, auto_retract, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
 				} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {

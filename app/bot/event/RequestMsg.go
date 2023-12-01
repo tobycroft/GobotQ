@@ -15,6 +15,7 @@ import (
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/tuuz/Redis"
 	"net"
+	"net/netip"
 	"time"
 )
 
@@ -40,6 +41,16 @@ type requestGroup struct {
 }
 
 func (em RequestMessage) RequestMsg() {
+	bot := BotModel.Api_find(em.SelfId)
+	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", em.remoteaddr.String())
+		return
+	}
+	ip := netip.MustParseAddrPort(em.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), em.SelfId)
+		return
+	}
 	self_id := em.SelfId
 	request_type := em.RequestType
 

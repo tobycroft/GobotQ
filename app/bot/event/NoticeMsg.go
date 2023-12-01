@@ -6,6 +6,7 @@ import (
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/iapi"
+	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupBlackListModel"
 	"main.go/app/bot/model/GroupFunctionModel"
@@ -17,6 +18,7 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"net"
+	"net/netip"
 
 	"main.go/tuuz/Jsong"
 	"main.go/tuuz/Redis"
@@ -72,6 +74,16 @@ type groupLiftBan struct {
 }
 
 func (em Notice) NoticeMsg() {
+	bot := BotModel.Api_find(em.SelfId)
+	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", em.remoteaddr.String())
+		return
+	}
+	ip := netip.MustParseAddrPort(em.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), em.SelfId)
+		return
+	}
 	notice_type := em.NoticeType
 	sub_type := em.SubType
 	group_id := em.GroupId

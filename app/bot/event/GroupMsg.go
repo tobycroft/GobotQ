@@ -2,6 +2,7 @@ package event
 
 import (
 	"errors"
+	"fmt"
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/action/Group"
@@ -11,11 +12,13 @@ import (
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
 	"net"
+	"net/netip"
 
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -66,6 +69,16 @@ type GroupSender struct {
 var GroupMsgChan = make(chan GroupMessageStruct, 99)
 
 func (gm GroupMessageStruct) GroupMsg() {
+	bot := BotModel.Api_find(gm.SelfId)
+	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", gm.remoteaddr.String())
+		return
+	}
+	ip := netip.MustParseAddrPort(gm.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), gm.SelfId)
+		return
+	}
 	GroupMsgChan <- gm
 	is_self := false
 

@@ -12,9 +12,11 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/BotSettingModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/app/bot/model/LogErrorModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"net"
+	"net/netip"
 )
 
 type OperationEvent struct {
@@ -28,6 +30,16 @@ type OperationEvent struct {
 }
 
 func (oe OperationEvent) OperationRouter() {
+	bot := BotModel.Api_find(oe.Echo.SelfId)
+	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", oe.remoteaddr.String())
+		return
+	}
+	ip := netip.MustParseAddrPort(oe.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), oe.Echo.SelfId)
+		return
+	}
 	self_id := oe.Echo.SelfId
 	switch oe.Echo.Action {
 	case "get_login_info":

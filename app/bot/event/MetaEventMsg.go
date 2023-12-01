@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"log"
 	"main.go/app/bot/iapi"
+	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/LogErrorModel"
 	"net"
+	"net/netip"
 )
 
 type MetaEventStruct struct {
@@ -27,6 +30,16 @@ type MetaEventStruct struct {
 }
 
 func (self MetaEventStruct) MetaEvent() {
+	bot := BotModel.Api_find(self.SelfId)
+	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", self.remoteaddr.String())
+		return
+	}
+	ip := netip.MustParseAddrPort(self.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), self.SelfId)
+		return
+	}
 	switch self.MetaEventType {
 	case "lifecycle":
 		_, err := iapi.Api.GetLoginInfo(self.SelfId)

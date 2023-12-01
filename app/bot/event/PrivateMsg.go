@@ -2,16 +2,19 @@ package event
 
 import (
 	"errors"
+	"fmt"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/BotGroupAllowModel"
 	"main.go/app/bot/model/BotModel"
+	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
 	"net"
+	"net/netip"
 
 	"main.go/tuuz/Log"
 	"regexp"
@@ -53,6 +56,16 @@ type PrivateSender struct {
 var PrivateMsgChan = make(chan PrivateMessageStruct, 99)
 
 func (pm PrivateMessageStruct) PrivateMsg() {
+	bot := BotModel.Api_find(pm.SelfId)
+	if len(bot) < 1 {
+		LogErrorModel.Api_insert("bot bot found", pm.remoteaddr.String())
+		return
+	}
+	ip := netip.MustParseAddrPort(pm.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr().String() {
+		LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), pm.SelfId)
+		return
+	}
 	PrivateMsgChan <- pm
 	selfId := pm.SelfId
 	user_id := pm.UserId

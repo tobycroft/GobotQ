@@ -638,7 +638,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupFunction["ban_repeat"].(int64) == 1 {
 				num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(userId) + "_" + raw_message))
 				if err != nil {
-					return
+					num = 0
 				}
 				Redis.String_set(Calc.Md5(Calc.Any2String(userId)+"_"+raw_message), num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
 				if num > groupFunction["repeat_count"].(int64) {

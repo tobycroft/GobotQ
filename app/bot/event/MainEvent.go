@@ -6,12 +6,14 @@ import (
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/iapi"
+	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/app/bot/model/LogsModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"net"
+	"net/netip"
 )
 
 func EventListener() {
@@ -52,6 +54,15 @@ type EventStruct struct {
 func (es EventStruct) EventRouter() {
 	if es.PostType != "meta_event" {
 		go LogsModel.Api_insert(es.json, "main", es.remoteaddr.String())
+	}
+	bot := BotModel.Api_find(es.SelfId)
+	if len(bot) < 1 {
+		return
+	}
+	ip := netip.MustParseAddrPort(es.remoteaddr.String())
+	if bot["allow_ip"] != ip.Addr() {
+		LogErrorModel.Api_insert(errors.New("invalid ip address"), es.SelfId)
+		return
 	}
 	switch es.PostType {
 	case "message":

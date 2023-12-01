@@ -638,11 +638,11 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 			if groupFunction["ban_repeat"].(int64) == 1 {
 				num, err := Redis.String_getInt64(Calc.Md5(Calc.Any2String(userId) + "_" + raw_message))
 				if err != nil {
-					//Log.Crrs(err, tuuz.FUNCTION_ALL())
+					return
 				}
 				Redis.String_set(Calc.Md5(Calc.Any2String(userId)+"_"+raw_message), num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
-				if int64(num) > groupFunction["repeat_count"].(int64) {
-					go Group.App_ban_user(selfId, groupId, userId, auto_retract, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
+				if num > groupFunction["repeat_count"].(int64) {
+					Group.App_ban_user(selfId, groupId, userId, auto_retract, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
 				} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
 					Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", groupFunction)
 				}
@@ -668,9 +668,9 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					go func(ret iapi.Struct_Retract) {
 						iapi.Retract_instant <- ret
 					}(ret)
-					go iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
+					iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
 				} else {
-					go iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+					iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 				}
 			}
 

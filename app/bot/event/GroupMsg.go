@@ -702,7 +702,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 				go func(ret iapi.Struct_Retract) {
 					iapi.Retract_instant <- ret
 				}(ret)
-				//go api.Post{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
+				go iapi.Post{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 			}
 		}(self_id, group_id, user_id, groupfunction)
 

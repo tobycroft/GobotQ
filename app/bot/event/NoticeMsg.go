@@ -331,6 +331,10 @@ func (em Notice) NoticeMsg() {
 		}
 		break
 
+	case "group_upload":
+		fmt.Println("群上传", em.json)
+		break
+
 	//case "friend_add":
 	//	//fmt.Println(em)
 	//	break

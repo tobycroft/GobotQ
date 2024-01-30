@@ -589,6 +589,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					iapi.Retract_instant <- ret
 				}(ret)
 			}
+			fmt.Println("url_detect", self_id, group_id, user_id)
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
 		}
 		break
@@ -600,6 +601,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					iapi.Retract_instant <- ret
 				}(ret)
 			}
+			fmt.Println("ban_group", self_id, group_id, user_id)
 			go Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
 		}
 		break
@@ -611,6 +613,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					iapi.Retract_instant <- ret
 				}(ret)
 			}
+			fmt.Println("ban_weixin", self_id, group_id, user_id)
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
 		}
 		break
@@ -622,6 +625,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 					iapi.Retract_instant <- ret
 				}(ret)
 			}
+			fmt.Println("ban_share", self_id, group_id, user_id)
 			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
 		}
 		break
@@ -638,6 +642,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		go func(ret iapi.Struct_Retract) {
 			iapi.Retract_instant <- ret
 		}(ret)
+		fmt.Println("长度限制", self_id, group_id, user_id)
 		go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
 			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
 		break

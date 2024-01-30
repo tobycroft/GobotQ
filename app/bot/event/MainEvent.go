@@ -86,7 +86,7 @@ func (es EventStruct) EventRouter() {
 		break
 
 	case "notice":
-		fmt.Println(es.PostType, es.json)
+		//fmt.Println(es.PostType, es.json)
 		var notice Notice
 		notice.remoteaddr = es.remoteaddr
 		notice.json = es.json
@@ -99,7 +99,7 @@ func (es EventStruct) EventRouter() {
 		break
 
 	case "request":
-		fmt.Println(es.PostType, es.json)
+		//fmt.Println(es.PostType, es.json)
 		var req RequestMessage
 		req.remoteaddr = es.remoteaddr
 		req.json = es.json

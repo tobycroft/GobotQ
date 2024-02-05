@@ -3,11 +3,14 @@ package private
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogErrorModel"
+	"main.go/config/app_default"
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
 	"net/netip"
+	"time"
 )
 
 func Router() {
@@ -19,24 +22,29 @@ func Router() {
 			fmt.Println(err)
 		} else {
 			pm := es.Json
-			bot := BotModel.Api_find(pm.SelfId)
-			if len(bot) < 1 {
+			botinfo := BotModel.Api_find(pm.SelfId)
+			if len(botinfo) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
 				return
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
-			if bot["allow_ip"] != ip.Addr().String() {
-				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), pm.SelfId)
+			if botinfo["allow_ip"] != ip.Addr().String() {
+				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", botinfo["allow_ip"], ip.Addr().String()), pm.SelfId)
 				return
 			}
-			PrivateMsgChan <- pm
-			selfId := pm.SelfId
-			user_id := pm.UserId
-			group_id := int64(0)
-			message := pm.RawMessage
-			rawMessage := pm.RawMessage
+			//if botinfo["allow_ip"] == nil {
+			//	return
+			//}
+			//if !strings.Contains(remoteip, botinfo["allow_ip"].(string)) {
+			//	Log.Errs(errors.New(fmt.Sprint(remoteip, botinfo["allow_ip"].(string))), "不允许的ip")
+			//	return
+			//}
+			if botinfo["end_date"].(time.Time).Before(time.Now()) {
+				iapi.Api.Sendprivatemsg(pm.SelfId, pm.UserId, 0, app_default.Default_over_time, false)
+				return
+			}
 
-			pm.PrivateHandle(selfId, user_id, group_id, message, rawMessage)
+			ps.Publish(types.MessagePrivateValid, c)
 		}
 
 	}

@@ -10,11 +10,11 @@ import (
 	"strings"
 )
 
-func (pm PrivateMessageStruct) active_main_function(self_id, user_id, group_id int64, message, origin_text string) {
+func active_main_function(self_id, user_id, group_id int64, message, origin_text string) {
 	switch message {
 
 	case "ip":
-		iapi.Api.Sendprivatemsg(self_id, user_id, group_id, es.RemoteAddr, true)
+		iapi.Api.Sendprivatemsg(self_id, user_id, group_id, pm.RemoteAddr, true)
 		break
 
 	case "app", "下载":

@@ -4,18 +4,19 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/gin-gonic/gin"
 	Net "github.com/tobycroft/TuuzNet"
-	"main.go/app/bot/event"
+	"main.go/config/types"
 	v1 "main.go/route/v1"
+	"main.go/tuuz/Redis"
 )
 
 func OnRoute(router *gin.Engine) {
 	router.Any("", func(context *gin.Context) {
 		data, _ := context.GetRawData()
 		//fmt.Println(string(data))
-		var ev event.EventStruct
-		err := sonic.Unmarshal(data, &ev)
-		if err == nil {
-			ev.EventRouter()
+		ok := sonic.Valid(data)
+		if ok {
+			ps := Redis.PubSub{}
+			ps.Publish(types.MessageEvent, data)
 		}
 		context.String(200, "ok")
 	})

@@ -12,6 +12,7 @@ import (
 func LogsInit() {
 	go log_message_all()
 	go log_message_group()
+	go log_message_private()
 }
 
 type eventStruct struct {

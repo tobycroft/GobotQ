@@ -32,12 +32,12 @@ func Router() {
 			bot := BotModel.Api_find(oe.Echo.SelfId)
 			if len(bot) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
-				return
+				continue
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
 			if bot["allow_ip"] != ip.Addr().String() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), oe.Echo.SelfId)
-				return
+				continue
 			}
 			self_id := oe.Echo.SelfId
 			switch oe.Echo.Action {
@@ -46,7 +46,7 @@ func Router() {
 				err := sonic.UnmarshalString(oe.json, &logininfo)
 				if err != nil {
 					fmt.Println(oe.json)
-					return
+					break
 				}
 				user_id := logininfo.Data.UserID
 				nickname := logininfo.Data.Nickname
@@ -78,7 +78,7 @@ func Router() {
 				err := sonic.UnmarshalString(oe.json, &data)
 				if err != nil {
 					fmt.Println(err, oe.json)
-					return
+					break
 				}
 				Group.App_refresh_group_list_action(self_id, data.Data)
 				fmt.Println("群列表更新完毕：", oe.Echo.SelfId)
@@ -98,7 +98,7 @@ func Router() {
 				err := sonic.UnmarshalString(oe.json, &data)
 				if err != nil {
 					fmt.Println(err, oe.json)
-					return
+					break
 				}
 				Group.App_refresh_group_member_one_action(self_id, data.Data)
 				fmt.Println("群成员更新完毕：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
@@ -110,7 +110,7 @@ func Router() {
 					err := sonic.UnmarshalString(oe.json, &data)
 					if err != nil {
 						fmt.Println(err, oe.json)
-						return
+						break
 					}
 					iapi.Retract_chan <- iapi.Struct_Retract{
 						SelfId:    oe.Echo.SelfId,

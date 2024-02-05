@@ -27,12 +27,12 @@ func Router() {
 			botinfo := BotModel.Api_find(pm.SelfId)
 			if len(botinfo) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
-				return
+				continue
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
 			if botinfo["allow_ip"] != ip.Addr().String() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", botinfo["allow_ip"], ip.Addr().String()), pm.SelfId)
-				return
+				continue
 			}
 			//if botinfo["allow_ip"] == nil {
 			//	return
@@ -43,7 +43,7 @@ func Router() {
 			//}
 			if botinfo["end_date"].(time.Time).Before(time.Now()) {
 				iapi.Api.Sendprivatemsg(pm.SelfId, pm.UserId, 0, app_default.Default_over_time, false)
-				return
+				continue
 			}
 
 			ps.Publish(types.MessagePrivateValid, c)

@@ -67,7 +67,7 @@ func Router() {
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c)
-					continue
+					break
 				}
 				ga := esg.Json
 				user_id := ga.TargetId
@@ -95,7 +95,6 @@ func Router() {
 							go iapi.Api.Sendgroupmsg(self_id, group_id, "恭喜上位,但是权限变动失败", auto_retract)
 						}
 					}
-
 					break
 
 				case "unset":
@@ -125,7 +124,7 @@ func Router() {
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c)
-					continue
+					break
 				}
 				ga := esg.Json
 				user_id := ga.UserId
@@ -206,7 +205,7 @@ func Router() {
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c)
-					continue
+					break
 				}
 				ga := esg.Json
 				operator_id := ga.OperatorId
@@ -266,7 +265,7 @@ func Router() {
 					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
 						LogErrorModel.Api_insert(err.Error(), c)
-						continue
+						break
 					}
 					ga := esg.Json
 					user_id := ga.TargetId
@@ -285,7 +284,7 @@ func Router() {
 					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
 						LogErrorModel.Api_insert(err.Error(), c)
-						continue
+						break
 					}
 					ga := esg.Json
 					user_id := ga.TargetId

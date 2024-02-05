@@ -23,12 +23,12 @@ func Router() {
 			bot := BotModel.Api_find(es.SelfId)
 			if len(bot) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
-				return
+				continue
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
 			if bot["allow_ip"] != ip.Addr().String() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), es.SelfId)
-				return
+				continue
 			}
 			switch es.Json.MetaEventType {
 			case "lifecycle":

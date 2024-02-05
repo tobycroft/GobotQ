@@ -86,7 +86,7 @@ func private_message_fully_attached_with_acfur() {
 					break
 
 				default:
-					privateHandle_acfur_middle(self_id, user_id, group_id, new_text, message)
+					ps.Publish(types.MessagePrivateAcfur, c.Payload)
 					break
 				}
 			}

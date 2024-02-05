@@ -26,11 +26,11 @@ func Router() {
 			message_type := es.MessageType
 			switch message_type {
 			case "private":
-				ps.Publish(types.MessagePrivate, c)
+				ps.Publish(types.MessagePrivate, c.Payload)
 				break
 
 			case "group":
-				ps.Publish(types.MessageGroup, c)
+				ps.Publish(types.MessageGroup, c.Payload)
 				break
 
 			default:
@@ -41,21 +41,21 @@ func Router() {
 
 		case "notice":
 			//fmt.Println(es.PostType, message)
-			ps.Publish(types.MessageNotice, c)
+			ps.Publish(types.MessageNotice, c.Payload)
 			break
 
 		case "request":
 			//fmt.Println(es.PostType, message)
-			ps.Publish(types.MessageRequest, c)
+			ps.Publish(types.MessageRequest, c.Payload)
 			break
 
 		case "meta_event":
 			//trigger the
-			ps.Publish(types.MessageMetaEvent, c)
+			ps.Publish(types.MessageMetaEvent, c.Payload)
 			break
 
 		default:
-			ps.Publish(types.MessageOperation, c)
+			ps.Publish(types.MessageOperation, c.Payload)
 
 			fmt.Println("event-notfound:", es.Json)
 			LogRecvModel.Api_insert(es.Json)

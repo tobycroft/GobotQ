@@ -26,9 +26,7 @@ func private_main_handler() {
 
 			reg := regexp.MustCompile("(?i)^acfur")
 			active := reg.MatchString(message)
-			if active {
-				ps.Publish(types.MessagePrivateAcfur, c)
-			} else {
+			if !active {
 				//在未激活acfur的情况下应该对原始内容进行还原
 				if private_default_reply(selfId, user_id, group_id, message) {
 					continue

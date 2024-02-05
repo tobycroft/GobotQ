@@ -1,16 +1,50 @@
 package private
 
 import (
+	"fmt"
+	"github.com/bytedance/sonic"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/service"
+	"main.go/config/types"
+	"main.go/tuuz/Redis"
+	"regexp"
 	"sync"
 )
 
 const private_function_number = 5
 
 var private_function_type = []string{"unknow", "密码", "修改密码", "绑定群", "解绑群", "绑定"}
+
+func private_message_setting_change_with_acfur() {
+	ps := Redis.PubSub{}
+	for c := range ps.Subscribe(types.MessagePrivateValid) {
+		var es EventStruct[PrivateMessageStruct]
+		err := sonic.UnmarshalString(c.Payload, &es)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			pm := es.Json
+			self_id := pm.SelfId
+			user_id := pm.UserId
+			group_id := int64(0)
+			message := pm.RawMessage
+
+			reg := regexp.MustCompile("(?i)^acfur")
+			active := reg.MatchString(message)
+			new_text := reg.ReplaceAllString(message, "")
+			if active {
+
+			}
+		}
+	}
+}
+
+func acfur_password() {
+
+	service.Serv_text_match(message, []string{"密码", "password"})
+}
 
 func privateHandle_acfur_middle(selfId, user_id, group_id int64, message, origin_text string) {
 	function := make([]bool, private_function_number+1, private_function_number+1)

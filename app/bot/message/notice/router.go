@@ -66,7 +66,7 @@ func Router() {
 				var esg EventStruct[groupAdmin]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
-					LogErrorModel.Api_insert(err.Error(), c)
+					LogErrorModel.Api_insert(err.Error(), c.Payload)
 					break
 				}
 				ga := esg.Json
@@ -123,7 +123,7 @@ func Router() {
 				var esg EventStruct[groupIncrease]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
-					LogErrorModel.Api_insert(err.Error(), c)
+					LogErrorModel.Api_insert(err.Error(), c.Payload)
 					break
 				}
 				ga := esg.Json
@@ -204,7 +204,7 @@ func Router() {
 				var esg EventStruct[groupDecrease]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
-					LogErrorModel.Api_insert(err.Error(), c)
+					LogErrorModel.Api_insert(err.Error(), c.Payload)
 					break
 				}
 				ga := esg.Json
@@ -264,7 +264,7 @@ func Router() {
 					var esg EventStruct[groupBan]
 					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
-						LogErrorModel.Api_insert(err.Error(), c)
+						LogErrorModel.Api_insert(err.Error(), c.Payload)
 						break
 					}
 					ga := esg.Json
@@ -283,7 +283,7 @@ func Router() {
 					var esg EventStruct[groupLiftBan]
 					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
-						LogErrorModel.Api_insert(err.Error(), c)
+						LogErrorModel.Api_insert(err.Error(), c.Payload)
 						break
 					}
 					ga := esg.Json

@@ -13,6 +13,11 @@ type Pubsub struct {
 func (self *Pubsub) Subscribe(channel string) <-chan *redis.Message {
 	return goredis.Subscribe(context.Background(), app_conf.Project+":"+channel).Channel()
 }
+
+func (self *Pubsub) Subscribe_struct(channel string, Struct any) <-chan *redis.Message {
+
+}
+
 func (self *Pubsub) Publish_string(channel string, message string) error {
 	return goredis.Publish(context.Background(), app_conf.Project+":"+channel, message).Err()
 }

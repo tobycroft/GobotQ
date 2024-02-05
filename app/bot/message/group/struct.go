@@ -1,6 +1,6 @@
 package group
 
-type EventStruct[T GroupMessageStruct | GroupSender] struct {
+type EventStruct[T GroupMessageStruct] struct {
 	SelfId      int64  `json:"self_id"`
 	MessageType string `json:"message_type"`
 	PostType    string `json:"post_type"`

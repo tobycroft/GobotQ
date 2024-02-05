@@ -63,6 +63,7 @@ func Router() {
 					})
 				}
 				GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
+				ps.Publish(types.MessageGroupValid, c.Payload)
 			} else {
 
 			}

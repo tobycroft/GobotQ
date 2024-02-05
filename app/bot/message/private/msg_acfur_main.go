@@ -34,7 +34,6 @@ func private_message_fully_attached_with_acfur() {
 			new_text := reg.ReplaceAllString(message, "")
 			if active {
 				switch new_text {
-
 				case "ip":
 					iapi.Api.Sendprivatemsg(self_id, user_id, group_id, es.RemoteAddr, true)
 					break

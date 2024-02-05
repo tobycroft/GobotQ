@@ -3,50 +3,22 @@ package Redis
 import (
 	"context"
 	"errors"
+	"github.com/tobycroft/gorose-pro"
 	"main.go/config/app_conf"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
-	"reflect"
-	"regexp"
-	"strings"
 )
 
 func Hash_set(key string, field, value any) error {
 	return goredis.HSet(context.Background(), app_conf.Project+":"+key, field, value).Err()
 }
 
-func Hash_set_map[T map[string]string | map[string]any](key string, maps T) error {
+func Hash_set_map[T map[string]string | map[string]any | gorose.Data](key string, maps T) error {
 	return goredis.HSet(context.Background(), app_conf.Project+":"+key, maps).Err()
 }
 
 func Hash_set_struct(key string, maps any) error {
-	//newmap := mapDealer(maps)
 	return goredis.HSet(context.Background(), app_conf.Project+":"+key, maps).Err()
-}
-
-var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
-var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
-
-func toSnakeCase(str string) string {
-	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
-	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
-	return strings.ToLower(snake)
-}
-
-func mapDealer(maps any) any {
-	value := reflect.ValueOf(maps)
-	t := value.Type()
-	sf := make([]reflect.StructField, 0)
-	for i := 0; i < t.NumField(); i++ {
-		sf = append(sf, t.Field(i))
-		tag := t.Field(i).Tag.Get("redis")
-		if tag == "" {
-			sf[i].Tag = `redis:"` + reflect.StructTag(toSnakeCase(t.Field(i).Name)) + `"`
-		}
-	}
-	newType := reflect.StructOf(sf)
-	newValue := value.Convert(newType)
-	return newValue.Interface()
 }
 
 func Hash_field_exist(key string, field string) bool {
@@ -100,21 +72,6 @@ func Hash_get_all(key string) (map[string]string, error) {
 		return nil, errors.New("empty")
 	}
 	return data, err
-}
-func mapDealer2(maps any) reflect.Value {
-	value := reflect.ValueOf(maps)
-	t := value.Type()
-	sf := make([]reflect.StructField, 0)
-	for i := 0; i < t.NumField(); i++ {
-		sf = append(sf, t.Field(i))
-		tag := t.Field(i).Tag.Get("redis")
-		if tag == "" {
-			sf[i].Tag = `redis:"` + reflect.StructTag(toSnakeCase(t.Field(i).Name)) + `"`
-		}
-	}
-	newType := reflect.StructOf(sf)
-	newValue := value.Convert(newType)
-	return newValue
 }
 
 func Hash_get_struct(key string, model_struct_pointer any) error {

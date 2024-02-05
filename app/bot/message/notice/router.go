@@ -5,8 +5,8 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
-	event2 "main.go/app/bot/event"
 	"main.go/app/bot/iapi"
+	group2 "main.go/app/bot/message/group"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupBlackListModel"
@@ -66,16 +66,17 @@ func Router() {
 				var esg EventStruct[groupAdmin]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
-					LogErrorModel.Api_insert(err, c)
+					LogErrorModel.Api_insert(err.Error(), c)
 					continue
 				}
 				ga := esg.Json
 				user_id := ga.TargetId
-				var group event2.RefreshGroupStruct
+				var group group2.RefreshGroupStruct
 				group.GroupId = group_id
 				group.SelfId = self_id
 				group.UserId = user_id
-				RefreshGroupChan <- group
+
+				ps.Publish_struct(types.OperationRefreshGroup, group)
 				switch sub_type {
 				case "set":
 					if user_id == self_id {
@@ -120,12 +121,13 @@ func Router() {
 				break
 
 			case "group_increase":
-				var ga groupIncrease
-				err := sonic.UnmarshalString(em.json, &ga)
+				var esg EventStruct[groupIncrease]
+				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
-					LogErrorModel.Api_insert(err, em.json)
-					return
+					LogErrorModel.Api_insert(err.Error(), c)
+					continue
 				}
+				ga := esg.Json
 				user_id := ga.UserId
 				if user_id == self_id {
 					go Group.App_refreshmember(self_id, group_id)
@@ -200,12 +202,13 @@ func Router() {
 				break
 
 			case "group_decrease":
-				var ga groupDecrease
-				err := sonic.UnmarshalString(em.json, &ga)
+				var esg EventStruct[groupDecrease]
+				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
-					LogErrorModel.Api_insert(err, em.json)
-					return
+					LogErrorModel.Api_insert(err.Error(), c)
+					continue
 				}
+				ga := esg.Json
 				operator_id := ga.OperatorId
 				user_id := ga.UserId
 				GroupMemberModel.Api_delete_byUid(self_id, group_id, user_id)
@@ -259,12 +262,13 @@ func Router() {
 			case "group_ban":
 				switch sub_type {
 				case "ban":
-					var ga groupBan
-					err := sonic.UnmarshalString(em.json, &ga)
+					var esg EventStruct[groupBan]
+					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
-						LogErrorModel.Api_insert(err, em.json)
-						return
+						LogErrorModel.Api_insert(err.Error(), c)
+						continue
 					}
+					ga := esg.Json
 					user_id := ga.TargetId
 					if ga.Duration >= 2505600 {
 						if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
@@ -277,12 +281,13 @@ func Router() {
 					break
 
 				case "lift_ban":
-					var ga groupLiftBan
-					err := sonic.UnmarshalString(em.json, &ga)
+					var esg EventStruct[groupLiftBan]
+					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
-						LogErrorModel.Api_insert(err, em.json)
-						return
+						LogErrorModel.Api_insert(err.Error(), c)
+						continue
 					}
+					ga := esg.Json
 					user_id := ga.TargetId
 					if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 						GroupBanPermenentModel.Api_delete(group_id, user_id)
@@ -293,7 +298,7 @@ func Router() {
 				break
 
 			case "group_upload":
-				fmt.Println("群上传", em.json)
+				fmt.Println("群上传", c.Payload)
 				break
 
 			//case "friend_add":
@@ -312,7 +317,7 @@ func Router() {
 
 			default:
 				fmt.Println("notice no route", em)
-				LogRecvModel.Api_insert(em.json)
+				LogRecvModel.Api_insert(c.Payload)
 				break
 			}
 		}

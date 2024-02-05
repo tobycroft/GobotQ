@@ -47,7 +47,7 @@ func Router() {
 				rr := esf.Json
 				err := sonic.UnmarshalString(c.Payload, &esf)
 				if err != nil {
-					LogErrorModel.Api_insert(err, c)
+					LogErrorModel.Api_insert(err.Error(), c)
 					return
 				}
 				user_id := rr.UserId
@@ -69,7 +69,7 @@ func Router() {
 				rr := esf.Json
 				err := sonic.UnmarshalString(c.Payload, &esf)
 				if err != nil {
-					LogErrorModel.Api_insert(err, c)
+					LogErrorModel.Api_insert(err.Error(), c)
 					return
 				}
 				user_id := rr.UserId

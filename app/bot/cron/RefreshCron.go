@@ -1,20 +1,30 @@
 package cron
 
 import (
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/action/Private"
-	"main.go/app/bot/event"
+	"main.go/app/bot/message/group"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
+	"main.go/config/types"
+	"main.go/tuuz/Log"
 
 	"main.go/tuuz/Redis"
 	"time"
 )
 
 func Refresh_group_chan() {
-	for data := range event.RefreshGroupChan {
-		group_check(data.SelfId, data.UserId, data.GroupId)
+	ps := Redis.PubSub{}
+	for c := range ps.Subscribe(types.OperationRefreshGroup) {
+		var data group.RefreshGroupStruct
+		err := sonic.UnmarshalString(c.Payload, &data)
+		if err != nil {
+			Log.Crrs(err, c.Payload)
+		} else {
+			group_check(data.SelfId, data.UserId, data.GroupId)
+		}
 	}
 }
 

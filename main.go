@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
+	"main.go/app/bot/logs"
+	event "main.go/app/bot/message"
 	"main.go/common/BaseController"
 	"main.go/config/app_conf"
 	"main.go/route"
@@ -30,8 +32,8 @@ func main() {
 	go cron.BaseCron()
 	go cron.Refresh_friend_list()
 	*/
-	//go logs.LogsInit()
-	//go event.MainRouter()
+	go logs.LogsInit()
+	go event.MainRouter()
 
 	//go Group.App_refresh_group_member_chan()
 	//go cron.Refresh_group_chan()

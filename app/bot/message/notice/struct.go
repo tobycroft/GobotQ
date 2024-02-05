@@ -1,10 +1,10 @@
 package notice
 
-type EventStruct struct {
+type EventStruct[T Notice | groupApply | groupAdmin | groupBan | groupIncrease | groupDecrease | groupLiftBan] struct {
 	SelfId      int64  `json:"self_id"`
 	MessageType string `json:"message_type"`
 	PostType    string `json:"post_type"`
-	Notice      Notice `json:"json"`
+	Json        T      `json:"json"`
 	RemoteAddr  string `json:"remote_addr"`
 }
 type Notice struct {

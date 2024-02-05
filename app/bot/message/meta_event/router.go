@@ -5,17 +5,17 @@ import (
 	"github.com/bytedance/sonic"
 	"log"
 	"main.go/app/bot/iapi"
-	event "main.go/app/bot/message"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogErrorModel"
+	"main.go/config/types"
 	"main.go/tuuz/Redis"
 	"net/netip"
 )
 
 func Router() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(event.MessageMetaEvent) {
-		var es EventStruct
+	for c := range ps.Subscribe(types.MessageMetaEvent) {
+		var es EventStruct[MetaEventStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			fmt.Println(err)
@@ -30,17 +30,17 @@ func Router() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), es.SelfId)
 				return
 			}
-			switch es.MetaEventStruct.MetaEventType {
+			switch es.Json.MetaEventType {
 			case "lifecycle":
 				_, err := iapi.Api.GetLoginInfo(es.SelfId)
 				if err != nil {
 					log.Println(err)
 				}
-				fmt.Println(es.MetaEventStruct, es.SelfId)
+				fmt.Println(es.Json, es.SelfId)
 				break
 
 			case "heartbeat":
-				fmt.Println(es.MetaEventStruct, es.SelfId)
+				fmt.Println(es.Json, es.SelfId)
 				break
 
 			default:

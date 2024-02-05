@@ -12,10 +12,6 @@ import (
 	"regexp"
 )
 
-const private_function_number = 5
-
-var private_function_type = []string{"unknow", "密码", "修改密码", "绑定群", "解绑群", "绑定"}
-
 func private_message_setting_change_with_acfur() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessagePrivateAcfur) {

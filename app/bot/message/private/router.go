@@ -14,9 +14,9 @@ import (
 )
 
 func Router() {
-	go private_main_handler()
-	go private_message_fully_attached_with_acfur()
-	go private_message_setting_change_with_acfur()
+	go message_main_handler()
+	go message_fully_attached_with_acfur()
+	go message_setting_change_with_acfur()
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessagePrivate) {
 		var es EventStruct[PrivateMessageStruct]

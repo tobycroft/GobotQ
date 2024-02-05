@@ -14,6 +14,7 @@ import (
 )
 
 func Router() {
+	go message_main_handler()
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroup) {
 		var es EventStruct[GroupMessageStruct]
@@ -62,7 +63,6 @@ func Router() {
 						UserId:  user_id,
 					})
 				}
-				GroupHandle(self_id, group_id, user_id, message_id, message, raw_message, gm.Sender)
 				ps.Publish(types.MessageGroupValid, c.Payload)
 			} else {
 

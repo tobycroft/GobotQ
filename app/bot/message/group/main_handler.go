@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func GroupHandle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender) {
+func message_main_handler() {
 	text := message
 	reg := regexp.MustCompile("(?i)^acfur")
 	active := reg.MatchString(text)

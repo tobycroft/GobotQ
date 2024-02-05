@@ -12,7 +12,7 @@ import (
 	"regexp"
 )
 
-func private_message_setting_change_with_acfur() {
+func message_setting_change_with_acfur() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessagePrivateAcfur) {
 		var es EventStruct[PrivateMessageStruct]

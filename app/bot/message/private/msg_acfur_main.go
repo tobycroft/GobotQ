@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func private_message_fully_attached_with_acfur() {
+func message_fully_attached_with_acfur() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessagePrivateValid) {
 		var es EventStruct[PrivateMessageStruct]

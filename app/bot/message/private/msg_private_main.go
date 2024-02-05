@@ -10,7 +10,7 @@ import (
 	"regexp"
 )
 
-func private_main_handler() {
+func message_main_handler() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessagePrivateValid) {
 		var es EventStruct[PrivateMessageStruct]

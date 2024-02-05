@@ -10,26 +10,24 @@ import (
 	"regexp"
 )
 
-func PrivateHandle() {
+func private_main_handler() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessagePrivate) {
+	for c := range ps.Subscribe(types.MessagePrivateValid) {
 		var es EventStruct[PrivateMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			fmt.Println(err)
 		} else {
+			pm := es.Json
 			selfId := pm.SelfId
 			user_id := pm.UserId
 			group_id := int64(0)
 			message := pm.RawMessage
-			rawMessage := pm.RawMessage
 
 			reg := regexp.MustCompile("(?i)^acfur")
 			active := reg.MatchString(message)
-			new_text := reg.ReplaceAllString(message, "")
-
 			if active {
-				active_main_function(selfId, user_id, group_id, new_text, message)
+				ps.Publish(types.MessagePrivateAcfur, c)
 			} else {
 				//在未激活acfur的情况下应该对原始内容进行还原
 				if private_default_reply(selfId, user_id, group_id, message) {

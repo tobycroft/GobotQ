@@ -6,6 +6,8 @@ import (
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/message/index"
+	"main.go/app/bot/message/meta_event"
+	"main.go/app/bot/message/notice"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/tuuz"
 	"main.go/tuuz/Redis"
@@ -13,6 +15,8 @@ import (
 
 func MainRouter() {
 	go index.Router()
+	go meta_event.Router()
+	go notice.Router()
 
 	for c := range Net.WsServer_ReadChannel {
 		if c.Status {

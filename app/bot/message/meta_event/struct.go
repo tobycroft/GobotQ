@@ -1,13 +1,13 @@
 package meta_event
 
 type EventStruct struct {
-	SelfId        int64  `json:"self_id"`
-	MessageType   string `json:"message_type"`
-	PostType      string `json:"post_type"`
-	MetaEventType string `json:"json"`
-	RemoteAddr    string `json:"remote_addr"`
+	SelfId          int64           `json:"self_id"`
+	MessageType     string          `json:"message_type"`
+	PostType        string          `json:"post_type"`
+	MetaEventStruct MetaEventStruct `json:"json"`
+	RemoteAddr      string          `json:"remote_addr"`
 }
-type MetaEventType struct {
+type MetaEventStruct struct {
 	Time          int64  `json:"time"`
 	SelfId        int64  `json:"self_id"`
 	PostType      string `json:"post_type"`

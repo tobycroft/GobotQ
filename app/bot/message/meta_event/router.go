@@ -30,17 +30,17 @@ func Router() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), es.SelfId)
 				return
 			}
-			switch es.MetaEventType {
+			switch es.MetaEventStruct.MetaEventType {
 			case "lifecycle":
 				_, err := iapi.Api.GetLoginInfo(es.SelfId)
 				if err != nil {
 					log.Println(err)
 				}
-				fmt.Println(es.MetaEventType, es.SelfId)
+				fmt.Println(es.MetaEventStruct, es.SelfId)
 				break
 
 			case "heartbeat":
-				fmt.Println(es.MetaEventType, es.SelfId)
+				fmt.Println(es.MetaEventStruct, es.SelfId)
 				break
 
 			default:

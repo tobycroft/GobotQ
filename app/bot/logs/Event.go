@@ -23,14 +23,14 @@ type eventStruct struct {
 
 func log_message_all() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(event.MessageFull) {
+	for c := range ps.Subscribe(event.MessageEvent) {
 		var es eventStruct
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			Log.Crrs(err, c.Payload)
 		} else {
 			if es.PostType != "meta_event" {
-				LogsModel.Api_insert(es.Json, event.MessageFull, es.Remoteaddr)
+				LogsModel.Api_insert(es.Json, event.MessageEvent, es.Remoteaddr)
 			}
 		}
 	}

@@ -22,17 +22,19 @@ func Router() {
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			gm := es.Json
-			bot := BotModel.Api_find(gm.SelfId)
+			bot := BotModel.Api_find(es.SelfId)
 			if len(bot) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
 				continue
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
 			if bot["allow_ip"] != ip.Addr().String() {
-				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), gm.SelfId)
+				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), es.SelfId)
 				continue
 			}
+
+			ps.Publish(types.MessageGroupValid, c.Payload)
+
 			is_self := false
 
 			self_id := gm.SelfId
@@ -63,9 +65,6 @@ func Router() {
 						UserId:  user_id,
 					})
 				}
-				ps.Publish(types.MessageGroupValid, c.Payload)
-			} else {
-
 			}
 		}
 

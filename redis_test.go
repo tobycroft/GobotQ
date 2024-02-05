@@ -7,10 +7,10 @@ import (
 )
 
 func BenchmarkName(b *testing.B) {
-	var ps Redis.Pubsub[byte]
+	var ps Redis.PubSub
 	go func() {
 		for message := range ps.Subscribe("test") {
-			fmt.Println(message)
+			fmt.Println(message.Payload)
 		}
 	}()
 

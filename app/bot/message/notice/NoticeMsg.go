@@ -1,4 +1,4 @@
-package event
+package notice
 
 import (
 	"fmt"

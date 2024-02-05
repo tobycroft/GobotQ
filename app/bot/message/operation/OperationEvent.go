@@ -1,4 +1,4 @@
-package event
+package operation
 
 import (
 	"errors"

@@ -5,7 +5,8 @@ import (
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/cron"
-	"main.go/app/bot/event"
+	"main.go/app/bot/logs"
+	event "main.go/app/bot/message"
 	"main.go/common/BaseController"
 	"main.go/config/app_conf"
 	"main.go/route"
@@ -28,12 +29,13 @@ func init() {
 
 func main() {
 
-	go event.EventListener()
 	/*Cron which no needed
 	cron.BotInfoCron()
 	go cron.BaseCron()
 	go cron.Refresh_friend_list()
 	*/
+	go logs.LogsInit()
+	go event.MainRouter()
 
 	go Group.App_refresh_group_member_chan()
 	go cron.Refresh_group_chan()

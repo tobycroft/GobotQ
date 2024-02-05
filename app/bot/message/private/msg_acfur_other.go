@@ -19,7 +19,7 @@ var private_function_type = []string{"unknow", "密码", "修改密码", "绑定
 
 func private_message_setting_change_with_acfur() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessagePrivateValid) {
+	for c := range ps.Subscribe(types.MessagePrivateAcfur) {
 		var es EventStruct[PrivateMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {

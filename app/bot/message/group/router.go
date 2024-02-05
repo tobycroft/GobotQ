@@ -25,12 +25,12 @@ func Router() {
 			bot := BotModel.Api_find(gm.SelfId)
 			if len(bot) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
-				return
+				continue
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
 			if bot["allow_ip"] != ip.Addr().String() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), gm.SelfId)
-				return
+				continue
 			}
 			is_self := false
 
@@ -50,7 +50,7 @@ func Router() {
 				botinfo := BotModel.Api_find(self_id)
 				if len(botinfo) < 1 {
 					Log.Crrs(errors.New("bot_not_found"), Calc.Any2String(self_id))
-					return
+					break
 				}
 
 				has1 := Redis.CheckExists("__groupinfo__" + Calc.Int642String(group_id) + "_" + Calc.Int642String(user_id))

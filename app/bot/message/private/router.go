@@ -36,11 +36,11 @@ func Router() {
 				continue
 			}
 			//if botinfo["allow_ip"] == nil {
-			//	return
+			//	continue
 			//}
 			//if !strings.Contains(remoteip, botinfo["allow_ip"].(string)) {
 			//	Log.Errs(errors.New(fmt.Sprint(remoteip, botinfo["allow_ip"].(string))), "不允许的ip")
-			//	return
+			//	continue
 			//}
 			if botinfo["end_date"].(time.Time).Before(time.Now()) {
 				iapi.Api.Sendprivatemsg(pm.SelfId, pm.UserId, 0, app_default.Default_over_time, false)

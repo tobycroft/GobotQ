@@ -31,12 +31,12 @@ func Router() {
 			bot := BotModel.Api_find(em.SelfId)
 			if len(bot) < 1 {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
-				return
+				continue
 			}
 			ip := netip.MustParseAddrPort(es.RemoteAddr)
 			if bot["allow_ip"] != ip.Addr().String() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", bot["allow_ip"], ip.Addr().String()), em.SelfId)
-				return
+				continue
 			}
 			self_id := em.SelfId
 			request_type := em.RequestType
@@ -48,7 +48,7 @@ func Router() {
 				err := sonic.UnmarshalString(c.Payload, &esf)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c.Payload)
-					return
+					break
 				}
 				user_id := rr.UserId
 				flag := rr.Flag
@@ -70,7 +70,7 @@ func Router() {
 				err := sonic.UnmarshalString(c.Payload, &esf)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c.Payload)
-					return
+					break
 				}
 				user_id := rr.UserId
 				flag := rr.Flag

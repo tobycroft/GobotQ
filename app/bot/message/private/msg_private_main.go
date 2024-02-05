@@ -34,7 +34,7 @@ func private_main_handler() {
 				auto_reply := PrivateAutoReplyModel.Api_find_byKey(message)
 				if len(auto_reply) > 0 {
 					if auto_reply["value"] == nil {
-						return
+						continue
 					}
 					iapi.Api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
 				} else {

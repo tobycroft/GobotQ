@@ -59,7 +59,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "设定":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		Group.App_group_function_get_all(self_id, group_id, user_id, new_text, groupfunction)
 		break
@@ -79,7 +79,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "查询群主", "查看群主", "呼叫群主":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		owner_data := GroupMemberModel.Api_find_owner(self_id, group_id)
 		if len(owner_data) > 0 {
@@ -99,7 +99,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				service.Not_admin(self_id, group_id, user_id)
-				return
+				break
 			}
 		}
 		Group.App_refreshmember(self_id, group_id)
@@ -109,7 +109,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "刷新群信息":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		Group.App_refresh_groupinfo(self_id, group_id)
 		Group.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", groupfunction)
@@ -120,7 +120,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 		ret.MessageId = message_id
 		ret.SelfId = self_id
 		if !admin {
-			return
+			break
 		}
 		go func(ret iapi.Struct_Retract) {
 			iapi.Retract_instant <- ret
@@ -155,7 +155,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "屏蔽":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_str_ban_word, groupfunction)
 		break
@@ -163,7 +163,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "屏蔽词":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 1, groupmember, groupfunction)
 		break
@@ -171,7 +171,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "T出词":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 2, groupmember, groupfunction)
 		break
@@ -179,7 +179,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "撤回词":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 3, groupmember, groupfunction)
 		break
@@ -187,7 +187,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "清除小黑屋":
 		if !admin && !owner {
 			service.Not_admin(self_id, group_id, user_id)
-			return
+			break
 		}
 		if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
 			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
@@ -211,7 +211,7 @@ func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_t
 	case "群人数清理", "清理人数上限":
 		if !owner && !admin {
 			service.Not_owner(self_id, group_id, user_id)
-			return
+			break
 		}
 		if Redis.CheckExists("__lock__group_id__" + Calc.Any2String(group_id)) {
 			Group.AutoMessage(self_id, group_id, user_id, "执行中请稍等", groupfunction)
@@ -386,7 +386,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				go service.Not_admin(self_id, group_id, user_id)
-				return
+				break
 			}
 		}
 		go Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
@@ -396,7 +396,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				go service.Not_admin(self_id, group_id, user_id)
-				return
+				break
 			}
 		}
 		go Group.App_reverify_force(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
@@ -406,7 +406,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				go service.Not_admin(self_id, group_id, user_id)
-				return
+				break
 			}
 		}
 		go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
@@ -440,7 +440,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				go service.Not_admin(self_id, group_id, user_id)
-				return
+				break
 			}
 		}
 		go Group.App_group_function_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
@@ -450,7 +450,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		if !admin && !owner {
 			if len(groupmember) > 0 {
 				go service.Not_admin(self_id, group_id, user_id)
-				return
+				break
 			}
 		}
 		go Group.App_group_ban_word_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)

@@ -66,7 +66,7 @@ func Router() {
 				err := sonic.UnmarshalString(oe.json, &data)
 				if err != nil {
 					fmt.Println(err, oe.json)
-					return
+					break
 				}
 				Private.App_refresh_friend_list_action(self_id, data.Data)
 				fmt.Println("好友列表更新完毕：", oe.Echo.SelfId)

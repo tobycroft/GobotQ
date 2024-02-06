@@ -2,10 +2,8 @@ package index
 
 import (
 	"errors"
-	"fmt"
 	"github.com/bytedance/sonic"
 	"main.go/app/bot/model/LogErrorModel"
-	"main.go/app/bot/model/LogRecvModel"
 	"main.go/config/types"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -14,7 +12,7 @@ import (
 func Router() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageEvent) {
-		var es EventStruct[string]
+		var es EventStruct
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			LogErrorModel.Api_insert(err.Error(), c.Payload)
@@ -34,7 +32,7 @@ func Router() {
 				break
 
 			default:
-				Log.Crrs(errors.New("undefine route"), es.Json)
+				Log.Crrs(errors.New("undefine route"), c.Payload)
 				break
 			}
 			break
@@ -57,8 +55,6 @@ func Router() {
 		default:
 			ps.Publish(types.MessageOperation, c.Payload)
 
-			fmt.Println("event-notfound:", es.Json)
-			LogRecvModel.Api_insert(es.Json)
 		}
 
 	}

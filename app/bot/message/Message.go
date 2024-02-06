@@ -32,13 +32,19 @@ func MainRouter() {
 
 	for c := range Net.WsServer_ReadChannel {
 		if c.Status {
-			var es index.EventStruct[string]
+			var es index.EventStruct
 			err := sonic.Unmarshal(c.Message, &es)
 			if err != nil {
-				go LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
+				LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
 				continue
 			}
-			es.Json = string(c.Message)
+			mp := map[string]any{}
+			err = sonic.Unmarshal(c.Message, &mp)
+			if err != nil {
+				LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
+				continue
+			}
+			es.Json = mp
 			es.RemoteAddr = c.Conn.RemoteAddr().String()
 			if c.Status {
 				iapi.ClientToConn.Store(es.SelfId, c.Conn)

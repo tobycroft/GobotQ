@@ -1,6 +1,6 @@
 package private
 
-type EventStruct[T PrivateMessageStruct | PrivateSender] struct {
+type EventStruct[T PrivateMessageStruct] struct {
 	SelfId      int64  `json:"self_id"`
 	MessageType string `json:"message_type"`
 	PostType    string `json:"post_type"`

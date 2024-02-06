@@ -25,6 +25,7 @@ func Router() {
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			Log.Errs(err, tuuz.FUNCTION_ALL())
+			//panic(c.Payload)
 		} else {
 			pm := es.Json
 			botinfo := BotModel.Api_find(pm.SelfId)

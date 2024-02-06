@@ -1,7 +1,6 @@
 package private
 
 import (
-	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Private"
@@ -10,6 +9,8 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/config/app_default"
 	"main.go/config/types"
+	"main.go/tuuz"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
 	"strings"
@@ -21,7 +22,7 @@ func message_fully_attached_with_acfur() {
 		var es EventStruct[PrivateMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			fmt.Println(err)
+			Log.Errs(err, tuuz.FUNCTION_ALL())
 		} else {
 			pm := es.Json
 			self_id := pm.SelfId

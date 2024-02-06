@@ -1,11 +1,12 @@
 package private
 
 import (
-	"fmt"
 	"github.com/bytedance/sonic"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/config/types"
+	"main.go/tuuz"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
 )
@@ -16,7 +17,7 @@ func message_main_handler() {
 		var es EventStruct[PrivateMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			fmt.Println(err)
+			Log.Errs(err, tuuz.FUNCTION_ALL())
 		} else {
 			pm := es.Json
 			selfId := pm.SelfId

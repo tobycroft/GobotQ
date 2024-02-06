@@ -2,6 +2,7 @@ package logs
 
 import (
 	"github.com/bytedance/sonic"
+	"main.go/app/bot/message/index"
 	"main.go/app/bot/model/LogsModel"
 	"main.go/config/types"
 	"main.go/tuuz/Log"
@@ -14,24 +15,19 @@ func LogsInit() {
 	go log_message_private()
 }
 
-type eventStruct struct {
-	SelfId      int64  `json:"self_id"`
-	MessageType string `json:"message_type"`
-	PostType    string `json:"post_type"`
-	Json        string `json:"json"`
-	RemoteAddr  string `json:"remote_addr"`
-}
-
 func log_message_all() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageEvent) {
-		var es eventStruct
+		var es index.EventStruct
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			Log.Crrs(err, c.Payload)
 		} else {
 			if es.PostType != "meta_event" {
-				LogsModel.Api_insert(es.Json, types.MessageEvent, es.RemoteAddr)
+				json, err := sonic.MarshalString(es.Json)
+				if err == nil {
+					LogsModel.Api_insert(json, types.MessageEvent, es.RemoteAddr)
+				}
 			}
 		}
 	}

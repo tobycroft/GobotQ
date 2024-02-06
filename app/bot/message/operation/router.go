@@ -26,7 +26,7 @@ func Router() {
 		var es EventStruct[OperationEvent]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			Log.Errs(err, tuuz.FUNCTION_ALL())
+			Log.Errs(err, c.Payload)
 		} else {
 			oe := es.Json
 			bot := BotModel.Api_find(oe.Echo.SelfId)

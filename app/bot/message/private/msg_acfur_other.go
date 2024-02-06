@@ -1,13 +1,14 @@
 package private
 
 import (
-	"fmt"
 	"github.com/bytedance/sonic"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/service"
 	"main.go/config/types"
+	"main.go/tuuz"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
 )
@@ -18,7 +19,7 @@ func message_setting_change_with_acfur() {
 		var es EventStruct[PrivateMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			fmt.Println(err)
+			Log.Errs(err, tuuz.FUNCTION_ALL())
 		} else {
 			pm := es.Json
 			selfId := pm.SelfId

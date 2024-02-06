@@ -112,24 +112,6 @@ func ban_share() {
 	}
 }
 
-func ban_word() {
-	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupAcfur + banWord) {
-		var gmr GroupMessageRedirect[GroupMessageStruct]
-		err := sonic.UnmarshalString(c.Payload, &gmr)
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			gm := gmr.Json
-			self_id := gm.SelfId
-			user_id := gm.UserId
-			group_id := gm.GroupId
-			raw_message := gm.RawMessage
-			Group.App_group_ban_word_set(self_id, group_id, user_id, raw_message)
-		}
-	}
-}
-
 func set_setting() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur + setting) {

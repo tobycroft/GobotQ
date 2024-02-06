@@ -16,6 +16,7 @@ func Router() {
 
 	go group_message_acfur_when_fully_matched()
 	go group_message_acfur_semi_match()
+	go group_message_normal()
 
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroup) {

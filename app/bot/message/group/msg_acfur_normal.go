@@ -16,6 +16,7 @@ import (
 	"time"
 )
 
+// group_message_normal 处理标注消息
 func group_message_normal() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur) {

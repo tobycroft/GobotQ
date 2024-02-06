@@ -13,6 +13,7 @@ import (
 	"main.go/app/bot/model/BotSettingModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/LogErrorModel"
+	"main.go/app/bot/model/LogRecvModel"
 	"main.go/config/types"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
@@ -129,7 +130,8 @@ func Router() {
 				break
 
 			default:
-				fmt.Println(oe)
+				fmt.Println("event-notfound:", c.Payload)
+				LogRecvModel.Api_insert(c.Payload)
 				break
 
 			}

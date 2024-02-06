@@ -7,7 +7,10 @@ import (
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
+	"main.go/config/app_conf"
+	"main.go/config/types"
 	"main.go/tuuz"
+	"main.go/tuuz/Redis"
 )
 
 type Interface struct {
@@ -21,10 +24,12 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	}
 	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret iapi.Struct_Retract
-			ret.MessageId = message_id
-			ret.SelfId = self_id
-			iapi.Retract_chan <- ret
+			rm := iapi.RetractMessage{
+				SelfId:    self_id,
+				MessageId: message_id,
+				Time:      app_conf.Retract_time_duration,
+			}
+			Redis.PubSub{}.Publish_struct(types.RetractChannel, rm)
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface
@@ -42,10 +47,12 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 	}
 	go func(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret iapi.Struct_Retract
-			ret.MessageId = message_id
-			ret.SelfId = self_id
-			iapi.Retract_chan <- ret
+			rm := iapi.RetractMessage{
+				SelfId:    self_id,
+				MessageId: message_id,
+				Time:      app_conf.Retract_time_duration,
+			}
+			Redis.PubSub{}.Publish_struct(types.RetractChannel, rm)
 		}
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	var gpm GroupBalanceModel.Interface

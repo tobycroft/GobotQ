@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
-type Struct_Retract struct {
-	SelfId    any
-	MessageId any
-}
+//type Struct_Retract struct {
+//	SelfId    any
+//	MessageId any
+//}
 
 type RetractMessage struct {
 	SelfId    any           `json:"selfId"`
@@ -22,7 +22,7 @@ type RetractMessage struct {
 	Time      time.Duration `json:"time"`
 }
 
-var Retract_chan = make(chan Struct_Retract, 100)
+//var Retract_chan = make(chan Struct_Retract, 100)
 
 type DefaultRetStruct struct {
 	Data    any    `json:"data"`

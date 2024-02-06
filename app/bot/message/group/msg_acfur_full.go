@@ -176,7 +176,7 @@ func group_message_acfur_when_fully_matched() {
 					break
 
 				case "测试自动撤回":
-					Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", groupfunction)
+					Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Any2String(app_conf.Retract_time_duration/time.Second+3)+"秒后撤回", groupfunction)
 					break
 
 				case "测试立即撤回":

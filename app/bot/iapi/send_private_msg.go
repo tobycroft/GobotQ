@@ -11,6 +11,8 @@ import (
 	"main.go/app/bot/action/GroupMemberAction"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogSendModel"
+	"main.go/config/app_conf"
+	"main.go/config/types"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"time"
@@ -68,6 +70,7 @@ type PrivateSendStruct struct {
 }
 
 func (api Post) Send_private() {
+	ps := Redis.PubSub{}
 	for pss := range Private_send_chan {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			continue
@@ -78,15 +81,18 @@ func (api Post) Send_private() {
 
 		} else {
 			if pss.AutoRetract {
-				var r Struct_Retract
-				r.SelfId = pss.Self_id
-				r.MessageId = pmr.MessageId
-				Retract_chan <- r
+				rm := RetractMessage{
+					SelfId:    pss.Self_id,
+					MessageId: pmr.MessageId,
+					Time:      app_conf.Retract_time_duration,
+				}
+				ps.Publish_struct(types.RetractChannel, rm)
 			}
 		}
 	}
 }
 func (api Ws) Send_private() {
+	ps := Redis.PubSub{}
 	for pss := range Private_send_chan {
 		if Redis.CheckExists("SendCheck:" + pss.Message) {
 			log.Println("SendCheck:" + pss.Message)
@@ -98,10 +104,12 @@ func (api Ws) Send_private() {
 
 		} else {
 			if pss.AutoRetract {
-				Retract_chan <- Struct_Retract{
+				rm := RetractMessage{
 					SelfId:    pss.Self_id,
 					MessageId: pmr.MessageId,
+					Time:      app_conf.Retract_time_duration,
 				}
+				ps.Publish_struct(types.RetractChannel, rm)
 			}
 		}
 	}

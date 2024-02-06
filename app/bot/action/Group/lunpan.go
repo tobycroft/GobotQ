@@ -9,8 +9,11 @@ import (
 	"main.go/app/bot/model/GroupDaojuModel"
 	"main.go/app/bot/model/GroupLunpanModel"
 	"main.go/app/bot/service"
+	"main.go/config/app_conf"
+	"main.go/config/types"
 	"main.go/tuuz"
 	"main.go/tuuz/Array"
+	"main.go/tuuz/Redis"
 
 	"main.go/tuuz/Log"
 	"math"
@@ -26,10 +29,12 @@ func App_group_lunpan(self_id, group_id, user_id, message_id int64, message stri
 	sign := glm.Api_find(group_id, user_id)
 	go func(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 		if groupfunction["sign_send_retract"].(int64) == 1 {
-			var ret iapi.Struct_Retract
-			ret.MessageId = message_id
-			ret.SelfId = self_id
-			iapi.Retract_chan <- ret
+			rm := iapi.RetractMessage{
+				SelfId:    self_id,
+				MessageId: message_id,
+				Time:      app_conf.Retract_time_duration,
+			}
+			Redis.PubSub{}.Publish_struct(types.RetractChannel, rm)
 		}
 	}(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 	mode := regexp.MustCompile("[A-Za-z]")

@@ -59,7 +59,7 @@ func reverify(self_id, group_id, user_id any, send_to_message string, kick, forc
 			GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
 		}
 		num := Calc.Rand(1000, 9999)
-		Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, time.Duration(app_conf.Retract_time_second+10)*time.Second)
+		Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, app_conf.Retract_time_duration+10*time.Second)
 		err := Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(member["user_id"]), num, 3600*time.Second)
 		if err != nil {
 			return "", err

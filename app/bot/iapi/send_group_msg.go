@@ -9,6 +9,8 @@ import (
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogSendModel"
+	"main.go/config/app_conf"
+	"main.go/config/types"
 	"main.go/tuuz/Redis"
 
 	"main.go/tuuz/Log"
@@ -55,6 +57,7 @@ type GroupSendStruct struct {
 }
 
 func (api Post) Send_group() {
+	ps := Redis.PubSub{}
 	for gss := range Group_send_chan {
 		//if Redis.CheckExists("SendCheck:" + gss.Message) {
 		//	continue
@@ -68,15 +71,20 @@ func (api Post) Send_group() {
 				if gmr.MessageId < 2 {
 					fmt.Println("gmr.MessageId:", gmr.MessageId)
 				}
-				var r Struct_Retract
-				r.SelfId = gss.Self_id
-				r.MessageId = gmr.MessageId
-				Retract_chan <- r
+
+				rm := RetractMessage{
+					SelfId:    gss.Self_id,
+					MessageId: gmr.MessageId,
+					Time:      app_conf.Retract_time_duration,
+				}
+				ps.Publish_struct(types.RetractChannel, rm)
+
 			}
 		}
 	}
 }
 func (api Ws) Send_group() {
+	ps := Redis.PubSub{}
 	for gss := range Group_send_chan {
 		if Redis.CheckExists("SendCheck:" + gss.Message) {
 			continue
@@ -91,10 +99,12 @@ func (api Ws) Send_group() {
 					if gmr.MessageId < 2 {
 						fmt.Println("gmr.MessageId:", gmr.MessageId)
 					}
-					var r Struct_Retract
-					r.SelfId = gss.Self_id
-					r.MessageId = gmr.MessageId
-					Retract_chan <- r
+					rm := RetractMessage{
+						SelfId:    gss.Self_id,
+						MessageId: gmr.MessageId,
+						Time:      app_conf.Retract_time_duration,
+					}
+					ps.Publish_struct(types.RetractChannel, rm)
 				}
 			}
 		}

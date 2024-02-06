@@ -2,6 +2,7 @@ package group
 
 import (
 	"fmt"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/action/Group"
@@ -13,10 +14,24 @@ import (
 	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
+	"main.go/config/types"
 	"main.go/tuuz/Redis"
 	"sync"
 	"time"
 )
+
+func group_message_acfur() {
+	ps := Redis.PubSub{}
+	for c := range ps.Subscribe(types.MessagePrivateValid) {
+		var es EventStruct[GroupMessageStruct]
+		err := sonic.UnmarshalString(c.Payload, &es)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			pm := es.Json
+		}
+	}
+}
 
 func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
 	admin := false

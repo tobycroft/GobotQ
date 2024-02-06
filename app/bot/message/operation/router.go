@@ -60,7 +60,6 @@ func Router() {
 					}
 					iapi.Api.Getfriendlist(self_id)
 				}
-
 				break
 
 			case "get_friend_list":

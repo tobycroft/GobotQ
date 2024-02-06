@@ -1,6 +1,6 @@
 package notice
 
-type EventStruct[T Notice | groupApply | groupAdmin | groupBan | groupIncrease | groupDecrease | groupLiftBan] struct {
+type EventStruct[T Notice | groupApply | groupAdmin | groupBan | groupIncrease | groupDecrease | groupLiftBan | groupRecallMessage] struct {
 	SelfId      int64  `json:"self_id"`
 	MessageType string `json:"message_type"`
 	PostType    string `json:"post_type"`

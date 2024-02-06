@@ -254,9 +254,6 @@ func Router() {
 					GroupMemberModel.Api_delete_byGid(self_id, group_id)
 					break
 
-				case "group_recall":
-					break
-
 				default:
 					fmt.Println("notice no route sub_type", em)
 					break
@@ -312,10 +309,18 @@ func Router() {
 			//case "friend_recall":
 			//	//fmt.Println(em)
 			//	break
-			//
-			//case "group_recall":
-			//	break
-			//
+
+			case "group_recall":
+				var esg EventStruct[groupRecallMessage]
+				err := sonic.UnmarshalString(c.Payload, &esg)
+				if err != nil {
+					LogErrorModel.Api_insert(err.Error(), c.Payload)
+					break
+				}
+				ga := esg.Json
+				fmt.Println("群成员撤回消息", ga)
+				break
+
 			//case "notice":
 			//	break
 
@@ -328,4 +333,16 @@ func Router() {
 
 	}
 
+}
+
+type groupRecallMessage struct {
+	OperatorId int    `json:"operator_id"`
+	UserId     int    `json:"user_id"`
+	TipText    string `json:"tip_text"`
+	NoticeType string `json:"notice_type"`
+	GroupId    int    `json:"group_id"`
+	Time       int    `json:"time"`
+	SelfId     int    `json:"self_id"`
+	MessageId  int    `json:"message_id"`
+	PostType   string `json:"post_type"`
 }

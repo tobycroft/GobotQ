@@ -4,17 +4,11 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/action/Group"
 	"main.go/app/bot/model/BotModel"
-	"main.go/app/bot/model/GroupFunctionModel"
-	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/LogErrorModel"
-	"main.go/app/bot/service"
-	"main.go/config/app_default"
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
 	"net/netip"
-	"regexp"
 	"time"
 )
 
@@ -40,16 +34,20 @@ func Router() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", botinfo["allow_ip"], ip.Addr().String()), es.SelfId)
 				continue
 			}
+			if botinfo["end_date"].(time.Time).Before(time.Now()) {
+				continue
+			}
+
 			gm := es.Json
 			is_self := false
 
 			self_id := gm.SelfId
 			user_id := gm.UserId
 			group_id := gm.GroupId
-			message_id := gm.MessageId
+			//message_id := gm.MessageId
 			//message := gm.Message
-			message := gm.RawMessage
-			raw_message := gm.RawMessage
+			//message := gm.RawMessage
+			//raw_message := gm.RawMessage
 
 			if user_id == self_id {
 				is_self = true
@@ -69,26 +67,21 @@ func Router() {
 
 			ps.Publish(types.MessageGroupValid, c.Payload)
 
-			text := message
-			reg := regexp.MustCompile("(?i)^acfur")
-			active := reg.MatchString(text)
+			//text := raw_message
+			//reg := regexp.MustCompile("(?i)^acfur")
+			//active := reg.MatchString(text)
 			//new_text := reg.ReplaceAllString(text, "")
-			groupmember := GroupMemberModel.Api_find(group_id, user_id)
-			groupfunction := GroupFunctionModel.Api_find(group_id)
-			if len(groupfunction) < 1 {
-				GroupFunctionModel.Api_insert(group_id)
-				groupfunction = GroupFunctionModel.Api_find(group_id)
-			}
-			if botinfo["end_date"].(time.Time).Before(time.Now()) {
-				Group.AutoMessage(self_id, group_id, user_id, app_default.Default_over_time, groupfunction)
-				continue
-			}
-			sender := gm.Sender
-			if !active || !service.Serv_is_at_me(self_id, message) {
-				//在未激活acfur的情况下应该对原始内容进行还原
-				go groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
-				ps.Publish(types.MessageGroupValid, c.Payload)
-			}
+			//groupmember := GroupMemberModel.Api_find(group_id, user_id)
+			//groupfunction := GroupFunctionModel.Api_find(group_id)
+			//if len(groupfunction) < 1 {
+			//	GroupFunctionModel.Api_insert(group_id)
+			//	groupfunction = GroupFunctionModel.Api_find(group_id)
+			//}
+
+			//sender := gm.Sender
+			//if !active || !service.Serv_is_at_me(self_id, raw_message) {
+			//在未激活acfur的情况下应该对原始内容进行还原
+			//}
 
 		}
 

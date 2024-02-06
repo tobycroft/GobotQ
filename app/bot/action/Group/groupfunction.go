@@ -41,7 +41,7 @@ func App_group_function_get_all(self_id, group_id, user_id int64, message string
 	AutoMessage(self_id, group_id, user_id, str, groupfunction)
 }
 
-func App_group_function_set(self_id, group_id, user_id any, message string, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
+func App_group_function_set(self_id, group_id, user_id any, message string, groupfunction map[string]any) {
 	i1 := strings.Index(message, ":")
 	i2 := strings.Index(message, "：")
 	if i1 == i2 {

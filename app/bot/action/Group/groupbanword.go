@@ -39,7 +39,7 @@ func App_group_ban_word_list(self_id, group_id, user_id int64, message string, T
 	}
 }
 
-func App_group_ban_word_set(self_id, group_id, user_id int64, message string, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
+func App_group_ban_word_set(self_id, group_id, user_id int64, message string) {
 	if len(message) > 2 {
 		text_slice := strings.Split(message, "")
 		Type := text_slice[0]

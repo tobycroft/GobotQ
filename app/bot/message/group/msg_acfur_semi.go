@@ -24,6 +24,11 @@ func group_message_acfur_semi_match() {
 	go ban_group()
 	go ban_url()
 	go ban_wx()
+	go ban_share()
+
+	go ban_word()
+	go settings()
+	go signs()
 
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur) {
@@ -67,10 +72,6 @@ func group_message_acfur_semi_match() {
 			}
 
 			if active || service.Serv_is_at_me(self_id, message) {
-				var rm iapi.RetractMessage
-				rm.MessageId = message_id
-				rm.SelfId = self_id
-				rm.Time = 0
 
 				gmr := GroupMessageRedirect[GroupMessageStruct]{}
 				gmr.GroupMember = groupmember
@@ -78,40 +79,28 @@ func group_message_acfur_semi_match() {
 				gmr.Json = gm
 				if groupfunction["ban_group"].(int64) == 1 {
 					if service.Serv_ban_group(raw_message) {
-						if groupfunction["ban_retract"].(int64) == 1 {
-							ps.Publish_struct(types.RetractChannel, rm)
-						}
-						fmt.Println(banGroup, self_id, group_id, user_id)
+						//fmt.Println(banGroup, self_id, group_id, user_id)
 						ps.Publish_struct(types.MessageGroupAcfur+banGroup, gmr)
 					}
 				}
 
 				if groupfunction["ban_url"].(int64) == 1 {
 					if service.Serv_url_detect(raw_message) {
-						if groupfunction["ban_retract"].(int64) == 1 {
-							ps.Publish_struct(types.RetractChannel, rm)
-						}
-						fmt.Println(banUrl, self_id, group_id, user_id)
+						//fmt.Println(banUrl, self_id, group_id, user_id)
 						ps.Publish_struct(types.MessageGroupAcfur+banUrl, gmr)
 					}
 				}
 
 				if groupfunction["ban_wx"].(int64) == 1 {
 					if service.Serv_ban_weixin(message) {
-						if groupfunction["ban_retract"].(int64) == 1 {
-							ps.Publish_struct(types.RetractChannel, rm)
-						}
-						fmt.Println(banWx, self_id, group_id, user_id)
+						//fmt.Println(banWx, self_id, group_id, user_id)
 						ps.Publish(types.MessageGroupAcfur+banWx, gmr)
 					}
 				}
 
 				if groupfunction["ban_share"].(int64) == 1 {
 					if service.Serv_ban_share(message) {
-						if groupfunction["ban_retract"].(int64) == 1 {
-							ps.Publish_struct(types.RetractChannel, rm)
-						}
-						fmt.Println(banShare, self_id, group_id, user_id)
+						//fmt.Println(banShare, self_id, group_id, user_id)
 						ps.Publish(types.MessageGroupAcfur+banShare, gmr)
 					}
 				}
@@ -121,7 +110,6 @@ func group_message_acfur_semi_match() {
 						if len(groupmember) > 0 {
 							service.Not_admin(self_id, group_id, user_id)
 						} else {
-							Group.App_group_ban_word_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
 							ps.Publish(types.MessageGroupAcfur+banWord, gmr)
 						}
 					}
@@ -132,7 +120,6 @@ func group_message_acfur_semi_match() {
 						if len(groupmember) > 0 {
 							service.Not_admin(self_id, group_id, user_id)
 						} else {
-							Group.App_group_function_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
 							ps.Publish(types.MessageGroupAcfur+setting, gmr)
 						}
 					}
@@ -141,7 +128,6 @@ func group_message_acfur_semi_match() {
 				if groupfunction["sign"].(int64) == 1 {
 					if _, ok := service.Serv_text_match_all(message, []string{"签到"}); ok {
 						ps.Publish(types.MessageGroupAcfur+sign, gmr)
-						Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 					}
 				}
 

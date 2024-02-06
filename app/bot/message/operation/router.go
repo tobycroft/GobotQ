@@ -130,6 +130,20 @@ func Router() {
 				}
 				break
 
+			case "delete_msg":
+				var es EventStruct[iapi.RetractWsRetStruct]
+				err := sonic.UnmarshalString(c.Payload, &es)
+				if err != nil {
+					Log.Errs(err, tuuz.FUNCTION_ALL())
+				} else {
+					if es.Json.Retcode == 0 {
+						fmt.Println("消息撤回完成：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
+					} else {
+						fmt.Println("消息撤回失败：", oe.Echo.SelfId, Calc.Any2Int64(es.Json.Message))
+					}
+				}
+				break
+
 			default:
 				fmt.Println("event-notfound:", c.Payload)
 				LogRecvModel.Api_insert(c.Payload)

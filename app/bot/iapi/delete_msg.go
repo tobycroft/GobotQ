@@ -34,6 +34,13 @@ type DefaultRetStruct struct {
 	Status  string `json:"status"`
 	Wording string `json:"wording"`
 }
+type RetractWsRetStruct struct {
+	Message string `json:"message"`
+	Status  string `json:"status"`
+	Retcode int    `json:"retcode"`
+	Data    struct {
+	} `json:"data"`
+}
 
 func (api Post) DeleteMsg(self_id, message_id int64) (bool, error) {
 	post := map[string]any{

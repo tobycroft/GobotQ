@@ -23,7 +23,6 @@ type RetractMessage struct {
 }
 
 var Retract_chan = make(chan Struct_Retract, 100)
-var Retract_instant = make(chan Struct_Retract, 100)
 
 type DefaultRetStruct struct {
 	Data    any    `json:"data"`

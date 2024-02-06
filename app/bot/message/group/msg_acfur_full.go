@@ -148,15 +148,14 @@ func group_message_acfur_when_fully_matched() {
 					break
 
 				case "测试撤回":
-					var ret iapi.Struct_Retract
-					ret.MessageId = message_id
-					ret.SelfId = self_id
+					var rm iapi.RetractMessage
+					rm.MessageId = message_id
+					rm.SelfId = self_id
+					rm.Time = 5 * time.Second
 					if !admin {
 						break
 					}
-					go func(ret iapi.Struct_Retract) {
-						iapi.Retract_instant <- ret
-					}(ret)
+					ps.Publish_struct(types.RetractChannel, rm)
 					break
 
 				case "测试T出测试":

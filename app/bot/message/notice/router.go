@@ -254,6 +254,9 @@ func Router() {
 					GroupMemberModel.Api_delete_byGid(self_id, group_id)
 					break
 
+				case "group_recall":
+					break
+
 				default:
 					fmt.Println("notice no route sub_type", em)
 					break

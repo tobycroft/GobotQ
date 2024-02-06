@@ -92,16 +92,6 @@ func group_message_acfur_semi_match() {
 					}
 				}
 
-				if _, ok := service.Serv_text_match(message, []string{"acfur设定"}); ok {
-					if !admin && !owner {
-						if len(groupmember) > 0 {
-							service.Not_admin(self_id, group_id, user_id)
-						} else {
-							ps.Publish(types.MessageGroupAcfur+setting, gmr)
-						}
-					}
-				}
-
 				if groupfunction["sign"].(int64) == 1 {
 					if _, ok := service.Serv_text_match_all(message, []string{"签到"}); ok {
 						ps.Publish(types.MessageGroupAcfur+signDaily, gmr)

@@ -34,6 +34,8 @@ func group_message_normal() {
 			message := gm.RawMessage
 			raw_message := gm.RawMessage
 
+			groupfunction := es.GroupFunction
+
 			if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
 				ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
 			}

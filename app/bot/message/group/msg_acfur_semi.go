@@ -12,7 +12,6 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/app/bot/service"
-	"main.go/config/app_default"
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
 	"main.go/tuuz/Vali"
@@ -27,8 +26,13 @@ func group_message_acfur_semi_match() {
 	go ban_share()
 
 	go ban_word()
-	go settings()
-	go signs()
+	go set_setting()
+	go sign_daily()
+	go sign_lunpan()
+
+	go check_score()
+	go rank_list()
+	go word_limit()
 
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur) {
@@ -127,44 +131,23 @@ func group_message_acfur_semi_match() {
 
 				if groupfunction["sign"].(int64) == 1 {
 					if _, ok := service.Serv_text_match_all(message, []string{"签到"}); ok {
-						ps.Publish(types.MessageGroupAcfur+sign, gmr)
+						ps.Publish(types.MessageGroupAcfur+signDaily, gmr)
 					}
-				}
-
-				if groupfunction["sign"].(int64) == 1 {
 					if _, ok := service.Serv_text_match(message, []string{"轮盘"}); ok {
-						ps.Publish(types.MessageGroupAcfur+轮盘, gmr)
-						Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+						ps.Publish(types.MessageGroupAcfur+signLunpan, gmr)
 					}
 				}
 
 				if _, ok := service.Serv_text_match_all(message, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包", "查询余额", "余额查询"}); ok {
-					Group.App_check_balance(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+					ps.Publish(types.MessageGroupAcfur+checkScore, gmr)
 				}
 
 				if _, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行", "排行榜"}); ok {
-					Group.App_check_rank(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+					ps.Publish(types.MessageGroupAcfur+rankList, gmr)
 				}
 
 				if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
-					ps.Publish_struct(types.RetractChannel, rm)
-					fmt.Println("长度限制", self_id, group_id, user_id)
-					Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
-				}
-
-				if str, ok := service.Serv_auto_reply(group_id, raw_message); ok {
-					iapi.Api.Sendgroupmsg(self_id, group_id, message, auto_retract)
-				}
-				if _, ok := service.Serv_text_match_any(message, []string{"[CQ:at,qq=" + Calc.Any2String(self_id) + "]"}); ok {
-					iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
-				}
-
-				if str, ok := service.Serv_text_match(message, []string{"道具"}); ok {
-					Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-				}
-
-				if str, ok := service.Serv_text_match(message, []string{"交易"}); ok {
-					Group.App_trade_center(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+					ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
 				}
 
 				if str, ok := service.Serv_text_match(message, []string{"acfur重新验证"}); ok {

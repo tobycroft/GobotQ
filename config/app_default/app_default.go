@@ -72,7 +72,7 @@ const Default_retract_word = "用户触发了撤回"
 
 const Default_over_time = "您的服务已经到期，如需增加时间请加入反馈：542749156"
 
-const Default_welcome = "Hi~我是Acfur，如果需要查看功能可以发acfurhelp哦~"
+const Default_greetings = "Hi~我是Acfur，如果需要查看功能可以发acfurhelp哦~"
 
 const Default_lunpan_help = "轮盘模式说明：" +
 	"\r\n\r\n	1.经典轮盘模式：直接发送“轮盘”即可参与经典轮盘模式，有2分5分10分以及翻倍翻10倍等奖励，也有扣5，随机扣，清零以及减半等惩罚" +

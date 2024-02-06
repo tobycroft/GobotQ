@@ -21,7 +21,7 @@ type LoginInfo struct {
 	UserID   int64  `json:"user_id"`
 }
 
-func (api Post) GetLoginInfo(self_id any) (LoginInfo, error) {
+func (api Post) GetLoginInfo(self_id int64) (LoginInfo, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
@@ -44,7 +44,7 @@ func (api Post) GetLoginInfo(self_id any) (LoginInfo, error) {
 	}
 }
 
-func (api Ws) GetLoginInfo(self_id any) (LoginInfo, error) {
+func (api Ws) GetLoginInfo(self_id int64) (LoginInfo, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

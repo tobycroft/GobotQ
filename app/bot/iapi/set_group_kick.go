@@ -16,7 +16,7 @@ type KickGroupMemberRet struct {
 	Ret string `json:"ret"`
 }
 
-func (api Post) SetGroupKick(self_id, group_id, user_id any, reject_add_request bool) (bool, error) {
+func (api Post) SetGroupKick(self_id, group_id, user_id int64, reject_add_request bool) (bool, error) {
 	post := map[string]any{
 		"group_id":           group_id,
 		"user_id":            user_id,
@@ -44,7 +44,7 @@ func (api Post) SetGroupKick(self_id, group_id, user_id any, reject_add_request 
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) SetGroupKick(self_id, group_id, user_id any, reject_add_request bool) (bool, error) {
+func (api Ws) SetGroupKick(self_id, group_id, user_id int64, reject_add_request bool) (bool, error) {
 	post := map[string]any{
 		"group_id":           group_id,
 		"user_id":            user_id,

@@ -11,7 +11,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Post) DeleteFriend(self_id, friend_id any) (bool, error) {
+func (api Post) DeleteFriend(self_id int64, friend_id any) (bool, error) {
 	post := map[string]any{
 		"friend_id": friend_id,
 	}
@@ -39,7 +39,7 @@ func (api Post) DeleteFriend(self_id, friend_id any) (bool, error) {
 }
 
 // DeleteFriend incomplete
-func (api Ws) DeleteFriend(self_id, user_id any) (bool, error) {
+func (api Ws) DeleteFriend(self_id int64, user_id any) (bool, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

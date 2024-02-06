@@ -12,7 +12,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Post) SetGroupAdmin(self_id, group_id, user_id any, enable bool) (bool, error) {
+func (api Post) SetGroupAdmin(self_id, group_id, user_id int64, enable bool) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -40,7 +40,7 @@ func (api Post) SetGroupAdmin(self_id, group_id, user_id any, enable bool) (bool
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) SetGroupAdmin(self_id, group_id, user_id any, enable bool) (bool, error) {
+func (api Ws) SetGroupAdmin(self_id, group_id, user_id int64, enable bool) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,

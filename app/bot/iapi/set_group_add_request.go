@@ -12,7 +12,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Post) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error) {
+func (api Post) SetGroupAddRequestRet(self_id int64, flag, sub_type any, approve bool, reason string) (bool, error) {
 	post := map[string]any{
 		"flag":     flag,
 		"sub_type": sub_type,
@@ -42,7 +42,7 @@ func (api Post) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool,
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) SetGroupAddRequestRet(self_id, flag, sub_type any, approve bool, reason string) (bool, error) {
+func (api Ws) SetGroupAddRequestRet(self_id int64, flag, sub_type any, approve bool, reason string) (bool, error) {
 	post := map[string]any{
 		"flag":     flag,
 		"sub_type": sub_type,

@@ -31,7 +31,7 @@ func power_check() {
 			} else if role == "owner" {
 				gms := GroupMemberModel.Api_select_admin(self_id, group_id)
 				for _, gm := range gms {
-					iapi.Api.SetGroupAdmin(self_id, group_id, gm["user_id"], false)
+					iapi.Api.SetGroupAdmin(self_id, group_id, Calc.Any2Int64(gm["user_id"]), false)
 				}
 				iapi.Api.SetGroupWholeBan(self_id, group_id, true)
 				iapi.Api.SetGroupLeave(self_id, group_id)

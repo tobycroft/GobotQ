@@ -13,7 +13,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Post) SetGroupLeave(self_id, group_id any) (bool, error) {
+func (api Post) SetGroupLeave(self_id, group_id int64) (bool, error) {
 	post := map[string]any{
 		"group_id":   group_id,
 		"is_dismiss": true,
@@ -41,7 +41,7 @@ func (api Post) SetGroupLeave(self_id, group_id any) (bool, error) {
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) SetGroupLeave(self_id, group_id any) (bool, error) {
+func (api Ws) SetGroupLeave(self_id, group_id int64) (bool, error) {
 	post := map[string]any{
 		"group_id":   group_id,
 		"is_dismiss": true,

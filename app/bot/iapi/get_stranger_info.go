@@ -86,7 +86,7 @@ type UserInfo struct {
 	} `json:"ext"`
 }
 
-func (api Post) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, error) {
+func (api Post) GetStrangerInfo(self_id, user_id int64, no_cache bool) (UserInfo, error) {
 	post := map[string]any{
 		"user_id":  user_id,
 		"no_cache": no_cache,
@@ -108,7 +108,7 @@ func (api Post) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, 
 	}
 	return ret1.Data, nil
 }
-func (api Ws) GetStrangerInfo(self_id, user_id any, no_cache bool) (UserInfo, error) {
+func (api Ws) GetStrangerInfo(self_id, user_id int64, no_cache bool) (UserInfo, error) {
 	post := map[string]any{
 		"user_id":  user_id,
 		"no_cache": no_cache,

@@ -2,6 +2,7 @@ package Group
 
 import (
 	"fmt"
+	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
@@ -12,8 +13,8 @@ import (
 )
 
 type App_group_member struct {
-	SelfId  any
-	GroupId any
+	SelfId  int64
+	GroupId int64
 }
 
 var Chan_refresh_group_member = make(chan App_group_member, 99)
@@ -29,21 +30,21 @@ func App_refresh_group_member() {
 	for _, bot := range bots {
 		gl := GroupListModel.Api_select(bot["self_id"])
 		if len(gl) > 0 {
-			App_refresh_group_member_action(bot["self_id"], gl)
+			App_refresh_group_member_action(Calc.Any2Int64(bot["self_id"]), gl)
 		}
 	}
 }
 
-func App_refresh_group_member_action(self_id any, grouplist []gorose.Data) {
+func App_refresh_group_member_action(self_id int64, grouplist []gorose.Data) {
 	for _, gll := range grouplist {
 		var apm App_group_member
 		apm.SelfId = self_id
-		apm.GroupId = gll["group_id"]
+		apm.GroupId = gll["group_id"].(int64)
 		Chan_refresh_group_member <- apm
 	}
 }
 
-func App_refresh_group_member_one(self_id, group_id any) {
+func App_refresh_group_member_one(self_id, group_id int64) {
 	GroupMemberModel.Api_delete_byGid(self_id, group_id)
 	GroupMemberRedis.Cac_del(self_id, "*", group_id)
 	gm, err := iapi.Api.Getgroupmemberlist(self_id, group_id)

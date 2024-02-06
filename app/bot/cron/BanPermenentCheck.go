@@ -1,6 +1,7 @@
 package cron
 
 import (
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -19,9 +20,9 @@ func ban_permenent_check() {
 	datas := GroupBanPermenentModel.Api_select()
 	for _, data := range datas {
 		//设定下次禁言的时间为28天
-		group_id := data["group_id"]
-		user_id := data["user_id"]
-		self_id := data["self_id"]
+		group_id := Calc.Any2Int64(data["group_id"])
+		user_id := Calc.Any2Int64(data["user_id"])
+		self_id := Calc.Any2Int64(data["self_id"])
 		gm := GroupMemberModel.Api_find(group_id, user_id)
 		//如果这个用户不在群里面就不执行了
 		if len(gm) > 0 {

@@ -17,7 +17,7 @@ type GroupMemberInfoRet struct {
 	Status  string          `json:"status"`
 }
 
-func (api Post) GetGroupMemberInfo(self_id, group_id, user_id any) (GroupMemberList, error) {
+func (api Post) GetGroupMemberInfo(self_id, group_id, user_id int64) (GroupMemberList, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -44,7 +44,7 @@ func (api Post) GetGroupMemberInfo(self_id, group_id, user_id any) (GroupMemberL
 		return GroupMemberList{}, nil
 	}
 }
-func (api Ws) GetGroupMemberInfo(self_id, group_id, user_id any) (GroupMemberList, error) {
+func (api Ws) GetGroupMemberInfo(self_id, group_id, user_id int64) (GroupMemberList, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,

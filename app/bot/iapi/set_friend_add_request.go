@@ -12,7 +12,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Post) SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error) {
+func (api Post) SetFriendAddRequest(self_id int64, flag any, approve bool, remark any) (bool, error) {
 	post := map[string]any{
 		"flag":    flag,
 		"approve": approve,
@@ -42,7 +42,7 @@ func (api Post) SetFriendAddRequest(self_id, flag any, approve bool, remark any)
 }
 
 // SetFriendAddRequest not yet done
-func (api Ws) SetFriendAddRequest(self_id, flag any, approve bool, remark any) (bool, error) {
+func (api Ws) SetFriendAddRequest(self_id int64, flag any, approve bool, remark any) (bool, error) {
 	post := map[string]any{
 		"flag":    flag,
 		"approve": approve,

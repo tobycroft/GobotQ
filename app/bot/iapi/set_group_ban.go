@@ -16,7 +16,7 @@ type MuteGroupmeMberRet struct {
 	Ret string `json:"ret"`
 }
 
-func (api Post) SetGroupBan(self_id, group_id, user_id any, duration float64) (bool, error) {
+func (api Post) SetGroupBan(self_id, group_id, user_id int64, duration float64) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -44,7 +44,7 @@ func (api Post) SetGroupBan(self_id, group_id, user_id any, duration float64) (b
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) SetGroupBan(self_id, group_id, user_id any, duration float64) (bool, error) {
+func (api Ws) SetGroupBan(self_id, group_id, user_id int64, duration float64) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,

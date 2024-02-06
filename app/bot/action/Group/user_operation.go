@@ -126,7 +126,7 @@ func App_drcrease_member(self_id, group_id, user_id int64, groupfunction map[str
 					"\n最后一个被清除的为:"+Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"])+
 					"，他最后一次说话是在："+Date.Date_format_second(group_member_datas[len(group_member_datas)-1]["last_date"].(time.Time)), false)
 				for _, data := range group_member_datas {
-					ok, err := iapi.Api.SetGroupKick(self_id, group_id, data["user_id"], false)
+					ok, err := iapi.Api.SetGroupKick(self_id, group_id, Calc.Any2Int64(data["user_id"]), false)
 					if err != nil {
 						fmt.Println(err)
 					} else {

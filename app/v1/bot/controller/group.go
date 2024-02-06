@@ -69,7 +69,10 @@ func bot_group_list(c *gin.Context) {
 }
 
 func bot_group_exit(c *gin.Context) {
-	bot := c.PostForm("self_id")
+	bot, ok := Input.PostInt64("self_id", c)
+	if !ok {
+		return
+	}
 	gid, ok := Input.PostInt64("group_id", c)
 	if !ok {
 		return

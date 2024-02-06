@@ -13,7 +13,7 @@ func BotPower(group_id, self_id any) string {
 	return "member"
 }
 
-func BotPowerRefresh(group_id, self_id any) string {
+func BotPowerRefresh(group_id, self_id int64) string {
 	gm, err := iapi.Api.GetGroupMemberInfo(self_id, group_id, self_id)
 	if err != nil {
 

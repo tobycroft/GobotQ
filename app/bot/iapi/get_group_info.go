@@ -31,7 +31,7 @@ type GroupInfo struct {
 	MaxMemberCount int64   `json:"max_member_count"`
 }
 
-func (api Post) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
+func (api Post) GetGroupInfo(self_id, group_id int64) (GroupInfo, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"no_cache": false,
@@ -59,7 +59,7 @@ func (api Post) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
 	}
 
 }
-func (api Ws) GetGroupInfo(self_id, group_id any) (GroupInfo, error) {
+func (api Ws) GetGroupInfo(self_id, group_id int64) (GroupInfo, error) {
 	post := map[string]any{
 		"group_id": group_id,
 	}

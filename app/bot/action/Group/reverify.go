@@ -53,7 +53,7 @@ func reverify(self_id, group_id, user_id int64, send_to_message string, kick, fo
 		return "", errors.New("群成员不在群内")
 	}
 	user := GroupBanPermenentModel.Api_find(group_id, member["user_id"])
-	go iapi.Api.SetGroupBan(self_id, group_id, member["user_id"], 0)
+	go iapi.Api.SetGroupBan(self_id, group_id, Calc.Any2Int64(member["user_id"]), 0)
 	if len(user) > 0 || force {
 		if len(user) < 1 {
 			GroupBanPermenentModel.Api_insert(group_id, member["user_id"], time.Now().Unix()+app_conf.Auto_ban_time-86400)
@@ -80,7 +80,7 @@ func reverify(self_id, group_id, user_id int64, send_to_message string, kick, fo
 					}
 				}
 			}
-		}(self_id, group_id, member["user_id"].(int64), kick)
+		}(self_id, group_id, Calc.Any2Int64(member["user_id"]), kick)
 		return "", nil
 	} else {
 		return "", errors.New("群成员没有在小黑屋内")

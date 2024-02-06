@@ -8,11 +8,18 @@ import (
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/BotModel"
 	"main.go/tuuz/Log"
+	"time"
 )
 
 type Struct_Retract struct {
 	SelfId    any
 	MessageId any
+}
+
+type RetractMessage struct {
+	SelfId    any           `json:"selfId"`
+	MessageId any           `json:"messageId"`
+	Time      time.Duration `json:"time"`
 }
 
 var Retract_chan = make(chan Struct_Retract, 100)

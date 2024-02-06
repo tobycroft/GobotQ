@@ -24,4 +24,3 @@ const OperationRefreshGroup = "Operation:RefreshGroup:"
 
 // retract channel
 const RetractChannel = "RetractChannel:"
-const RetractChannelInstant = "RetractChannelInstant:"

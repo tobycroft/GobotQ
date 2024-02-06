@@ -15,12 +15,16 @@ import (
 	"main.go/config/app_default"
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
+	"main.go/tuuz/Vali"
 	"regexp"
-	"sync"
 	"time"
 )
 
 func group_message_acfur_semi_match() {
+	go ban_group()
+	go ban_url()
+	go ban_wx()
+
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur) {
 		var es EventStruct[GroupMessageStruct]
@@ -42,155 +46,177 @@ func group_message_acfur_semi_match() {
 			reg := regexp.MustCompile("(?i)^acfur")
 			active := reg.MatchString(text)
 			new_text := reg.ReplaceAllString(text, "")
+
 			groupmember := GroupMemberModel.Api_find(group_id, user_id)
+			admin := false
+			owner := false
+			if len(groupmember) > 0 {
+				if groupmember["role"].(string) == "admin" {
+					admin = true
+				}
+				if groupmember["role"].(string) == "owner" {
+					admin = true
+					owner = true
+				}
+			}
+
 			groupfunction := GroupFunctionModel.Api_find(group_id)
 			if len(groupfunction) < 1 {
 				GroupFunctionModel.Api_insert(group_id)
 				groupfunction = GroupFunctionModel.Api_find(group_id)
 			}
+
 			if active || service.Serv_is_at_me(self_id, message) {
+				var rm iapi.RetractMessage
+				rm.MessageId = message_id
+				rm.SelfId = self_id
+				rm.Time = 0
+
 				gmr := GroupMessageRedirect[GroupMessageStruct]{}
 				gmr.GroupMember = groupmember
 				gmr.GroupFunction = groupfunction
 				gmr.Json = gm
 				if groupfunction["ban_group"].(int64) == 1 {
-					if groupfunction["ban_retract"].(int64) == 1 {
-						go func(ret iapi.Struct_Retract) {
-							iapi.Retract_instant <- ret
-						}(ret)
+					if service.Serv_ban_group(raw_message) {
+						if groupfunction["ban_retract"].(int64) == 1 {
+							ps.Publish_struct(types.RetractChannel, rm)
+						}
+						fmt.Println(banGroup, self_id, group_id, user_id)
+						ps.Publish_struct(types.MessageGroupAcfur+banGroup, gmr)
 					}
-					fmt.Println("ban_group", self_id, group_id, user_id)
-					go ban_group()
 				}
-				if service.Serv_ban_group(raw_message) {
-					ps.Publish_struct(types.MessageGroupAcfur+"ban_group", gmr)
+
+				if groupfunction["ban_url"].(int64) == 1 {
+					if service.Serv_url_detect(raw_message) {
+						if groupfunction["ban_retract"].(int64) == 1 {
+							ps.Publish_struct(types.RetractChannel, rm)
+						}
+						fmt.Println(banUrl, self_id, group_id, user_id)
+						ps.Publish_struct(types.MessageGroupAcfur+banUrl, gmr)
+					}
 				}
-				if service.Serv_url_detect(raw_message) {
-					ps.Publish(types.MessageGroupAcfur+"url_detect", gmr)
+
+				if groupfunction["ban_wx"].(int64) == 1 {
+					if service.Serv_ban_weixin(message) {
+						if groupfunction["ban_retract"].(int64) == 1 {
+							ps.Publish_struct(types.RetractChannel, rm)
+						}
+						fmt.Println(banWx, self_id, group_id, user_id)
+						ps.Publish(types.MessageGroupAcfur+banWx, gmr)
+					}
 				}
-				if service.Serv_ban_weixin(message) {
-					ps.Publish(types.MessageGroupAcfur+"ban_weixin", gmr)
+
+				if groupfunction["ban_share"].(int64) == 1 {
+					if service.Serv_ban_share(message) {
+						if groupfunction["ban_retract"].(int64) == 1 {
+							ps.Publish_struct(types.RetractChannel, rm)
+						}
+						fmt.Println(banShare, self_id, group_id, user_id)
+						ps.Publish(types.MessageGroupAcfur+banShare, gmr)
+					}
 				}
-				if service.Serv_ban_share(message) {
-					ps.Publish(types.MessageGroupAcfur+"ban_share", gmr)
+
+				if _, ok := service.Serv_text_match(message, []string{"acfur屏蔽"}); ok {
+					if !admin && !owner {
+						if len(groupmember) > 0 {
+							service.Not_admin(self_id, group_id, user_id)
+						} else {
+							Group.App_group_ban_word_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
+							ps.Publish(types.MessageGroupAcfur+banWord, gmr)
+						}
+					}
 				}
-				if service.Serv_text_match(message, []string{"acfur屏蔽"}) {
-					ps.Publish(types.MessageGroupAcfur+"ban_word", gmr)
+
+				if _, ok := service.Serv_text_match(message, []string{"acfur设定"}); ok {
+					if !admin && !owner {
+						if len(groupmember) > 0 {
+							service.Not_admin(self_id, group_id, user_id)
+						} else {
+							Group.App_group_function_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
+							ps.Publish(types.MessageGroupAcfur+setting, gmr)
+						}
+					}
+				}
+
+				if groupfunction["sign"].(int64) == 1 {
+					if _, ok := service.Serv_text_match_all(message, []string{"签到"}); ok {
+						ps.Publish(types.MessageGroupAcfur+sign, gmr)
+						Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+					}
+				}
+
+				if groupfunction["sign"].(int64) == 1 {
+					if _, ok := service.Serv_text_match(message, []string{"轮盘"}); ok {
+						ps.Publish(types.MessageGroupAcfur+轮盘, gmr)
+						Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+					}
+				}
+
+				if _, ok := service.Serv_text_match_all(message, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包", "查询余额", "余额查询"}); ok {
+					Group.App_check_balance(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+				}
+
+				if _, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行", "排行榜"}); ok {
+					Group.App_check_rank(self_id, group_id, user_id, message_id, groupmember, groupfunction)
+				}
+
+				if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
+					ps.Publish_struct(types.RetractChannel, rm)
+					fmt.Println("长度限制", self_id, group_id, user_id)
+					Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
+				}
+
+				if str, ok := service.Serv_auto_reply(group_id, raw_message); ok {
+					iapi.Api.Sendgroupmsg(self_id, group_id, message, auto_retract)
+				}
+				if _, ok := service.Serv_text_match_any(message, []string{"[CQ:at,qq=" + Calc.Any2String(self_id) + "]"}); ok {
+					iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
+				}
+
+				if str, ok := service.Serv_text_match(message, []string{"道具"}); ok {
+					Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+				}
+
+				if str, ok := service.Serv_text_match(message, []string{"交易"}); ok {
+					Group.App_trade_center(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+				}
+
+				if str, ok := service.Serv_text_match(message, []string{"acfur重新验证"}); ok {
+					if !admin && !owner {
+						if len(groupmember) > 0 {
+							go service.Not_admin(self_id, group_id, user_id)
+							break
+						}
+					}
+					go Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+				}
+
+				if str, ok := service.Serv_text_match(message, []string{"acfur死亡验证"}); ok {
+					if !admin && !owner {
+						if len(groupmember) > 0 {
+							go service.Not_admin(self_id, group_id, user_id)
+							break
+						}
+					}
+					go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+				}
+
+				if str, ok := service.Serv_text_match(message, []string{"acfur活人验证"}); ok {
+					if !admin && !owner {
+						if len(groupmember) > 0 {
+							go service.Not_admin(self_id, group_id, user_id)
+							break
+						}
+					}
+					go Group.App_reverify_force(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 				}
 			}
-
 		}
 	}
-}
-
-var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_weixin", "ban_share", "ban_word", "setting",
-	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易", "重新验证", "死亡验证", "活人验证"}
-
-func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
-
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur设定"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(6, &wg)
-	//签到(直接)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match_all(message, []string{"签到"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(7, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"轮盘"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(8, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match_all(message, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包", "查询余额", "余额查询"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(9, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		_, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行", "排行榜"})
-		new_text[idx] = ""
-		function[idx] = ok
-	}(10, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		if int64(len(raw_message)) > groupfunction["word_limit"].(int64) {
-			new_text[idx] = raw_message
-			function[idx] = true
-		}
-	}(11, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_auto_reply(group_id, raw_message)
-		new_text[idx] = str
-		function[idx] = ok
-	}(12, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		_, ok := service.Serv_text_match_any(message, []string{"[CQ:at,qq=" + Calc.Any2String(self_id) + "]"})
-		new_text[idx] = ""
-		function[idx] = ok
-	}(13, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"道具"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(14, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"交易"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(15, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur重新验证"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(16, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur死亡验证"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(17, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur活人验证"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(18, &wg)
-	wg.Wait()
-	function_route := 0
-	for i := range function {
-		if function[i] == true {
-			function_route = i
-			break
-		}
-	}
-	groupHandle_acfur_other(group_function_type[function_route], self_id, group_id, user_id, message_id, new_text[function_route], raw_message, sender, groupmember, groupfunction)
 }
 
 func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
-	admin := false
-	owner := false
-	if len(groupmember) > 0 {
-		if groupmember["role"].(string) == "admin" {
-			admin = true
-		}
-		if groupmember["role"].(string) == "owner" {
-			admin = true
-			owner = true
-		}
-	}
+
 	auto_retract := true
 	if groupfunction["auto_retract"].(int64) == 0 {
 		auto_retract = false
@@ -200,141 +226,6 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 	ret.SelfId = self_id
 
 	switch Type {
-
-	case "重新验证":
-		if !admin && !owner {
-			if len(groupmember) > 0 {
-				go service.Not_admin(self_id, group_id, user_id)
-				break
-			}
-		}
-		go Group.App_reverify(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-		break
-
-	case "活人验证":
-		if !admin && !owner {
-			if len(groupmember) > 0 {
-				go service.Not_admin(self_id, group_id, user_id)
-				break
-			}
-		}
-		go Group.App_reverify_force(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-		break
-
-	case "死亡验证":
-		if !admin && !owner {
-			if len(groupmember) > 0 {
-				go service.Not_admin(self_id, group_id, user_id)
-				break
-			}
-		}
-		go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-		break
-
-	case "交易":
-		go Group.App_trade_center(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-		break
-
-	case "道具":
-		go Group.App_group_daoju(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-		break
-
-	case "atme":
-		go iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
-		break
-
-	case "sign":
-		if groupfunction["sign"].(int64) == 1 {
-			go Group.App_group_sign(self_id, group_id, user_id, message_id, groupmember, groupfunction)
-		}
-		break
-
-	case "轮盘":
-		if groupfunction["sign"].(int64) == 1 {
-			go Group.App_group_lunpan(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-		}
-		break
-
-	case "setting":
-		if !admin && !owner {
-			if len(groupmember) > 0 {
-				go service.Not_admin(self_id, group_id, user_id)
-				break
-			}
-		}
-		go Group.App_group_function_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
-		break
-
-	case "ban_word":
-		if !admin && !owner {
-			if len(groupmember) > 0 {
-				go service.Not_admin(self_id, group_id, user_id)
-				break
-			}
-		}
-		go Group.App_group_ban_word_set(self_id, group_id, user_id, message, message_id, groupmember, groupfunction)
-		break
-
-	case "url_detect":
-		if groupfunction["ban_url"].(int64) == 1 {
-			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret iapi.Struct_Retract) {
-					iapi.Retract_instant <- ret
-				}(ret)
-			}
-			fmt.Println("url_detect", self_id, group_id, user_id)
-			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_url)
-		}
-		break
-
-	case "ban_group":
-
-		break
-
-	case "ban_weixin":
-		if groupfunction["ban_wx"].(int64) == 1 {
-			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret iapi.Struct_Retract) {
-					iapi.Retract_instant <- ret
-				}(ret)
-			}
-			fmt.Println("ban_weixin", self_id, group_id, user_id)
-			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_weixin)
-		}
-		break
-
-	case "ban_share":
-		if groupfunction["ban_share"].(int64) == 1 {
-			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret iapi.Struct_Retract) {
-					iapi.Retract_instant <- ret
-				}(ret)
-			}
-			fmt.Println("ban_share", self_id, group_id, user_id)
-			go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_share)
-		}
-		break
-
-	case "威望查询":
-		go Group.App_check_balance(self_id, group_id, user_id, message_id, groupmember, groupfunction)
-		break
-
-	case "威望排行":
-		go Group.App_check_rank(self_id, group_id, user_id, message_id, groupmember, groupfunction)
-		break
-
-	case "长度限制":
-		go func(ret iapi.Struct_Retract) {
-			iapi.Retract_instant <- ret
-		}(ret)
-		fmt.Println("长度限制", self_id, group_id, user_id)
-		go Group.App_ban_user(self_id, group_id, user_id, auto_retract, groupfunction,
-			app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(groupfunction["word_limit"].(int64)))
-		break
-
-	case "自动回复":
-		go iapi.Api.Sendgroupmsg(self_id, group_id, message, auto_retract)
-		break
 
 	default:
 

@@ -8,7 +8,7 @@ import (
 
 func Serv_at(qq any) string {
 	if Calc.Any2String(qq) != "0" {
-		return "[CQ:at,qq=" + Calc.Any2String(qq) + "]"
+		return "[CQ:at,qq=" + Calc.Any2String(qq) + "] "
 	}
 	return ""
 }

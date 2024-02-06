@@ -1,11 +1,19 @@
 package group
 
+import "github.com/tobycroft/gorose-pro"
+
 type EventStruct[T GroupMessageStruct | string] struct {
 	SelfId      int64  `json:"self_id"`
 	MessageType string `json:"message_type"`
 	PostType    string `json:"post_type"`
 	Json        T      `json:"json"`
 	RemoteAddr  string `json:"remote_addr"`
+}
+
+type GroupMessageRedirect[T string | GroupMessageStruct] struct {
+	Json          T           `json:"json"`
+	GroupFunction gorose.Data `json:"group_function"`
+	GroupMember   gorose.Data `json:"group_member"`
 }
 
 type GroupMessageStruct struct {

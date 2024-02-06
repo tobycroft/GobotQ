@@ -8,237 +8,78 @@ import (
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBanPermenentModel"
-	"main.go/app/bot/model/GroupListModel"
+	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/app/bot/service"
-	"main.go/config/app_conf"
 	"main.go/config/app_default"
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
+	"regexp"
 	"sync"
 	"time"
 )
 
-func group_message_acfur() {
+func group_message_acfur_semi_match() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessagePrivateValid) {
+	for c := range ps.Subscribe(types.MessageGroupAcfur) {
 		var es EventStruct[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			pm := es.Json
-		}
-	}
-}
+			gm := es.Json
 
-func groupHandle_acfur(self_id, group_id, user_id int64, message_id int64, new_text, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
-	admin := false
-	owner := false
-	if len(groupmember) > 0 {
-		if groupmember["role"].(string) == "admin" {
-			admin = true
-		}
-		if groupmember["role"].(string) == "owner" {
-			admin = true
-			owner = true
-		}
-	}
-	switch new_text {
+			self_id := gm.SelfId
+			user_id := gm.UserId
+			group_id := gm.GroupId
+			message_id := gm.MessageId
+			//message := gm.Message
+			message := gm.RawMessage
+			raw_message := gm.RawMessage
 
-	case "":
-		go iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_welcome, true)
-		break
-
-	case "交易":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_trade, groupfunction)
-		break
-
-	case "道具", "商店", "商城":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_daoju, groupfunction)
-		break
-
-	case "轮盘":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_lunpan_help, groupfunction)
-		break
-
-	case "help":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, groupfunction)
-		break
-
-	case "app":
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_app_download_url, groupfunction)
-		break
-
-	case "设定":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		Group.App_group_function_get_all(self_id, group_id, user_id, new_text, groupfunction)
-		break
-
-	case "刷新":
-		Group.AutoMessage(self_id, group_id, user_id, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", groupfunction)
-		break
-
-	case "权限", "查看权限":
-		Group.AutoMessage(self_id, group_id, user_id, "我当前的权限为："+Group.BotPowerRefresh(group_id, self_id), groupfunction)
-		break
-
-	case "我的权限":
-		Group.AutoMessage(self_id, group_id, user_id, "我当前的管理权限为："+Calc.Any2String(admin)+"\n群主权限为："+Calc.Any2String(owner), groupfunction)
-		break
-
-	case "查询群主", "查看群主", "呼叫群主":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		owner_data := GroupMemberModel.Api_find_owner(self_id, group_id)
-		if len(owner_data) > 0 {
-			Group.AutoMessage(self_id, group_id, user_id, "本群群主为："+service.Serv_at(owner_data["user_id"]), groupfunction)
-		} else {
-			Group.AutoMessage(self_id, group_id, user_id, "本群未找到群主", groupfunction)
-		}
-		break
-
-	case "随机数测试":
-		rand1 := Calc.Rand(1, 100)
-		rand2 := Calc.Rand(1, 100)
-		Group.AutoMessage(self_id, group_id, user_id, "随机数1："+Calc.Any2String(rand1)+"\n随机数2："+Calc.Any2String(rand2), groupfunction)
-		break
-
-	case "刷新人数", "刷新群成员":
-		if !admin && !owner {
-			if len(groupmember) > 0 {
-				service.Not_admin(self_id, group_id, user_id)
-				break
+			text := message
+			reg := regexp.MustCompile("(?i)^acfur")
+			active := reg.MatchString(text)
+			new_text := reg.ReplaceAllString(text, "")
+			groupmember := GroupMemberModel.Api_find(group_id, user_id)
+			groupfunction := GroupFunctionModel.Api_find(group_id)
+			if len(groupfunction) < 1 {
+				GroupFunctionModel.Api_insert(group_id)
+				groupfunction = GroupFunctionModel.Api_find(group_id)
 			}
+			if active || service.Serv_is_at_me(self_id, message) {
+				gmr := GroupMessageRedirect[GroupMessageStruct]{}
+				gmr.GroupMember = groupmember
+				gmr.GroupFunction = groupfunction
+				gmr.Json = gm
+				if groupfunction["ban_group"].(int64) == 1 {
+					if groupfunction["ban_retract"].(int64) == 1 {
+						go func(ret iapi.Struct_Retract) {
+							iapi.Retract_instant <- ret
+						}(ret)
+					}
+					fmt.Println("ban_group", self_id, group_id, user_id)
+					go ban_group()
+				}
+				if service.Serv_ban_group(raw_message) {
+					ps.Publish_struct(types.MessageGroupAcfur+"ban_group", gmr)
+				}
+				if service.Serv_url_detect(raw_message) {
+					ps.Publish(types.MessageGroupAcfur+"url_detect", gmr)
+				}
+				if service.Serv_ban_weixin(message) {
+					ps.Publish(types.MessageGroupAcfur+"ban_weixin", gmr)
+				}
+				if service.Serv_ban_share(message) {
+					ps.Publish(types.MessageGroupAcfur+"ban_share", gmr)
+				}
+				if service.Serv_text_match(message, []string{"acfur屏蔽"}) {
+					ps.Publish(types.MessageGroupAcfur+"ban_word", gmr)
+				}
+			}
+
 		}
-		Group.App_refreshmember(self_id, group_id)
-		Group.AutoMessage(self_id, group_id, user_id, "群用户已经刷新", groupfunction)
-		break
-
-	case "刷新群信息":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		Group.App_refresh_groupinfo(self_id, group_id)
-		Group.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", groupfunction)
-		break
-
-	case "测试撤回":
-		var ret iapi.Struct_Retract
-		ret.MessageId = message_id
-		ret.SelfId = self_id
-		if !admin {
-			break
-		}
-		go func(ret iapi.Struct_Retract) {
-			iapi.Retract_instant <- ret
-		}(ret)
-		break
-
-	case "测试T出测试":
-		Group.App_kick_user(self_id, group_id, user_id, true, groupfunction, "测试")
-		break
-
-	case "测试禁言测试":
-		Group.App_ban_user(self_id, group_id, user_id, true, groupfunction, "测试")
-		break
-
-	case "测试拼音":
-		py, err := service.Serv_pinyin(new_text)
-		if err != nil {
-
-		} else {
-			Group.AutoMessage(self_id, group_id, user_id, py, groupfunction)
-		}
-		break
-
-	case "测试自动撤回":
-		Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Int2String(app_conf.Retract_time_second+3)+"秒后撤回", groupfunction)
-		break
-
-	case "测试立即撤回":
-		Group.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计0秒后撤回", groupfunction)
-		break
-
-	case "屏蔽":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		Group.AutoMessage(self_id, group_id, user_id, app_default.Default_str_ban_word, groupfunction)
-		break
-
-	case "屏蔽词":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 1, groupmember, groupfunction)
-		break
-
-	case "T出词":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 2, groupmember, groupfunction)
-		break
-
-	case "撤回词":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		Group.App_group_ban_word_list(self_id, group_id, user_id, new_text, 3, groupmember, groupfunction)
-		break
-
-	case "清除小黑屋":
-		if !admin && !owner {
-			service.Not_admin(self_id, group_id, user_id)
-			break
-		}
-		if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
-			Group.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
-		} else {
-			Group.AutoMessage(self_id, group_id, user_id, "小黑屋里面没有人啦~", groupfunction)
-		}
-		break
-
-	case "查看人数", "查看人数上限":
-		group_list_data := GroupListModel.Api_find(group_id)
-		if len(group_list_data) > 0 {
-			group_member_count := GroupMemberModel.Api_count_byGroupIdAndRole(group_id, nil)
-			Group.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_list_data["max_member_count"])+
-				"\n当前人数为"+Calc.Any2String(group_member_count)+
-				",\n如需清理请执行:acfur群人数清理", groupfunction)
-		} else {
-			Group.AutoMessage(self_id, group_id, user_id, "未找到本群，请使用acfur刷新群信息", groupfunction)
-		}
-		break
-
-	case "群人数清理", "清理人数上限":
-		if !owner && !admin {
-			service.Not_owner(self_id, group_id, user_id)
-			break
-		}
-		if Redis.CheckExists("__lock__group_id__" + Calc.Any2String(group_id)) {
-			Group.AutoMessage(self_id, group_id, user_id, "执行中请稍等", groupfunction)
-		} else {
-			Redis.String_set("__lock__group_id__"+Calc.Any2String(group_id), 1, 60*time.Second)
-			Group.App_drcrease_member(self_id, group_id, user_id, groupfunction, "")
-		}
-		break
-
-	default:
-		groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
-		break
 	}
 }
 
@@ -246,44 +87,7 @@ var group_function_type = []string{"unknow", "ban_group", "url_detect", "ban_wei
 	"sign", "轮盘", "威望查询", "威望排行", "长度限制", "自动回复", "atme", "道具", "交易", "重新验证", "死亡验证", "活人验证"}
 
 func groupHandle_acfur_middle(self_id, group_id, user_id, message_id int64, message, raw_message string, sender GroupSender, groupmember map[string]any, groupfunction map[string]any) {
-	function := make([]bool, len(group_function_type)+1, len(group_function_type)+1)
-	new_text := make([]string, len(group_function_type)+1, len(group_function_type)+1)
-	var wg sync.WaitGroup
-	wg.Add(len(group_function_type))
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		new_text[idx] = message
-	}(0, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		ok := service.Serv_ban_group(raw_message)
-		new_text[idx] = raw_message
-		function[idx] = ok
-	}(1, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		ok := service.Serv_url_detect(raw_message)
-		new_text[idx] = raw_message
-		function[idx] = ok
-	}(2, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		ok := service.Serv_ban_weixin(message)
-		new_text[idx] = message
-		function[idx] = ok
-	}(3, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		ok := service.Serv_ban_share(message)
-		new_text[idx] = message
-		function[idx] = ok
-	}(4, &wg)
-	go func(idx int, wg *sync.WaitGroup) {
-		defer wg.Done()
-		str, ok := service.Serv_text_match(message, []string{"acfur屏蔽"})
-		new_text[idx] = str
-		function[idx] = ok
-	}(5, &wg)
+
 	go func(idx int, wg *sync.WaitGroup) {
 		defer wg.Done()
 		str, ok := service.Serv_text_match(message, []string{"acfur设定"})
@@ -484,15 +288,7 @@ func groupHandle_acfur_other(Type string, self_id, group_id, user_id, message_id
 		break
 
 	case "ban_group":
-		if groupfunction["ban_group"].(int64) == 1 {
-			if groupfunction["ban_retract"].(int64) == 1 {
-				go func(ret iapi.Struct_Retract) {
-					iapi.Retract_instant <- ret
-				}(ret)
-			}
-			fmt.Println("ban_group", self_id, group_id, user_id)
-			go Group.App_kick_user(self_id, group_id, user_id, auto_retract, groupfunction, app_default.Default_ban_group)
-		}
+
 		break
 
 	case "ban_weixin":

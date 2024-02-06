@@ -20,6 +20,9 @@ import (
 
 func Router() {
 
+	go group_message_acfur_when_fully_matched()
+	go group_message_acfur_semi_match()
+
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroup) {
 		var es EventStruct[GroupMessageStruct]
@@ -69,7 +72,7 @@ func Router() {
 			text := message
 			reg := regexp.MustCompile("(?i)^acfur")
 			active := reg.MatchString(text)
-			new_text := reg.ReplaceAllString(text, "")
+			//new_text := reg.ReplaceAllString(text, "")
 			groupmember := GroupMemberModel.Api_find(group_id, user_id)
 			groupfunction := GroupFunctionModel.Api_find(group_id)
 			if len(groupfunction) < 1 {
@@ -81,11 +84,10 @@ func Router() {
 				continue
 			}
 			sender := gm.Sender
-			if active || service.Serv_is_at_me(self_id, message) {
-				go groupHandle_acfur(self_id, group_id, user_id, message_id, new_text, message, raw_message, sender, groupmember, groupfunction)
-			} else {
+			if !active || !service.Serv_is_at_me(self_id, message) {
 				//在未激活acfur的情况下应该对原始内容进行还原
 				go groupHandle_acfur_middle(self_id, group_id, user_id, message_id, message, raw_message, sender, groupmember, groupfunction)
+				ps.Publish(types.MessageGroupValid, c.Payload)
 			}
 
 		}

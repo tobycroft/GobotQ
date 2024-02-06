@@ -1,7 +1,9 @@
 package cron
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/iapi"
 	"main.go/config/types"
 	"main.go/tuuz"
@@ -23,8 +25,11 @@ func Retract() {
 	}
 }
 
-func retract_and_wait_for_exec(self_id, message_id any, duration time.Duration) {
-	time.Sleep(duration)
+func retract_and_wait_for_exec(self_id, message_id int64, duration time.Duration) {
+	if duration.Seconds() > 0 {
+		time.Sleep(duration)
+	}
+	fmt.Println("开始撤回:", Calc.Any2String(self_id), Calc.Any2String(message_id))
 	iapi.Api.DeleteMsg(self_id, message_id)
 }
 

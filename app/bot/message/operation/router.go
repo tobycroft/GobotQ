@@ -19,6 +19,7 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"net/netip"
+	"time"
 )
 
 func Router() {
@@ -120,7 +121,7 @@ func Router() {
 						var rm iapi.RetractMessage
 						rm.MessageId = data.Data.MessageId
 						rm.SelfId = oe.Echo.SelfId
-						rm.Time = 0
+						rm.Time = 5 * time.Second
 						ps.Publish_struct(types.RetractChannel, rm)
 						fmt.Println("发送消息，有撤回", oe.Echo.SelfId, data.Data.MessageId)
 					}

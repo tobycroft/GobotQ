@@ -7,11 +7,14 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
+	"log"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogSendModel"
 	"main.go/config/app_conf"
 	"main.go/config/types"
+	"main.go/tuuz"
 	"main.go/tuuz/Redis"
+	"reflect"
 
 	"main.go/tuuz/Log"
 	"net/url"
@@ -20,7 +23,7 @@ import (
 
 var Group_send_chan = make(chan GroupSendStruct, 100)
 
-func (api Post) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool) {
+func (api Post) Sendgroupmsg(Self_id, Group_id int64, Message string, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.Self_id = Self_id
 	gss.Group_id = Group_id
@@ -34,7 +37,7 @@ func (api Post) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract 
 		return
 	}
 }
-func (api Ws) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bool) {
+func (api Ws) Sendgroupmsg(Self_id, Group_id int64, Message string, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.Self_id = Self_id
 	gss.Group_id = Group_id
@@ -50,8 +53,8 @@ func (api Ws) Sendgroupmsg(Self_id, Group_id any, Message string, AutoRetract bo
 }
 
 type GroupSendStruct struct {
-	Self_id     any
-	Group_id    any
+	Self_id     int64
+	Group_id    int64
 	Message     string
 	AutoRetract bool
 }
@@ -161,8 +164,10 @@ func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 	if err != nil {
 		return Message{}, err
 	}
+
 	conn, ok := ClientToConn.Load(gss.Self_id)
 	if !ok {
+		log.Println(tuuz.FUNCTION_ALL(), "ClientNotFound", gss.Self_id, reflect.TypeOf(gss.Self_id))
 		return Message{}, errors.New("ClientNotFound")
 	}
 	Net.WsServer_WriteChannel <- Net.WsData{

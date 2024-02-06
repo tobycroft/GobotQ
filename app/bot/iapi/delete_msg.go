@@ -6,8 +6,11 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
+	"log"
 	"main.go/app/bot/model/BotModel"
+	"main.go/tuuz"
 	"main.go/tuuz/Log"
+	"reflect"
 	"time"
 )
 
@@ -17,8 +20,8 @@ import (
 //}
 
 type RetractMessage struct {
-	SelfId    any           `json:"selfId"`
-	MessageId any           `json:"messageId"`
+	SelfId    int64         `json:"selfId"`
+	MessageId int64         `json:"messageId"`
 	Time      time.Duration `json:"time"`
 }
 
@@ -32,7 +35,7 @@ type DefaultRetStruct struct {
 	Wording string `json:"wording"`
 }
 
-func (api Post) DeleteMsg(self_id, message_id any) (bool, error) {
+func (api Post) DeleteMsg(self_id, message_id int64) (bool, error) {
 	post := map[string]any{
 		"message_id": message_id,
 	}
@@ -58,7 +61,7 @@ func (api Post) DeleteMsg(self_id, message_id any) (bool, error) {
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) DeleteMsg(self_id, message_id any) (bool, error) {
+func (api Ws) DeleteMsg(self_id, message_id int64) (bool, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
@@ -81,10 +84,12 @@ func (api Ws) DeleteMsg(self_id, message_id any) (bool, error) {
 	}
 	conn, ok := ClientToConn.Load(self_id)
 	if !ok {
+		log.Println(tuuz.FUNCTION_ALL(), "ClientNotFound", self_id, reflect.TypeOf(self_id))
 		return false, errors.New("ClientNotFound")
 	}
 	Net.WsServer_WriteChannel <- Net.WsData{
 		Conn: conn.(*websocket.Conn), Message: data,
 	}
+
 	return true, nil
 }

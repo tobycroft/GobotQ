@@ -35,7 +35,7 @@ func App_reverify_force(self_id, group_id, user_id, message_id int64, message st
 	}
 }
 
-func reverify(self_id, group_id, user_id any, send_to_message string, kick, force bool) (string, error) {
+func reverify(self_id, group_id, user_id int64, send_to_message string, kick, force bool) (string, error) {
 	qq := service.Serv_get_qq(send_to_message)
 	cq_mess, to_user_id := service.Serv_at_who(send_to_message)
 	qq_num := ""
@@ -66,7 +66,7 @@ func reverify(self_id, group_id, user_id any, send_to_message string, kick, forc
 		}
 		at := service.Serv_at(member["user_id"])
 		go iapi.Api.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
-		go func(self_id, group_id, user_id any, kick bool) {
+		go func(self_id, group_id, user_id int64, kick bool) {
 			time.Sleep(120 * time.Second)
 			ok, err := Redis.String_getBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 			if err != nil {
@@ -80,7 +80,7 @@ func reverify(self_id, group_id, user_id any, send_to_message string, kick, forc
 					}
 				}
 			}
-		}(self_id, group_id, member["user_id"], kick)
+		}(self_id, group_id, member["user_id"].(int64), kick)
 		return "", nil
 	} else {
 		return "", errors.New("群成员没有在小黑屋内")

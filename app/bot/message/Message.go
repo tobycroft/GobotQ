@@ -46,10 +46,9 @@ func MainRouter() {
 			}
 			es.Json = mp
 			es.RemoteAddr = c.Conn.RemoteAddr().String()
-			if c.Status {
-				iapi.ClientToConn.Store(es.SelfId, c.Conn)
-				iapi.ConnToClient.Store(c.Conn, es.SelfId)
-			}
+			iapi.ClientToConn.Store(es.SelfId, c.Conn)
+			iapi.ConnToClient.Store(c.Conn, es.SelfId)
+
 			Redis.PubSub{}.Publish_struct(types.MessageEvent, es)
 		} else {
 			fmt.Println(c.Conn.RemoteAddr(), "断开链接")

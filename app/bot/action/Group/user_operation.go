@@ -22,7 +22,7 @@ import (
 	"time"
 )
 
-func App_ban_user(self_id, group_id, user_id any, auto_retract bool, groupfunction map[string]any, reason string) {
+func App_ban_user(self_id, group_id, user_id int64, auto_retract bool, groupfunction map[string]any, reason string) {
 	at := service.Serv_at(user_id)
 	time := GroupBanModel.Api_count(group_id, user_id)
 	GroupBanModel.Api_insert(group_id, user_id)
@@ -65,7 +65,7 @@ func App_ban_user(self_id, group_id, user_id any, auto_retract bool, groupfuncti
 	}
 }
 
-func App_kick_user(self_id, group_id, user_id any, auto_retract bool, groupfunction map[string]any, reason string) {
+func App_kick_user(self_id, group_id, user_id int64, auto_retract bool, groupfunction map[string]any, reason string) {
 	var daoju GroupDaojuModel.Interface
 	daoju.Db = tuuz.Db()
 	daoju.Db.Begin()
@@ -113,7 +113,7 @@ func Api_retract_send(bot, gid, uid int, req int, random int, groupmember map[st
 
 }
 
-func App_drcrease_member(self_id, group_id, user_id any, groupfunction map[string]any, reason string) {
+func App_drcrease_member(self_id, group_id, user_id int64, groupfunction map[string]any, reason string) {
 	group_list_data := GroupListModel.Api_find(group_id)
 	if len(group_list_data) > 0 {
 		group_member_count := GroupMemberModel.Api_count_byGroupIdAndRole(group_id, nil)

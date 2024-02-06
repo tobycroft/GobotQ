@@ -141,7 +141,7 @@ func Router() {
 						Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, 3600*time.Second)
 						at := service.Serv_at(user_id)
 						go iapi.Api.Sendgroupmsg(self_id, group_id, at+"请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
-						go func(selfId, groupId, userId any) {
+						go func(selfId, groupId, userId int64) {
 							time.Sleep(120 * time.Second)
 							ok, err := Redis.String_getBool("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
 							if err != nil {

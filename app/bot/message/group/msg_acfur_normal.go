@@ -46,7 +46,7 @@ func group_message_normal() {
 				ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
 			}
 
-			go func(selfId, groupId, userId any, groupFunction gorose.Data) {
+			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {
 				if groupFunction["ban_repeat"].(int64) == 1 {
 					num, err := BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_find()
 					if err != nil {
@@ -61,7 +61,7 @@ func group_message_normal() {
 				}
 			}(self_id, group_id, user_id, groupfunction)
 
-			go func(selfId, groupId, userId any, groupFunction gorose.Data) {
+			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {
 				//验证程序
 				code, err := Redis.String_get("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
 				if err != nil {

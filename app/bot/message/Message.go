@@ -5,6 +5,7 @@ import (
 	"main.go/app/bot/message/index"
 	"main.go/app/bot/message/meta_event"
 	"main.go/app/bot/message/notice"
+	"main.go/app/bot/message/operation"
 	"main.go/app/bot/message/private"
 	"main.go/app/bot/message/request"
 )
@@ -18,6 +19,8 @@ func MainRouter() {
 
 	go private.Router()
 	go group.Router()
+
+	go operation.Router()
 
 	//for c := range Net.WsServer_ReadChannel {
 	//	if c.Status {

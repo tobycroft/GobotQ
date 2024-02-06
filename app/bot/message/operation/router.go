@@ -112,10 +112,11 @@ func Router() {
 						fmt.Println(err, oe.json)
 						break
 					}
-					iapi.Retract_chan <- iapi.Struct_Retract{
-						SelfId:    oe.Echo.SelfId,
-						MessageId: data.Data.MessageId,
-					}
+					var rm iapi.RetractMessage
+					rm.MessageId = data.Data.MessageId
+					rm.SelfId = oe.Echo.SelfId
+					rm.Time = 0
+					ps.Publish_struct(types.RetractChannel, rm)
 					fmt.Println("发送消息，有撤回", oe.Echo.SelfId, data.Data.MessageId)
 				} else {
 					fmt.Println("发送消息，无撤回", oe.Echo.SelfId)

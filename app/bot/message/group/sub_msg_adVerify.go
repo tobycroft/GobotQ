@@ -38,14 +38,13 @@ func ad_verify() {
 				}
 			}
 
-			if str, ok := service.Serv_text_match(raw_message, []string{"acfur重新验证"}); ok {
+			if str, ok := service.Serv_text_match(raw_message, []string{"acfur活人验证"}); ok {
 				if !admin && !owner {
 					if len(groupmember) > 0 {
 						service.Not_admin(self_id, group_id, user_id)
 					}
-				} else {
-					Group.App_reverify(self_id, group_id, user_id, message_id, str, groupmember, groupfunction)
 				}
+				Group.App_reverify_force(self_id, group_id, user_id, message_id, str, groupmember, groupfunction)
 			}
 		}
 	}

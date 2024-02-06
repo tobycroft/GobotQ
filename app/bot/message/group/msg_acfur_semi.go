@@ -3,7 +3,6 @@ package group
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
-	"main.go/app/bot/action/Group"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -28,6 +27,7 @@ func group_message_acfur_semi_match() {
 	go word_limit()
 
 	go re_verify()
+	go ad_verify()
 
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur) {
@@ -119,15 +119,6 @@ func group_message_acfur_semi_match() {
 				//	go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
 				//}
 
-				if str, ok := service.Serv_text_match(message, []string{"acfur活人验证"}); ok {
-					if !admin && !owner {
-						if len(groupmember) > 0 {
-							go service.Not_admin(self_id, group_id, user_id)
-							break
-						}
-					}
-					go Group.App_reverify_force(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-				}
 			}
 		}
 	}

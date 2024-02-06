@@ -109,15 +109,15 @@ func group_message_acfur_semi_match() {
 					ps.Publish(types.MessageGroupAcfur+rankList, gmr)
 				}
 
-				if str, ok := service.Serv_text_match(message, []string{"acfur死亡验证"}); ok {
-					if !admin && !owner {
-						if len(groupmember) > 0 {
-							go service.Not_admin(self_id, group_id, user_id)
-							break
-						}
-					}
-					go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
-				}
+				//if str, ok := service.Serv_text_match(message, []string{"acfur死亡验证"}); ok {
+				//	if !admin && !owner {
+				//		if len(groupmember) > 0 {
+				//			go service.Not_admin(self_id, group_id, user_id)
+				//			break
+				//		}
+				//	}
+				//	go Group.App_reverify_death(self_id, group_id, user_id, message_id, message, groupmember, groupfunction)
+				//}
 
 				if str, ok := service.Serv_text_match(message, []string{"acfur活人验证"}); ok {
 					if !admin && !owner {

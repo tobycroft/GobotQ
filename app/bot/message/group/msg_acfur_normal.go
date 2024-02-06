@@ -13,19 +13,20 @@ import (
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
 	"main.go/tuuz/Vali"
+	"regexp"
 	"time"
 )
 
 // group_message_normal 处理标注消息
 func group_message_normal() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupAcfur) {
-		var es GroupMessageRedirect[GroupMessageStruct]
-		err := sonic.UnmarshalString(c.Payload, &es)
+	for c := range ps.Subscribe(types.MessageGroupNormal) {
+		var gmr GroupMessageRedirect[GroupMessageStruct]
+		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			gm := es.Json
+			gm := gmr.Json
 
 			self_id := gm.SelfId
 			user_id := gm.UserId
@@ -35,64 +36,69 @@ func group_message_normal() {
 			message := gm.RawMessage
 			raw_message := gm.RawMessage
 
-			groupfunction := es.GroupFunction
+			groupfunction := gmr.GroupFunction
 
-			if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
-				ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
-			}
+			reg := regexp.MustCompile("(?i)^acfur")
+			active := reg.MatchString(gm.RawMessage)
+			if !active || !service.Serv_is_at_me(self_id, message) {
 
-			go func(selfId, groupId, userId any, groupFunction gorose.Data) {
-				if groupFunction["ban_repeat"].(int64) == 1 {
-					num, err := BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_find()
-					if err != nil {
-						num = 0
-					}
-					BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_set(num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
-					if num > groupFunction["repeat_count"].(int64) {
-						Group.App_ban_user(selfId, groupId, userId, groupfunction["auto_retract"].(int64) == 1, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
-					} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
-						Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", groupFunction)
-					}
+				if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
+					ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
 				}
-			}(self_id, group_id, user_id, groupfunction)
 
-			go func(selfId, groupId, userId any, groupFunction gorose.Data) {
-				//验证程序
-				code, err := Redis.String_get("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
-				if err != nil {
-				} else {
-					if code == message {
-						str := ""
-						Redis.Del("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
-						Redis.Del("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
-						if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
-							GroupBanPermenentModel.Api_delete(groupId, userId)
-							str += "\r\n永久小黑屋记录已移除"
+				go func(selfId, groupId, userId any, groupFunction gorose.Data) {
+					if groupFunction["ban_repeat"].(int64) == 1 {
+						num, err := BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_find()
+						if err != nil {
+							num = 0
 						}
-						if groupFunction["auto_welcome"] == 1 {
-							str = "\r\n" + Calc.Any2String(groupFunction["welcome_word"])
+						BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_set(num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
+						if num > groupFunction["repeat_count"].(int64) {
+							Group.App_ban_user(selfId, groupId, userId, groupfunction["auto_retract"].(int64) == 1, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
+						} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
+							Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", groupFunction)
 						}
+					}
+				}(self_id, group_id, user_id, groupfunction)
+
+				go func(selfId, groupId, userId any, groupFunction gorose.Data) {
+					//验证程序
+					code, err := Redis.String_get("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
+					if err != nil {
+					} else {
+						if code == message {
+							str := ""
+							Redis.Del("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
+							Redis.Del("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
+							if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
+								GroupBanPermenentModel.Api_delete(groupId, userId)
+								str += "\r\n永久小黑屋记录已移除"
+							}
+							if groupFunction["auto_welcome"] == 1 {
+								str = "\r\n" + Calc.Any2String(groupFunction["welcome_word"])
+							}
+							go func(ret iapi.Struct_Retract) {
+								iapi.Retract_instant <- ret
+							}(ret)
+							iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
+						} else {
+							iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+						}
+					}
+
+					if Redis.CheckExists("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId)) {
 						go func(ret iapi.Struct_Retract) {
 							iapi.Retract_instant <- ret
 						}(ret)
-						iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
-					} else {
-						iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+						Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
+					} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
+						go func(ret iapi.Struct_Retract) {
+							iapi.Retract_instant <- ret
+						}(ret)
+						go iapi.Post{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 					}
-				}
-
-				if Redis.CheckExists("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId)) {
-					go func(ret iapi.Struct_Retract) {
-						iapi.Retract_instant <- ret
-					}(ret)
-					Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
-				} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
-					go func(ret iapi.Struct_Retract) {
-						iapi.Retract_instant <- ret
-					}(ret)
-					go iapi.Post{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
-				}
-			}(self_id, group_id, user_id, groupfunction)
+				}(self_id, group_id, user_id, groupfunction)
+			}
 		}
 	}
 }

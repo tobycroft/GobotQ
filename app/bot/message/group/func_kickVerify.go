@@ -9,9 +9,9 @@ import (
 	"main.go/tuuz/Redis"
 )
 
-func re_verify() {
+func kick_verify() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupAcfur + autoReply) {
+	for c := range ps.Subscribe(types.MessageGroupNormal) {
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {
@@ -37,14 +37,13 @@ func re_verify() {
 					owner = true
 				}
 			}
-
-			if str, ok := service.Serv_text_match(raw_message, []string{"acfur重新验证"}); ok {
+			if str, ok := service.Serv_text_match(raw_message, []string{"acfur死亡验证"}); ok {
 				if !admin && !owner {
 					if len(groupmember) > 0 {
 						service.Not_admin(self_id, group_id, user_id)
+					} else {
+						Group.App_reverify_death(self_id, group_id, user_id, message_id, str, groupmember, groupfunction)
 					}
-				} else {
-					Group.App_reverify(self_id, group_id, user_id, message_id, str, groupmember, groupfunction)
 				}
 			}
 		}

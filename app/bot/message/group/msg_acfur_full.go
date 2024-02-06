@@ -254,7 +254,7 @@ func group_message_acfur_when_fully_matched() {
 					break
 
 				default:
-					//if acfur triggered but fully match was failed, that means it matched a part in the sentence
+					//if acfur triggered but fully match was failed, send to semi mode
 					ps.Publish(types.MessageGroupAcfur, c.Payload)
 					break
 				}

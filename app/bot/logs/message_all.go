@@ -6,7 +6,6 @@ import (
 	"main.go/config/types"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
-	"net"
 )
 
 func LogsInit() {
@@ -16,11 +15,11 @@ func LogsInit() {
 }
 
 type eventStruct struct {
-	SelfId      int64    `json:"self_id"`
-	MessageType string   `json:"message_type"`
-	PostType    string   `json:"post_type"`
-	Json        string   `json:"json"`
-	RemoteAddr  net.Addr `json:"remote_addr"`
+	SelfId      int64  `json:"self_id"`
+	MessageType string `json:"message_type"`
+	PostType    string `json:"post_type"`
+	Json        string `json:"json"`
+	RemoteAddr  string `json:"remote_addr"`
 }
 
 func log_message_all() {

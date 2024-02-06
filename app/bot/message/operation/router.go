@@ -26,7 +26,7 @@ func Router() {
 		var es EventStruct[OperationEvent]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			fmt.Println(err)
+			Log.Errs(err, tuuz.FUNCTION_ALL())
 		} else {
 			oe := es.Json
 			bot := BotModel.Api_find(oe.Echo.SelfId)
@@ -43,7 +43,7 @@ func Router() {
 			switch oe.Echo.Action {
 			case "get_login_info":
 				logininfo := iapi.LoginInfoRet{}
-				err := sonic.UnmarshalString(oe.json, &logininfo)
+				err := sonic.UnmarshalString(es.Json, &logininfo)
 				if err != nil {
 					fmt.Println(oe.json)
 					break

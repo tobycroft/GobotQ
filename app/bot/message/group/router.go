@@ -7,6 +7,8 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/config/types"
+	"main.go/tuuz"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"net/netip"
 	"time"
@@ -23,7 +25,7 @@ func Router() {
 		var es EventStruct[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			fmt.Println(err)
+			Log.Errs(err, tuuz.FUNCTION_ALL())
 		} else {
 			botinfo := BotModel.Api_find(es.SelfId)
 			if len(botinfo) < 1 {

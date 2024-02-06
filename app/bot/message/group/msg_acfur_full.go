@@ -1,7 +1,6 @@
 package group
 
 import (
-	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
@@ -14,6 +13,7 @@ import (
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
 	"main.go/config/types"
+	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
 	"time"
@@ -25,7 +25,7 @@ func group_message_acfur_when_fully_matched() {
 		var es EventStruct[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
-			fmt.Println(err)
+			Log.Err(err)
 		} else {
 			gm := es.Json
 

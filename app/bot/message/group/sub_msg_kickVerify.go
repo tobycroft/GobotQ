@@ -11,7 +11,7 @@ import (
 
 func kick_verify() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupNormal) {
+	for c := range ps.Subscribe(types.MessageGroupAcfur) {
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {
@@ -37,7 +37,8 @@ func kick_verify() {
 					owner = true
 				}
 			}
-			if str, ok := service.Serv_text_match(raw_message, []string{"acfur死亡验证"}); ok {
+
+			if str, ok := service.Serv_text_match(raw_message, []string{"acfur踢出验证"}); ok {
 				if !admin && !owner {
 					if len(groupmember) > 0 {
 						service.Not_admin(self_id, group_id, user_id)

@@ -22,12 +22,12 @@ func auto_send() {
 	for _, data := range datas {
 		db := tuuz.Db()
 		db.Begin()
-		var ass AutoSendModel.Interface
-		ass.Db = db
+		var asm AutoSendModel.Interface
+		asm.Db = db
 
 		timer := data["sep"].(int64)
 		next_time := time.Now().Unix() + timer
-		ass.Api_update_next_time(data["group_id"], data["id"], next_time)
+		asm.Api_update_next_time(data["group_id"], data["id"], next_time)
 
 		switch data["type"].(string) {
 		case "sep":
@@ -36,13 +36,13 @@ func auto_send() {
 
 		case "fix":
 			//如果采用一次性模式，则直接关闭这个定时
-			ass.Api_update_active(data["group_id"], data["id"], 0)
+			asm.Api_update_active(data["group_id"], data["id"], 0)
 			break
 
 		default:
 			break
 		}
-		ass.Api_dec_count(data["id"])
+		asm.Api_dec_count(data["id"])
 		db.Commit()
 		//发送部分
 		auto_retract := false

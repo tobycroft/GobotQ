@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
+	"main.go/app/bot/action/Group"
+	"main.go/app/bot/cron"
 	"main.go/app/bot/logs"
 	event "main.go/app/bot/message"
 	"main.go/common/BaseController"
@@ -35,8 +37,8 @@ func main() {
 	go logs.LogsInit()
 	go event.MainRouter()
 
-	//go Group.App_refresh_group_member_chan()
-	//go cron.Refresh_group_chan()
+	go Group.App_refresh_group_member_chan()
+	go cron.Refresh_group_chan()
 
 	//go cron.Retract()
 	//go cron.Send_private()
@@ -44,7 +46,7 @@ func main() {
 	//go cron.GroupMsgRecv()
 	//go cron.PrivateMsgRecv()
 
-	//go cron.Cron_auto_send()
+	go cron.Cron_auto_send()
 
 	//go cron.BanPermenentCheck()
 

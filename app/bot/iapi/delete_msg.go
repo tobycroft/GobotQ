@@ -25,8 +25,6 @@ type RetractMessage struct {
 	Time      time.Duration `json:"time"`
 }
 
-//var Retract_chan = make(chan Struct_Retract, 100)
-
 type DefaultRetStruct struct {
 	Data    any    `json:"data"`
 	Msg     string `json:"msg"`

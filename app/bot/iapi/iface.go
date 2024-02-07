@@ -1,6 +1,9 @@
 package iapi
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 // Api : 是IfaceApi的接口实例模式，使用Ws来启用websocket发送模式，接口化操作
 var Api = IfaceApi(Ws{})
@@ -33,7 +36,8 @@ type IfaceApi interface {
 	Getgroupmemberlist(self_id, group_id int64) ([]GroupMemberList, error)
 	GetLoginInfo(self_id int64) (LoginInfo, error)
 	GetStrangerInfo(self_id, user_id int64, no_cache bool) (UserInfo, error)
-	Sendgroupmsg(Self_id, Group_id int64, Message string, AutoRetract bool)
+	SenndGroupMsg(Self_id, Group_id int64, Message string, AutoRetract bool)
+	SenndGroupMsgWithTime(Self_id, Group_id int64, Message string, AutoRetract bool, Time time.Duration)
 	Send_group()
 	Sendprivatemsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool)
 	Send_private()

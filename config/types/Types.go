@@ -24,3 +24,10 @@ const OperationRefreshGroup = "Operation:RefreshGroup:"
 
 // retract channel
 const RetractChannel = "RetractChannel:"
+
+//Sending channel
+
+const SendGroupChannel = "SendGroupChannel:"
+const SendCheck = "SendCheck:"
+
+const SendPrivateChannel = "SendPrivateChannel:"

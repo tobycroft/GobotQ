@@ -4,7 +4,7 @@ import "time"
 
 //撤回秒数
 
-const Retract_time_duration = 100 * time.Second
+const Retract_time_duration = 110 * time.Second
 
 // 每日签到威望
 const Group_Sign_incr = 10

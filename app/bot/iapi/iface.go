@@ -40,6 +40,7 @@ type IfaceApi interface {
 	SendGroupMsgWithTime(Self_id, Group_id int64, Message string, AutoRetract bool, Time time.Duration)
 	Send_group()
 	SendPrivateMsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool)
+	SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message string, AutoRetract bool, Time time.Duration)
 	Send_private()
 	SetFriendAddRequest(self_id int64, flag any, approve bool, remark any) (bool, error)
 	SetGroupAddRequestRet(self_id int64, flag, sub_type any, approve bool, reason string) (bool, error)

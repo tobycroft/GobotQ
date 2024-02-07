@@ -79,9 +79,9 @@ func group_message_normal() {
 						}
 
 						ps.Publish_struct(types.RetractChannel, rm)
-						iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
+						iapi.Api.SendGroupMsg(selfId, groupId, service.Serv_at(userId)+"验证成功"+str, true)
 					} else {
-						iapi.Api.Sendgroupmsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
+						iapi.Api.SendGroupMsg(selfId, groupId, service.Serv_at(userId)+"你的输入不正确，需要输入："+Calc.Any2String(code), true)
 					}
 				}
 
@@ -92,7 +92,7 @@ func group_message_normal() {
 				} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
 
 					ps.Publish_struct(types.RetractChannel, rm)
-					go iapi.Post{}.Sendgroupmsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
+					go iapi.Api.SendGroupMsg(self_id, group_id, "你现在处于永久小黑屋中，请让管理员使用acfur重新验证"+service.Serv_at(user_id)+"，来脱离当前状态", true)
 				}
 			}(self_id, group_id, user_id, groupfunction)
 		}

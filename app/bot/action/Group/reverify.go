@@ -65,14 +65,14 @@ func reverify(self_id, group_id, user_id int64, send_to_message string, kick, fo
 			return "", err
 		}
 		at := service.Serv_at(member["user_id"])
-		go iapi.Api.Sendgroupmsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
+		go iapi.Api.SendGroupMsg(self_id, group_id, at+"你已被临时解禁，请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num), true)
 		go func(self_id, group_id, user_id int64, kick bool) {
 			time.Sleep(120 * time.Second)
 			ok, err := Redis.String_getBool("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 			if err != nil {
 			} else {
 				if ok {
-					go iapi.Api.Sendgroupmsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
+					go iapi.Api.SendGroupMsg(self_id, group_id, at+"看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除", true)
 					if kick {
 						iapi.Api.SetGroupKick(self_id, group_id, user_id, false)
 					} else {

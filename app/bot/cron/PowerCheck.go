@@ -25,7 +25,7 @@ func power_check() {
 			group_id := Calc.Any2Int64(group["group_id"])
 			role := Group.BotPowerRefresh(group_id, self_id)
 			if role == "member" {
-				go iapi.Api.Sendgroupmsg(self_id, group_id, "额，如果以后有需要管理，可以再叫我来啊？", false)
+				go iapi.Api.SendGroupMsg(self_id, group_id, "额，如果以后有需要管理，可以再叫我来啊？", false)
 				iapi.Api.SetGroupLeave(self_id, group_id)
 				GroupMemberModel.Api_delete_byGid(self_id, group_id)
 			} else if role == "owner" {

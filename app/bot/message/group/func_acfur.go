@@ -125,7 +125,7 @@ func auto_reply() {
 			//message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if str, ok := service.Serv_auto_reply(group_id, raw_message); ok {
-				iapi.Api.Sendgroupmsg(self_id, group_id, str, gmr.GroupFunction["auto_retract"].(int64) == 1)
+				iapi.Api.SendGroupMsg(self_id, group_id, str, gmr.GroupFunction["auto_retract"].(int64) == 1)
 			}
 		}
 	}
@@ -146,7 +146,7 @@ func greeting_when_at_me() {
 			//message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if _, ok := service.Serv_text_match_any(raw_message, []string{"[CQ:at,qq=" + Calc.Any2String(self_id) + "]"}); ok {
-				iapi.Api.Sendgroupmsg(self_id, group_id, app_default.Default_greetings, gmr.GroupFunction["auto_retract"].(int64) == 1)
+				iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings, gmr.GroupFunction["auto_retract"].(int64) == 1)
 			}
 		}
 	}

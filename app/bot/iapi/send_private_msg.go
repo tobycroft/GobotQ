@@ -19,8 +19,6 @@ import (
 	"time"
 )
 
-//var Private_send_chan = make(chan PrivateSendStruct, 20)
-
 type MessageRet struct {
 	Data    Message `json:"data"`
 	Retcode int64   `json:"retcode"`

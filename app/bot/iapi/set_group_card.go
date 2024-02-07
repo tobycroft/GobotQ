@@ -12,7 +12,7 @@ import (
 	"main.go/tuuz/Log"
 )
 
-func (api Post) Setgroupcard(self_id, group_id, user_id int64, card any) (bool, error) {
+func (api Post) SetGroupCard(self_id, group_id, user_id int64, card any) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,
@@ -40,7 +40,7 @@ func (api Post) Setgroupcard(self_id, group_id, user_id int64, card any) (bool, 
 		return false, errors.New(dls.Wording)
 	}
 }
-func (api Ws) Setgroupcard(self_id, group_id, user_id int64, card any) (bool, error) {
+func (api Ws) SetGroupCard(self_id, group_id, user_id int64, card any) (bool, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"user_id":  user_id,

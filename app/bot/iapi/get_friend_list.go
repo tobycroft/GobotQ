@@ -29,7 +29,7 @@ type FriendList struct {
 	TermType        int64  `json:"term_type"`
 }
 
-func (api Post) Getfriendlist(self_id int64) ([]FriendList, error) {
+func (api Post) GetFriendList(self_id int64) ([]FriendList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
@@ -47,7 +47,7 @@ func (api Post) Getfriendlist(self_id int64) ([]FriendList, error) {
 	}
 	return gfl.Data, nil
 }
-func (api Ws) Getfriendlist(self_id int64) ([]FriendList, error) {
+func (api Ws) GetFriendList(self_id int64) ([]FriendList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

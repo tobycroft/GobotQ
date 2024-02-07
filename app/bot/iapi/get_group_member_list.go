@@ -39,7 +39,7 @@ type GroupMemberList struct {
 	CardChangeable  bool   `json:"card_changeable"`
 }
 
-func (api Post) Getgroupmemberlist(self_id, group_id int64) ([]GroupMemberList, error) {
+func (api Post) GetGroupMemberList(self_id, group_id int64) ([]GroupMemberList, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"no_cache": true,
@@ -61,7 +61,7 @@ func (api Post) Getgroupmemberlist(self_id, group_id int64) ([]GroupMemberList, 
 	}
 	return gms.Data, nil
 }
-func (api Ws) Getgroupmemberlist(self_id, group_id int64) ([]GroupMemberList, error) {
+func (api Ws) GetGroupMemberList(self_id, group_id int64) ([]GroupMemberList, error) {
 	post := map[string]any{
 		"group_id": group_id,
 		"no_cache": true,

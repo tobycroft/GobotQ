@@ -31,7 +31,7 @@ type GroupList struct {
 	MaxMemberCount int64   `json:"max_member_count"`
 }
 
-func (api Post) Getgrouplist(self_id int64) ([]GroupList, error) {
+func (api Post) GetGroupList(self_id int64) ([]GroupList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
@@ -49,7 +49,7 @@ func (api Post) Getgrouplist(self_id int64) ([]GroupList, error) {
 	}
 	return gls.Data, nil
 }
-func (api Ws) Getgrouplist(self_id int64) ([]GroupList, error) {
+func (api Ws) GetGroupList(self_id int64) ([]GroupList, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))

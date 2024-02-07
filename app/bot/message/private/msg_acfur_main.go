@@ -36,28 +36,28 @@ func message_fully_attached_with_acfur() {
 			if active {
 				switch new_text {
 				case "ip":
-					iapi.Api.Sendprivatemsg(self_id, user_id, group_id, es.RemoteAddr, true)
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, es.RemoteAddr, true)
 					break
 
 				case "app", "下载":
-					iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_app_download_url, true)
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_app_download_url, true)
 					break
 
 				case "help":
 					botinfo := BotModel.Api_find(self_id)
 					if len(botinfo) > 0 {
 						if botinfo["owner"].(int64) == user_id {
-							iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
+							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
 						} else {
-							iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_private_help, false)
+							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_private_help, false)
 						}
 					} else {
-						iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_private_help, false)
+						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_private_help, false)
 					}
 					break
 
 				case "测试撤回":
-					iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "测试撤回", true)
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, "测试撤回", true)
 					break
 
 				case "登录", "登陆", "login":
@@ -73,7 +73,7 @@ func message_fully_attached_with_acfur() {
 					break
 
 				case "绑定":
-					iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, "请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人", false)
 					break
 
 				case "绑定群":
@@ -82,7 +82,7 @@ func message_fully_attached_with_acfur() {
 					for _, groupbind := range groupbinds {
 						groups = append(groups, Calc.Any2String(groupbind["group_id"]))
 					}
-					iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, "您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+
 						"\r\n您可以使用：acfur绑定群:群号，来绑定新群，\r\n使用：acfur解绑群:群号，解绑", false)
 					break
 

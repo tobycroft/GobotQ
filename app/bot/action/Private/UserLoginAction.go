@@ -19,15 +19,15 @@ func App_userLogin(self_id int64, user_id, group_id int64, message string) {
 	usermember := UserMemberModel.Api_find(user_id)
 	if len(usermember) > 0 {
 		if UserMemberModel.Api_update_all(user_id, uname, rand) {
-			iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "您的登录密码：\r\n"+Calc.Int2String(rand), false)
+			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, "您的登录密码：\r\n"+Calc.Int2String(rand), false)
 		} else {
-			iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_error_alert, false)
+			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_error_alert, false)
 		}
 	} else {
 		if UserMemberModel.Api_insert(user_id, uname, rand) {
-			iapi.Api.Sendprivatemsg(self_id, user_id, group_id, "↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n"+Calc.Int2String(rand)+"\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n"+app_default.Default_str_login_text, false)
+			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, "↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n"+Calc.Int2String(rand)+"\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n"+app_default.Default_str_login_text, false)
 		} else {
-			iapi.Api.Sendprivatemsg(self_id, user_id, group_id, app_default.Default_error_alert, false)
+			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_error_alert, false)
 		}
 	}
 

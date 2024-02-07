@@ -16,7 +16,7 @@ func App_refresh_friend_list_all() {
 }
 
 func App_refresh_friend_list(self_id int64) {
-	fl, err := iapi.Api.Getfriendlist(self_id)
+	fl, err := iapi.Api.GetFriendList(self_id)
 	if err != nil {
 
 	} else {

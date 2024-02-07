@@ -53,6 +53,6 @@ func auto_send() {
 		if len(group) < 1 {
 			return
 		}
-		go iapi.Api.SenndGroupMsg(group["self_id"].(int64), data["group_id"].(int64), Calc.Any2String(data["msg"]), auto_retract)
+		go iapi.Api.SendGroupMsg(group["self_id"].(int64), data["group_id"].(int64), Calc.Any2String(data["msg"]), auto_retract)
 	}
 }

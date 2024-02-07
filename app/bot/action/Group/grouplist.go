@@ -13,7 +13,7 @@ import (
 func App_refresh_group_list() {
 	bots := BotModel.Api_select()
 	for _, bot := range bots {
-		gl, err := iapi.Api.Getgrouplist(Calc.Any2Int64(bot["self_id"]))
+		gl, err := iapi.Api.GetGroupList(Calc.Any2Int64(bot["self_id"]))
 		if err != nil {
 
 		} else {

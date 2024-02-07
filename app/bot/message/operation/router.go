@@ -60,7 +60,7 @@ func Router() {
 					if len(BotSettingModel.Api_find(self_id)) < 1 {
 						BotSettingModel.Api_insert(self_id, 0, 0)
 					}
-					iapi.Api.Getfriendlist(self_id)
+					iapi.Api.GetFriendList(self_id)
 				}
 				break
 
@@ -73,7 +73,7 @@ func Router() {
 					data := es.Json
 					Private.App_refresh_friend_list_action(self_id, data.Data)
 					fmt.Println("好友列表更新完毕：", oe.Echo.SelfId)
-					iapi.Api.Getgrouplist(self_id)
+					iapi.Api.GetGroupList(self_id)
 				}
 				break
 

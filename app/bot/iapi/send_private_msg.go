@@ -30,7 +30,7 @@ type Message struct {
 	MessageId int64 `json:"message_id"`
 }
 
-func (api Post) Sendprivatemsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool) {
+func (api Post) SendPrivateMsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.Self_id = Self_id
 	pss.UserId = UserId
@@ -45,7 +45,7 @@ func (api Post) Sendprivatemsg(Self_id, UserId, GroupId int64, Message string, A
 		return
 	}
 }
-func (api Ws) Sendprivatemsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool) {
+func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.Self_id = Self_id
 	pss.UserId = UserId

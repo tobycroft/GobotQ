@@ -5,7 +5,7 @@ import (
 )
 
 func App_refresh_groupinfo(self_id, group_id int64) {
-	_, err := iapi.Api.Getgrouplist(self_id)
+	_, err := iapi.Api.GetGroupList(self_id)
 	//gl, err := iapi.Api.Getgrouplist(self_id)
 	if err != nil {
 

@@ -37,7 +37,7 @@ func message_main_handler() {
 					if auto_reply["value"] == nil {
 						continue
 					}
-					iapi.Api.Sendprivatemsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
+					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
 				} else {
 					private_auto_reply(selfId, user_id, group_id, message)
 				}

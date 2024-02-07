@@ -46,7 +46,7 @@ func Router() {
 			//	continue
 			//}
 			if botinfo["end_date"].(time.Time).Before(time.Now()) {
-				iapi.Api.Sendprivatemsg(pm.SelfId, pm.UserId, 0, app_default.Default_over_time, false)
+				iapi.Api.SendPrivateMsg(pm.SelfId, pm.UserId, 0, app_default.Default_over_time, false)
 				continue
 			}
 

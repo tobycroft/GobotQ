@@ -47,7 +47,7 @@ func App_refresh_group_member_action(self_id int64, grouplist []gorose.Data) {
 func App_refresh_group_member_one(self_id, group_id int64) {
 	GroupMemberModel.Api_delete_byGid(self_id, group_id)
 	GroupMemberRedis.Cac_del(self_id, "*", group_id)
-	gm, err := iapi.Api.Getgroupmemberlist(self_id, group_id)
+	gm, err := iapi.Api.GetGroupMemberList(self_id, group_id)
 	if err != nil {
 		fmt.Println(tuuz.FUNCTION_ALL(), err)
 	} else {

@@ -171,9 +171,9 @@ func Router() {
 					if groupfunction["auto_card"].(int64) == 1 {
 						comment, err := Redis.String_get("__request_comment__" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 						if groupfunction["auto_card_insert"] == 1 && err == nil {
-							go iapi.Api.Setgroupcard(self_id, group_id, user_id, comment)
+							go iapi.Api.SetGroupCard(self_id, group_id, user_id, comment)
 						} else {
-							go iapi.Api.Setgroupcard(self_id, group_id, user_id, groupfunction["auto_card_value"])
+							go iapi.Api.SetGroupCard(self_id, group_id, user_id, groupfunction["auto_card_value"])
 						}
 					}
 

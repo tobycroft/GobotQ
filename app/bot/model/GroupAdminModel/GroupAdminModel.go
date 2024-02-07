@@ -9,7 +9,7 @@ import (
 const Table = "group_admin"
 
 type GroupAdmins struct {
-	SelfId  any   `gorose:"self_id" redis:"self_id"`
+	SelfId  int64 `gorose:"self_id" redis:"self_id"`
 	GroupId int64 `gorose:"group_id" redis:"group_id"`
 	UserId  int64 `gorose:"user_id" redis:"user_id"`
 }

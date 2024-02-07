@@ -90,9 +90,10 @@ func Router() {
 						num := GroupMemberModel.Api_count_byGroupIdAndRole(datum.GroupId, nil)
 						if num-datum.MemberNum != 0 {
 							log.Println("需要更新的群：", self_id, datum.GroupId, num, datum.MemberNum, datum.MemberCount)
-							Group.Chan_refresh_group_member <- Group.App_group_member{
-								SelfId: self_id, GroupId: datum.GroupId,
-							}
+							Redis.PubSub{}.Publish_struct(types.RefreshGroupMembers, Group.App_group_member{
+								SelfId:  self_id,
+								GroupId: datum.GroupId,
+							})
 						}
 					}
 				}

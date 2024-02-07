@@ -9,7 +9,7 @@ import (
 const table = "group_member"
 
 type GroupMember struct {
-	SelfId       any    `gorose:"self_id" redis:"self_id"`
+	SelfId       int64  `gorose:"self_id" redis:"self_id"`
 	Card         string `gorose:"card" redis:"card"`
 	GroupId      any    `gorose:"group_id" redis:"group_id"`
 	JoinTime     int64  `gorose:"join_time" redis:"join_time"`

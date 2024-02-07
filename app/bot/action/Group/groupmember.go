@@ -2,6 +2,7 @@ package Group
 
 import (
 	"fmt"
+	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/iapi"
@@ -9,18 +10,28 @@ import (
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/redis/GroupMemberRedis"
+	"main.go/config/types"
 	"main.go/tuuz"
+	"main.go/tuuz/Log"
+	"main.go/tuuz/Redis"
 )
 
 type App_group_member struct {
-	SelfId  int64
-	GroupId int64
+	SelfId  int64 `json:"self_id"`
+	GroupId int64 `json:"group_id"`
 }
 
-var Chan_refresh_group_member = make(chan App_group_member, 99)
+//var Chan_refresh_group_member = make(chan App_group_member, 99)
 
 func App_refresh_group_member_chan() {
-	for gm := range Chan_refresh_group_member {
+	ps := Redis.PubSub{}
+	for c := range ps.Subscribe(types.RetractChannel) {
+		var gm App_group_member
+		err := sonic.UnmarshalString(c.Payload, &gm)
+		if err != nil {
+			Log.Crrs(err, tuuz.FUNCTION_ALL())
+			continue
+		}
 		App_refresh_group_member_one(gm.SelfId, gm.GroupId)
 	}
 }
@@ -39,8 +50,8 @@ func App_refresh_group_member_action(self_id int64, grouplist []gorose.Data) {
 	for _, gll := range grouplist {
 		var apm App_group_member
 		apm.SelfId = self_id
-		apm.GroupId = gll["group_id"].(int64)
-		Chan_refresh_group_member <- apm
+		apm.GroupId = Calc.Any2Int64(gll["group_id"])
+		Redis.PubSub{}.Publish_struct(types.RefreshGroupMembers, apm)
 	}
 }
 
@@ -57,7 +68,7 @@ func App_refresh_group_member_one(self_id, group_id int64) {
 	}
 }
 
-func App_refresh_group_member_one_action(self_id any, gm []iapi.GroupMemberList) {
+func App_refresh_group_member_one_action(self_id int64, gm []iapi.GroupMemberList) {
 	var gss []GroupMemberModel.GroupMember
 	for _, gmm := range gm {
 		var gs GroupMemberModel.GroupMember

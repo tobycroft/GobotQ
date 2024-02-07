@@ -32,24 +32,3 @@ func retract_and_wait_for_exec(self_id, message_id int64, duration time.Duration
 	fmt.Println("开始撤回:", Calc.Any2String(self_id), Calc.Any2String(message_id))
 	iapi.Api.DeleteMsg(self_id, message_id)
 }
-
-//func retract_private() {
-//	for r := range iapi.Retract_chan {
-//		fmt.Println("retract_private", r)
-//		go func(retract iapi.Struct_Retract) {
-//			time.Sleep(app_conf.Retract_time_second * time.Second)
-//			select {
-//			case iapi.Retract_instant <- retract:
-//
-//			case <-time.After(5 * time.Second):
-//				return
-//			}
-//		}(r)
-//	}
-//}
-
-//func retract_instant() {
-//	for r := range iapi.Retract_instant {
-//		iapi.Api.DeleteMsg(r.SelfId, r.MessageId)
-//	}
-//}

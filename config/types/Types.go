@@ -21,6 +21,7 @@ const MessageGroupNormal = "Message:Group:Normal:"
 
 // bot operation
 const OperationRefreshGroup = "Operation:RefreshGroup:"
+const RefreshGroupMembers = "RefreshGroupMembers:"
 
 // retract channel
 const RetractChannel = "RetractChannel:"

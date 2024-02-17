@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/Group"
@@ -10,6 +11,7 @@ import (
 	"main.go/common/BaseController"
 	"main.go/config/app_conf"
 	"main.go/route"
+	"main.go/tuuz/Redis"
 	"os"
 	"time"
 )
@@ -27,12 +29,12 @@ func init() {
 	}
 }
 
-func main() {
+func main2() {
 
 	/*Cron which no needed
-	cron.BotInfoCron()
-	go cron.BaseCron()
-	go cron.Refresh_friend_list()
+	  cron.BotInfoCron()
+	  go cron.BaseCron()
+	  go cron.Refresh_friend_list()
 	*/
 	go logs.LogsInit()
 	go event.MainRouter()
@@ -60,4 +62,10 @@ func main() {
 	route.OnRoute(mainroute)
 	mainroute.Run(":80")
 
+}
+
+func main() {
+	rs := Redis.StreamNew("test")
+	fmt.Println(rs.Publish(map[string]any{"sss": "bbb"}))
+	fmt.Println(rs.XRange())
 }

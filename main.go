@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
+	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/action/Group"
 	"main.go/app/bot/cron"
 	"main.go/app/bot/logs"
@@ -11,6 +12,8 @@ import (
 	"main.go/common/BaseController"
 	"main.go/config/app_conf"
 	"main.go/route"
+	"main.go/tuuz"
+	"main.go/tuuz/Jsong"
 	"os"
 	"time"
 )
@@ -28,7 +31,7 @@ func init() {
 	}
 }
 
-func main2() {
+func main() {
 
 	/*Cron which no needed
 	  cron.BotInfoCron()
@@ -63,7 +66,7 @@ func main2() {
 
 }
 
-func main() {
+func main2() {
 	//rs := Redis.StreamNew("test")
 	//fmt.Println(rs.Publish(map[string]any{"sss": "bbb"}))
 	//fmt.Println(rs.XRange())
@@ -71,13 +74,11 @@ func main() {
 }
 
 func chunk_test() {
-	//db := tuuz.Db().Table("bot_default_reply")
-	//db.Where("1=1")
-	//db.Chunk(1, func(data []gorose.Data) error {
-	//	fmt.Println(Jsong.Encode(data))
-	//	return nil
-	//})
-	for i := 0; i < 5-1; i++ {
-		fmt.Println(i)
-	}
+	db := tuuz.Db().Table("bot_default_reply")
+	db.Where("id", 1)
+	db.ChunkWG(1, 1, func(data []gorose.Data) error {
+		fmt.Println(Jsong.Encode(data))
+		return nil
+	})
+
 }

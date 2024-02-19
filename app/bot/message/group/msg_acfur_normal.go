@@ -4,7 +4,7 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/redis/BanRepeatRedis"
@@ -54,9 +54,9 @@ func group_message_normal() {
 					}
 					BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_set(num+1, time.Duration(groupFunction["repeat_time"].(int64))*time.Second)
 					if num > groupFunction["repeat_count"].(int64) {
-						Group.App_ban_user(selfId, groupId, userId, groupfunction["auto_retract"].(int64) == 1, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
+						GroupFunction.App_ban_user(selfId, groupId, userId, groupfunction["auto_retract"].(int64) == 1, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
 					} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
-						Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", groupFunction)
+						GroupFunction.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容", groupFunction)
 					}
 				}
 			}(self_id, group_id, user_id, groupfunction)
@@ -88,7 +88,7 @@ func group_message_normal() {
 				if Redis.CheckExists("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId)) {
 
 					ps.Publish_struct(types.RetractChannel, rm)
-					Group.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
+					GroupFunction.AutoMessage(selfId, groupId, userId, service.Serv_at(userId)+"请尽快输入"+Calc.Any2String(code), groupFunction)
 				} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
 
 					ps.Publish_struct(types.RetractChannel, rm)

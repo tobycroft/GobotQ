@@ -1,4 +1,4 @@
-package Group
+package GroupFunction
 
 import (
 	"main.go/app/bot/iapi"

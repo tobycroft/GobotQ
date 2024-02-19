@@ -3,7 +3,7 @@ package group
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/iapi"
 	"main.go/config/app_default"
 	"main.go/config/types"
@@ -30,7 +30,7 @@ func ban_url() {
 				rm.Time = 0
 				ps.Publish_struct(types.RetractChannel, rm)
 			}
-			Group.App_ban_user(self_id, group_id, user_id, true, gmr.GroupFunction, app_default.Default_ban_url)
+			GroupFunction.App_ban_user(self_id, group_id, user_id, true, gmr.GroupFunction, app_default.Default_ban_url)
 		}
 	}
 }

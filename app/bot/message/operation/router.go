@@ -6,7 +6,7 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"log"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
@@ -84,13 +84,13 @@ func Router() {
 					Log.Errs(err, tuuz.FUNCTION_ALL())
 				} else {
 					data := es.Json
-					Group.App_refresh_group_list_action(self_id, data.Data)
+					GroupFunction.App_refresh_group_list_action(self_id, data.Data)
 					fmt.Println("群列表更新完毕：", oe.Echo.SelfId)
 					for _, datum := range data.Data {
 						num := GroupMemberModel.Api_count_byGroupIdAndRole(datum.GroupId, nil)
 						if num-datum.MemberNum != 0 {
 							log.Println("需要更新的群：", self_id, datum.GroupId, num, datum.MemberNum, datum.MemberCount)
-							Redis.PubSub{}.Publish_struct(types.RefreshGroupMembers, Group.App_group_member{
+							Redis.PubSub{}.Publish_struct(types.RefreshGroupMembers, GroupFunction.App_group_member{
 								SelfId:  self_id,
 								GroupId: datum.GroupId,
 							})
@@ -106,7 +106,7 @@ func Router() {
 					Log.Errs(err, tuuz.FUNCTION_ALL())
 				} else {
 					data := es.Json
-					Group.App_refresh_group_member_one_action(self_id, data.Data)
+					GroupFunction.App_refresh_group_member_one_action(self_id, data.Data)
 					fmt.Println("群成员更新完毕：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
 				}
 				break

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/iapi"
 	group2 "main.go/app/bot/message/group"
 	"main.go/app/bot/model/BotModel"
@@ -131,7 +131,7 @@ func Router() {
 				ga := esg.Json
 				user_id := ga.UserId
 				if user_id == self_id {
-					go Group.App_refreshmember(self_id, group_id)
+					go GroupFunction.App_refreshmember(self_id, group_id)
 				} else {
 					if groupfunction["auto_hold"].(int64) == 1 {
 						//如果禁言成功，就将这个人暂时加入永久小黑屋

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -25,7 +25,7 @@ func sign_daily() {
 			user_id := gm.UserId
 			group_id := gm.GroupId
 			message_id := gm.MessageId
-			Group.App_group_sign(self_id, group_id, user_id, message_id, gmr.GroupMember, gmr.GroupFunction)
+			GroupFunction.App_group_sign(self_id, group_id, user_id, message_id, gmr.GroupMember, gmr.GroupFunction)
 		}
 	}
 }
@@ -44,7 +44,7 @@ func sign_lunpan() {
 			group_id := gm.GroupId
 			message_id := gm.MessageId
 			raw_message := gm.RawMessage
-			Group.App_group_lunpan(self_id, group_id, user_id, message_id, raw_message, gmr.GroupMember, gmr.GroupFunction)
+			GroupFunction.App_group_lunpan(self_id, group_id, user_id, message_id, raw_message, gmr.GroupMember, gmr.GroupFunction)
 		}
 	}
 }
@@ -62,7 +62,7 @@ func check_score() {
 			user_id := gm.UserId
 			group_id := gm.GroupId
 			message_id := gm.MessageId
-			Group.App_check_balance(self_id, group_id, user_id, message_id, gmr.GroupMember, gmr.GroupFunction)
+			GroupFunction.App_check_balance(self_id, group_id, user_id, message_id, gmr.GroupMember, gmr.GroupFunction)
 		}
 	}
 }
@@ -80,7 +80,7 @@ func rank_list() {
 			user_id := gm.UserId
 			group_id := gm.GroupId
 			message_id := gm.MessageId
-			Group.App_check_rank(self_id, group_id, user_id, message_id, gmr.GroupMember, gmr.GroupFunction)
+			GroupFunction.App_check_rank(self_id, group_id, user_id, message_id, gmr.GroupMember, gmr.GroupFunction)
 		}
 	}
 }
@@ -105,7 +105,7 @@ func word_limit() {
 				rm.Time = 0
 				ps.Publish_struct(types.RetractChannel, rm)
 			}
-			Group.App_ban_user(self_id, group_id, user_id, true, gmr.GroupFunction, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(gmr.GroupFunction["word_limit"].(int64)))
+			GroupFunction.App_ban_user(self_id, group_id, user_id, true, gmr.GroupFunction, app_default.Default_length_limit+"本群消息长度限制为："+Calc.Int642String(gmr.GroupFunction["word_limit"].(int64)))
 		}
 	}
 }
@@ -167,7 +167,7 @@ func daoju() {
 			message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if str, ok := service.Serv_text_match(raw_message, []string{"道具"}); ok {
-				Group.App_group_daoju(self_id, group_id, user_id, message_id, str, gmr.GroupMember, gmr.GroupFunction)
+				GroupFunction.App_group_daoju(self_id, group_id, user_id, message_id, str, gmr.GroupMember, gmr.GroupFunction)
 			}
 		}
 	}
@@ -188,7 +188,28 @@ func trade() {
 			message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if str, ok := service.Serv_text_match(raw_message, []string{"交易"}); ok {
-				Group.App_trade_center(self_id, group_id, user_id, message_id, str, gmr.GroupMember, gmr.GroupFunction)
+				GroupFunction.App_trade_center(self_id, group_id, user_id, message_id, str, gmr.GroupMember, gmr.GroupFunction)
+			}
+		}
+	}
+}
+
+func pal() {
+	ps := Redis.PubSub{}
+	for c := range ps.Subscribe(types.MessageGroupAcfur + palworld) {
+		var gmr GroupMessageRedirect[GroupMessageStruct]
+		err := sonic.UnmarshalString(c.Payload, &gmr)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			gm := gmr.Json
+			self_id := gm.SelfId
+			user_id := gm.UserId
+			group_id := gm.GroupId
+			message_id := gm.MessageId
+			raw_message := gm.RawMessage
+			if str, ok := service.Serv_text_match(raw_message, []string{"交易"}); ok {
+				GroupFunction.App_trade_center(self_id, group_id, user_id, message_id, str, gmr.GroupMember, gmr.GroupFunction)
 			}
 		}
 	}

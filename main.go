@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/cron"
 	"main.go/app/bot/logs"
 	event "main.go/app/bot/message"
@@ -41,7 +41,7 @@ func main() {
 	go logs.LogsInit()
 	go event.MainRouter()
 
-	go Group.App_refresh_group_member_chan()
+	go GroupFunction.App_refresh_group_member_chan()
 	go cron.Refresh_group_chan()
 
 	go cron.Retract()

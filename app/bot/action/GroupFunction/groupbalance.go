@@ -1,4 +1,4 @@
-package Group
+package GroupFunction
 
 import (
 	"github.com/tobycroft/Calc"

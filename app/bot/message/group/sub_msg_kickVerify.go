@@ -3,7 +3,7 @@ package group
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
-	"main.go/app/bot/action/Group"
+	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/service"
 	"main.go/config/types"
 	"main.go/tuuz/Redis"
@@ -43,7 +43,7 @@ func kick_verify() {
 					if len(groupmember) > 0 {
 						service.Not_admin(self_id, group_id, user_id)
 					} else {
-						Group.App_reverify_death(self_id, group_id, user_id, message_id, str, groupmember, groupfunction)
+						GroupFunction.App_reverify_death(self_id, group_id, user_id, message_id, str, groupmember, groupfunction)
 					}
 				}
 			}

@@ -154,7 +154,7 @@ func greeting_when_at_me() {
 
 func daoju() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupAcfur + atMe) {
+	for c := range ps.Subscribe(types.MessageGroupAcfur + 道具) {
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {
@@ -175,7 +175,7 @@ func daoju() {
 
 func trade() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupAcfur + atMe) {
+	for c := range ps.Subscribe(types.MessageGroupAcfur + 交易) {
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {

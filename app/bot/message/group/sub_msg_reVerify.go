@@ -11,7 +11,7 @@ import (
 
 func re_verify() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroupAcfur + autoReply) {
+	for c := range ps.Subscribe(types.MessageGroupAcfur) {
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {

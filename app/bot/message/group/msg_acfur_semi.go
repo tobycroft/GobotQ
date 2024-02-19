@@ -29,6 +29,12 @@ func group_message_acfur_semi_match() {
 	go re_verify()
 	go ad_verify()
 
+	go auto_reply()
+	go greeting_when_at_me()
+	go daoju()
+	go trade()
+	go pal()
+
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupAcfur) {
 		var es EventStruct[GroupMessageStruct]

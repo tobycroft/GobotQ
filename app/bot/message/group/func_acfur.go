@@ -206,10 +206,10 @@ func pal() {
 			self_id := gm.SelfId
 			user_id := gm.UserId
 			group_id := gm.GroupId
-			message_id := gm.MessageId
+			//message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if str, ok := service.Serv_text_match(raw_message, []string{"交易"}); ok {
-				GroupFunction.App_trade_center(self_id, group_id, user_id, message_id, str, gmr.GroupMember, gmr.GroupFunction)
+				GroupFunction.App_PalWorld(self_id, group_id, user_id, str, gmr.GroupFunction)
 			}
 		}
 	}

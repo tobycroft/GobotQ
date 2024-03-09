@@ -1,6 +1,7 @@
 package group
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
@@ -10,6 +11,8 @@ import (
 	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/app/bot/service"
 	"main.go/config/types"
+	"main.go/extend/Aigc"
+	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"main.go/tuuz/Vali"
@@ -45,7 +48,15 @@ func group_message_normal() {
 			if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
 				ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
 			}
-
+			if service.Serv_is_at_me(self_id, message) {
+				ai_reply, err := Aigc.Aigc_gemini_text(message)
+				if err == nil {
+					fmt.Println(err)
+					Log.Crrs(err, tuuz.FUNCTION_ALL())
+				} else {
+					iapi.Api.SendGroupMsg(self_id, group_id, Calc.Any2String(ai_reply), true)
+				}
+			}
 			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {
 				if groupFunction["ban_repeat"].(int64) == 1 {
 					num, err := BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_find()

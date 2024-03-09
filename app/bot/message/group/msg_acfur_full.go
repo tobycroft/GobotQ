@@ -254,7 +254,11 @@ func group_message_acfur_when_fully_matched() {
 					break
 				}
 			} else {
-				ps.Publish(types.MessageGroupNormal, c.Payload)
+				gmr := GroupMessageRedirect[GroupMessageStruct]{}
+				gmr.GroupMember = groupmember
+				gmr.GroupFunction = groupfunction
+				gmr.Json = gm
+				ps.Publish(types.MessageGroupNormal, gmr)
 			}
 
 		}

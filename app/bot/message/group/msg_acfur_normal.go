@@ -23,7 +23,6 @@ import (
 func group_message_normal() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupNormal) {
-		fmt.Println("normal1")
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {
@@ -46,13 +45,12 @@ func group_message_normal() {
 			rm.SelfId = self_id
 			rm.Time = 0
 
-			if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
-				ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
+			if err := Vali.Length(raw_message, -1, Calc.Any2Int64(groupfunction["word_limit"])); err != nil {
+				ps.Publish_struct(types.MessageGroupAcfur+wordLimit, gmr)
 			}
-			fmt.Println("is at me", service.Serv_is_at_me(self_id, message))
 			if service.Serv_is_at_me(self_id, message) {
 				ai_reply, err := Aigc.Aigc_gemini_text(message)
-				if err == nil {
+				if err != nil {
 					fmt.Println(err)
 					Log.Crrs(err, tuuz.FUNCTION_ALL())
 				} else {
@@ -60,7 +58,7 @@ func group_message_normal() {
 				}
 			}
 			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {
-				if groupFunction["ban_repeat"].(int64) == 1 {
+				if Calc.Any2Int64(groupFunction["ban_repeat"]) == 1 {
 					num, err := BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_find()
 					if err != nil {
 						num = 0

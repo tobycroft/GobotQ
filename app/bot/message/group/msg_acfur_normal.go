@@ -54,7 +54,7 @@ func group_message_normal() {
 					fmt.Println(err)
 					Log.Crrs(err, tuuz.FUNCTION_ALL())
 				} else {
-					iapi.Api.SendGroupMsg(self_id, group_id, Calc.Any2String(ai_reply), true)
+					iapi.Api.SendGroupMsg(self_id, group_id, Calc.Any2String(ai_reply.Data.Text), true)
 				}
 			}
 			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {

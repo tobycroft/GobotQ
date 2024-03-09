@@ -1,6 +1,7 @@
 package private
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
@@ -35,16 +36,17 @@ func message_main_handler() {
 				}
 				auto_reply := PrivateAutoReplyModel.Api_find_byKey(message)
 				if len(auto_reply) > 0 {
-					if auto_reply["value"] == nil {
+					if auto_reply["value"] != nil {
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
 						continue
 					}
-					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
-					continue
 				} else {
 					private_auto_reply(selfId, user_id, group_id, message)
 				}
 				ai_reply, err := Aigc.Aigc_gemini_text(message)
 				if err != nil {
+					fmt.Println(err)
+					Log.Crrs(err, tuuz.FUNCTION_ALL())
 					continue
 				}
 				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Data.Text, false)

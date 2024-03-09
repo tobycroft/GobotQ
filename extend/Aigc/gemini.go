@@ -6,11 +6,11 @@ import (
 )
 
 func Aigc_gemini_text(text string) (AigcGeminiStruct, error) {
-	post := Net.Post{}.PostFormData("http://aigc.aerofsx.com/v1/aigc/gemini/text", map[string]interface{}{
+	post := Net.Post{}.PostUrlXEncode("http://aigc.aerofsx.com:81/v1/aigc/gemini/text", map[string]interface{}{
 		"token": SystemParamModel.Api_value("aigc"),
 	}, map[string]interface{}{
 		"text": text,
-	}, nil, nil)
+	}, map[string]string{}, map[string]string{})
 	var ag AigcGeminiStruct
 	err := post.RetJson(&ag)
 	if err != nil {

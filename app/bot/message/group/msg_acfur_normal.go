@@ -55,6 +55,7 @@ func group_message_normal() {
 					Log.Crrs(err, tuuz.FUNCTION_ALL())
 				} else {
 					iapi.Api.SendGroupMsg(self_id, group_id, Calc.Any2String(ai_reply.Data.Text), true)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, service.Serv_at(user_id)+Calc.Any2String(ai_reply.Data.Text), groupfunction)
 				}
 			}
 			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {

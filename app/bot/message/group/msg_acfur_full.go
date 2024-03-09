@@ -49,7 +49,7 @@ func group_message_acfur_when_fully_matched() {
 				GroupFunctionModel.Api_insert(group_id)
 				groupfunction = GroupFunctionModel.Api_find(group_id)
 			}
-			if active || service.Serv_is_at_me(self_id, raw_message) {
+			if active {
 
 				admin := false
 				owner := false
@@ -63,10 +63,6 @@ func group_message_acfur_when_fully_matched() {
 					}
 				}
 				switch new_text {
-
-				case "":
-					go iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings, true)
-					break
 
 				case "交易":
 					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_trade, groupfunction)
@@ -257,6 +253,8 @@ func group_message_acfur_when_fully_matched() {
 					ps.Publish(types.MessageGroupAcfur, c.Payload)
 					break
 				}
+			} else {
+				ps.Publish(types.MessageGroupNormal, c.Payload)
 			}
 
 		}

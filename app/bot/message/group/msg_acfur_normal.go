@@ -48,6 +48,7 @@ func group_message_normal() {
 			if err := Vali.Length(raw_message, -1, groupfunction["word_limit"].(int64)); err != nil {
 				ps.Publish(types.MessageGroupAcfur+wordLimit, gmr)
 			}
+			fmt.Println("is at me", service.Serv_is_at_me(self_id, message))
 			if service.Serv_is_at_me(self_id, message) {
 				ai_reply, err := Aigc.Aigc_gemini_text(message)
 				if err == nil {

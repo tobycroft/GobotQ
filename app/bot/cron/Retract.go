@@ -16,6 +16,7 @@ func Retract() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.RetractChannel) {
 		var es iapi.RetractMessage
+		fmt.Println(c.Payload)
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			Log.Crrs(err, tuuz.FUNCTION_ALL())
@@ -29,6 +30,6 @@ func retract_and_wait_for_exec(self_id, message_id int64, duration time.Duration
 	if duration.Seconds() > 0 {
 		time.Sleep(duration)
 	}
-	fmt.Println("开始撤回:", Calc.Any2String(self_id), Calc.Any2String(message_id))
+	fmt.Println("开始撤回:", Calc.Any2String(self_id), Calc.Any2String(message_id), duration)
 	iapi.Api.DeleteMsg(self_id, message_id)
 }

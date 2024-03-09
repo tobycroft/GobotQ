@@ -14,12 +14,12 @@ import (
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/model/LogErrorModel"
 	"main.go/app/bot/model/LogRecvModel"
+	"main.go/config/app_conf"
 	"main.go/config/types"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"net/netip"
-	"time"
 )
 
 func Router() {
@@ -123,7 +123,7 @@ func Router() {
 						var rm iapi.RetractMessage
 						rm.MessageId = data.Data.MessageId
 						rm.SelfId = oe.Echo.SelfId
-						rm.Time = 5 * time.Second
+						rm.Time = app_conf.Retract_time_duration
 						ps.Publish_struct(types.RetractChannel, rm)
 						fmt.Println("发送消息，有撤回", oe.Echo.SelfId, data.Data.MessageId)
 					}

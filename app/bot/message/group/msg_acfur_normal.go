@@ -23,6 +23,7 @@ import (
 func group_message_normal() {
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupNormal) {
+		fmt.Println("normal1")
 		var gmr GroupMessageRedirect[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &gmr)
 		if err != nil {

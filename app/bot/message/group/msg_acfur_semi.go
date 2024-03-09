@@ -1,6 +1,7 @@
 package group
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
@@ -36,6 +37,7 @@ func group_message_acfur_semi_match() {
 
 	ps := Redis.PubSub{}
 	for c := range ps.Subscribe(types.MessageGroupNormal) {
+		fmt.Println("semi")
 		var es EventStruct[GroupMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {

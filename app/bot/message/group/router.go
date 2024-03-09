@@ -67,7 +67,6 @@ func Router() {
 					})
 				}
 			}
-			fmt.Println("MessageGroupValid")
 			ps.Publish(types.MessageGroupValid, c.Payload)
 
 			//text := raw_message

@@ -1,6 +1,7 @@
 package group
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupFunction"
@@ -63,6 +64,10 @@ func group_message_acfur_when_fully_matched() {
 					}
 				}
 				switch new_text {
+
+				case "":
+					go iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings, true)
+					break
 
 				case "交易":
 					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_trade, groupfunction)
@@ -254,6 +259,7 @@ func group_message_acfur_when_fully_matched() {
 					break
 				}
 			} else {
+				fmt.Println("nms")
 				gmr := GroupMessageRedirect[GroupMessageStruct]{}
 				gmr.GroupMember = groupmember
 				gmr.GroupFunction = groupfunction

@@ -48,8 +48,8 @@ func group_message_normal() {
 			if err := Vali.Length(raw_message, -1, Calc.Any2Int64(groupfunction["word_limit"])); err != nil {
 				ps.Publish_struct(types.MessageGroupAcfur+wordLimit, gmr)
 			}
-			if service.Serv_is_at_me(self_id, message) {
-				ai_reply, err := Aigc.Aigc_gemini_text(message)
+			if msg, ok := service.Serv_is_at_me_withoutQQ(self_id, message); ok {
+				ai_reply, err := Aigc.Aigc_gemini_text(msg)
 				if err != nil {
 					fmt.Println(err)
 					Log.Crrs(err, tuuz.FUNCTION_ALL())

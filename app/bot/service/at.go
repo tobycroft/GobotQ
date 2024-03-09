@@ -21,6 +21,10 @@ func Serv_is_at_me(self_id any, message string) bool {
 	return strings.Contains(message, Serv_at(self_id))
 }
 
+func Serv_is_at_me_withoutQQ(self_id any, message string) (string, bool) {
+	return strings.ReplaceAll(message, Serv_at(self_id), ""), strings.Contains(message, Serv_at(self_id))
+}
+
 func Serv_at_who(contains_at_message string) (string, string) {
 	reg, err := regexp.Compile("\\[CQ\\:at\\,qq\\=[0-9]+\\]")
 	if err != nil {

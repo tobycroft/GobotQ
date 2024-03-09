@@ -263,7 +263,7 @@ func group_message_acfur_when_fully_matched() {
 				gmr.GroupMember = groupmember
 				gmr.GroupFunction = groupfunction
 				gmr.Json = gm
-				ps.Publish(types.MessageGroupNormal, gmr)
+				ps.Publish(types.MessageGroupNormal, c.Payload)
 			}
 
 		}

@@ -5,6 +5,7 @@ import (
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/config/types"
+	"main.go/extend/Aigc"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -38,9 +39,16 @@ func message_main_handler() {
 						continue
 					}
 					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
+					continue
 				} else {
 					private_auto_reply(selfId, user_id, group_id, message)
 				}
+				ai_reply, err := Aigc.Aigc_gemini_text(message)
+				if err != nil {
+					continue
+				}
+				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Data.Text, false)
+				continue
 			}
 		}
 	}

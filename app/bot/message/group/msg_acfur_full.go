@@ -51,7 +51,7 @@ func group_message_acfur_when_fully_matched() {
 				groupfunction = GroupFunctionModel.Api_find(group_id)
 			}
 			if active {
-
+				fmt.Println("acfuractive")
 				admin := false
 				owner := false
 				if len(groupmember) > 0 {
@@ -255,11 +255,10 @@ func group_message_acfur_when_fully_matched() {
 
 				default:
 					//if acfur triggered but fully match was failed, send to semi mode
-					ps.Publish(types.MessageGroupAcfur, c.Payload)
+					//ps.Publish(types.MessageGroupAcfur, c.Payload)
 					break
 				}
 			} else {
-				fmt.Println("nms")
 				gmr := GroupMessageRedirect[GroupMessageStruct]{}
 				gmr.GroupMember = groupmember
 				gmr.GroupFunction = groupfunction

@@ -17,6 +17,7 @@ import (
 	"main.go/tuuz/Redis"
 	"main.go/tuuz/Vali"
 	"time"
+	"unicode/utf8"
 )
 
 // group_message_normal 处理标注消息
@@ -49,13 +50,14 @@ func group_message_normal() {
 				ps.Publish_struct(types.MessageGroupAcfur+wordLimit, gmr)
 			}
 			if msg, ok := service.Serv_is_at_me_withoutQQ(self_id, message); ok {
-				ai_reply, err := Aigc.Aigc_gemini_text(msg)
-				if err != nil {
-					fmt.Println(err)
-					Log.Crrs(err, tuuz.FUNCTION_ALL())
-				} else {
-					iapi.Api.SendGroupMsg(self_id, group_id, Calc.Any2String(ai_reply.Data.Text), true)
-					GroupFunction.AutoMessage(self_id, group_id, user_id, service.Serv_at(user_id)+Calc.Any2String(ai_reply.Data.Text), groupfunction)
+				if utf8.RuneCountInString(msg) > 4 {
+					ai_reply, err := Aigc.Aigc_gemini_text(msg)
+					if err != nil {
+						fmt.Println(err)
+						Log.Crrs(err, tuuz.FUNCTION_ALL())
+					} else {
+						GroupFunction.AutoMessage(self_id, group_id, user_id, service.Serv_at(user_id)+Calc.Any2String(ai_reply.Data.Text), groupfunction)
+					}
 				}
 			}
 			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {

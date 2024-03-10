@@ -11,6 +11,7 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
+	"unicode/utf8"
 )
 
 func message_main_handler() {
@@ -43,14 +44,16 @@ func message_main_handler() {
 				} else {
 					private_auto_reply(selfId, user_id, group_id, message)
 				}
-				ai_reply, err := Aigc.Aigc_gemini_text(message)
-				if err != nil {
-					fmt.Println(err)
-					Log.Crrs(err, tuuz.FUNCTION_ALL())
+				if utf8.RuneCountInString(message) > 2 {
+					ai_reply, err := Aigc.Aigc_gemini_text(message)
+					if err != nil {
+						fmt.Println(err)
+						Log.Crrs(err, tuuz.FUNCTION_ALL())
+						continue
+					}
+					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Data.Text, false)
 					continue
 				}
-				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Data.Text, false)
-				continue
 			}
 		}
 	}

@@ -49,6 +49,7 @@ func message_main_handler() {
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, err.Error(), false)
 						continue
 					}
 					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Data.Text, false)

@@ -20,10 +20,6 @@ func Aigc_gemini_text(text string) (AigcGeminiStruct, error) {
 }
 
 type AigcGeminiStruct struct {
-	Code int `json:"code"`
-	Data struct {
-		Image []string `json:"image"`
-		Text  string   `json:"text"`
-	} `json:"data"`
+	Code int    `json:"code"`
 	Echo string `json:"echo"`
 }

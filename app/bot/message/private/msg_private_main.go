@@ -52,7 +52,7 @@ func message_main_handler() {
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, err.Error(), false)
 						continue
 					}
-					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Data.Text, false)
+					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Echo, false)
 					continue
 				}
 			}

@@ -57,7 +57,7 @@ func group_message_normal() {
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
 						GroupFunction.AutoMessage(self_id, group_id, user_id, err.Error(), groupfunction)
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, service.Serv_at(user_id)+Calc.Any2String(ai_reply.Data.Text), groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, service.Serv_at(user_id)+Calc.Any2String(ai_reply.Echo), groupfunction)
 					}
 				}
 			}

@@ -3,6 +3,7 @@ package Aigc
 import (
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/SystemParamModel"
+	"strings"
 )
 
 func Aigc_bing_text(text string) (AigcStruct, error) {
@@ -16,5 +17,6 @@ func Aigc_bing_text(text string) (AigcStruct, error) {
 	if err != nil {
 		return AigcStruct{}, err
 	}
+	strings.ReplaceAll(ag.Echo, "<br>", "\r")
 	return ag, err
 }

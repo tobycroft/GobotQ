@@ -157,7 +157,7 @@ func (api Ws) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(gss.SelfId))
 		return Message{}, errors.New("botinfo_notfound")
 	}
-	LogSendModel.Api_insert(gss.SelfId, "private", 0, gss.Message)
+	LogSendModel.Api_insert(gss.SelfId, "group", 0, gss.Message)
 	data, err := sonic.Marshal(sendStruct{
 		Action: "send_group_msg",
 		Params: post,

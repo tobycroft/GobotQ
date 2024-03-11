@@ -66,7 +66,7 @@ func group_message_acfur_when_fully_matched() {
 				switch new_text {
 
 				case "":
-					go iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings, true)
+					go iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings+time.Now().Format("2006-01-02 15:04:05"), true)
 					break
 
 				case "交易":

@@ -119,6 +119,11 @@ func Router() {
 					if err != nil {
 						Log.Errs(err, tuuz.FUNCTION_ALL())
 					} else {
+						if es.Json.Retcode != 0 {
+							Log.Crrs(errors.New(es.Json.Message), tuuz.FUNCTION_ALL())
+							fmt.Println("发送消息，有错误", es.Json)
+							break
+						}
 						data := es.Json
 						var rm iapi.RetractMessage
 						rm.MessageId = data.Data.MessageId

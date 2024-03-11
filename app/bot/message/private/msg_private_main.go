@@ -52,6 +52,7 @@ func message_main_handler() {
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, err.Error(), false)
 						continue
 					}
+					fmt.Println(ai_reply.Echo)
 					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, ai_reply.Echo, false)
 					continue
 				}

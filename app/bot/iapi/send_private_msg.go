@@ -23,6 +23,7 @@ type MessageRet struct {
 	Data    Message `json:"data"`
 	Retcode int64   `json:"retcode"`
 	Status  string  `json:"status"`
+	Message string  `json:"message"`
 }
 
 type Message struct {

@@ -45,7 +45,7 @@ func message_main_handler() {
 					private_auto_reply(selfId, user_id, group_id, message)
 				}
 				if utf8.RuneCountInString(message) > 2 {
-					ai_reply, err := Aigc.Aigc_gemini_text(message)
+					ai_reply, err := Aigc.Aigc_bing_text(message)
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())

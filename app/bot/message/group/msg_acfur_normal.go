@@ -51,7 +51,7 @@ func group_message_normal() {
 			}
 			if msg, ok := service.Serv_is_at_me_withoutQQ(self_id, message); ok {
 				if utf8.RuneCountInString(msg) > 4 {
-					ai_reply, err := Aigc.Aigc_gemini_text(msg)
+					ai_reply, err := Aigc.Aigc_bing_text(msg)
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())

@@ -5,8 +5,8 @@ import (
 	"main.go/app/bot/model/SystemParamModel"
 )
 
-func Aigc_gemini_text(text string) (AigcStruct, error) {
-	post := Net.Post{}.PostUrlXEncode("http://aigc.aerofsx.com:81/v1/aigc/gemini/text", map[string]interface{}{
+func Aigc_bing_text(text string) (AigcStruct, error) {
+	post := Net.Post{}.PostUrlXEncode("http://aigc.aerofsx.com:81/v1/aigc/bing/text", map[string]interface{}{
 		"token": SystemParamModel.Api_value("aigc"),
 	}, map[string]interface{}{
 		"text": text,
@@ -17,9 +17,4 @@ func Aigc_gemini_text(text string) (AigcStruct, error) {
 		return AigcStruct{}, err
 	}
 	return ag, err
-}
-
-type AigcStruct struct {
-	Code int    `json:"code"`
-	Echo string `json:"echo"`
 }

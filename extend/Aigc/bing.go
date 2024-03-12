@@ -1,6 +1,7 @@
 package Aigc
 
 import (
+	"fmt"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/SystemParamModel"
 	"strings"
@@ -18,6 +19,7 @@ func Aigc_bing_text(text string) (AigcStruct, error) {
 	if err != nil {
 		return AigcStruct{}, err
 	}
-	strings.ReplaceAll(ag.Echo, "<br>", "\r")
+	ag.Echo = strings.ReplaceAll(ag.Echo, "<br>", "\r")
+	fmt.Println("AIGC_RET", ag.Echo)
 	return ag, err
 }

@@ -17,6 +17,7 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -36,11 +37,22 @@ func group_message_acfur_when_fully_matched() {
 			message_id := gm.MessageId
 
 			//the message in json format
-			//message := gm.Message
+			message := gm.Message
 
-			raw_message := gm.RawMessage
+			//raw_message := gm.RawMessage
+			normal_text := strings.Builder{}
+			for _, msg := range message {
+				switch msg.Type {
+				case "at":
+					break
 
-			text := raw_message
+				case "text":
+					normal_text.WriteString(msg.Data["text"])
+					break
+				}
+			}
+
+			text := normal_text.String()
 			reg := regexp.MustCompile("(?i)^acfur")
 			active := reg.MatchString(text)
 			new_text := reg.ReplaceAllString(text, "")

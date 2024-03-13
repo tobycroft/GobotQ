@@ -27,10 +27,8 @@ type GroupMessageStruct struct {
 	PeerId      int64  `json:"peer_id"`
 	UserId      int64  `json:"user_id"`
 	Message     []struct {
-		Data struct {
-			Text string `json:"text"`
-		} `json:"data"`
-		Type string `json:"type"`
+		Data map[string]string `json:"data"`
+		Type string            `json:"type"`
 	} `json:"message"`
 	RawMessage string      `json:"raw_message"`
 	Font       int64       `json:"font"`

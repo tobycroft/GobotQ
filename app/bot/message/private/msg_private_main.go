@@ -11,6 +11,7 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -26,13 +27,26 @@ func message_main_handler() {
 			selfId := pm.SelfId
 			user_id := pm.UserId
 			group_id := int64(0)
-			message := pm.RawMessage
+			message := pm.Message
+
+			normal_text := strings.Builder{}
+			for _, msg := range message {
+				switch msg.Type {
+				case "at":
+					break
+
+				case "text":
+					normal_text.WriteString(msg.Data["text"])
+					break
+				}
+			}
+			text := normal_text.String()
 
 			reg := regexp.MustCompile("(?i)^acfur")
-			active := reg.MatchString(message)
+			active := reg.MatchString(text)
 			if !active {
 				//在未激活acfur的情况下应该对原始内容进行还原
-				if private_default_reply(selfId, user_id, group_id, message) {
+				if private_default_reply(selfId, user_id, group_id, text) {
 					continue
 				}
 				auto_reply := PrivateAutoReplyModel.Api_find_byKey(message)
@@ -42,10 +56,10 @@ func message_main_handler() {
 						continue
 					}
 				} else {
-					private_auto_reply(selfId, user_id, group_id, message)
+					private_auto_reply(selfId, user_id, group_id, text)
 				}
-				if utf8.RuneCountInString(message) > 2 {
-					ai_reply, err := Aigc.Aigc_bing_text(message)
+				if utf8.RuneCountInString(text) > 2 {
+					ai_reply, err := Aigc.Aigc_bing_text(text)
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())

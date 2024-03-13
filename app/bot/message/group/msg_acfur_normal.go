@@ -16,6 +16,7 @@ import (
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"main.go/tuuz/Vali"
+	"strings"
 	"time"
 	"unicode/utf8"
 )
@@ -35,9 +36,24 @@ func group_message_normal() {
 			user_id := gm.UserId
 			group_id := gm.GroupId
 			message_id := gm.MessageId
-			//message := gm.Message
-			message := gm.RawMessage
+			message := gm.Message
 			raw_message := gm.RawMessage
+
+			normal_text := strings.Builder{}
+			is_at_me := false
+			for _, msg := range message {
+				switch msg.Type {
+				case "at":
+					if Calc.Any2String(msg.Data["qq"]) == Calc.Any2String(self_id) {
+						is_at_me = true
+					}
+					break
+
+				case "text":
+					normal_text.WriteString(msg.Data["text"])
+					break
+				}
+			}
 
 			groupfunction := gmr.GroupFunction
 
@@ -46,12 +62,13 @@ func group_message_normal() {
 			rm.SelfId = self_id
 			rm.Time = 0
 
+			text := normal_text.String()
 			if err := Vali.Length(raw_message, -1, Calc.Any2Int64(groupfunction["word_limit"])); err != nil {
 				ps.Publish_struct(types.MessageGroupAcfur+wordLimit, gmr)
 			}
-			if msg, ok := service.Serv_is_at_me_withoutQQ(self_id, message); ok {
-				if utf8.RuneCountInString(msg) > 4 {
-					ai_reply, err := Aigc.Aigc_bing_text(msg)
+			if is_at_me {
+				if utf8.RuneCountInString(text) > 4 {
+					ai_reply, err := Aigc.Aigc_bing_text(text)
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
@@ -81,7 +98,7 @@ func group_message_normal() {
 				code, err := Redis.String_get("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
 				if err != nil {
 				} else {
-					if code == message {
+					if code == text {
 						str := ""
 						Redis.Del("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))
 						Redis.Del("verify_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId))

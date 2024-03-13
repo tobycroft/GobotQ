@@ -28,11 +28,23 @@ func message_fully_attached_with_acfur() {
 			self_id := pm.SelfId
 			user_id := pm.UserId
 			group_id := int64(0)
-			message := pm.RawMessage
+			message := pm.Message
+			//raw_message := pm.RawMessage
+			normal_text := strings.Builder{}
+			for _, msg := range message {
+				switch msg.Type {
+				case "at":
+					break
 
+				case "text":
+					normal_text.WriteString(msg.Data["text"])
+					break
+				}
+			}
+			text := normal_text.String()
 			reg := regexp.MustCompile("(?i)^acfur")
-			active := reg.MatchString(message)
-			new_text := reg.ReplaceAllString(message, "")
+			active := reg.MatchString(text)
+			new_text := reg.ReplaceAllString(text, "")
 			if active {
 				switch new_text {
 				case "ip":
@@ -46,7 +58,7 @@ func message_fully_attached_with_acfur() {
 				case "help":
 					botinfo := BotModel.Api_find(self_id)
 					if len(botinfo) > 0 {
-						if botinfo["owner"].(int64) == user_id {
+						if Calc.Any2Int64(botinfo["owner"]) == user_id {
 							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_private_help+app_default.Default_private_help_for_RobotOwner, false)
 						} else {
 							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, app_default.Default_private_help, false)

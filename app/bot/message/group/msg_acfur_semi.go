@@ -9,6 +9,7 @@ import (
 	"main.go/config/types"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
+	"strings"
 )
 
 func group_message_acfur_semi_match() {
@@ -49,14 +50,20 @@ func group_message_acfur_semi_match() {
 			user_id := gm.UserId
 			group_id := gm.GroupId
 			//message_id := gm.MessageId
-			//message := gm.Message
-			message := gm.RawMessage
-			raw_message := gm.RawMessage
+			message := gm.Message
+			//raw_message := gm.RawMessage
 
-			//text := message
-			//reg := regexp.MustCompile("(?i)^acfur")
-			//active := reg.MatchString(text)
-			//new_text := reg.ReplaceAllString(text, "")
+			normal_text := strings.Builder{}
+			for _, msg := range message {
+				switch msg.Type {
+				case "at":
+					break
+
+				case "text":
+					normal_text.WriteString(msg.Data["text"])
+					break
+				}
+			}
 
 			groupmember := GroupMemberModel.Api_find(group_id, user_id)
 			groupfunction := GroupFunctionModel.Api_find(group_id)
@@ -69,8 +76,10 @@ func group_message_acfur_semi_match() {
 			gmr.GroupFunction = groupfunction
 			gmr.Json = gm
 
+			text := normal_text.String()
+
 			if groupfunction["ban_group"].(int64) == 1 {
-				if service.Serv_ban_group(raw_message) {
+				if service.Serv_ban_group(text) {
 					//fmt.Println(banGroup, self_id, group_id, user_id)
 					ps.Publish_struct(types.MessageGroupAcfur+banGroup, gmr)
 					continue
@@ -78,7 +87,7 @@ func group_message_acfur_semi_match() {
 			}
 
 			if groupfunction["ban_url"].(int64) == 1 {
-				if service.Serv_url_detect(raw_message) {
+				if service.Serv_url_detect(text) {
 					//fmt.Println(banUrl, self_id, group_id, user_id)
 					ps.Publish_struct(types.MessageGroupAcfur+banUrl, gmr)
 					continue
@@ -86,7 +95,7 @@ func group_message_acfur_semi_match() {
 			}
 
 			if groupfunction["ban_wx"].(int64) == 1 {
-				if service.Serv_ban_weixin(message) {
+				if service.Serv_ban_weixin(text) {
 					//fmt.Println(banWx, self_id, group_id, user_id)
 					ps.Publish(types.MessageGroupAcfur+banWx, gmr)
 					continue
@@ -94,7 +103,7 @@ func group_message_acfur_semi_match() {
 			}
 
 			if groupfunction["ban_share"].(int64) == 1 {
-				if service.Serv_ban_share(message) {
+				if service.Serv_ban_share(text) {
 					//fmt.Println(banShare, self_id, group_id, user_id)
 					ps.Publish(types.MessageGroupAcfur+banShare, gmr)
 					continue
@@ -102,21 +111,21 @@ func group_message_acfur_semi_match() {
 			}
 
 			if groupfunction["sign"].(int64) == 1 {
-				if _, ok := service.Serv_text_match_all(message, []string{"签到"}); ok {
+				if _, ok := service.Serv_text_match_all(text, []string{"签到"}); ok {
 					ps.Publish(types.MessageGroupAcfur+signDaily, gmr)
 					continue
 				}
-				if _, ok := service.Serv_text_match(message, []string{"轮盘"}); ok {
+				if _, ok := service.Serv_text_match(text, []string{"轮盘"}); ok {
 					ps.Publish(types.MessageGroupAcfur+signLunpan, gmr)
 					continue
 				}
 			}
 
-			if _, ok := service.Serv_text_match_all(message, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包", "查询余额", "余额查询"}); ok {
+			if _, ok := service.Serv_text_match_all(text, []string{"积分查询", "查询积分", "威望查询", "查询威望", "钱包", "查询余额", "余额查询"}); ok {
 				ps.Publish(types.MessageGroupAcfur+checkScore, gmr)
 			}
 
-			if _, ok := service.Serv_text_match_all(message, []string{"积分排行", "威望排行", "排行榜"}); ok {
+			if _, ok := service.Serv_text_match_all(text, []string{"积分排行", "威望排行", "排行榜"}); ok {
 				ps.Publish(types.MessageGroupAcfur+rankList, gmr)
 			}
 		}

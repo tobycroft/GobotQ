@@ -7,7 +7,7 @@ import (
 )
 
 func Aigc_gemini_text(text string) (AigcStruct, error) {
-	post := Net.Post{}.SetTimeOut(60*time.Second).PostUrlXEncode("http://aigc.aerofsx.com:81/v1/aigc/gemini/text", map[string]interface{}{
+	post := Net.Post{}.SetTimeOut(100*time.Second).PostUrlXEncode("http://10.0.0.182:84/v1/aigc/gemini/text", map[string]interface{}{
 		"token": SystemParamModel.Api_value("aigc"),
 	}, map[string]interface{}{
 		"text": text,

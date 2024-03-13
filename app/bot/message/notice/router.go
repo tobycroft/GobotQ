@@ -324,6 +324,14 @@ func Router() {
 			//case "notice":
 			//	break
 
+			case "notify":
+				switch sub_type {
+				case "poke":
+					break
+
+				}
+				break
+
 			default:
 				fmt.Println("notice no route", em)
 				LogRecvModel.Api_insert(c.Payload)

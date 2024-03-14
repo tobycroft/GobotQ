@@ -1,11 +1,13 @@
 package TTS
 
 import (
+	"errors"
+	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"time"
 )
 
-func (self Audio) Huihui(text string) (Audio, error) {
+func (self *Audio) Huihui(text string) (Audio, error) {
 	post := Net.Post{}.SetTimeOut(100*time.Second).PostUrlXEncode("http://tts.aerofsx.com/request_tts.php", nil, map[string]interface{}{
 		"service": "StreamElements",
 		"voice":   "Huihui",
@@ -13,7 +15,17 @@ func (self Audio) Huihui(text string) (Audio, error) {
 	}, map[string]string{}, map[string]string{})
 	audio := Audio{}
 	err := post.RetJson(&audio)
+	if err != nil {
+		return audio, err
+	}
+	if audio.Success == false {
+		return audio, errors.New(Calc.Any2String(audio.ErrorMsg))
+	}
 	return audio, err
+}
+
+func (self Audio) New() *Audio {
+	return &self
 }
 
 type Audio struct {

@@ -10,6 +10,7 @@ import (
 	"main.go/app/bot/model/BotModel"
 	"main.go/config/app_default"
 	"main.go/config/types"
+	"main.go/extend/TTS"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -48,6 +49,16 @@ func message_fully_attached_with_acfur() {
 			new_text := reg.ReplaceAllString(text, "")
 			if active {
 				switch new_text {
+				case "测试语音":
+					tts, err := TTS.Audio{}.New().Huihui("Hi~我是A C FUR，如果需要查看功能可以发a c furhelp 哦")
+					if err != nil {
+						Log.Errs(err, tuuz.FUNCTION_ALL())
+						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
+						break
+					}
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(tts.AudioUrl), false)
+					break
+
 				case "ip":
 					msg := MessageBuilder.IMessageBuilder{}.New().New().Text(es.RemoteAddr)
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, true)

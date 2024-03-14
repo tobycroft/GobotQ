@@ -30,22 +30,24 @@ type Message struct {
 	MessageId int64 `json:"message_id"`
 }
 
-func (api Post) SendPrivateMsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool) {
+func (api Post) SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
 	pss.Message = Message
+	pss.RawMessage = RawMessage
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = app_conf.Retract_time_duration
 
 	Redis.PubSub{}.Publish_struct(types.SendPrivateChannel, pss)
 }
-func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message string, AutoRetract bool) {
+func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
 	pss.Message = Message
+	pss.RawMessage = RawMessage
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = app_conf.Retract_time_duration
@@ -53,11 +55,12 @@ func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message string, Aut
 	Redis.PubSub{}.Publish_struct(types.SendPrivateChannel, pss)
 }
 
-func (api Post) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message string, AutoRetract bool, Time time.Duration) {
+func (api Post) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool, Time time.Duration) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
 	pss.Message = Message
+	pss.RawMessage = RawMessage
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = Time
@@ -65,11 +68,12 @@ func (api Post) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message s
 	Redis.PubSub{}.Publish_struct(types.SendPrivateChannel, pss)
 }
 
-func (api Ws) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message string, AutoRetract bool, Time time.Duration) {
+func (api Ws) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool, Time time.Duration) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
 	pss.Message = Message
+	pss.RawMessage = RawMessage
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = Time
@@ -78,12 +82,13 @@ func (api Ws) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message str
 }
 
 type PrivateSendStruct struct {
-	SelfId      int64         `json:"self_id"`
-	GroupId     int64         `json:"group_id"`
-	UserId      int64         `json:"user_id"`
-	Message     string        `json:"message"`
-	AutoRetract bool          `json:"auto_retract"`
-	RetractTime time.Duration `json:"retract_time"`
+	SelfId      int64               `json:"self_id"`
+	GroupId     int64               `json:"group_id"`
+	UserId      int64               `json:"user_id"`
+	Message     []map[string]string `json:"message"`
+	RawMessage  string              `json:"raw_message"`
+	AutoRetract bool                `json:"auto_retract"`
+	RetractTime time.Duration       `json:"retract_time"`
 }
 
 func (api Post) Send_private() {
@@ -95,10 +100,10 @@ func (api Post) Send_private() {
 			Log.Crrs(err, tuuz.FUNCTION_ALL())
 			continue
 		}
-		if Redis.CheckExists("SendCheck:" + pss.Message) {
+		if Redis.CheckExists("SendCheck:" + pss.RawMessage) {
 			continue
 		}
-		Redis.String_set("SendCheck:"+pss.Message, true, app_conf.Retract_time_duration)
+		Redis.String_set("SendCheck:"+pss.RawMessage, true, app_conf.Retract_time_duration)
 		pmr, err := api.sendprivatemsg(pss)
 		if err != nil {
 
@@ -123,11 +128,11 @@ func (api Ws) Send_private() {
 			Log.Crrs(err, tuuz.FUNCTION_ALL())
 			continue
 		}
-		if Redis.CheckExists("SendCheck:" + pss.Message) {
-			log.Println("SendCheck:" + pss.Message)
+		if Redis.CheckExists("SendCheck:" + pss.RawMessage) {
+			log.Println("SendCheck:" + pss.RawMessage)
 			continue
 		}
-		Redis.String_set("SendCheck:"+pss.Message, true, app_conf.Retract_time_duration)
+		Redis.String_set("SendCheck:"+pss.RawMessage, true, app_conf.Retract_time_duration)
 		api.sendprivatemsg(pss)
 	}
 }

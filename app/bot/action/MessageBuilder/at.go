@@ -16,5 +16,6 @@ func (self *IMessageBuilder) At(qq any) *IMessageBuilder {
 		},
 	})
 	self.rawMessage.WriteString("[CQ:at,qq=" + Calc.Any2String(qq) + "]")
+	self.Text(" ")
 	return self
 }

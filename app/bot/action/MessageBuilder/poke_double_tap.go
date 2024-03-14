@@ -8,8 +8,7 @@ type pokeDoubleTap struct {
 	Id int64 `json:"id"`
 }
 
-func (self IMessageBuilder) PokeDoubleTap(qq int64) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) PokeDoubleTap(qq int64) *IMessageBuilder {
 	self.message = append(self.message, iMessage[pokeDoubleTap]{
 		Type: "touch",
 		Data: pokeDoubleTap{

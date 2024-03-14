@@ -4,8 +4,7 @@ type image struct {
 	File string `json:"file"`
 }
 
-func (self IMessageBuilder) Image(File string) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Image(File string) *IMessageBuilder {
 	self.message = append(self.message, iMessage[image]{
 		Type: "image",
 		Data: image{

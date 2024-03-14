@@ -18,11 +18,8 @@ type im interface {
 	at | basketball | caiquan | face | bubbleFace | image | music | poke | pokeDoubleTap | record | reply | text | touzi | share | video
 }
 
-func (self IMessageBuilder) New() {
-	if len(self.message) < 1 {
-		self.rawMessage = strings.Builder{}
-		self.message = make([]any, 0)
-	}
+func (self IMessageBuilder) New() *IMessageBuilder {
+	return &self
 }
 
 func (self IMessageBuilder) BuildRawMessage() string {

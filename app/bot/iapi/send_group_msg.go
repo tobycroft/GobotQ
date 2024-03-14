@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-func (api Post) SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool) {
+func (api Post) SendGroupMsg(Self_id, Group_id int64, Message *MessageBuilder.IMessageBuilder, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
@@ -32,7 +32,7 @@ func (api Post) SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMe
 
 	Redis.PubSub{}.Publish_struct(types.SendGroupChannel, gss)
 }
-func (api Post) SendGroupMsgWithTime(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
+func (api Post) SendGroupMsgWithTime(Self_id, Group_id int64, Message *MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
@@ -43,7 +43,7 @@ func (api Post) SendGroupMsgWithTime(Self_id, Group_id int64, Message MessageBui
 
 	Redis.PubSub{}.Publish_struct(types.SendGroupChannel, gss)
 }
-func (api Ws) SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool) {
+func (api Ws) SendGroupMsg(Self_id, Group_id int64, Message *MessageBuilder.IMessageBuilder, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
@@ -54,7 +54,7 @@ func (api Ws) SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMess
 
 	Redis.PubSub{}.Publish_struct(types.SendGroupChannel, gss)
 }
-func (api Ws) SendGroupMsgWithTime(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
+func (api Ws) SendGroupMsgWithTime(Self_id, Group_id int64, Message *MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id

@@ -6,8 +6,7 @@ type caiquan struct {
 	Id int64 `json:"id"`
 }
 
-func (self IMessageBuilder) Caiquan(Id int64) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Caiquan(Id int64) *IMessageBuilder {
 	self.message = append(self.message, iMessage[caiquan]{
 		Type: "new_rps",
 		Data: caiquan{

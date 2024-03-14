@@ -6,8 +6,7 @@ type basketball struct {
 	Id int64 `json:"id"`
 }
 
-func (self IMessageBuilder) Basketball(Id int64) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Basketball(Id int64) *IMessageBuilder {
 	self.message = append(self.message, iMessage[basketball]{
 		Type: "basketball",
 		Data: basketball{Id: Id},

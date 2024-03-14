@@ -9,8 +9,7 @@ type at struct {
 	Qq string `json:"qq"`
 }
 
-func (self IMessageBuilder) At(qq any) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) At(qq any) *IMessageBuilder {
 	self.message = append(self.message, iMessage[at]{
 		Type: "at",
 		Data: at{

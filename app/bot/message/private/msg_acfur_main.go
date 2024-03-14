@@ -49,12 +49,12 @@ func message_fully_attached_with_acfur() {
 			if active {
 				switch new_text {
 				case "ip":
-					msg := MessageBuilder.IMessageBuilder{}.Text(es.RemoteAddr)
+					msg := MessageBuilder.IMessageBuilder{}.New().New().Text(es.RemoteAddr)
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, true)
 					break
 
 				case "app", "下载":
-					msg := MessageBuilder.IMessageBuilder{}.Text(app_default.Default_app_download_url)
+					msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_app_download_url)
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, true)
 					break
 
@@ -62,20 +62,20 @@ func message_fully_attached_with_acfur() {
 					botinfo := BotModel.Api_find(self_id)
 					if len(botinfo) > 0 {
 						if Calc.Any2Int64(botinfo["owner"]) == user_id {
-							msg := MessageBuilder.IMessageBuilder{}.Text(app_default.Default_private_help + app_default.Default_private_help_for_RobotOwner)
+							msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_private_help + app_default.Default_private_help_for_RobotOwner)
 							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 						} else {
-							msg := MessageBuilder.IMessageBuilder{}.Text(app_default.Default_private_help)
+							msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_private_help)
 							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 						}
 					} else {
-						msg := MessageBuilder.IMessageBuilder{}.Text(app_default.Default_private_help)
+						msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_private_help)
 						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 					}
 					break
 
 				case "测试撤回":
-					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("测试撤回"), true)
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("测试撤回"), true)
 					break
 
 				case "登录", "登陆", "login":
@@ -91,7 +91,7 @@ func message_fully_attached_with_acfur() {
 					break
 
 				case "绑定":
-					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人"), false)
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("请使用\"acfur绑定(+)本机器人密码\"来绑定您的机器人"), false)
 					break
 
 				case "绑定群":
@@ -100,7 +100,7 @@ func message_fully_attached_with_acfur() {
 					for _, groupbind := range groupbinds {
 						groups = append(groups, Calc.Any2String(groupbind["group_id"]))
 					}
-					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+
+					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("您的机器人可在如下群中使用:\r\n"+strings.Join(groups, ",")+
 						"\r\n您可以使用：acfur绑定群:群号，来绑定新群，\r\n使用：acfur解绑群:群号，解绑"), false)
 					break
 

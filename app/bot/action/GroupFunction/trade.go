@@ -20,23 +20,23 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 
 	case "我的", "列表", "背包":
 		str := list_my_coin(group_id, user_id)
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 		break
 
 	case "中心", "商城", "商店":
 		str := list_coin()
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 		break
 
 	case "帮助":
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_trade), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_trade), groupfunction)
 		break
 
 	case "买入", "购买", "兑换":
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Trade_buy), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(app_default.Trade_buy), groupfunction)
 		break
 	case "卖出", "卖掉", "兑出":
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Trade_sell), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(app_default.Trade_sell), groupfunction)
 		break
 
 	default:
@@ -44,18 +44,18 @@ func App_trade_center(self_id, group_id, user_id, message_id int64, message stri
 		if has {
 			str, err := buy_coin(group_id, user_id, str)
 			if err != nil {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 			} else {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 			}
 		}
 		sell, has := service.Serv_text_match(message, []string{"卖出", "卖掉", "兑出"})
 		if has {
 			send, err := sell_coin(group_id, user_id, sell)
 			if err != nil {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 			} else {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(send), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(send), groupfunction)
 			}
 		}
 		break

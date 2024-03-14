@@ -12,8 +12,7 @@ type bubbleFace struct {
 	Count int64 `json:"count"`
 }
 
-func (self IMessageBuilder) Face(Id int64) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Face(Id int64) *IMessageBuilder {
 	self.message = append(self.message, iMessage[face]{
 		Type: "face",
 		Data: face{
@@ -24,8 +23,7 @@ func (self IMessageBuilder) Face(Id int64) IMessageBuilder {
 	return self
 }
 
-func (self IMessageBuilder) BubbleFace(Id, Count int64) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) BubbleFace(Id, Count int64) *IMessageBuilder {
 	self.message = append(self.message, iMessage[bubbleFace]{
 		Type: "bubble_face",
 		Data: bubbleFace{

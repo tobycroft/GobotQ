@@ -6,8 +6,7 @@ type touzi struct {
 	Id int64 `json:"id"`
 }
 
-func (self IMessageBuilder) Touzi(Id int64) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Touzi(Id int64) *IMessageBuilder {
 	self.message = append(self.message, iMessage[touzi]{
 		Type: "new_dice",
 		Data: touzi{

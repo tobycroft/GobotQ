@@ -6,8 +6,7 @@ type poke struct {
 	Strength int64 `json:"strength"`
 }
 
-func (self IMessageBuilder) Poke() IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Poke() *IMessageBuilder {
 	self.message = append(self.message, iMessage[poke]{
 		Type: "poke",
 		Data: poke{

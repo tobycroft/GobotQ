@@ -20,29 +20,29 @@ func App_group_daoju(self_id, group_id, user_id, message_id int64, message strin
 	switch message {
 	case "清空我的背包":
 		str := clear_backpack(group_id, user_id)
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 		break
 
 	case "我的", "列表", "背包":
 		str := list_my_daoju(group_id, user_id)
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 		break
 
 	case "商城", "商店":
 		str := list_daoju()
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 		break
 
 	case "帮助":
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_daoju), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_daoju), groupfunction)
 		break
 
 	case "赠送":
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_send_daoju), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_send_daoju), groupfunction)
 		break
 
 	case "购买", "兑换":
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Daoju_goumai), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(app_default.Daoju_goumai), groupfunction)
 		break
 
 	default:
@@ -50,18 +50,18 @@ func App_group_daoju(self_id, group_id, user_id, message_id int64, message strin
 		if has {
 			str, err := buy_daoju(group_id, user_id, str)
 			if err != nil {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 			} else {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(str), groupfunction)
 			}
 		}
 		send_to, has := service.Serv_text_match(message, []string{"赠送", "赠与", "送给"})
 		if has {
 			send, err := send_daoju(group_id, user_id, send_to)
 			if err != nil {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 			} else {
-				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(send), groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(send), groupfunction)
 			}
 		}
 		break

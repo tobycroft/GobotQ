@@ -18,7 +18,7 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			msg := MessageBuilder.IMessageBuilder{}.Text(auto_reply["value"].(string))
+			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(auto_reply["value"].(string))
 			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, true)
 			break
 		}
@@ -35,7 +35,7 @@ func private_default_reply(selfId, user_id, group_id int64, message string) bool
 			if auto_reply["value"] == nil {
 				continue
 			}
-			msg := MessageBuilder.IMessageBuilder{}.Text(auto_reply["value"].(string))
+			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(auto_reply["value"].(string))
 			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, false)
 			return true
 		}

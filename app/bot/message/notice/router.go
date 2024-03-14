@@ -83,19 +83,19 @@ func Router() {
 				case "set":
 					if user_id == self_id {
 						if GroupMemberModel.Api_update_type(group_id, user_id, "admin") {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("Acfur-On，已获取权限，可使用acfurhelp查看功能"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("Acfur-On，已获取权限，可使用acfurhelp查看功能"), auto_retract)
 						} else {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("Acfur-On，已获取权限，数据故障，请使用acfur刷新人数来更新信息"), auto_retract)
 						}
 					} else {
 						if GroupMemberModel.Api_update_type(group_id, user_id, "admin") {
-							msg := MessageBuilder.IMessageBuilder{}.Text("恭喜上位").At(user_id)
+							msg := MessageBuilder.IMessageBuilder{}.New().New().Text("恭喜上位").At(user_id)
 							go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 							GroupBlackListModel.Api_delete(group_id, user_id)
 							GroupBanPermenentModel.Api_delete(group_id, user_id)
 							Redis.Del("ban_" + Calc.Any2String(group_id) + "_" + Calc.Any2String(user_id))
 						} else {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("恭喜上位,但是权限变动失败"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("恭喜上位,但是权限变动失败"), auto_retract)
 						}
 					}
 					break
@@ -103,15 +103,15 @@ func Router() {
 				case "unset":
 					if user_id == self_id {
 						if GroupMemberModel.Api_update_type(group_id, user_id, "member") {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("Acfur-Off，权限已回收，将在2小时内退群"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("Acfur-Off，权限已回收，将在2小时内退群"), auto_retract)
 						} else {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("Acfur-Off，权限已回收，数据故障"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("Acfur-Off，权限已回收，数据故障"), auto_retract)
 						}
 					} else {
 						if GroupMemberModel.Api_update_type(group_id, user_id, "member") {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("管理员列表更新"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("管理员列表更新"), auto_retract)
 						} else {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("管理员权限变动失败"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("管理员权限变动失败"), auto_retract)
 						}
 					}
 					break
@@ -140,7 +140,7 @@ func Router() {
 						num := Calc.Rand(1000, 9999)
 						Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_duration+10*time.Second)
 						Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, 3600*time.Second)
-						msg := MessageBuilder.IMessageBuilder{}.At(user_id)
+						msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id)
 						go iapi.Api.SendGroupMsg(self_id, group_id, msg.Text("请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num)), true)
 						go func(selfId, groupId, userId int64) {
 							time.Sleep(120 * time.Second)
@@ -157,7 +157,7 @@ func Router() {
 					} else {
 						//在没有启动自动验证模式的时候，使用正常欢迎流程
 						if groupfunction["auto_welcome"].(int64) == 1 {
-							msg := MessageBuilder.IMessageBuilder{}.Text(Calc.Any2String(groupfunction["welcome_word"]))
+							msg := MessageBuilder.IMessageBuilder{}.New().New().Text(Calc.Any2String(groupfunction["welcome_word"]))
 							if groupfunction["welcome_at"].(int64) == 1 {
 								go iapi.Api.SendGroupMsg(self_id, group_id, msg.At(user_id), auto_retract)
 							} else {
@@ -165,7 +165,7 @@ func Router() {
 							}
 						} else {
 							if groupfunction["join_alert"].(int64) == 1 {
-								go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("成员+1"), auto_retract)
+								go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("成员+1"), auto_retract)
 							}
 						}
 					}
@@ -197,7 +197,7 @@ func Router() {
 							mb.Nickname = member.Nickname
 							mb.Role = member.Role
 							if !GroupMemberModel.Api_insert(mb) {
-								go iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.Text("群成员数据增加失败"), autoRetract)
+								go iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.New().Text("群成员数据增加失败"), autoRetract)
 							}
 						}
 					}(self_id, group_id, user_id, auto_retract)
@@ -220,11 +220,11 @@ func Router() {
 					if groupfunction["exit_to_black"].(int64) == 1 {
 						GroupBlackListModel.Api_insert(group_id, user_id, operator_id)
 						if groupfunction["exit_alert"].(int64) == 1 {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text(Calc.Any2String(user_id)+"退群，已加入本群黑名单"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(Calc.Any2String(user_id)+"退群，已加入本群黑名单"), auto_retract)
 						}
 					} else {
 						if groupfunction["exit_alert"].(int64) == 1 {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("成员-1"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("成员-1"), auto_retract)
 						}
 					}
 					break
@@ -239,15 +239,15 @@ func Router() {
 					if groupfunction["kick_to_black"].(int64) == 1 {
 						GroupBlackListModel.Api_insert(group_id, user_id, operator_id)
 						if GroupKickModel.Api_insert(self_id, group_id, user_id, jsonmsg) {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("群成员"+Calc.Any2String(user_id)+"T出报告已经生成，并已加入黑名单，请在APP中查看"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("群成员"+Calc.Any2String(user_id)+"T出报告已经生成，并已加入黑名单，请在APP中查看"), auto_retract)
 						} else {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("群成员"+Calc.Any2String(user_id)+"T出报告生成失败，但已加入黑名单"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("群成员"+Calc.Any2String(user_id)+"T出报告生成失败，但已加入黑名单"), auto_retract)
 						}
 					} else {
 						if GroupKickModel.Api_insert(self_id, group_id, user_id, jsonmsg) {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("群成员T出报告已经生成，请在APP中查看"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("群成员T出报告已经生成，请在APP中查看"), auto_retract)
 						} else {
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text("群成员T出报告生成失败"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("群成员T出报告生成失败"), auto_retract)
 						}
 					}
 					break
@@ -278,7 +278,7 @@ func Router() {
 
 						} else {
 							GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
-							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.At(user_id).Text("你进入永久小黑屋，可联系群管解除"), auto_retract)
+							go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().At(user_id).Text("你进入永久小黑屋，可联系群管解除"), auto_retract)
 						}
 					}
 					break
@@ -294,7 +294,7 @@ func Router() {
 					user_id := ga.TargetId
 					if len(GroupBanPermenentModel.Api_find(group_id, user_id)) > 0 {
 						GroupBanPermenentModel.Api_delete(group_id, user_id)
-						go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.At(user_id).Text("你已经脱离永久小黑屋了"), auto_retract)
+						go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().At(user_id).Text("你已经脱离永久小黑屋了"), auto_retract)
 					}
 					break
 				}

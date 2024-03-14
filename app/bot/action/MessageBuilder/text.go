@@ -4,8 +4,7 @@ type text struct {
 	Text string `json:"text"`
 }
 
-func (self IMessageBuilder) Text(Message string) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Text(Message string) *IMessageBuilder {
 	self.message = append(self.message, iMessage[text]{
 		Type: "text",
 		Data: text{

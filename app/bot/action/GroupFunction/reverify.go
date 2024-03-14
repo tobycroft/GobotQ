@@ -18,21 +18,21 @@ import (
 func App_reverify(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 	_, err := reverify(self_id, group_id, user_id, message, false, false)
 	if err != nil {
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 	}
 }
 
 func App_reverify_death(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 	_, err := reverify(self_id, group_id, user_id, message, true, false)
 	if err != nil {
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 	}
 }
 
 func App_reverify_force(self_id, group_id, user_id, message_id int64, message string, groupmember map[string]any, groupfunction map[string]any) {
 	_, err := reverify(self_id, group_id, user_id, message, false, true)
 	if err != nil {
-		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 	}
 }
 
@@ -65,7 +65,7 @@ func reverify(self_id, group_id, user_id int64, send_to_message string, kick, fo
 		if err != nil {
 			return "", err
 		}
-		msg := MessageBuilder.IMessageBuilder{}.At(member["user_id"]).Text("你已被临时解禁，请在120秒内在群内输入验证码数字：\n" + Calc.Any2String(num))
+		msg := MessageBuilder.IMessageBuilder{}.New().New().At(member["user_id"]).Text("你已被临时解禁，请在120秒内在群内输入验证码数字：\n" + Calc.Any2String(num))
 		go iapi.Api.SendGroupMsg(self_id, group_id, msg, true)
 		go func(self_id, group_id, user_id int64, kick bool) {
 			time.Sleep(120 * time.Second)
@@ -73,7 +73,7 @@ func reverify(self_id, group_id, user_id int64, send_to_message string, kick, fo
 			if err != nil {
 			} else {
 				if ok {
-					msg := MessageBuilder.IMessageBuilder{}.At(member["user_id"]).Text("看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除")
+					msg := MessageBuilder.IMessageBuilder{}.New().New().At(member["user_id"]).Text("看起来你没有完成活人验证，我现在将你加入永久小黑屋，但是你依然可以让其他管理员帮你解除")
 					go iapi.Api.SendGroupMsg(self_id, group_id, msg, true)
 					if kick {
 						iapi.Api.SetGroupKick(self_id, group_id, user_id, false)

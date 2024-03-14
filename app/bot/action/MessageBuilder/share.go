@@ -8,8 +8,7 @@ type share struct {
 	File    string `json:"file"`
 }
 
-func (self IMessageBuilder) Share(Url, Title, Content, Image, File string) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Share(Url, Title, Content, Image, File string) *IMessageBuilder {
 	self.message = append(self.message, iMessage[share]{
 		Type: "share",
 		Data: share{

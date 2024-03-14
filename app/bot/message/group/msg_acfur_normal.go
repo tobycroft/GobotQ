@@ -72,9 +72,9 @@ func group_message_normal() {
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
-						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(err.Error()), groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.At(user_id).Text(ai_reply.Echo), groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(ai_reply.Echo), groupfunction)
 					}
 				}
 			}
@@ -88,7 +88,7 @@ func group_message_normal() {
 					if num > groupFunction["repeat_count"].(int64) {
 						GroupFunction.App_ban_user(selfId, groupId, userId, groupfunction["auto_retract"].(int64) == 1, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
 					} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
-						GroupFunction.AutoMessage(selfId, groupId, userId, MessageBuilder.IMessageBuilder{}.At(userId).Text(Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容"), groupFunction)
+						GroupFunction.AutoMessage(selfId, groupId, userId, MessageBuilder.IMessageBuilder{}.New().At(userId).Text(Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容"), groupFunction)
 					}
 				}
 			}(self_id, group_id, user_id, groupfunction)
@@ -111,18 +111,18 @@ func group_message_normal() {
 						}
 
 						ps.Publish_struct(types.RetractChannel, rm)
-						iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.At(userId).Text("验证成功"+str), true)
+						iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.New().At(userId).Text("验证成功"+str), true)
 					} else {
-						iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.At(userId).Text("你的输入不正确，需要输入："+Calc.Any2String(code)), true)
+						iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.New().At(userId).Text("你的输入不正确，需要输入："+Calc.Any2String(code)), true)
 					}
 				}
 
 				if Redis.CheckExists("ban_" + Calc.Any2String(groupId) + "_" + Calc.Any2String(userId)) {
 					ps.Publish_struct(types.RetractChannel, rm)
-					GroupFunction.AutoMessage(selfId, groupId, userId, MessageBuilder.IMessageBuilder{}.At(userId).Text("请尽快输入"+Calc.Any2String(code)), groupFunction)
+					GroupFunction.AutoMessage(selfId, groupId, userId, MessageBuilder.IMessageBuilder{}.New().At(userId).Text("请尽快输入"+Calc.Any2String(code)), groupFunction)
 				} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
 					ps.Publish_struct(types.RetractChannel, rm)
-					msg := MessageBuilder.IMessageBuilder{}.Text("你现在处于永久小黑屋中，请让管理员使用acfur重新验证").At(user_id).Text("，来脱离当前状态")
+					msg := MessageBuilder.IMessageBuilder{}.New().New().Text("你现在处于永久小黑屋中，请让管理员使用acfur重新验证").At(user_id).Text("，来脱离当前状态")
 					go iapi.Api.SendGroupMsg(self_id, group_id, msg, true)
 				}
 			}(self_id, group_id, user_id, groupfunction)

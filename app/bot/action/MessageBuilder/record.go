@@ -4,8 +4,7 @@ type record struct {
 	File string `json:"file"`
 }
 
-func (self IMessageBuilder) Record(File string) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Record(File string) *IMessageBuilder {
 	self.message = append(self.message, iMessage[record]{
 		Type: "record",
 		Data: record{

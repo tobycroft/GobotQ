@@ -6,11 +6,11 @@ import (
 )
 
 func Not_admin(bot, gid, uid int64) {
-	msg := MessageBuilder.IMessageBuilder{}.Text("你不是本群的管理员，无法使用本功能").At(uid)
+	msg := MessageBuilder.IMessageBuilder{}.New().New().Text("你不是本群的管理员，无法使用本功能").At(uid)
 	go iapi.Api.SendGroupMsg(bot, gid, msg, true)
 }
 
 func Not_owner(bot, gid, uid int64) {
-	msg := MessageBuilder.IMessageBuilder{}.Text("本功能仅限群主执行").At(uid)
+	msg := MessageBuilder.IMessageBuilder{}.New().New().Text("本功能仅限群主执行").At(uid)
 	go iapi.Api.SendGroupMsg(bot, gid, msg, true)
 }

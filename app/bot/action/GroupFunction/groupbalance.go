@@ -35,7 +35,7 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	var gpm GroupBalanceModel.Interface
 	gpm.Db = tuuz.Db()
 	gbl := gpm.Api_find(group_id, user_id)
-	go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.At(user_id).Text("您当前拥有"+Calc.Any2String(gbl["balance"])+"分"), auto_retract)
+	go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().At(user_id).Text("您当前拥有"+Calc.Any2String(gbl["balance"])+"分"), auto_retract)
 }
 
 func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
@@ -67,5 +67,5 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 			}
 		}
 	}
-	go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text(str), auto_retract)
+	go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(str), auto_retract)
 }

@@ -9,8 +9,7 @@ type music struct {
 	Image  string `json:"image"`
 }
 
-func (self IMessageBuilder) Music(Type string, Url string, Audio string, Title string, Singer string, Image string) IMessageBuilder {
-	self.New()
+func (self *IMessageBuilder) Music(Type string, Url string, Audio string, Title string, Singer string, Image string) *IMessageBuilder {
 	self.message = append(self.message, iMessage[music]{
 		Type: Type,
 		Data: music{

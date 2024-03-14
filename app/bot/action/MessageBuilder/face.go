@@ -1,17 +1,36 @@
 package MessageBuilder
 
-type Face struct {
-	Type string `json:"type"`
-	Data struct {
-		Id  int64 `json:"id"`
-		Big bool  `json:"big"`
-	} `json:"data"`
+import "github.com/tobycroft/Calc"
+
+type face struct {
+	Id  int64 `json:"id"`
+	Big bool  `json:"big"`
 }
 
-type BubbleFace struct {
-	Type string `json:"type"`
-	Data struct {
-		Id    int64 `json:"id"`
-		Count int64 `json:"count"`
-	} `json:"data"`
+type bubbleFace struct {
+	Id    int64 `json:"id"`
+	Count int64 `json:"count"`
+}
+
+func (self IMessageBuilder) Face(Id int64) IMessageBuilder {
+	self.Message = append(self.Message, iMessage[face]{
+		Type: "face",
+		Data: face{
+			Id: Id,
+		},
+	})
+	self.RawMessage.WriteString("[CQ:face,id=" + Calc.Any2String(Id) + "]")
+	return self
+}
+
+func (self IMessageBuilder) BubbleFace(Id, Count int64) IMessageBuilder {
+	self.Message = append(self.Message, iMessage[bubbleFace]{
+		Type: "bubble_face",
+		Data: bubbleFace{
+			Id:    Id,
+			Count: Count,
+		},
+	})
+	self.RawMessage.WriteString("[CQ:bubble_face,id=" + Calc.Any2String(Id) + ",count=" + Calc.Any2String(Count) + "]")
+	return self
 }

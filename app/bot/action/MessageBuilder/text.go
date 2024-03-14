@@ -1,8 +1,16 @@
 package MessageBuilder
 
-type Text struct {
-	Type string `json:"type"`
-	Data struct {
-		Text int64 `json:"text"`
-	} `json:"data"`
+type text struct {
+	Text string `json:"text"`
+}
+
+func (self IMessageBuilder) Text(Message string) IMessageBuilder {
+	self.Message = append(self.Message, iMessage[text]{
+		Type: "text",
+		Data: text{
+			Text: Message,
+		},
+	})
+	self.RawMessage.WriteString(Message)
+	return self
 }

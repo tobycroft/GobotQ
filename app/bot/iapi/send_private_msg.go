@@ -47,6 +47,7 @@ func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[strin
 	pss.SelfId = Self_id
 	pss.UserId = UserId
 	pss.Message = Message
+
 	pss.RawMessage = RawMessage
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract

@@ -3,6 +3,7 @@ package private
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogErrorModel"
@@ -46,7 +47,7 @@ func Router() {
 			//	continue
 			//}
 			if botinfo["end_date"].(time.Time).Before(time.Now()) {
-				iapi.Api.SendPrivateMsg(pm.SelfId, pm.UserId, 0, app_default.Default_over_time, false)
+				iapi.Api.SendPrivateMsg(pm.SelfId, pm.UserId, 0, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_over_time), false)
 				continue
 			}
 

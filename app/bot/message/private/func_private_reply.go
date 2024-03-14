@@ -1,6 +1,7 @@
 package private
 
 import (
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
@@ -17,7 +18,8 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 			if auto_reply["value"] == nil {
 				continue
 			}
-			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, auto_reply["value"].(string), true)
+			msg := MessageBuilder.IMessageBuilder{}.Text(auto_reply["value"].(string))
+			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, true)
 			break
 		}
 	}
@@ -33,7 +35,8 @@ func private_default_reply(selfId, user_id, group_id int64, message string) bool
 			if auto_reply["value"] == nil {
 				continue
 			}
-			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, auto_reply["value"].(string), false)
+			msg := MessageBuilder.IMessageBuilder{}.Text(auto_reply["value"].(string))
+			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, false)
 			return true
 		}
 	}

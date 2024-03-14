@@ -1,6 +1,7 @@
 package iapi
 
 import (
+	"main.go/app/bot/action/MessageBuilder"
 	"sync"
 	"time"
 )
@@ -36,11 +37,11 @@ type IfaceApi interface {
 	GetGroupMemberList(self_id, group_id int64) ([]GroupMemberList, error)
 	GetLoginInfo(self_id int64) (LoginInfo, error)
 	GetStrangerInfo(self_id, user_id int64, no_cache bool) (UserInfo, error)
-	SendGroupMsg(Self_id, Group_id int64, Message string, AutoRetract bool)
-	SendGroupMsgWithTime(Self_id, Group_id int64, Message string, AutoRetract bool, Time time.Duration)
+	SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool)
+	SendGroupMsgWithTime(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration)
 	Send_group()
-	SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool)
-	SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool, Time time.Duration)
+	SendPrivateMsg(Self_id, UserId, GroupId int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool)
+	SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration)
 	Send_private()
 	SetFriendAddRequest(self_id int64, flag any, approve bool, remark any) (bool, error)
 	SetGroupAddRequestRet(self_id int64, flag, sub_type any, approve bool, reason string) (bool, error)

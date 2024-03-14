@@ -3,10 +3,10 @@ package GroupFunction
 import (
 	"github.com/tobycroft/Calc"
 	"github.com/tobycroft/gorose-pro"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBalanceModel"
 	"main.go/app/bot/model/GroupMemberModel"
-	"main.go/app/bot/service"
 	"main.go/config/app_conf"
 	"main.go/config/types"
 	"main.go/tuuz"
@@ -35,9 +35,7 @@ func App_check_balance(self_id, group_id, user_id, message_id int64, groupmember
 	var gpm GroupBalanceModel.Interface
 	gpm.Db = tuuz.Db()
 	gbl := gpm.Api_find(group_id, user_id)
-	at := service.Serv_at(user_id)
-	str := at + "您当前拥有" + Calc.Any2String(gbl["balance"]) + "分"
-	go iapi.Api.SendGroupMsg(self_id, group_id, str, auto_retract)
+	go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.At(user_id).Text("您当前拥有"+Calc.Any2String(gbl["balance"])+"分"), auto_retract)
 }
 
 func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember map[string]any, groupfunction map[string]any) {
@@ -69,5 +67,5 @@ func App_check_rank(self_id, group_id, user_id, message_id int64, groupmember ma
 			}
 		}
 	}
-	go iapi.Api.SendGroupMsg(self_id, group_id, str, auto_retract)
+	go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text(str), auto_retract)
 }

@@ -10,7 +10,7 @@ type music struct {
 }
 
 func (self IMessageBuilder) Music(Type string, Url string, Audio string, Title string, Singer string, Image string) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[music]{
+	self.message = append(self.message, iMessage[music]{
 		Type: Type,
 		Data: music{
 			Url:    Url,
@@ -20,6 +20,6 @@ func (self IMessageBuilder) Music(Type string, Url string, Audio string, Title s
 			Image:  Image,
 		},
 	})
-	self.RawMessage.WriteString("[CQ:music,type=" + Type + ",url=" + Url + ",audio=" + Audio + ",title=" + Title + ",singer=" + Singer + ",image=" + Image + "]")
+	self.raw_message.WriteString("[CQ:music,type=" + Type + ",url=" + Url + ",audio=" + Audio + ",title=" + Title + ",singer=" + Singer + ",image=" + Image + "]")
 	return self
 }

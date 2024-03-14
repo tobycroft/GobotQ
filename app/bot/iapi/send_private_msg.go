@@ -9,6 +9,7 @@ import (
 	"log"
 	"main.go/app/bot/action/FriendListAction"
 	"main.go/app/bot/action/GroupMemberAction"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogSendModel"
 	"main.go/config/app_conf"
@@ -30,25 +31,24 @@ type Message struct {
 	MessageId int64 `json:"message_id"`
 }
 
-func (api Post) SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool) {
+func (api Post) SendPrivateMsg(Self_id, UserId, GroupId int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
-	pss.Message = Message
-	pss.RawMessage = RawMessage
+	pss.Message = Message.BuildMessage()
+	pss.RawMessage = Message.BuildRawMessage()
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = app_conf.Retract_time_duration
 
 	Redis.PubSub{}.Publish_struct(types.SendPrivateChannel, pss)
 }
-func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool) {
+func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
-	pss.Message = Message
-
-	pss.RawMessage = RawMessage
+	pss.Message = Message.BuildMessage()
+	pss.RawMessage = Message.BuildRawMessage()
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = app_conf.Retract_time_duration
@@ -56,12 +56,12 @@ func (api Ws) SendPrivateMsg(Self_id, UserId, GroupId int64, Message []map[strin
 	Redis.PubSub{}.Publish_struct(types.SendPrivateChannel, pss)
 }
 
-func (api Post) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool, Time time.Duration) {
+func (api Post) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
-	pss.Message = Message
-	pss.RawMessage = RawMessage
+	pss.Message = Message.BuildMessage()
+	pss.RawMessage = Message.BuildRawMessage()
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = Time
@@ -69,12 +69,12 @@ func (api Post) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message [
 	Redis.PubSub{}.Publish_struct(types.SendPrivateChannel, pss)
 }
 
-func (api Ws) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message []map[string]string, RawMessage string, AutoRetract bool, Time time.Duration) {
+func (api Ws) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
 	var pss PrivateSendStruct
 	pss.SelfId = Self_id
 	pss.UserId = UserId
-	pss.Message = Message
-	pss.RawMessage = RawMessage
+	pss.Message = Message.BuildMessage()
+	pss.RawMessage = Message.BuildRawMessage()
 	pss.GroupId = GroupId
 	pss.AutoRetract = AutoRetract
 	pss.RetractTime = Time
@@ -83,13 +83,13 @@ func (api Ws) SendPrivateMsgWithTime(Self_id, UserId, GroupId int64, Message []m
 }
 
 type PrivateSendStruct struct {
-	SelfId      int64               `json:"self_id"`
-	GroupId     int64               `json:"group_id"`
-	UserId      int64               `json:"user_id"`
-	Message     []map[string]string `json:"message"`
-	RawMessage  string              `json:"raw_message"`
-	AutoRetract bool                `json:"auto_retract"`
-	RetractTime time.Duration       `json:"retract_time"`
+	SelfId      int64         `json:"self_id"`
+	GroupId     int64         `json:"group_id"`
+	UserId      int64         `json:"user_id"`
+	Message     []any         `json:"message"`
+	RawMessage  string        `json:"raw_message"`
+	AutoRetract bool          `json:"auto_retract"`
+	RetractTime time.Duration `json:"retract_time"`
 }
 
 func (api Post) Send_private() {

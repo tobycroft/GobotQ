@@ -2,6 +2,7 @@ package cron
 
 import (
 	"github.com/tobycroft/Calc"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupListModel"
 	"main.go/app/v1/group/model/AutoSendModel"
@@ -53,6 +54,6 @@ func auto_send() {
 		if len(group) < 1 {
 			return
 		}
-		go iapi.Api.SendGroupMsg(group["self_id"].(int64), data["group_id"].(int64), Calc.Any2String(data["msg"]), auto_retract)
+		go iapi.Api.SendGroupMsg(group["self_id"].(int64), data["group_id"].(int64), MessageBuilder.IMessageBuilder{}.Text(Calc.Any2String(data["msg"])), auto_retract)
 	}
 }

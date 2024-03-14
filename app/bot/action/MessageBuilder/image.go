@@ -5,12 +5,12 @@ type image struct {
 }
 
 func (self IMessageBuilder) Image(File string) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[image]{
+	self.message = append(self.message, iMessage[image]{
 		Type: "image",
 		Data: image{
 			File: File,
 		},
 	})
-	self.RawMessage.WriteString("[CQ:image,file=" + File + "]")
+	self.raw_message.WriteString("[CQ:image,file=" + File + "]")
 	return self
 }

@@ -2,6 +2,7 @@ package GroupFunction
 
 import (
 	"github.com/tobycroft/Calc"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/model/GroupFunctionDetailModel"
 	"main.go/app/bot/model/GroupFunctionModel"
 
@@ -38,14 +39,14 @@ func App_group_function_get_all(self_id, group_id, user_id int64, message string
 
 		str += "\r\n"
 	}
-	AutoMessage(self_id, group_id, user_id, str, groupfunction)
+	AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), groupfunction)
 }
 
 func App_group_function_set(self_id, group_id, user_id int64, message string, groupfunction map[string]any) {
 	i1 := strings.Index(message, ":")
 	i2 := strings.Index(message, "：")
 	if i1 == i2 {
-		AutoMessage(self_id, group_id, user_id, "如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开", groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\n\"acfur设定入群欢迎：开"), groupfunction)
 		return
 	}
 	strs := []string{}
@@ -79,13 +80,13 @@ func App_group_function_set(self_id, group_id, user_id int64, message string, gr
 			if len(set) > 0 {
 				i, err := Calc.Any2Int_2(set)
 				if err != nil {
-					AutoMessage(self_id, group_id, user_id, name+"只能设定为数字整数,请调整为数字整数", groupfunction)
+					AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"只能设定为数字整数,请调整为数字整数"), groupfunction)
 					return
 				} else {
 					value = i
 				}
 			} else {
-				AutoMessage(self_id, group_id, user_id, name+"的设定有误，例子：acfur设定"+name+":"+"数字", groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"的设定有误，例子：acfur设定"+name+":"+"数字"), groupfunction)
 				return
 			}
 			break
@@ -94,21 +95,21 @@ func App_group_function_set(self_id, group_id, user_id int64, message string, gr
 			if len(set) > 0 {
 				value = set
 			} else {
-				AutoMessage(self_id, group_id, user_id, name+"的设定有误，例子：acfur设定"+name+":"+"你要设定的文字", groupfunction)
+				AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"的设定有误，例子：acfur设定"+name+":"+"你要设定的文字"), groupfunction)
 			}
 			break
 
 		default:
-			AutoMessage(self_id, group_id, user_id, name+"需要有设定项，你可以使用acfur设定"+name+":"+"设定值，对该功能进行设定", groupfunction)
+			AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"需要有设定项，你可以使用acfur设定"+name+":"+"设定值，对该功能进行设定"), groupfunction)
 			return
 		}
 		if GroupFunctionModel.Api_update(group_id, detail["key"], value) {
-			AutoMessage(self_id, group_id, user_id, name+"设定成功为"+":"+set, groupfunction)
+			AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"设定成功为"+":"+set), groupfunction)
 		} else {
-			AutoMessage(self_id, group_id, user_id, name+"设定失败", groupfunction)
+			AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"设定失败"), groupfunction)
 		}
 	} else {
-		AutoMessage(self_id, group_id, user_id, name+"没有找到对应的设定项目，\r\n如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\nacfur设定入群欢迎：开", groupfunction)
+		AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(name+"没有找到对应的设定项目，\r\n如果需要设定，请使用acfur设定设定内容：设定结果，例如\r\nacfur设定入群欢迎：开"), groupfunction)
 	}
 }
 

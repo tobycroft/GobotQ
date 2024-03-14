@@ -7,10 +7,10 @@ type basketball struct {
 }
 
 func (self IMessageBuilder) Basketball(Id int64) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[basketball]{
+	self.message = append(self.message, iMessage[basketball]{
 		Type: "basketball",
 		Data: basketball{Id: Id},
 	})
-	self.RawMessage.WriteString("[CQ:basketball,id=" + Calc.Any2String(Id) + "]")
+	self.raw_message.WriteString("[CQ:basketball,id=" + Calc.Any2String(Id) + "]")
 	return self
 }

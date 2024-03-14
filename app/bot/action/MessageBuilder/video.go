@@ -5,12 +5,12 @@ type video struct {
 }
 
 func (self IMessageBuilder) Video(File string) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[video]{
+	self.message = append(self.message, iMessage[video]{
 		Type: "video",
 		Data: video{
 			File: File,
 		},
 	})
-	self.RawMessage.WriteString("[CQ:video,file=" + File + "]")
+	self.raw_message.WriteString("[CQ:video,file=" + File + "]")
 	return self
 }

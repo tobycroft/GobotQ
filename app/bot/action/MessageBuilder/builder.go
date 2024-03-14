@@ -5,8 +5,8 @@ import (
 )
 
 type IMessageBuilder struct {
-	Message    []any
-	RawMessage strings.Builder
+	message     []any
+	raw_message strings.Builder
 }
 
 type iMessage[T im] struct {
@@ -15,15 +15,18 @@ type iMessage[T im] struct {
 }
 
 type im interface {
-	at | basketball | caiquan | face | bubbleFace | image | music | poke | pokeDoubleTap | record | reply | text | touzi | url | video
+	at | basketball | caiquan | face | bubbleFace | image | music | poke | pokeDoubleTap | record | reply | text | touzi | share | video
 }
 
 func (self IMessageBuilder) New() IMessageBuilder {
-	self.Message = make([]any, 0)
-	self.RawMessage = strings.Builder{}
+	self.message = make([]any, 0)
+	self.raw_message = strings.Builder{}
 	return self
 }
 
 func (self IMessageBuilder) BuildRawMessage() string {
-	return self.RawMessage.String()
+	return self.raw_message.String()
+}
+func (self IMessageBuilder) BuildMessage() []any {
+	return self.message
 }

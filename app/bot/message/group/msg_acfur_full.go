@@ -5,6 +5,7 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupFunction"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBanPermenentModel"
 	"main.go/app/bot/model/GroupFunctionModel"
@@ -78,27 +79,27 @@ func group_message_acfur_when_fully_matched() {
 				switch new_text {
 
 				case "":
-					go iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings+time.Now().Format("2006-01-02 15:04:05"), true)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_greetings), groupfunction)
 					break
 
 				case "交易":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_trade, groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_trade), groupfunction)
 					break
 
 				case "道具", "商店", "商城":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_daoju, groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_daoju), groupfunction)
 					break
 
 				case "轮盘":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_lunpan_help, groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_lunpan_help), groupfunction)
 					break
 
 				case "help":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_group_help, groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_group_help), groupfunction)
 					break
 
 				case "app":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_app_download_url, groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_app_download_url), groupfunction)
 					break
 
 				case "设定":
@@ -110,15 +111,15 @@ func group_message_acfur_when_fully_matched() {
 					break
 
 				case "刷新":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "可以使用“刷新人数”以及“刷新群信息”来控制刷新", groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("可以使用“刷新人数”以及“刷新群信息”来控制刷新"), groupfunction)
 					break
 
 				case "权限", "查看权限":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "我当前的权限为："+GroupFunction.BotPowerRefresh(group_id, self_id), groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("我当前的权限为："+GroupFunction.BotPowerRefresh(group_id, self_id)), groupfunction)
 					break
 
 				case "我的权限":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "我当前的管理权限为："+Calc.Any2String(admin)+"\n群主权限为："+Calc.Any2String(owner), groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("我当前的管理权限为："+Calc.Any2String(admin)+"\n群主权限为："+Calc.Any2String(owner)), groupfunction)
 					break
 
 				case "查询群主", "查看群主", "呼叫群主":
@@ -128,16 +129,17 @@ func group_message_acfur_when_fully_matched() {
 					}
 					owner_data := GroupMemberModel.Api_find_owner(self_id, group_id)
 					if len(owner_data) > 0 {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "本群群主为："+service.Serv_at(owner_data["user_id"]), groupfunction)
+
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("本群群主为：").At(owner_data["user_id"]), groupfunction)
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "本群未找到群主", groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("本群未找到群主"), groupfunction)
 					}
 					break
 
 				case "随机数测试":
 					rand1 := Calc.Rand(1, 100)
 					rand2 := Calc.Rand(1, 100)
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "随机数1："+Calc.Any2String(rand1)+"\n随机数2："+Calc.Any2String(rand2), groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("随机数1："+Calc.Any2String(rand1)+"\n随机数2："+Calc.Any2String(rand2)), groupfunction)
 					break
 
 				case "刷新人数", "刷新群成员":
@@ -148,7 +150,7 @@ func group_message_acfur_when_fully_matched() {
 						}
 					}
 					GroupFunction.App_refreshmember(self_id, group_id)
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "群用户已经刷新", groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("群用户已经刷新"), groupfunction)
 					break
 
 				case "刷新群信息":
@@ -157,7 +159,7 @@ func group_message_acfur_when_fully_matched() {
 						break
 					}
 					GroupFunction.App_refresh_groupinfo(self_id, group_id)
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "群信息刷新完成", groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("群信息刷新完成"), groupfunction)
 					break
 
 				case "测试撤回":
@@ -184,16 +186,16 @@ func group_message_acfur_when_fully_matched() {
 					if err != nil {
 
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, py, groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(py), groupfunction)
 					}
 					break
 
 				case "测试自动撤回":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计"+Calc.Any2String(app_conf.Retract_time_duration/time.Second+3)+"秒后撤回", groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("自动撤回测试中……预计"+Calc.Any2String(app_conf.Retract_time_duration/time.Second+3)+"秒后撤回"), groupfunction)
 					break
 
 				case "测试立即撤回":
-					GroupFunction.AutoMessage(self_id, group_id, user_id, "自动撤回测试中……预计0秒后撤回", groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("自动撤回测试中……预计0秒后撤回"), groupfunction)
 					break
 
 				case "屏蔽":
@@ -201,7 +203,7 @@ func group_message_acfur_when_fully_matched() {
 						service.Not_admin(self_id, group_id, user_id)
 						break
 					}
-					GroupFunction.AutoMessage(self_id, group_id, user_id, app_default.Default_str_ban_word, groupfunction)
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_str_ban_word), groupfunction)
 					break
 
 				case "屏蔽词":
@@ -234,9 +236,9 @@ func group_message_acfur_when_fully_matched() {
 						break
 					}
 					if GroupBanPermenentModel.Api_delete_byGroupId(group_id) {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "小黑屋已经清除", groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("小黑屋已经清除"), groupfunction)
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "小黑屋里面没有人啦~", groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("小黑屋里面没有人啦~"), groupfunction)
 					}
 					break
 
@@ -244,11 +246,11 @@ func group_message_acfur_when_fully_matched() {
 					group_list_data := GroupListModel.Api_find(group_id)
 					if len(group_list_data) > 0 {
 						group_member_count := GroupMemberModel.Api_count_byGroupIdAndRole(group_id, nil)
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "本群人数上限为:"+Calc.Any2String(group_list_data["max_member_count"])+
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("本群人数上限为:"+Calc.Any2String(group_list_data["max_member_count"])+
 							"\n当前人数为"+Calc.Any2String(group_member_count)+
-							",\n如需清理请执行:acfur群人数清理", groupfunction)
+							",\n如需清理请执行:acfur群人数清理"), groupfunction)
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "未找到本群，请使用acfur刷新群信息", groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("未找到本群，请使用acfur刷新群信息"), groupfunction)
 					}
 					break
 
@@ -258,7 +260,7 @@ func group_message_acfur_when_fully_matched() {
 						break
 					}
 					if Redis.CheckExists("__lock__group_id__" + Calc.Any2String(group_id)) {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, "执行中请稍等", groupfunction)
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text("执行中请稍等"), groupfunction)
 					} else {
 						Redis.String_set("__lock__group_id__"+Calc.Any2String(group_id), 1, 60*time.Second)
 						GroupFunction.App_drcrease_member(self_id, group_id, user_id, groupfunction, "")

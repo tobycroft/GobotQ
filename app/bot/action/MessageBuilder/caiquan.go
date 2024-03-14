@@ -7,12 +7,12 @@ type caiquan struct {
 }
 
 func (self IMessageBuilder) Caiquan(Id int64) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[caiquan]{
+	self.message = append(self.message, iMessage[caiquan]{
 		Type: "new_rps",
 		Data: caiquan{
 			Id: Id,
 		},
 	})
-	self.RawMessage.WriteString("[CQ:new_rps,qq=" + Calc.Any2String(Id) + "]")
+	self.raw_message.WriteString("[CQ:new_rps,qq=" + Calc.Any2String(Id) + "]")
 	return self
 }

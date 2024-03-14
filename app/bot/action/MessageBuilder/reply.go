@@ -7,12 +7,12 @@ type reply struct {
 }
 
 func (self IMessageBuilder) Reply(MessageId int64) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[reply]{
+	self.message = append(self.message, iMessage[reply]{
 		Type: "reply",
 		Data: reply{
 			Id: MessageId,
 		},
 	})
-	self.RawMessage.WriteString("[CQ:reply,id=" + Calc.Any2String(MessageId) + "]")
+	self.raw_message.WriteString("[CQ:reply,id=" + Calc.Any2String(MessageId) + "]")
 	return self
 }

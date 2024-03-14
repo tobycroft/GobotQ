@@ -1,28 +1,18 @@
 package service
 
 import (
-	"github.com/tobycroft/Calc"
 	"regexp"
-	"strings"
 )
 
-func Serv_at(qq any) string {
-	if Calc.Any2String(qq) != "0" {
-		return "[CQ:at,qq=" + Calc.Any2String(qq) + "] "
-	}
-	return ""
-}
+//func Serv_at(qq any) string {
+//	if Calc.Any2String(qq) != "0" {
+//		return "[CQ:at,qq=" + Calc.Any2String(qq) + "] "
+//	}
+//	return ""
+//}
 
 func Serv_at_all() string {
 	return "[CQ:at,qq=all]"
-}
-
-func Serv_is_at_me(self_id any, message string) bool {
-	return strings.Contains(message, Serv_at(self_id))
-}
-
-func Serv_is_at_me_withoutQQ(self_id any, message string) (string, bool) {
-	return strings.ReplaceAll(message, Serv_at(self_id), ""), strings.Contains(message, Serv_at(self_id))
 }
 
 func Serv_at_who(contains_at_message string) (string, string) {

@@ -5,6 +5,7 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/GroupFunction"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/service"
 	"main.go/config/app_default"
@@ -125,7 +126,7 @@ func auto_reply() {
 			//message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if str, ok := service.Serv_auto_reply(group_id, raw_message); ok {
-				iapi.Api.SendGroupMsg(self_id, group_id, str, gmr.GroupFunction["auto_retract"].(int64) == 1)
+				iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text(str), gmr.GroupFunction["auto_retract"].(int64) == 1)
 			}
 		}
 	}
@@ -146,7 +147,7 @@ func greeting_when_at_me() {
 			//message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if _, ok := service.Serv_text_match_any(raw_message, []string{"[CQ:at,qq=" + Calc.Any2String(self_id) + "]"}); ok {
-				iapi.Api.SendGroupMsg(self_id, group_id, app_default.Default_greetings, gmr.GroupFunction["auto_retract"].(int64) == 1)
+				iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.Text(app_default.Default_greetings), gmr.GroupFunction["auto_retract"].(int64) == 1)
 			}
 		}
 	}
@@ -209,7 +210,7 @@ func pal() {
 			//message_id := gm.MessageId
 			raw_message := gm.RawMessage
 			if str, ok := service.Serv_text_match(raw_message, []string{"交易"}); ok {
-				GroupFunction.App_PalWorld(self_id, group_id, user_id, str, gmr.GroupFunction)
+				GroupFunction.App_PalWorld(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.Text(str), gmr.GroupFunction)
 			}
 		}
 	}

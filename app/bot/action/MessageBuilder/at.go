@@ -6,13 +6,13 @@ type at struct {
 	Qq string `json:"qq"`
 }
 
-func (self IMessageBuilder) At(qq string) IMessageBuilder {
-	self.Message = append(self.Message, iMessage[at]{
+func (self IMessageBuilder) At(qq any) IMessageBuilder {
+	self.message = append(self.message, iMessage[at]{
 		Type: "at",
 		Data: at{
-			Qq: qq,
+			Qq: Calc.Any2String(qq),
 		},
 	})
-	self.RawMessage.WriteString("[CQ:at,qq=" + Calc.Any2String(qq) + "]")
+	self.raw_message.WriteString("[CQ:at,qq=" + Calc.Any2String(qq) + "]")
 	return self
 }

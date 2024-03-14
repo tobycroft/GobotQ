@@ -3,6 +3,7 @@ package private
 import (
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/action/Private"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotModel"
@@ -51,7 +52,7 @@ func message_setting_change_with_acfur() {
 					if int64(user_id) == Calc.Any2Int64(botinfo["owner"]) {
 						Private.App_userChangePassword(selfId, user_id, group_id, msg)
 					} else {
-						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("您未拥有这个机器人的权限，请先绑定机器人"), true)
 					}
 				} else if msg, ok := service.Serv_text_match(new_text, []string{"绑定"}); ok {
 					Private.App_bind_robot(selfId, user_id, group_id, msg)
@@ -59,22 +60,22 @@ func message_setting_change_with_acfur() {
 					if int64(user_id) == Calc.Any2Int64(botinfo["owner"]) {
 						Private.App_change_bot_secret(selfId, user_id, group_id, msg)
 					} else {
-						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("您未拥有这个机器人的权限，请先绑定机器人"), true)
 					}
 				} else if msg, ok := service.Serv_text_match(new_text, []string{"绑定群"}); ok {
 					if int64(user_id) == Calc.Any2Int64(botinfo["owner"]) {
 						Private.App_bind_group(selfId, user_id, group_id, msg)
 					} else {
-						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("您未拥有这个机器人的权限，请先绑定机器人"), true)
 					}
 				} else if msg, ok := service.Serv_text_match(new_text, []string{"解绑群"}); ok {
 					if int64(user_id) == Calc.Any2Int64(botinfo["owner"]) {
 						Private.App_unbind_group(selfId, user_id, group_id, msg)
 					} else {
-						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, "您未拥有这个机器人的权限，请先绑定机器人", true)
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("您未拥有这个机器人的权限，请先绑定机器人"), true)
 					}
 				} else {
-					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, "Hi我是Acfur！如果需要帮助请发送acfurhelp", false)
+					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.Text("Hi我是Acfur！如果需要帮助请发送acfurhelp"), false)
 				}
 			}
 		}

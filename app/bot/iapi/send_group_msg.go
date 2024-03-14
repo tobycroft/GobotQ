@@ -8,6 +8,7 @@ import (
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"log"
+	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/model/BotModel"
 	"main.go/app/bot/model/LogSendModel"
 	"main.go/config/app_conf"
@@ -17,45 +18,48 @@ import (
 	"reflect"
 
 	"main.go/tuuz/Log"
-	"net/url"
 	"time"
 )
 
-func (api Post) SendGroupMsg(Self_id, Group_id int64, Message string, AutoRetract bool) {
+func (api Post) SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
-	gss.Message = Message
+	gss.Message = Message.BuildMessage()
+	gss.RawMessage = Message.BuildRawMessage()
 	gss.AutoRetract = AutoRetract
 	gss.RetractTime = app_conf.Retract_time_duration
 
 	Redis.PubSub{}.Publish_struct(types.SendGroupChannel, gss)
 }
-func (api Post) SendGroupMsgWithTime(Self_id, Group_id int64, Message string, AutoRetract bool, Time time.Duration) {
+func (api Post) SendGroupMsgWithTime(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
-	gss.Message = Message
+	gss.Message = Message.BuildMessage()
+	gss.RawMessage = Message.BuildRawMessage()
 	gss.AutoRetract = AutoRetract
 	gss.RetractTime = Time
 
 	Redis.PubSub{}.Publish_struct(types.SendGroupChannel, gss)
 }
-func (api Ws) SendGroupMsg(Self_id, Group_id int64, Message string, AutoRetract bool) {
+func (api Ws) SendGroupMsg(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
-	gss.Message = Message
+	gss.Message = Message.BuildMessage()
+	gss.RawMessage = Message.BuildRawMessage()
 	gss.AutoRetract = AutoRetract
 	gss.RetractTime = app_conf.Retract_time_duration
 
 	Redis.PubSub{}.Publish_struct(types.SendGroupChannel, gss)
 }
-func (api Ws) SendGroupMsgWithTime(Self_id, Group_id int64, Message string, AutoRetract bool, Time time.Duration) {
+func (api Ws) SendGroupMsgWithTime(Self_id, Group_id int64, Message MessageBuilder.IMessageBuilder, AutoRetract bool, Time time.Duration) {
 	var gss GroupSendStruct
 	gss.SelfId = Self_id
 	gss.GroupId = Group_id
-	gss.Message = Message
+	gss.Message = Message.BuildMessage()
+	gss.RawMessage = Message.BuildRawMessage()
 	gss.AutoRetract = AutoRetract
 	gss.RetractTime = Time
 
@@ -65,7 +69,8 @@ func (api Ws) SendGroupMsgWithTime(Self_id, Group_id int64, Message string, Auto
 type GroupSendStruct struct {
 	SelfId      int64         `json:"self_id"`
 	GroupId     int64         `json:"group_id"`
-	Message     string        `json:"message"`
+	Message     []any         `json:"message"`
+	RawMessage  string        `json:"raw_message"`
 	AutoRetract bool          `json:"auto_retract"`
 	RetractTime time.Duration `json:"retract_time"`
 }
@@ -79,10 +84,10 @@ func (api Post) Send_group() {
 			Log.Crrs(err, tuuz.FUNCTION_ALL())
 			continue
 		}
-		if Redis.CheckExists(types.SendCheck + gss.Message) {
+		if Redis.CheckExists(types.SendCheck + gss.RawMessage) {
 			continue
 		}
-		Redis.String_set(types.SendCheck+gss.Message, true, app_conf.Retract_time_duration)
+		Redis.String_set(types.SendCheck+gss.RawMessage, true, app_conf.Retract_time_duration)
 		gmr, err := api.sendgroupmsg(gss)
 		if err != nil {
 
@@ -112,19 +117,19 @@ func (api Ws) Send_group() {
 			Log.Crrs(err, tuuz.FUNCTION_ALL())
 			continue
 		}
-		if Redis.CheckExists(types.SendCheck + gss.Message) {
+		if Redis.CheckExists(types.SendCheck + gss.RawMessage) {
 			continue
 		}
-		Redis.String_set(types.SendCheck+gss.Message, true, app_conf.Retract_time_duration)
+		Redis.String_set(types.SendCheck+gss.RawMessage, true, app_conf.Retract_time_duration)
 		api.sendgroupmsg(gss)
 	}
 }
 
 func (api Post) sendgroupmsg(gss GroupSendStruct) (Message, error) {
-	msg := url.QueryEscape(gss.Message)
+	//msg := url.QueryEscape(gss.RawMessage)
 	post := map[string]any{
 		"group_id":    gss.GroupId,
-		"message":     msg,
+		"message":     gss.Message,
 		"auto_escape": false,
 	}
 	botinfo := BotModel.Api_find(gss.SelfId)

@@ -175,7 +175,7 @@ func (api Ws) sendprivatemsg(pss PrivateSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(pss.SelfId))
 		return Message{}, errors.New("botinfo_notfound")
 	}
-	LogSendModel.Api_insert(pss.SelfId, "private", 0, pss.Message)
+	LogSendModel.Api_insert(pss.SelfId, "private", 0, pss.RawMessage)
 	_, err := FriendListAction.App_find_friendList(pss.SelfId, pss.UserId)
 	if err != nil {
 		data, err := GroupMemberAction.App_find_groupMember(pss.SelfId, pss.UserId, nil)

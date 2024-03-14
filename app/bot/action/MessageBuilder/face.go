@@ -13,17 +13,19 @@ type bubbleFace struct {
 }
 
 func (self IMessageBuilder) Face(Id int64) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[face]{
 		Type: "face",
 		Data: face{
 			Id: Id,
 		},
 	})
-	self.raw_message.WriteString("[CQ:face,id=" + Calc.Any2String(Id) + "]")
+	self.rawMessage.WriteString("[CQ:face,id=" + Calc.Any2String(Id) + "]")
 	return self
 }
 
 func (self IMessageBuilder) BubbleFace(Id, Count int64) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[bubbleFace]{
 		Type: "bubble_face",
 		Data: bubbleFace{
@@ -31,6 +33,6 @@ func (self IMessageBuilder) BubbleFace(Id, Count int64) IMessageBuilder {
 			Count: Count,
 		},
 	})
-	self.raw_message.WriteString("[CQ:bubble_face,id=" + Calc.Any2String(Id) + ",count=" + Calc.Any2String(Count) + "]")
+	self.rawMessage.WriteString("[CQ:bubble_face,id=" + Calc.Any2String(Id) + ",count=" + Calc.Any2String(Count) + "]")
 	return self
 }

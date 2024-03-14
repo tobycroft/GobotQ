@@ -7,12 +7,13 @@ type at struct {
 }
 
 func (self IMessageBuilder) At(qq any) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[at]{
 		Type: "at",
 		Data: at{
 			Qq: Calc.Any2String(qq),
 		},
 	})
-	self.raw_message.WriteString("[CQ:at,qq=" + Calc.Any2String(qq) + "]")
+	self.rawMessage.WriteString("[CQ:at,qq=" + Calc.Any2String(qq) + "]")
 	return self
 }

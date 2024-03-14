@@ -4,8 +4,11 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/gin-gonic/gin"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/app/bot/message/index"
+	"main.go/app/bot/model/LogErrorModel"
 	"main.go/config/types"
 	v1 "main.go/route/v1"
+	"main.go/tuuz"
 	"main.go/tuuz/Redis"
 )
 
@@ -15,8 +18,22 @@ func OnRoute(router *gin.Engine) {
 		//fmt.Println(string(data))
 		ok := sonic.Valid(data)
 		if ok {
-			ps := Redis.PubSub{}
-			ps.Publish(types.MessageEvent, data)
+			var es index.EventStruct
+			err := sonic.Unmarshal(data, &es)
+			if err != nil {
+				LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
+				return
+			}
+			mp := map[string]any{}
+			err = sonic.Unmarshal(data, &mp)
+			if err != nil {
+				LogErrorModel.Api_insert(err.Error(), tuuz.FUNCTION_ALL())
+				return
+			}
+			es.Json = mp
+			es.RemoteAddr = context.RemoteIP() + ":80"
+
+			Redis.PubSub{}.Publish_struct(types.MessageEvent, es)
 		}
 		context.String(200, "ok")
 	})

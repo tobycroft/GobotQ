@@ -32,7 +32,13 @@ func Router() {
 				LogErrorModel.Api_insert("bot bot found", es.RemoteAddr)
 				continue
 			}
-			ip := netip.MustParseAddrPort(es.RemoteAddr)
+
+			ip, err := netip.ParseAddrPort(es.RemoteAddr)
+			if err != nil {
+				fmt.Println("erroronip", err.Error(), es.RemoteAddr)
+				LogErrorModel.Api_insert(fmt.Sprint("errorip", es.RemoteAddr), es.SelfId)
+				continue
+			}
 			if botinfo["allow_ip"] != ip.Addr().String() {
 				LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", botinfo["allow_ip"], ip.Addr().String()), es.SelfId)
 				continue

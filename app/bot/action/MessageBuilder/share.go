@@ -9,6 +9,7 @@ type share struct {
 }
 
 func (self IMessageBuilder) Share(Url, Title, Content, Image, File string) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[share]{
 		Type: "share",
 		Data: share{
@@ -19,6 +20,6 @@ func (self IMessageBuilder) Share(Url, Title, Content, Image, File string) IMess
 			File,
 		},
 	})
-	self.raw_message.WriteString("[CQ:share,url=" + Url + ",title=" + Title + ",content=" + Content + ",image=" + Image + ",file=" + File + "]")
+	self.rawMessage.WriteString("[CQ:share,url=" + Url + ",title=" + Title + ",content=" + Content + ",image=" + Image + ",file=" + File + "]")
 	return self
 }

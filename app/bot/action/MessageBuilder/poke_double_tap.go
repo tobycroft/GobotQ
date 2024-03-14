@@ -9,12 +9,13 @@ type pokeDoubleTap struct {
 }
 
 func (self IMessageBuilder) PokeDoubleTap(qq int64) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[pokeDoubleTap]{
 		Type: "touch",
 		Data: pokeDoubleTap{
 			Id: qq,
 		},
 	})
-	self.raw_message.WriteString("[CQ:touch,id=" + Calc.Any2String(qq) + "]")
+	self.rawMessage.WriteString("[CQ:touch,id=" + Calc.Any2String(qq) + "]")
 	return self
 }

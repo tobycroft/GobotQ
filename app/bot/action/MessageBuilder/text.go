@@ -5,12 +5,13 @@ type text struct {
 }
 
 func (self IMessageBuilder) Text(Message string) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[text]{
 		Type: "text",
 		Data: text{
 			Text: Message,
 		},
 	})
-	self.raw_message.WriteString(Message)
+	self.rawMessage.WriteString(Message)
 	return self
 }

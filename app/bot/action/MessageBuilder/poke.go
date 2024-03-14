@@ -7,6 +7,7 @@ type poke struct {
 }
 
 func (self IMessageBuilder) Poke() IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[poke]{
 		Type: "poke",
 		Data: poke{
@@ -15,6 +16,6 @@ func (self IMessageBuilder) Poke() IMessageBuilder {
 			Strength: 1,
 		},
 	})
-	self.raw_message.WriteString("[CQ:poke,type=1,id=10000]")
+	self.rawMessage.WriteString("[CQ:poke,type=1,id=10000]")
 	return self
 }

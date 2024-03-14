@@ -5,12 +5,13 @@ type record struct {
 }
 
 func (self IMessageBuilder) Record(File string) IMessageBuilder {
+	self.New()
 	self.message = append(self.message, iMessage[record]{
 		Type: "record",
 		Data: record{
 			File: File,
 		},
 	})
-	self.raw_message.WriteString("[CQ:record,file=" + File + "]")
+	self.rawMessage.WriteString("[CQ:record,file=" + File + "]")
 	return self
 }

@@ -8,6 +8,7 @@ import (
 	"main.go/app/bot/model/PrivateAutoReplyModel"
 	"main.go/config/types"
 	"main.go/extend/Aigc"
+	"main.go/extend/STT"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -39,6 +40,13 @@ func message_main_handler() {
 				case "text":
 					normal_text.WriteString(msg.Data["text"])
 					break
+
+				case "record":
+					str, err := STT.Audio{}.New().SpeechToText(msg.Data["url"])
+					if err != nil {
+						break
+					}
+					normal_text.WriteString(str)
 				}
 			}
 			text := normal_text.String()

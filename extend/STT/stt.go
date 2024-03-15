@@ -9,7 +9,7 @@ import (
 )
 
 func (self *Audio) SpeechToText(file_url string) (string, error) {
-	post := Net.Post{}.SetTimeOut(100*time.Second).PostUrlXEncode("http://10.0.0.182:84/v1/tts/stt/audio", map[string]interface{}{
+	post := Net.Post{}.SetTimeOut(100*time.Second).PostUrlXEncode("http://10.0.0.182:84/v1/tts/stt/qq", map[string]interface{}{
 		"token": SystemParamModel.Api_value("aigc"),
 	}, map[string]interface{}{
 		"file": file_url,
@@ -31,6 +31,5 @@ func (self Audio) New() *Audio {
 
 type Audio struct {
 	Code int    `json:"code"`
-	Data any    `json:"data"`
 	Echo string `json:"echo"`
 }

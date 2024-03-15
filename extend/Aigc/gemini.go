@@ -22,5 +22,6 @@ func Aigc_gemini_text(text string) (AigcStruct, error) {
 
 type AigcStruct struct {
 	Code int    `json:"code"`
+	Data string `json:"data"`
 	Echo string `json:"echo"`
 }

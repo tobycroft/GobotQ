@@ -9,6 +9,7 @@ import (
 	"main.go/config/types"
 	"main.go/extend/Aigc"
 	"main.go/extend/STT"
+	"main.go/extend/TTS"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -30,7 +31,7 @@ func message_main_handler() {
 			user_id := pm.UserId
 			group_id := int64(0)
 			message := pm.Message
-
+			use_voice := false
 			normal_text := strings.Builder{}
 			for _, msg := range message {
 				switch msg.Type {
@@ -48,6 +49,7 @@ func message_main_handler() {
 						break
 					}
 					fmt.Println("语音解析", str)
+					use_voice = true
 					normal_text.WriteString(str)
 					break
 				}
@@ -64,6 +66,13 @@ func message_main_handler() {
 				auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
 				if len(auto_reply) > 0 {
 					if auto_reply["value"] != nil {
+						if use_voice {
+							rec, err := TTS.Audio{}.New().Huihui(auto_reply["value"].(string))
+							if err == nil {
+								iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
+								continue
+							}
+						}
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(auto_reply["value"].(string)), false)
 						continue
 					}
@@ -73,10 +82,16 @@ func message_main_handler() {
 				if utf8.RuneCountInString(text) > 2 {
 					ai_reply, err := Aigc.Aigc_bing_text(text)
 					if err != nil {
-						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
 						continue
+					}
+					if use_voice {
+						rec, err := TTS.Audio{}.New().Huihui(ai_reply.Data)
+						if err == nil {
+							iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
+							continue
+						}
 					}
 					iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(ai_reply.Echo), false)
 					continue

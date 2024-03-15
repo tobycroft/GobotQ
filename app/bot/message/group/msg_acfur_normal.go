@@ -42,6 +42,7 @@ func group_message_normal() {
 
 			normal_text := strings.Builder{}
 			is_at_me := false
+			use_voice := false
 			for _, msg := range message {
 				switch msg.Type {
 				case "at":
@@ -60,6 +61,7 @@ func group_message_normal() {
 						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
 						break
 					}
+					use_voice = true
 					fmt.Println("语音解析", str)
 					normal_text.WriteString(str)
 					break

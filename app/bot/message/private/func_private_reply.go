@@ -5,6 +5,7 @@ import (
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/BotDefaultReplyModel"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
+	"main.go/extend/TTS"
 	"strings"
 )
 
@@ -17,6 +18,11 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 		if strings.Contains(message, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
 				continue
+			}
+			rec, err := TTS.Audio{}.New().Huihui(auto_reply["value"].(string))
+			if err == nil {
+				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
+				break
 			}
 			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(auto_reply["value"].(string))
 			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, true)
@@ -33,6 +39,11 @@ func private_default_reply(selfId, user_id, group_id int64, message string) bool
 		}
 		if strings.Contains(message, auto_reply["key"].(string)) {
 			if auto_reply["value"] == nil {
+				continue
+			}
+			rec, err := TTS.Audio{}.New().Huihui(auto_reply["value"].(string))
+			if err == nil {
+				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
 				continue
 			}
 			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(auto_reply["value"].(string))

@@ -30,6 +30,6 @@ func (self Audio) New() *Audio {
 }
 
 type Audio struct {
-	Code int    `json:"code"`
+	Code int64  `json:"code"`
 	Echo string `json:"echo"`
 }

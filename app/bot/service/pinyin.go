@@ -13,7 +13,7 @@ type py struct {
 }
 
 func Serv_pinyin(chinese any) (string, error) {
-	data, err := Net.Post{}.PostRaw("http://www.box3.cn/developtoolbox/pinyin.php", Calc.Any2String(chinese)).RetString()
+	data, err := Net.Post{}.New().PostRaw("http://www.box3.cn/developtoolbox/pinyin.php", Calc.Any2String(chinese)).RetString()
 	if err != nil {
 		return "", err
 	}

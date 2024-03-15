@@ -25,7 +25,7 @@ func (api Post) SetGroupAddRequestRet(self_id int64, flag, sub_type any, approve
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_add_request", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/set_group_add_request", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

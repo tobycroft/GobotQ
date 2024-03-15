@@ -35,7 +35,7 @@ func (api Post) GetFriendList(self_id int64) ([]FriendList, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return nil, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_friend_list", nil, nil, nil, nil).RetString()
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/get_friend_list", nil, nil, nil, nil).RetString()
 	if err != nil {
 		return nil, err
 	}

@@ -137,7 +137,7 @@ func (api Post) sendgroupmsg(gss GroupSendStruct) (Message, error) {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(gss.SelfId))
 		return Message{}, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/send_group_msg", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/send_group_msg", nil, post, nil, nil).RetString()
 	if err != nil {
 		return Message{}, err
 	}

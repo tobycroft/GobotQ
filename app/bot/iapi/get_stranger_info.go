@@ -96,7 +96,7 @@ func (api Post) GetStrangerInfo(self_id, user_id int64, no_cache bool) (UserInfo
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return UserInfo{}, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_stranger_info", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/get_stranger_info", nil, post, nil, nil).RetString()
 	if err != nil {
 		return UserInfo{}, err
 	}

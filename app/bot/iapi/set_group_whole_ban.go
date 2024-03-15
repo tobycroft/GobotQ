@@ -27,7 +27,7 @@ func (api Post) SetGroupWholeBan(self_id, group_id int64, enable bool) (bool, er
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
 		return false, errors.New("botinfo_notfound")
 	}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/set_group_whole_ban", nil, post, nil, nil).RetString()
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/set_group_whole_ban", nil, post, nil, nil).RetString()
 	if err != nil {
 		return false, err
 	}

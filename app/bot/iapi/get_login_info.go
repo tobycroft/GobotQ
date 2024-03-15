@@ -28,7 +28,7 @@ func (api Post) GetLoginInfo(self_id int64) (LoginInfo, error) {
 		return LoginInfo{}, errors.New("botinfo_notfound")
 	}
 	//Net.WsServer_WriteChannel <- Net.WsData{}
-	data, err := Net.Post{}.PostUrlXEncode(botinfo["url"].(string)+"/get_login_info", nil, nil, nil, nil).RetString()
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/get_login_info", nil, nil, nil, nil).RetString()
 	if err != nil {
 		return LoginInfo{}, err
 	}

@@ -47,6 +47,7 @@ func message_main_handler() {
 						break
 					}
 					normal_text.WriteString(str)
+					break
 				}
 			}
 			text := normal_text.String()

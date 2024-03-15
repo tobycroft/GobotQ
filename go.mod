@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/Unknwon/goconfig v1.0.0
 	github.com/afocus/captcha v0.0.0-20191010092841-4bd1f21c8868
-	github.com/bytedance/sonic v1.11.2
+	github.com/bytedance/sonic v1.11.3
 	github.com/feiin/go-xss v1.1.6
 	github.com/gin-contrib/cors v1.6.0
 	github.com/gin-gonic/gin v1.9.1
@@ -15,7 +15,7 @@ require (
 	github.com/redis/go-redis/v9 v9.5.1
 	github.com/shopspring/decimal v1.3.1
 	github.com/tobycroft/Calc v1.3.5
-	github.com/tobycroft/TuuzNet v1.2.8
+	github.com/tobycroft/TuuzNet v1.3.2
 	github.com/tobycroft/gorose-pro v1.14.1
 )
 

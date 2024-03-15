@@ -4,16 +4,14 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
-	"github.com/tobycroft/gorose-pro"
 	"main.go/app/bot/action/GroupFunction"
 	"main.go/app/bot/cron"
 	"main.go/app/bot/logs"
 	event "main.go/app/bot/message"
 	"main.go/common/BaseController"
 	"main.go/config/app_conf"
+	"main.go/extend/STT"
 	"main.go/route"
-	"main.go/tuuz"
-	"main.go/tuuz/Jsong"
 	"os"
 	"time"
 )
@@ -74,11 +72,7 @@ func main2() {
 }
 
 func chunk_test() {
-	db := tuuz.Db().Table("bot_default_reply")
-	db.Where("id", 1)
-	db.ChunkWG(1, 1, func(data []gorose.Data) error {
-		fmt.Println(Jsong.Encode(data))
-		return nil
-	})
-
+	url := "https://27.44.121.148:443/?ver=2&rkey=3062020101045b3059020101020100020447e8852f042431387a4f784437627245326c4c334c6137756e366638236b39767558725f63475f414249020465f47d17041f0000000866696c6574797065000000013000000005636f64656300000001310400&voice_codec=1&filetype=0&client_proto=qq&client_appid=537182769&client_type=android&client_ver=8.9.88&client_down_type=auto&client_aio_type=unk"
+	str, err := STT.Audio{}.New().SpeechToText(url)
+	fmt.Println(str, err)
 }

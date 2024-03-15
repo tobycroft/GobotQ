@@ -16,6 +16,8 @@ github.com/bytedance/sonic v1.11.0 h1:FwNNv6Vu4z2Onf1++LNzxB/QhitD8wuTdpZzMTGITW
 github.com/bytedance/sonic v1.11.0/go.mod h1:iZcSUejdk5aukTND/Eu/ivjQuEL0Cu9/rf50Hi0u/g4=
 github.com/bytedance/sonic v1.11.2 h1:ywfwo0a/3j9HR8wsYGWsIWl2mvRsI950HyoxiBERw5A=
 github.com/bytedance/sonic v1.11.2/go.mod h1:iZcSUejdk5aukTND/Eu/ivjQuEL0Cu9/rf50Hi0u/g4=
+github.com/bytedance/sonic v1.11.3 h1:jRN+yEjakWh8aK5FzrciUHG8OFXK+4/KrAX/ysEtHAA=
+github.com/bytedance/sonic v1.11.3/go.mod h1:iZcSUejdk5aukTND/Eu/ivjQuEL0Cu9/rf50Hi0u/g4=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash/v2 v2.2.0 h1:DC2CZ1Ep5Y4k3ZQ899DldepgrayRUGE6BBZ/cd9Cj44=
 github.com/cespare/xxhash/v2 v2.2.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
@@ -183,6 +185,18 @@ github.com/tobycroft/TuuzNet v1.2.7 h1:a2Iz7WNhvB3pe07f6geiUdEOwjKuscYU6f4prazYa
 github.com/tobycroft/TuuzNet v1.2.7/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
 github.com/tobycroft/TuuzNet v1.2.8 h1:pmwxZMOl8vUxd4O4Nnm9I9pz7jbJmjzH3XlyayDe6Do=
 github.com/tobycroft/TuuzNet v1.2.8/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.2.9 h1:lw0Bz02jyjJf0ZP6SE62j9dXn3UGNeUr2WPicHRrh6Y=
+github.com/tobycroft/TuuzNet v1.2.9/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.2.10 h1:y/NBvaO2qkFqkI1fcTMKcKWVK3IB9xssoL0Fnvw1Y1I=
+github.com/tobycroft/TuuzNet v1.2.10/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.2.11 h1:0peFSAPbY8GCdOTtmp0KwXkXSy2GaW/qRoJYNHtbrq0=
+github.com/tobycroft/TuuzNet v1.2.11/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.3.0 h1:C+enf0/hobRr+sqQ/0+q6TlcHujXcA1Cw0TFSvGeC/8=
+github.com/tobycroft/TuuzNet v1.3.0/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.3.1 h1:HJR7UaWVh2o/o6vTiut/V5UU+YHHMiiZRqvK8e3YSSQ=
+github.com/tobycroft/TuuzNet v1.3.1/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.3.2 h1:YljaL3j36kAaYWLjZaHzNkGpDMQo0GJ870fmuDxBGCE=
+github.com/tobycroft/TuuzNet v1.3.2/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
 github.com/tobycroft/gorose-pro v1.13.2 h1:Zq8NC8eEa4f7EteMRcZnJyCUkw/CzfPqa6c2NSNPrus=
 github.com/tobycroft/gorose-pro v1.13.2/go.mod h1:dgkEvC/YbvQKdrwCDac5Xy/OllbuERFz5Q1+QNRs3lQ=
 github.com/tobycroft/gorose-pro v1.13.4 h1:HWLSJbcB6xrRdHTg5qggIOjMjDZsB/9q8Tj18WOcs3Q=

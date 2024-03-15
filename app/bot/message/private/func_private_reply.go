@@ -45,7 +45,7 @@ func private_default_reply(selfId, user_id, group_id int64, message string) bool
 			rec, err := TTS.Audio{}.New().Huihui(auto_reply["value"].(string))
 			if err == nil {
 				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
-				continue
+				return true
 			}
 			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(auto_reply["value"].(string))
 			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, false)

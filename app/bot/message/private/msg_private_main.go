@@ -44,6 +44,7 @@ func message_main_handler() {
 				case "record":
 					str, err := STT.Audio{}.New().SpeechToText(msg.Data["url"])
 					if err != nil {
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
 						break
 					}
 					normal_text.WriteString(str)

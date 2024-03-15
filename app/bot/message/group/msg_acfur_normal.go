@@ -12,6 +12,7 @@ import (
 	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/config/types"
 	"main.go/extend/Aigc"
+	"main.go/extend/STT"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -51,6 +52,16 @@ func group_message_normal() {
 
 				case "text":
 					normal_text.WriteString(msg.Data["text"])
+					break
+
+				case "record":
+					str, err := STT.Audio{}.New().SpeechToText(msg.Data["url"])
+					if err != nil {
+						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
+						break
+					}
+					fmt.Println("语音解析", str)
+					normal_text.WriteString(str)
 					break
 				}
 			}

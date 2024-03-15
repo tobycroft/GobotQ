@@ -13,6 +13,7 @@ import (
 	"main.go/config/types"
 	"main.go/extend/Aigc"
 	"main.go/extend/STT"
+	"main.go/extend/TTS"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -88,6 +89,20 @@ func group_message_normal() {
 						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 					} else {
 						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(ai_reply.Echo), groupfunction)
+					}
+				}
+			} else if use_voice {
+				ai_reply, err := Aigc.Aigc_bing_text(text)
+				if err != nil {
+					fmt.Println(err)
+					Log.Crrs(err, tuuz.FUNCTION_ALL())
+					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
+				} else {
+					rec, err := TTS.Audio{}.New().Huihui(ai_reply.Data)
+					if err != nil {
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
+					} else {
+						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
 					}
 				}
 			}

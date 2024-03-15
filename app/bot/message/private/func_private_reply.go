@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func private_auto_reply(selfId, user_id, group_id int64, message string) {
+func private_auto_reply(selfId, user_id, group_id int64, message string) bool {
 	auto_replys := PrivateAutoReplyModel.Api_select_semi(selfId)
 	for _, auto_reply := range auto_replys {
 		if auto_reply["key"] == nil {
@@ -22,13 +22,14 @@ func private_auto_reply(selfId, user_id, group_id int64, message string) {
 			rec, err := TTS.Audio{}.New().Huihui(auto_reply["value"].(string))
 			if err == nil {
 				iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
-				break
+				return true
 			}
 			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(auto_reply["value"].(string))
 			iapi.Api.SendPrivateMsg(selfId, user_id, group_id, msg, true)
-			break
+			return true
 		}
 	}
+	return false
 }
 
 func private_default_reply(selfId, user_id, group_id int64, message string) bool {

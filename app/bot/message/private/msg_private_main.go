@@ -77,7 +77,9 @@ func message_main_handler() {
 						continue
 					}
 				} else {
-					private_auto_reply(selfId, user_id, group_id, text)
+					if private_auto_reply(selfId, user_id, group_id, text) {
+						continue
+					}
 				}
 				if utf8.RuneCountInString(text) > 2 {
 					ai_reply, err := Aigc.Aigc_bing_text(text)

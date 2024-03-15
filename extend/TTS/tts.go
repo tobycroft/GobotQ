@@ -8,7 +8,7 @@ import (
 )
 
 func (self *Audio) Huihui(text string) (Audio, error) {
-	post := Net.Post{}.New().SetTimeOut(100*time.Second).PostUrlXEncode("http://tts.aerofsx.com/request_tts.php", nil, map[string]interface{}{
+	post := Net.Post{}.New().SetTimeOut(100*time.Second).PostFormData("http://tts.aerofsx.com/request_tts.php", nil, map[string]string{
 		"service": "StreamElements",
 		"voice":   "Huihui",
 		"text":    text,

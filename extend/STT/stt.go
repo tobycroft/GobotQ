@@ -8,9 +8,9 @@ import (
 )
 
 func (self *Audio) SpeechToText(file_url string) (string, error) {
-	post := Net.Post{}.New().PostUrlXEncode("http://10.0.0.182:84/v1/tts/stt/qq", map[string]interface{}{
+	post := Net.Post{}.New().PostFormData("http://10.0.0.182:84/v1/tts/stt/qq", map[string]interface{}{
 		"token": SystemParamModel.Api_value("aigc"),
-	}, map[string]interface{}{
+	}, map[string]string{
 		"url": file_url,
 	}, map[string]string{}, map[string]string{})
 	audio := Audio{}

@@ -9,9 +9,9 @@ import (
 )
 
 func Aigc_bing_text(text string) (AigcStruct, error) {
-	post := Net.Post{}.New().SetTimeOut(100*time.Second).PostUrlXEncode("http://10.0.0.182:84/v1/aigc/bing/text", map[string]interface{}{
+	post := Net.Post{}.New().SetTimeOut(100*time.Second).PostFormData("http://10.0.0.182:84/v1/aigc/bing/text", map[string]interface{}{
 		"token": SystemParamModel.Api_value("aigc"),
-	}, map[string]interface{}{
+	}, map[string]string{
 		"text": text,
 	}, map[string]string{}, map[string]string{})
 	var ag AigcStruct

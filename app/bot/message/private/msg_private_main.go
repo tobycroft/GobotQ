@@ -47,6 +47,7 @@ func message_main_handler() {
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
 						break
 					}
+					fmt.Println("语音解析", str)
 					normal_text.WriteString(str)
 					break
 				}
@@ -60,7 +61,7 @@ func message_main_handler() {
 				if private_default_reply(selfId, user_id, group_id, text) {
 					continue
 				}
-				auto_reply := PrivateAutoReplyModel.Api_find_byKey(message)
+				auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
 				if len(auto_reply) > 0 {
 					if auto_reply["value"] != nil {
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(auto_reply["value"].(string)), false)

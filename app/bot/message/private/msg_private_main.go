@@ -60,7 +60,17 @@ func message_main_handler() {
 			active := reg.MatchString(text)
 			if !active {
 				//在未激活acfur的情况下应该对原始内容进行还原
-				if private_default_reply(selfId, user_id, group_id, text) {
+				re, ok := private_default_reply(text)
+				if ok {
+					if use_voice {
+						if use_voice {
+							rec, err := TTS.Audio{}.New().Huihui(re)
+							if err == nil {
+								iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
+								continue
+							}
+						}
+					}
 					continue
 				}
 				auto_reply := PrivateAutoReplyModel.Api_find_byKey(text)
@@ -77,7 +87,17 @@ func message_main_handler() {
 						continue
 					}
 				} else {
-					if private_auto_reply(selfId, user_id, group_id, text) {
+					re, ok := private_auto_reply(selfId, text)
+					if ok {
+						if use_voice {
+							if use_voice {
+								rec, err := TTS.Audio{}.New().Huihui(re)
+								if err == nil {
+									iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), false)
+									continue
+								}
+							}
+						}
 						continue
 					}
 				}

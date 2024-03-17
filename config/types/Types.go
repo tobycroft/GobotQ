@@ -32,3 +32,5 @@ const SendGroupChannel = "SendGroupChannel:"
 const SendCheck = "SendCheck:"
 
 const SendPrivateChannel = "SendPrivateChannel:"
+
+const GetFile = "GetFile:"

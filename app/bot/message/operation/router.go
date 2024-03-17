@@ -16,7 +16,6 @@ import (
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/config/app_conf"
 	"main.go/config/types"
-	"main.go/extend/STT"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -159,10 +158,12 @@ func Router() {
 					Log.Errs(err, tuuz.FUNCTION_ALL())
 				} else {
 					if es.Json.Retcode == 0 {
-						fmt.Println("收到文件，转换成mp3")
+						fmt.Println("mp3转换完毕，申请b64返回:", es.Json.Data.Md5)
 						iapi.Api.GetFile(oe.Echo.SelfId, es.Json.Data.Md5, "mp3")
+						break
 					}
 				}
+				Redis.PubSub{}.Publish(types.GetFile+es.Json.Data.Md5, "fail")
 				break
 
 			case "get_file":
@@ -172,11 +173,12 @@ func Router() {
 					Log.Errs(err, tuuz.FUNCTION_ALL())
 				} else {
 					if es.Json.Retcode == 0 {
-						fmt.Println("收到mp3保存")
-						fmt.Println("STT", fmt.Sprint(STT.Audio{}.New().SpeechBase64ToText(es.Json.Data.Base64String)))
+						fmt.Println("收到mp3-b64保存")
+						Redis.PubSub{}.Publish(types.GetFile+es.Json.Data.Md5, es.Json.Data.Base64String)
 						//byte save to a file
 					}
 				}
+				Redis.PubSub{}.Publish(types.GetFile+es.Json.Data.Md5, "fail")
 				break
 
 			default:

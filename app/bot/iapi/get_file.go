@@ -19,6 +19,7 @@ type GetFile struct {
 type GetFileData struct {
 	File         string `json:"file"`
 	Base64String string `json:"base64String"`
+	Md5          string `json:"md5"`
 }
 
 func (api Post) GetFile(self_id int64, file string, Type string) (GetFileData, error) {
@@ -61,7 +62,7 @@ func (api Ws) GetFile(self_id int64, file string, Type string) (GetFileData, err
 			"file_type": "base64",
 		},
 		Echo: echo{
-			Action: "get_record",
+			Action: "get_file",
 			SelfId: Calc.Any2Int64(self_id),
 			Extra:  file,
 		},

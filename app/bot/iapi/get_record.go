@@ -19,6 +19,7 @@ type GetRecord struct {
 type GetRecordData struct {
 	File string `json:"file"`
 	Url  string `json:"url"`
+	Md5  string `json:"md5"`
 }
 
 func (api Post) GetRecord(self_id int64, file string, out_format string) (GetRecordData, error) {

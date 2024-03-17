@@ -16,6 +16,7 @@ import (
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/config/app_conf"
 	"main.go/config/types"
+	"main.go/extend/STT"
 	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
@@ -147,6 +148,33 @@ func Router() {
 						fmt.Println("消息撤回完成：", oe.Echo.SelfId, Calc.Any2Int64(oe.Echo.Extra))
 					} else {
 						fmt.Println("消息撤回失败：", oe.Echo.SelfId, Calc.Any2Int64(es.Json.Message))
+					}
+				}
+				break
+
+			case "get_record":
+				var es EventStruct[iapi.GetRecord]
+				err := sonic.UnmarshalString(c.Payload, &es)
+				if err != nil {
+					Log.Errs(err, tuuz.FUNCTION_ALL())
+				} else {
+					if es.Json.Retcode == 0 {
+						fmt.Println("收到文件，转换成mp3")
+						iapi.Api.GetFile(oe.Echo.SelfId, es.Json.Data.Md5, "mp3")
+					}
+				}
+				break
+
+			case "get_file":
+				var es EventStruct[iapi.GetFile]
+				err := sonic.UnmarshalString(c.Payload, &es)
+				if err != nil {
+					Log.Errs(err, tuuz.FUNCTION_ALL())
+				} else {
+					if es.Json.Retcode == 0 {
+						fmt.Println("收到mp3保存")
+						fmt.Println("STT", fmt.Sprint(STT.Audio{}.New().SpeechBase64ToText(es.Json.Data.Base64String)))
+						//byte save to a file
 					}
 				}
 				break

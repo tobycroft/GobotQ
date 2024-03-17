@@ -28,7 +28,7 @@ func (api Post) GetFile(self_id int64, file string, Type string) (GetFileData, e
 		return GetFileData{}, errors.New("botinfo_notfound")
 	}
 	//Net.WsServer_WriteChannel <- Net.WsData{}
-	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/get_record", map[string]interface{}{
+	data, err := Net.Post{}.New().PostUrlXEncode(botinfo["url"].(string)+"/get_file", map[string]interface{}{
 		"file": file,
 	}, map[string]any{
 		"file_type": "base64",
@@ -55,7 +55,7 @@ func (api Ws) GetFile(self_id int64, file string, Type string) (GetFileData, err
 		return GetFileData{}, errors.New("botinfo_notfound")
 	}
 	data, err := sonic.Marshal(sendStruct{
-		Action: "get_record",
+		Action: "get_file",
 		Params: map[string]any{
 			"file":      file,
 			"file_type": "base64",

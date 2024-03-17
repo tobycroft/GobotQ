@@ -51,4 +51,6 @@ type IfaceApi interface {
 	SetGroupKick(self_id, group_id, user_id int64, reject_add_request bool) (bool, error)
 	SetGroupLeave(self_id, group_id int64) (bool, error)
 	SetGroupWholeBan(self_id, group_id int64, enable bool) (bool, error)
+
+	GetRecord(self_id int64, file string, out_format string) (GetRecordData, error)
 }

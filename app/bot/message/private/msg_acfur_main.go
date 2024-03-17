@@ -61,7 +61,7 @@ func message_fully_attached_with_acfur() {
 
 				case "语音":
 					iapi.Api.GetRecord(self_id, "cbfa1d1718b65b5b8d48402cf49b7a82", "mp3")
-					iapi.Api.GetRecord(self_id, "cbfa1d1718b65b5b8d48402cf49b7a82", "mp3")
+					iapi.Api.GetFile(self_id, "2D66B1D869808BC76C95B7D101FD4DD5", "base64")
 					break
 
 				case "ip":

@@ -49,7 +49,7 @@ func (api Post) GetFile(self_id int64, file string, Type string) (GetFileData, e
 	}
 }
 
-func (api Ws) GetFile(self_id int64, file string, Type string) (GetFileData, error) {
+func (api Ws) GetFile(self_id int64, file string, OrginalFile string) (GetFileData, error) {
 	botinfo := BotModel.Api_find(self_id)
 	if len(botinfo) < 1 {
 		Log.Crrs(nil, "bot:"+Calc.Any2String(self_id))
@@ -64,7 +64,7 @@ func (api Ws) GetFile(self_id int64, file string, Type string) (GetFileData, err
 		Echo: echo{
 			Action: "get_file",
 			SelfId: Calc.Any2Int64(self_id),
-			Extra:  file,
+			Extra:  OrginalFile,
 		},
 	})
 	if err != nil {

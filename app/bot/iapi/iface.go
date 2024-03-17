@@ -53,5 +53,5 @@ type IfaceApi interface {
 	SetGroupWholeBan(self_id, group_id int64, enable bool) (bool, error)
 
 	GetRecord(self_id int64, file string, out_format string) (GetRecordData, error)
-	GetFile(self_id int64, file string, Type string) (GetFileData, error)
+	GetFile(self_id int64, file string, OptOriginalFile string) (GetFileData, error)
 }

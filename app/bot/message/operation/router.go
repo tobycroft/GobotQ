@@ -158,12 +158,12 @@ func Router() {
 					Log.Errs(err, tuuz.FUNCTION_ALL())
 				} else {
 					if es.Json.Retcode == 0 {
-						fmt.Println("mp3转换完毕，申请b64返回:", es.Json.Data.Md5)
-						iapi.Api.GetFile(oe.Echo.SelfId, es.Json.Data.Md5, "mp3")
+						fmt.Println("mp3转换完毕，申请b64返回:", oe.Echo.Extra, es.Json.Data.Md5)
+						iapi.Api.GetFile(oe.Echo.SelfId, es.Json.Data.Md5, Calc.Any2String(oe.Echo.Extra))
 						break
 					}
 				}
-				Redis.PubSub{}.Publish(types.GetFile+es.Json.Data.Md5, "fail")
+				Redis.PubSub{}.Publish(types.GetFile+Calc.Any2String(oe.Echo.Extra), "fail")
 				break
 
 			case "get_file":

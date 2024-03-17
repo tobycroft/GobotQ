@@ -57,15 +57,26 @@ func group_message_normal() {
 					break
 
 				case "record":
-					str, err := STT.Audio{}.New().SpeechToText(msg.Data["url"])
+					go func() {
+						time.Sleep(500 * time.Millisecond)
+						iapi.Api.GetRecord(self_id, msg.Data["file"], "mp3")
+					}()
+					fmt.Println("语音解析:", msg.Data["file"])
+					c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"])
+					fmt.Println("接收语音:", msg.Data["file"], c.Payload)
+
+					if c.Payload == "fail" {
+						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)
+						break
+					}
+					str, err := STT.Audio{}.New().SpeechBase64ToText(c.Payload)
 					if err != nil {
 						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
 						break
 					}
-					use_voice = true
 					fmt.Println("语音解析", str)
+					use_voice = true
 					normal_text.WriteString(str)
-					break
 				}
 			}
 

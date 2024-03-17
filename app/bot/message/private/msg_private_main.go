@@ -15,6 +15,7 @@ import (
 	"main.go/tuuz/Redis"
 	"regexp"
 	"strings"
+	"time"
 	"unicode/utf8"
 )
 
@@ -43,8 +44,14 @@ func message_main_handler() {
 					break
 
 				case "record":
-					go iapi.Api.GetRecord(selfId, msg.Data["file"], "base64")
+					go func() {
+						time.Sleep(500 * time.Millisecond)
+						iapi.Api.GetRecord(selfId, msg.Data["file"], "mp3")
+					}()
+					fmt.Println("语音解析:", msg.Data["file"])
 					c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"])
+					fmt.Println("接收语音:", msg.Data["file"])
+
 					if c.Payload == "fail" {
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)
 						break

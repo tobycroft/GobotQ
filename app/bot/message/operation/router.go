@@ -178,7 +178,7 @@ func Router() {
 						//byte save to a file
 					}
 				}
-				Redis.PubSub{}.Publish(types.GetFile+es.Json.Data.Md5, "fail")
+				Redis.PubSub{}.Publish(types.GetFile+Calc.Any2String(oe.Echo.Extra), "fail")
 				break
 
 			default:

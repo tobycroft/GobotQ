@@ -59,6 +59,10 @@ func message_fully_attached_with_acfur() {
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(tts.AudioUrl), false)
 					break
 
+				case "语音":
+					iapi.Api.GetRecord(self_id, "16e3bb3a878a661810701e5d78b6aeba", "mp3")
+					break
+
 				case "ip":
 					msg := MessageBuilder.IMessageBuilder{}.New().New().Text(es.RemoteAddr)
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, true)

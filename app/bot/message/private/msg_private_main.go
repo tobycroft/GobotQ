@@ -54,6 +54,7 @@ func message_main_handler() {
 					break
 				}
 			}
+
 			text := normal_text.String()
 
 			reg := regexp.MustCompile("(?i)^acfur")

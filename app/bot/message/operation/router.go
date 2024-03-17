@@ -174,7 +174,8 @@ func Router() {
 				} else {
 					if es.Json.Retcode == 0 {
 						fmt.Println("收到mp3-b64保存")
-						Redis.PubSub{}.Publish(types.GetFile+es.Json.Data.Md5, es.Json.Data.Base64String)
+						Redis.PubSub{}.Publish(types.GetFile+Calc.Any2String(oe.Echo.Extra), es.Json.Data.Base64String)
+						break
 						//byte save to a file
 					}
 				}

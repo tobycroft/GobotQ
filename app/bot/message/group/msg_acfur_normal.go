@@ -63,7 +63,7 @@ func group_message_normal() {
 					}()
 					fmt.Println("语音解析:", msg.Data["file"])
 					c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"])
-					fmt.Println("接收语音:", msg.Data["file"], c.Payload)
+					fmt.Println("接收语音:", msg.Data["file"])
 
 					if c.Payload == "fail" {
 						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)

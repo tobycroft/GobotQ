@@ -63,6 +63,7 @@ func (api Ws) GetRecord(self_id int64, file string, out_format string) (GetRecor
 		Echo: echo{
 			Action: "get_record",
 			SelfId: Calc.Any2Int64(self_id),
+			Extra:  file,
 		},
 	})
 	if err != nil {

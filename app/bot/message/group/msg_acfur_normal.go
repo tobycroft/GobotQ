@@ -67,7 +67,7 @@ func group_message_normal() {
 					fmt.Println("语音解析:", msg.Data["file"])
 					select {
 					case <-time.NewTicker(10 * time.Second).C:
-						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("语音解析超时"), false)
+						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("语音解析超时"), true)
 						break
 
 					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"]):
@@ -112,7 +112,7 @@ func group_message_normal() {
 					}
 				}
 			} else if use_voice {
-				var b chan bool
+				b := make(chan bool, 0)
 				go func() {
 					run_time := 0
 					for {

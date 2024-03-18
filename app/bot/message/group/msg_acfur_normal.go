@@ -114,24 +114,28 @@ func group_message_normal() {
 			} else if use_voice {
 				var b chan bool
 				go func() {
+					run_time := 0
 					for {
 						select {
 						case <-time.NewTicker(10 * time.Second).C:
-							usr := GroupMemberModel.Api_find(group_id, user_id)
-							name := ""
-							if len(usr) > 0 {
-								name += Calc.Any2String(usr["nickname"])
-							}
-							rec, err := TTS.Audio{}.New().Huihui("请稍等一下" + name + "，我正在生成回答，可能需要一些时间")
-							if err != nil {
-								GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
-							} else {
-								GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
+							run_time += 1
+							if run_time <= 1 {
+								usr := GroupMemberModel.Api_find(group_id, user_id)
+								name := ""
+								if len(usr) > 0 {
+									name += Calc.Any2String(usr["nickname"])
+								}
+								rec, err := TTS.Audio{}.New().Huihui("请稍等一下" + TTS.Audio{}.CleanText(name) + "，我正在生成回答，可能需要一些时间")
+								if err != nil {
+									GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
+								} else {
+									GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
+								}
 							}
 							break
 
 						case <-b:
-							break
+							return
 						}
 					}
 				}()

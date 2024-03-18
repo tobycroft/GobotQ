@@ -49,22 +49,28 @@ func message_main_handler() {
 						iapi.Api.GetRecord(selfId, msg.Data["file"], "mp3")
 					}()
 					fmt.Println("语音解析:", msg.Data["file"])
-					c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"])
-					fmt.Println("接收语音:", msg.Data["file"])
+					select {
+					case <-time.NewTicker(10 * time.Second).C:
+						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("语音解析超时"), false)
+						break
 
-					if c.Payload == "fail" {
-						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)
+					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"]):
+						fmt.Println("接收语音:", msg.Data["file"])
+						if c.Payload == "fail" {
+							iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)
+							break
+						}
+						str, err := STT.Audio{}.New().SpeechBase64ToText(c.Payload)
+						if err != nil {
+							iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
+							break
+						}
+						fmt.Println("语音解析", str)
+						use_voice = true
+						normal_text.WriteString(str)
 						break
+
 					}
-					str, err := STT.Audio{}.New().SpeechBase64ToText(c.Payload)
-					if err != nil {
-						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
-						break
-					}
-					fmt.Println("语音解析", str)
-					use_voice = true
-					normal_text.WriteString(str)
-					break
 				}
 			}
 

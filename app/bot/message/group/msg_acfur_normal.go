@@ -33,6 +33,7 @@ func group_message_normal() {
 			Log.Err(err)
 		} else {
 			gm := gmr.Json
+			groupfunction := gmr.GroupFunction
 
 			self_id := gm.SelfId
 			user_id := gm.UserId
@@ -61,26 +62,33 @@ func group_message_normal() {
 						time.Sleep(500 * time.Millisecond)
 						iapi.Api.GetRecord(self_id, msg.Data["file"], "mp3")
 					}()
-					fmt.Println("语音解析:", msg.Data["file"])
-					c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"])
-					fmt.Println("接收语音:", msg.Data["file"])
 
-					if c.Payload == "fail" {
-						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)
+					fmt.Println("语音解析:", msg.Data["file"])
+					select {
+					case <-time.NewTicker(10 * time.Second).C:
+						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("语音解析超时"), false)
 						break
-					}
-					str, err := STT.Audio{}.New().SpeechBase64ToText(c.Payload)
-					if err != nil {
-						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), false)
+
+					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"]):
+						fmt.Println("接收语音:", msg.Data["file"])
+						if c.Payload == "fail" {
+							GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), groupfunction)
+							break
+						}
+						str, err := STT.Audio{}.New().SpeechBase64ToText(c.Payload)
+						if err != nil {
+							GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
+							break
+						}
+						fmt.Println("语音解析", str)
+						use_voice = true
+						normal_text.WriteString(str)
 						break
+
 					}
-					fmt.Println("语音解析", str)
-					use_voice = true
-					normal_text.WriteString(str)
+
 				}
 			}
-
-			groupfunction := gmr.GroupFunction
 
 			var rm iapi.RetractMessage
 			rm.MessageId = message_id

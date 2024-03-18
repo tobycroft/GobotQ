@@ -9,6 +9,7 @@ import (
 	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/GroupBanPermenentModel"
+	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/redis/BanRepeatRedis"
 	"main.go/config/types"
 	"main.go/extend/Aigc"
@@ -111,19 +112,47 @@ func group_message_normal() {
 					}
 				}
 			} else if use_voice {
-				ai_reply, err := Aigc.Aigc_bing_text(text)
-				if err != nil {
-					fmt.Println(err)
-					Log.Crrs(err, tuuz.FUNCTION_ALL())
-					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
-				} else {
-					rec, err := TTS.Audio{}.New().Huihui(ai_reply.Data)
+				var b chan bool
+				go func() {
+					for {
+						select {
+						case <-time.NewTicker(10 * time.Second).C:
+							usr := GroupMemberModel.Api_find(group_id, user_id)
+							name := ""
+							if len(usr) > 0 {
+								name += Calc.Any2String(usr["nickname"])
+							}
+							rec, err := TTS.Audio{}.New().Huihui("请稍等一下" + name + "，我正在生成回答，可能需要一些时间")
+							if err != nil {
+								GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
+							} else {
+								GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
+							}
+							break
+
+						case <-b:
+							break
+						}
+					}
+				}()
+
+				go func() {
+					ai_reply, err := Aigc.Aigc_bing_text(text)
+					b <- true
 					if err != nil {
+						fmt.Println(err)
+						Log.Crrs(err, tuuz.FUNCTION_ALL())
 						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 					} else {
-						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
+						rec, err := TTS.Audio{}.New().Huihui(ai_reply.Data)
+						if err != nil {
+							GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
+						} else {
+							GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
+						}
 					}
-				}
+				}()
+
 			}
 			go func(selfId, groupId, userId int64, groupFunction gorose.Data) {
 				if Calc.Any2Int64(groupFunction["ban_repeat"]) == 1 {

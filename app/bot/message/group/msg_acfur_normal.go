@@ -129,7 +129,7 @@ func group_message_normal() {
 								if err != nil {
 									GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 								} else {
-									GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), groupfunction)
+									iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Record(rec.AudioUrl), true)
 								}
 							}
 							break

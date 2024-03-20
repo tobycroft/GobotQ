@@ -171,9 +171,8 @@ func Router() {
 									Log.Crrs(err, tuuz.FUNCTION_ALL())
 								} else {
 									msg.Record(audio.AudioUrl)
+									iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 								}
-								go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
-
 							} else {
 								msg := MessageBuilder.IMessageBuilder{}.New().Text(Calc.Any2String(groupfunction["welcome_word"]))
 								if groupfunction["welcome_at"].(int64) == 1 {

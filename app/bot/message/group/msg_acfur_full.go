@@ -15,6 +15,8 @@ import (
 	"main.go/config/app_conf"
 	"main.go/config/app_default"
 	"main.go/config/types"
+	"main.go/extend/TTS"
+	"main.go/tuuz"
 	"main.go/tuuz/Log"
 	"main.go/tuuz/Redis"
 	"regexp"
@@ -80,6 +82,23 @@ func group_message_acfur_when_fully_matched() {
 
 				case "":
 					GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(app_default.Default_greetings), groupfunction)
+					break
+
+				case "欢迎":
+					usr := GroupMemberModel.Api_find(group_id, user_id)
+					name := ""
+					if len(usr) > 0 {
+						name += Calc.Any2String(usr["nickname"])
+					}
+					msg := MessageBuilder.IMessageBuilder{}.New()
+					audio, err := TTS.Audio{}.New().Huihui(Calc.Any2String(name + "，" + Calc.Any2String(groupfunction["welcome_word"])))
+					if err != nil {
+						//msg.Text(err.Error())
+						Log.Crrs(err, tuuz.FUNCTION_ALL())
+					} else {
+						msg.Record(audio.AudioUrl)
+						iapi.Api.SendGroupMsg(self_id, group_id, msg, false)
+					}
 					break
 
 				case "交易":

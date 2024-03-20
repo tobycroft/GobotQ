@@ -167,7 +167,7 @@ func Router() {
 								msg := MessageBuilder.IMessageBuilder{}.New()
 								audio, err := TTS.Audio{}.New().Huihui(Calc.Any2String(name + "，" + Calc.Any2String(groupfunction["welcome_word"])))
 								if err != nil {
-									msg.Text(err.Error())
+									//msg.Text(err.Error())
 								} else {
 									msg.Record(audio.AudioUrl)
 								}

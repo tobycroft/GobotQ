@@ -65,6 +65,7 @@ func function_edit(c *gin.Context) {
 	mp.PostString("kick_words")
 	mp.PostBool("ban_url")
 	mp.PostBool("auto_welcome")
+	mp.PostBool("welcome_voice")
 	mp.PostString("welcome_word")
 	mp.PostBool("welcome_at")
 	mp.PostBool("ban_share")

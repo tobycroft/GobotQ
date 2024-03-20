@@ -159,8 +159,13 @@ func Router() {
 						//在没有启动自动验证模式的时候，使用正常欢迎流程
 						if Calc.Any2Int64(groupfunction["auto_welcome"]) == 1 {
 							if Calc.Any2Int64(groupfunction["welcome_voice"]) == 1 {
+								usr := GroupMemberModel.Api_find(group_id, user_id)
+								name := ""
+								if len(usr) > 0 {
+									name += Calc.Any2String(usr["nickname"])
+								}
 								msg := MessageBuilder.IMessageBuilder{}.New()
-								audio, err := TTS.Audio{}.New().Huihui(Calc.Any2String(groupfunction["welcome_word"]))
+								audio, err := TTS.Audio{}.New().Huihui(Calc.Any2String(name + "，" + Calc.Any2String(groupfunction["welcome_word"])))
 								if err != nil {
 									msg.Text(err.Error())
 								} else {

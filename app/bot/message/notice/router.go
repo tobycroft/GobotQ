@@ -176,14 +176,14 @@ func Router() {
 							} else {
 								msg := MessageBuilder.IMessageBuilder{}.New().Text(Calc.Any2String(groupfunction["welcome_word"]))
 								if groupfunction["welcome_at"].(int64) == 1 {
-									go iapi.Api.SendGroupMsg(self_id, group_id, msg.At(user_id), auto_retract)
+									iapi.Api.SendGroupMsg(self_id, group_id, msg.At(user_id), auto_retract)
 								} else {
-									go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
+									iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 								}
 							}
 						} else {
 							if groupfunction["join_alert"].(int64) == 1 {
-								go iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("成员+1"), auto_retract)
+								iapi.Api.SendGroupMsg(self_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("成员+1"), auto_retract)
 							}
 						}
 					}

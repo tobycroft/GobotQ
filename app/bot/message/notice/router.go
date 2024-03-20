@@ -168,6 +168,7 @@ func Router() {
 								audio, err := TTS.Audio{}.New().Huihui(Calc.Any2String(name + "，" + Calc.Any2String(groupfunction["welcome_word"])))
 								if err != nil {
 									//msg.Text(err.Error())
+									Log.Crrs(err, tuuz.FUNCTION_ALL())
 								} else {
 									msg.Record(audio.AudioUrl)
 								}

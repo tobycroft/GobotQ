@@ -39,7 +39,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 	}(self_id, group_id, user_id, message_id, groupmember, groupfunction)
 	if len(sign) > 0 {
 		db.Rollback()
-		msg := MessageBuilder.IMessageBuilder{}.New().New().Text("你今天已经签到过了").At(user_id)
+		msg := MessageBuilder.IMessageBuilder{}.New().Text("你今天已经签到过了").At(user_id)
 		AutoMessage(self_id, group_id, user_id, msg, groupfunction)
 	} else {
 		rank := gsm.Api_count(group_id)
@@ -58,7 +58,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 		if len(GroupBanModel.Api_find(group_id, user_id)) > 1 {
 			//奖励生命模式
 			if GroupBanModel.Api_delete_userId(group_id, user_id) {
-				msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).Text(",您是今日第" + Calc.Int642String(order) + "个签到,生命值已经补满")
+				msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(",您是今日第" + Calc.Int642String(order) + "个签到,生命值已经补满")
 				AutoMessage(self_id, group_id, user_id, msg, groupfunction)
 			}
 			db.Commit()
@@ -93,7 +93,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
 					}
-					msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).
+					msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).
 						Text("您是今日第" + Calc.Int642String(order) + "个签到," +
 							"威望奖励" + Calc.Float642String(amount) + ",连续签到" + Calc.Any2String(week_sign) + "天," + "额外奖励＋7" +
 							"现有威望：" + Calc.Any2String(rest_bal+amount) + ",排名第：" + Calc.Int642String(rank+1))
@@ -104,7 +104,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 						Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 						return
 					}
-					msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).Text(",您是今日第" + Calc.Int642String(order) + "个签到" +
+					msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(",您是今日第" + Calc.Int642String(order) + "个签到" +
 						"威望奖励" + Calc.Float642String(amount) + ",连续签到" + Calc.Any2String(week_sign) + "天," + "额外奖励＋" + Calc.Any2String(week_sign) +
 						"现有威望：" + Calc.Any2String(rest_bal+amount) + ",排名第：" + Calc.Int642String(rank+1))
 					AutoMessage(self_id, group_id, user_id, msg, groupfunction)
@@ -115,7 +115,7 @@ func App_group_sign(self_id, group_id, user_id, message_id int64, groupmember ma
 					Log.Errs(errors.New("GroupBalanceModel,增加失败"), tuuz.FUNCTION_ALL())
 					return
 				}
-				msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).Text(",您是今日第" + Calc.Int642String(order) + "个签到,威望奖励" + Calc.Float642String(amount) + "," +
+				msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(",您是今日第" + Calc.Int642String(order) + "个签到,威望奖励" + Calc.Float642String(amount) + "," +
 					"现有威望：" + Calc.Any2String(rest_bal+amount) + ",排名第：" + Calc.Int642String(rank+1) + ",明日继续签到可堆叠奖励呢！")
 				AutoMessage(self_id, group_id, user_id, msg, groupfunction)
 			}

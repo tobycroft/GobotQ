@@ -202,7 +202,7 @@ func group_message_normal() {
 					GroupFunction.AutoMessage(selfId, groupId, userId, MessageBuilder.IMessageBuilder{}.New().At(userId).Text("请尽快输入"+Calc.Any2String(code)), groupFunction)
 				} else if len(GroupBanPermenentModel.Api_find(groupId, userId)) > 0 {
 					ps.Publish_struct(types.RetractChannel, rm)
-					msg := MessageBuilder.IMessageBuilder{}.New().New().Text("你现在处于永久小黑屋中，请让管理员使用acfur重新验证").At(user_id).Text("，来脱离当前状态")
+					msg := MessageBuilder.IMessageBuilder{}.New().Text("你现在处于永久小黑屋中，请让管理员使用acfur重新验证").At(user_id).Text("，来脱离当前状态")
 					go iapi.Api.SendGroupMsg(self_id, group_id, msg, true)
 				}
 			}(self_id, group_id, user_id, groupfunction)

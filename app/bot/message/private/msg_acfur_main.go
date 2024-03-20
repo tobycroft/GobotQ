@@ -65,12 +65,12 @@ func message_fully_attached_with_acfur() {
 					break
 
 				case "ip":
-					msg := MessageBuilder.IMessageBuilder{}.New().New().Text(es.RemoteAddr)
+					msg := MessageBuilder.IMessageBuilder{}.New().Text(es.RemoteAddr)
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, true)
 					break
 
 				case "app", "下载":
-					msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_app_download_url)
+					msg := MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_app_download_url)
 					iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, true)
 					break
 
@@ -78,14 +78,14 @@ func message_fully_attached_with_acfur() {
 					botinfo := BotModel.Api_find(self_id)
 					if len(botinfo) > 0 {
 						if Calc.Any2Int64(botinfo["owner"]) == user_id {
-							msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_private_help + app_default.Default_private_help_for_RobotOwner)
+							msg := MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_private_help + app_default.Default_private_help_for_RobotOwner)
 							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 						} else {
-							msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_private_help)
+							msg := MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_private_help)
 							iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 						}
 					} else {
-						msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_private_help)
+						msg := MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_private_help)
 						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 					}
 					break

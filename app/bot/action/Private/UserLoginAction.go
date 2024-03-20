@@ -20,18 +20,18 @@ func App_userLogin(self_id int64, user_id, group_id int64, message string) {
 	usermember := UserMemberModel.Api_find(user_id)
 	if len(usermember) > 0 {
 		if UserMemberModel.Api_update_all(user_id, uname, rand) {
-			msg := MessageBuilder.IMessageBuilder{}.New().New().Text("您的登录密码：\r\n" + Calc.Int2String(rand))
+			msg := MessageBuilder.IMessageBuilder{}.New().Text("您的登录密码：\r\n" + Calc.Int2String(rand))
 			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 		} else {
-			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_error_alert)
+			msg := MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_error_alert)
 			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 		}
 	} else {
 		if UserMemberModel.Api_insert(user_id, uname, rand) {
-			msg := MessageBuilder.IMessageBuilder{}.New().New().Text("↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n" + Calc.Int2String(rand) + "\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n" + app_default.Default_str_login_text)
+			msg := MessageBuilder.IMessageBuilder{}.New().Text("↓↓↓↓↓您的登录密码↓↓↓↓↓\r\n" + Calc.Int2String(rand) + "\r\n↑↑↑↑↑请在APP中输入↑↑↑↑↑\r\n" + app_default.Default_str_login_text)
 			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 		} else {
-			msg := MessageBuilder.IMessageBuilder{}.New().New().Text(app_default.Default_error_alert)
+			msg := MessageBuilder.IMessageBuilder{}.New().Text(app_default.Default_error_alert)
 			iapi.Api.SendPrivateMsg(self_id, user_id, group_id, msg, false)
 		}
 	}

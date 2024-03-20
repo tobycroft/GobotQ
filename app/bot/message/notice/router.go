@@ -19,6 +19,7 @@ import (
 	"main.go/app/bot/model/LogRecvModel"
 	"main.go/config/app_conf"
 	"main.go/config/types"
+	"main.go/extend/TTS"
 	"main.go/tuuz"
 	"main.go/tuuz/Jsong"
 	"main.go/tuuz/Log"
@@ -89,7 +90,7 @@ func Router() {
 						}
 					} else {
 						if GroupMemberModel.Api_update_type(group_id, user_id, "admin") {
-							msg := MessageBuilder.IMessageBuilder{}.New().New().Text("恭喜上位").At(user_id)
+							msg := MessageBuilder.IMessageBuilder{}.New().Text("恭喜上位").At(user_id)
 							go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 							GroupBlackListModel.Api_delete(group_id, user_id)
 							GroupBanPermenentModel.Api_delete(group_id, user_id)
@@ -140,7 +141,7 @@ func Router() {
 						num := Calc.Rand(1000, 9999)
 						Redis.String_set("verify_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, app_conf.Retract_time_duration+10*time.Second)
 						Redis.String_set("ban_"+Calc.Any2String(group_id)+"_"+Calc.Any2String(user_id), num, 3600*time.Second)
-						msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id)
+						msg := MessageBuilder.IMessageBuilder{}.New().At(user_id)
 						go iapi.Api.SendGroupMsg(self_id, group_id, msg.Text("请在120秒内在群内输入验证码数字：\n"+Calc.Any2String(num)), true)
 						go func(selfId, groupId, userId int64) {
 							time.Sleep(120 * time.Second)
@@ -156,12 +157,24 @@ func Router() {
 						//Group.App_reverify(self_id, group_id, user_id, 0, "", nil, groupfunction)
 					} else {
 						//在没有启动自动验证模式的时候，使用正常欢迎流程
-						if groupfunction["auto_welcome"].(int64) == 1 {
-							msg := MessageBuilder.IMessageBuilder{}.New().New().Text(Calc.Any2String(groupfunction["welcome_word"]))
-							if groupfunction["welcome_at"].(int64) == 1 {
-								go iapi.Api.SendGroupMsg(self_id, group_id, msg.At(user_id), auto_retract)
-							} else {
+						if Calc.Any2Int64(groupfunction["auto_welcome"]) == 1 {
+							if Calc.Any2Int64(groupfunction["welcome_voice"]) == 1 {
+								msg := MessageBuilder.IMessageBuilder{}.New()
+								audio, err := TTS.Audio{}.New().Huihui(Calc.Any2String(groupfunction["welcome_word"]))
+								if err != nil {
+									msg.Text(err.Error())
+								} else {
+									msg.Record(audio.AudioUrl)
+								}
 								go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
+
+							} else {
+								msg := MessageBuilder.IMessageBuilder{}.New().Text(Calc.Any2String(groupfunction["welcome_word"]))
+								if groupfunction["welcome_at"].(int64) == 1 {
+									go iapi.Api.SendGroupMsg(self_id, group_id, msg.At(user_id), auto_retract)
+								} else {
+									go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
+								}
 							}
 						} else {
 							if groupfunction["join_alert"].(int64) == 1 {

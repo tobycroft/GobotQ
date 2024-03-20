@@ -52,13 +52,13 @@ func App_ban_user(self_id, group_id, user_id int64, auto_retract bool, groupfunc
 			fmt.Println("当前积分", bal, balance_decr, balance_left)
 			if balance_left >= 0 {
 				balance.Api_decr(group_id, user_id, math.Abs(balance_decr))
-				msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).Text(Calc.Any2String(time+1) + "这是你第:" + "次扣分，扣除" + Calc.Any2String(balance_decr) + "分\n" + "本次扣分原因：" + reason + "\n你还剩下：" +
+				msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).Text(Calc.Any2String(time+1) + "这是你第:" + "次扣分，扣除" + Calc.Any2String(balance_decr) + "分\n" + "本次扣分原因：" + reason + "\n你还剩下：" +
 					"" + Calc.Any2String(balance_left) + "分")
 				go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 				return
 			}
 		}
-		msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).Text("这是你第:" + Calc.Any2String(time+1) + "次，接受惩罚\n" + "本次惩罚原因：" + reason + "\n你还剩下：" + Calc.Any2String(left_time) + "点生命值")
+		msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).Text("这是你第:" + Calc.Any2String(time+1) + "次，接受惩罚\n" + "本次惩罚原因：" + reason + "\n你还剩下：" + Calc.Any2String(left_time) + "点生命值")
 		go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 		iapi.Api.SetGroupBan(self_id, group_id, user_id, float64(groupfunction["ban_time"].(int64))*math.Pow10(int(time)))
 	} else {
@@ -103,7 +103,7 @@ func App_kick_user(self_id, group_id, user_id int64, auto_retract bool, groupfun
 		} else {
 			if GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400) {
 				iapi.Api.SetGroupBan(self_id, group_id, user_id, app_conf.Auto_ban_time)
-				msg := MessageBuilder.IMessageBuilder{}.New().New().At(user_id).Text("你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁")
+				msg := MessageBuilder.IMessageBuilder{}.New().At(user_id).Text("你已经低于生命值，现在将你加入永久禁言列表，仅允许管理员解禁")
 				go iapi.Api.SendGroupMsg(self_id, group_id, msg, auto_retract)
 			}
 		}
@@ -121,7 +121,7 @@ func App_drcrease_member(self_id, group_id, user_id int64, groupfunction map[str
 		if group_list_data["max_member_count"].(int64) < group_member_count {
 			group_member_datas := GroupMemberModel.Api_select_byGroupId(group_id, "last_sent_time desc", int(group_list_data["max_member_count"].(int64)-20), 2)
 			if len(group_member_datas) > 0 {
-				msg := MessageBuilder.IMessageBuilder{}.New().New().Text("本群将被清除" + Calc.Any2String(len(group_member_datas)) +
+				msg := MessageBuilder.IMessageBuilder{}.New().Text("本群将被清除" + Calc.Any2String(len(group_member_datas)) +
 					"人，\n第一个被T出的人为:" + Calc.Any2String(group_member_datas[0]["nickname"]) + "，他最后一次说话是在：" +
 					Date.Date_format_second(group_member_datas[0]["last_date"].(time.Time)) +
 					"\n最后一个被清除的为:" + Calc.Any2String(group_member_datas[len(group_member_datas)-1]["nickname"]) +

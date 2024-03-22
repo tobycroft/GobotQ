@@ -8,11 +8,14 @@ import (
 )
 
 func (self *Audio) SpeechToText(file_url string) (string, error) {
-	post := Net.Post{}.New().PostFormData("http://10.0.0.182:84/v1/tts/stt/qq", map[string]interface{}{
-		"token": SystemParamModel.Api_value("aigc"),
-	}, map[string]string{
-		"url": file_url,
-	}, map[string]string{}, map[string]string{})
+	post := Net.Net{}.New().SetUrl("http://10.0.0.182:84/v1/tts/stt/qq").
+		SetPostData(map[string]string{
+			"url": file_url,
+		}).
+		SetHeader(map[string]string{
+			"token": Calc.Any2String(SystemParamModel.Api_value("aigc")),
+		}).
+		PostFormData()
 	audio := Audio{}
 	err := post.RetJson(&audio)
 	if err != nil {
@@ -25,11 +28,14 @@ func (self *Audio) SpeechToText(file_url string) (string, error) {
 }
 
 func (self *Audio) SpeechBase64ToText(b64 string) (string, error) {
-	post := Net.Post{}.New().PostFormData("http://10.0.0.182:84/v1/tts/stt/b64", map[string]interface{}{
-		"token": SystemParamModel.Api_value("aigc"),
-	}, map[string]string{
-		"base64": b64,
-	}, map[string]string{}, map[string]string{})
+	post := Net.Net{}.New().SetUrl("http://10.0.0.182:84/v1/tts/stt/b64").
+		SetPostData(map[string]string{
+			"base64": b64,
+		}).
+		SetHeader(map[string]string{
+			"token": Calc.Any2String(SystemParamModel.Api_value("aigc")),
+		}).
+		PostFormData()
 	audio := Audio{}
 	err := post.RetJson(&audio)
 	if err != nil {

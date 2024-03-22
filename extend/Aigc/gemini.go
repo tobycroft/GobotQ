@@ -1,17 +1,17 @@
 package Aigc
 
 import (
+	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/bot/model/SystemParamModel"
 	"time"
 )
 
 func Aigc_gemini_text(text string) (AigcStruct, error) {
-	post := Net.Post{}.New().SetTimeOut(100*time.Second).PostFormData("http://10.0.0.182:84/v1/aigc/gemini/text", map[string]interface{}{
-		"token": SystemParamModel.Api_value("aigc"),
-	}, map[string]string{
-		"text": text,
-	}, map[string]string{}, map[string]string{})
+	post := Net.Net{}.New().SetTimeOut(100 * time.Second).SetUrl("http://10.0.0.182:84/v1/aigc/gemini/text").
+		SetPostData(map[string]string{"text": text}).
+		SetHeader(map[string]string{"token": Calc.Any2String(SystemParamModel.Api_value("aigc"))}).
+		PostFormData()
 	var ag AigcStruct
 	err := post.RetJson(&ag)
 	if err != nil {

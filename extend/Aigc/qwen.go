@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func Aigc_qwen_base(message string) (AigcEchoStruct, error) {
+func Aigc_qwen(chat_id, message string) (AigcEchoStruct, error) {
 	post := Net.Net{}.New().SetTimeOut(100 * time.Second).SetUrl("http://10.0.0.182:84/v1/qwen/api/raw").
 		SetPostData(map[string]string{"message": message, "chat_id": "111"}).
 		SetHeader(map[string]string{"Authorization": "Bearer " + Calc.Any2String(SystemParamModel.Api_value("subtoken"))}).

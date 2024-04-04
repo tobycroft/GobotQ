@@ -25,3 +25,8 @@ type AigcStruct struct {
 	Data string `json:"data"`
 	Echo string `json:"echo"`
 }
+
+type AigcEchoStruct struct {
+	Code int    `json:"code"`
+	Echo string `json:"echo"`
+}

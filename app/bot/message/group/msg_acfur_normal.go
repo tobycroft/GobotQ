@@ -102,7 +102,7 @@ func group_message_normal() {
 			}
 			if is_at_me {
 				if utf8.RuneCountInString(text) > 4 {
-					ai_reply, err := Aigc.Aigc_bing_text(text)
+					ai_reply, err := Aigc.Aigc_qwen_base(text)
 					if err != nil {
 						fmt.Println(err)
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
@@ -141,7 +141,7 @@ func group_message_normal() {
 				}()
 
 				go func() {
-					ai_reply, err := Aigc.Aigc_bing_text(text)
+					ai_reply, err := Aigc.Aigc_qwen_base(text)
 					b <- true
 					if err != nil {
 						fmt.Println(err)

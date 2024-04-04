@@ -148,7 +148,7 @@ func group_message_normal() {
 						Log.Crrs(err, tuuz.FUNCTION_ALL())
 						GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 					} else {
-						rec, err := TTS.Audio{}.New().Huihui(ai_reply.Data)
+						rec, err := TTS.Audio{}.New().Huihui(ai_reply.Echo)
 						if err != nil {
 							GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text(err.Error()), groupfunction)
 						} else {

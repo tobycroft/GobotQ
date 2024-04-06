@@ -39,7 +39,7 @@ func message_fully_attached_with_acfur() {
 					break
 
 				case "text":
-					normal_text.WriteString(msg.Data["text"])
+					normal_text.WriteString(Calc.Any2String(msg.Data["text"]))
 					break
 				}
 			}

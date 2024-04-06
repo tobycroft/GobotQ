@@ -3,6 +3,7 @@ package private
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/action/MessageBuilder"
 	"main.go/app/bot/iapi"
 	"main.go/app/bot/model/PrivateAutoReplyModel"
@@ -40,22 +41,22 @@ func message_main_handler() {
 					break
 
 				case "text":
-					normal_text.WriteString(msg.Data["text"])
+					normal_text.WriteString(Calc.Any2String(msg.Data["text"]))
 					break
 
 				case "record":
 					go func() {
 						time.Sleep(500 * time.Millisecond)
-						iapi.Api.GetRecord(selfId, msg.Data["file"], "mp3")
+						iapi.Api.GetRecord(selfId, Calc.Any2String(msg.Data["file"]), "mp3")
 					}()
-					fmt.Println("语音解析:", msg.Data["file"])
+					fmt.Println("语音解析:", Calc.Any2String(msg.Data["file"]))
 					select {
 					case <-time.NewTicker(10 * time.Second).C:
 						iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("语音解析超时"), false)
 						break
 
-					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"]):
-						fmt.Println("接收语音:", msg.Data["file"])
+					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + Calc.Any2String(msg.Data["file"])):
+						fmt.Println("接收语音:", Calc.Any2String(msg.Data["file"]))
 						if c.Payload == "fail" {
 							iapi.Api.SendPrivateMsg(selfId, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), false)
 							break

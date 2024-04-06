@@ -3,6 +3,7 @@ package group
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/tobycroft/Calc"
 	"main.go/app/bot/model/GroupFunctionModel"
 	"main.go/app/bot/model/GroupMemberModel"
 	"main.go/app/bot/service"
@@ -60,7 +61,7 @@ func group_message_acfur_semi_match() {
 					break
 
 				case "text":
-					normal_text.WriteString(msg.Data["text"])
+					normal_text.WriteString(Calc.Any2String(msg.Data["text"]))
 					break
 				}
 			}

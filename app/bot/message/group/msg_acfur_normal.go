@@ -55,23 +55,23 @@ func group_message_normal() {
 					break
 
 				case "text":
-					normal_text.WriteString(msg.Data["text"])
+					normal_text.WriteString(Calc.Any2String(msg.Data["text"]))
 					break
 
 				case "record":
 					go func() {
 						time.Sleep(500 * time.Millisecond)
-						iapi.Api.GetRecord(self_id, msg.Data["file"], "mp3")
+						iapi.Api.GetRecord(self_id, Calc.Any2String(msg.Data["file"]), "mp3")
 					}()
 
-					fmt.Println("语音解析:", msg.Data["file"])
+					fmt.Println("语音解析:", Calc.Any2String(msg.Data["file"]))
 					select {
 					case <-time.NewTicker(10 * time.Second).C:
 						iapi.Api.SendPrivateMsg(self_id, user_id, group_id, MessageBuilder.IMessageBuilder{}.New().Text("语音解析超时"), true)
 						break
 
-					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + msg.Data["file"]):
-						fmt.Println("接收语音:", msg.Data["file"])
+					case c := <-Redis.PubSub{}.Subscribe(types.GetFile + Calc.Any2String(msg.Data["file"])):
+						fmt.Println("接收语音:", Calc.Any2String(msg.Data["file"]))
 						if c.Payload == "fail" {
 							GroupFunction.AutoMessage(self_id, group_id, user_id, MessageBuilder.IMessageBuilder{}.New().Text("b64解码失败"), groupfunction)
 							break

@@ -50,7 +50,7 @@ func group_message_acfur_when_fully_matched() {
 					break
 
 				case "text":
-					normal_text.WriteString(msg.Data["text"])
+					normal_text.WriteString(Calc.Any2String(msg.Data["text"]))
 					break
 				}
 			}

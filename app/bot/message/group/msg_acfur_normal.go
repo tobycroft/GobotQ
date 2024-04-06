@@ -164,10 +164,11 @@ func group_message_normal() {
 					if err != nil {
 						num = 0
 					}
+					repeat_count := Calc.Any2Int64(groupFunction["repeat_count"])
 					BanRepeatRedis.BanRepeatRedis{}.Table(userId, raw_message).Cac_set(num+1, time.Duration(Calc.Any2Float64(groupFunction["repeat_time"]))*time.Second)
-					if num > groupFunction["repeat_count"].(int64) {
+					if num > repeat_count {
 						GroupFunction.App_ban_user(selfId, groupId, userId, groupfunction["auto_retract"].(int64) == 1, groupFunction, "请不要在"+Calc.Any2String(groupFunction["repeat_time"])+"秒内重复发送相同内容")
-					} else if int64(num)+1 > groupFunction["repeat_count"].(int64) {
+					} else if int64(num)+1 > repeat_count {
 						GroupFunction.AutoMessage(selfId, groupId, userId, MessageBuilder.IMessageBuilder{}.New().At(userId).Text(Calc.Any2String(groupFunction["repeat_time"])+"秒内请勿重复发送相同内容"), groupFunction)
 					}
 				}

@@ -135,6 +135,29 @@ func Router() {
 				if user_id == self_id {
 					go GroupFunction.App_refreshmember(self_id, group_id)
 				} else {
+					go func(selfId, groupId, userId int64, autoRetract bool) {
+						//将这个新加群的用户单条加入数据库
+						member, err := iapi.Api.GetGroupMemberInfo(selfId, groupId, userId)
+						if err != nil {
+
+						} else {
+							var mb GroupMemberModel.GroupMember
+							mb.SelfId = selfId
+							mb.UserId = userId
+							mb.GroupId = groupId
+							mb.Card = member.UserDisplayname
+							mb.Title = member.Title
+							mb.Level = member.Level
+							mb.JoinTime = member.JoinTime
+							mb.LastSentTime = member.LastSentTime
+							mb.Nickname = member.Nickname
+							mb.Role = member.Role
+							if !GroupMemberModel.Api_insert(mb) {
+								go iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.New().Text("群成员数据增加失败"), autoRetract)
+							}
+						}
+					}(self_id, group_id, user_id, auto_retract)
+
 					if groupfunction["auto_hold"].(int64) == 1 {
 						//如果禁言成功，就将这个人暂时加入永久小黑屋
 						GroupBanPermenentModel.Api_insert(group_id, user_id, time.Now().Unix()+app_conf.Auto_ban_time-86400)
@@ -197,28 +220,6 @@ func Router() {
 						}
 					}
 
-					go func(selfId, groupId, userId int64, autoRetract bool) {
-						//将这个新加群的用户单条加入数据库
-						member, err := iapi.Api.GetGroupMemberInfo(selfId, groupId, userId)
-						if err != nil {
-
-						} else {
-							var mb GroupMemberModel.GroupMember
-							mb.SelfId = selfId
-							mb.UserId = userId
-							mb.GroupId = groupId
-							mb.Card = member.UserDisplayname
-							mb.Title = member.Title
-							mb.Level = member.Level
-							mb.JoinTime = member.JoinTime
-							mb.LastSentTime = member.LastSentTime
-							mb.Nickname = member.Nickname
-							mb.Role = member.Role
-							if !GroupMemberModel.Api_insert(mb) {
-								go iapi.Api.SendGroupMsg(selfId, groupId, MessageBuilder.IMessageBuilder{}.New().Text("群成员数据增加失败"), autoRetract)
-							}
-						}
-					}(self_id, group_id, user_id, auto_retract)
 				}
 				break
 

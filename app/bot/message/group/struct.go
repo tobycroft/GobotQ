@@ -27,8 +27,8 @@ type GroupMessageStruct struct {
 	PeerId      int64  `json:"peer_id"`
 	UserId      int64  `json:"user_id"`
 	Message     []struct {
-		Data map[string]string `json:"data"`
-		Type string            `json:"type"`
+		Data map[string]any `json:"data"`
+		Type string         `json:"type"`
 	} `json:"message"`
 	RawMessage string      `json:"raw_message"`
 	Font       int64       `json:"font"`
@@ -36,7 +36,7 @@ type GroupMessageStruct struct {
 }
 
 type GroupSender struct {
-	UserId   int64  `json:"user_id"`
+	UserId   int    `json:"user_id"`
 	Nickname string `json:"nickname"`
 	Card     string `json:"card"`
 	Role     string `json:"role"`

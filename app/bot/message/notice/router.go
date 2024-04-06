@@ -157,6 +157,7 @@ func Router() {
 							}
 						}
 					}(self_id, group_id, user_id, auto_retract)
+					time.Sleep(2 * time.Second)
 
 					if groupfunction["auto_hold"].(int64) == 1 {
 						//如果禁言成功，就将这个人暂时加入永久小黑屋

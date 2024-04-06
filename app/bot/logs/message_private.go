@@ -2,7 +2,7 @@ package logs
 
 import (
 	"github.com/bytedance/sonic"
-	"main.go/app/bot/message/group"
+	"main.go/app/bot/message/private"
 	"main.go/app/bot/model/PrivateMsgModel"
 	"main.go/config/types"
 	"main.go/tuuz/Log"
@@ -11,8 +11,8 @@ import (
 
 func log_message_private() {
 	ps := Redis.PubSub{}
-	for c := range ps.Subscribe(types.MessageGroup) {
-		var es group.EventStruct[group.GroupMessageStruct]
+	for c := range ps.Subscribe(types.MessagePrivate) {
+		var es private.EventStruct[private.PrivateMessageStruct]
 		err := sonic.UnmarshalString(c.Payload, &es)
 		if err != nil {
 			Log.Crrs(err, c.Payload)

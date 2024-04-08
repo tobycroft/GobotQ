@@ -66,7 +66,7 @@ func Router() {
 			switch notice_type {
 			//取消管理
 			case "group_admin":
-				var esg EventStruct[groupAdmin]
+				var esg EventStruct[GroupAdmin]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c.Payload)
@@ -124,7 +124,7 @@ func Router() {
 				break
 
 			case "group_increase":
-				var esg EventStruct[groupIncrease]
+				var esg EventStruct[GroupIncrease]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c.Payload)
@@ -132,6 +132,9 @@ func Router() {
 				}
 				ga := esg.Json
 				user_id := ga.UserId
+				if user_id == 0 {
+					break
+				}
 				if user_id == self_id {
 					go GroupFunction.App_refreshmember(self_id, group_id)
 				} else {
@@ -204,7 +207,7 @@ func Router() {
 				break
 
 			case "group_decrease":
-				var esg EventStruct[groupDecrease]
+				var esg EventStruct[GroupDecrease]
 				err := sonic.UnmarshalString(c.Payload, &esg)
 				if err != nil {
 					LogErrorModel.Api_insert(err.Error(), c.Payload)
@@ -264,7 +267,7 @@ func Router() {
 			case "group_ban":
 				switch sub_type {
 				case "ban":
-					var esg EventStruct[groupBan]
+					var esg EventStruct[GroupBan]
 					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
 						LogErrorModel.Api_insert(err.Error(), c.Payload)
@@ -283,7 +286,7 @@ func Router() {
 					break
 
 				case "lift_ban":
-					var esg EventStruct[groupLiftBan]
+					var esg EventStruct[GroupLiftBan]
 					err := sonic.UnmarshalString(c.Payload, &esg)
 					if err != nil {
 						LogErrorModel.Api_insert(err.Error(), c.Payload)

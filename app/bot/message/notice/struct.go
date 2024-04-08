@@ -1,6 +1,6 @@
 package notice
 
-type EventStruct[T Notice | groupApply | groupAdmin | groupBan | groupIncrease | groupDecrease | groupLiftBan | groupRecallMessage] struct {
+type EventStruct[T Notice | GroupApply | GroupAdmin | GroupBan | GroupIncrease | GroupDecrease | GroupLiftBan | groupRecallMessage] struct {
 	SelfId      int64  `json:"self_id"`
 	MessageType string `json:"message_type"`
 	PostType    string `json:"post_type"`
@@ -15,30 +15,30 @@ type Notice struct {
 	GroupId    int64  `json:"group_id"`
 }
 
-type groupApply struct {
+type GroupApply struct {
 	OperatorId int64  `json:"operator_id"`
 	Flag       string `json:"flag"`
 }
 
-type groupAdmin struct {
+type GroupAdmin struct {
 	TargetId int64 `json:"target_id"`
 }
 
-type groupIncrease struct {
+type GroupIncrease struct {
 	OperatorId int64 `json:"operator_id"`
 	UserId     int64 `json:"user_id"`
 	SenderId   int64 `json:"sender_id"`
 	TargetId   int64 `json:"target_id"`
 }
 
-type groupDecrease struct {
+type GroupDecrease struct {
 	OperatorId int64 `json:"operator_id"`
 	GroupId    int   `json:"group_id"`
 	UserId     int   `json:"user_id"`
 	TargetId   int   `json:"target_id"`
 }
 
-type groupBan struct {
+type GroupBan struct {
 	OperatorId int64 `json:"operator_id"`
 	UserId     int64 `json:"user_id"`
 	SenderId   int64 `json:"sender_id"`
@@ -46,7 +46,7 @@ type groupBan struct {
 	TargetId   int64 `json:"target_id"`
 }
 
-type groupLiftBan struct {
+type GroupLiftBan struct {
 	OperatorId int64 `json:"operator_id"`
 	UserId     int64 `json:"user_id"`
 	SenderId   int64 `json:"sender_id"`

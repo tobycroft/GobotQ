@@ -1,6 +1,7 @@
 package notice
 
 import (
+	"errors"
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/tobycroft/Calc"
@@ -133,6 +134,7 @@ func Router() {
 				ga := esg.Json
 				user_id := ga.UserId
 				if user_id == 0 {
+					LogErrorModel.Api_insert(errors.New("user_id=0"), c.Payload)
 					break
 				}
 				if user_id == self_id {

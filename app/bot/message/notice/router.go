@@ -218,6 +218,10 @@ func Router() {
 				ga := esg.Json
 				operator_id := ga.OperatorId
 				user_id := ga.UserId
+				if user_id == 0 {
+					LogErrorModel.Api_insert(errors.New("user_id=0"), c.Payload)
+					break
+				}
 				GroupMemberModel.Api_delete_byUid(self_id, group_id, user_id)
 				switch sub_type {
 				case "leave":

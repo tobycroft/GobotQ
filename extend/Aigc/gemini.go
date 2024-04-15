@@ -8,7 +8,7 @@ import (
 )
 
 func Aigc_gemini_text(text string) (AigcStruct, error) {
-	post := Net.Net{}.New().SetTimeOut(100 * time.Second).SetUrl("http://aigc.aerofsx.com:84/v1/aigc/gemini/text").
+	post := Net.Net{}.New().SetTimeOut(100 * time.Second).SetUrl("http://aigc.aerofsx.com:81/v1/aigc/gemini/text").
 		SetPostData(map[string]string{"text": text}).
 		SetHeader(map[string]string{"token": Calc.Any2String(SystemParamModel.Api_value("aigc"))}).
 		PostFormData()

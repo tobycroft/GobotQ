@@ -11,7 +11,7 @@ import (
 )
 
 func Aigc_bing_text(text string) (AigcStruct, error) {
-	post := Net.Net{}.New().SetTimeOut(100 * time.Second).SetUrl("http://aigc.aerofsx.com:84/v1/aigc/bing/text").
+	post := Net.Net{}.New().SetTimeOut(100 * time.Second).SetUrl("http://aigc.aerofsx.com:81/v1/aigc/bing/text").
 		SetPostData(map[string]string{"text": text}).
 		SetHeader(map[string]string{"token": Calc.Any2String(SystemParamModel.Api_value("aigc"))}).
 		PostFormData()

@@ -8,7 +8,7 @@ import (
 )
 
 func (self *Audio) SpeechToText(file_url string) (string, error) {
-	post := Net.Net{}.New().SetUrl("http://10.0.0.182:84/v1/tts/stt/qq").
+	post := Net.Net{}.New().SetUrl("http://aigc.aerofsx.com:84/v1/tts/stt/qq").
 		SetPostData(map[string]string{
 			"url": file_url,
 		}).
@@ -28,7 +28,7 @@ func (self *Audio) SpeechToText(file_url string) (string, error) {
 }
 
 func (self *Audio) SpeechBase64ToText(b64 string) (string, error) {
-	post := Net.Net{}.New().SetUrl("http://10.0.0.182:84/v1/tts/stt/b64").
+	post := Net.Net{}.New().SetUrl("http://aigc.aerofsx.com:84/v1/tts/stt/b64").
 		SetPostData(map[string]string{
 			"base64": b64,
 		}).

@@ -41,7 +41,7 @@ func Router() {
 			}
 			if botinfo["allow_ip"] != nil && botinfo["allow_ip"] != "" {
 				if botinfo["allow_ip"] != ip.Addr().String() {
-					LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", botinfo["allow_ip"], ip.Addr().String()), pm.SelfId)
+					LogErrorModel.Api_insert(fmt.Sprint("invalid ip address", botinfo["allow_ip"], ip.Addr().String()), es.SelfId)
 					continue
 				}
 			}

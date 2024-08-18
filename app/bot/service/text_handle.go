@@ -39,15 +39,3 @@ func Serv_text_match_all(text string, Case []string) (string, bool) {
 	}
 	return "", false
 }
-
-func Serv_text_match_define(text *string, Case []string) bool {
-	for _, str := range Case {
-		reg := regexp.MustCompile("(?i)^" + str)
-		active := reg.MatchString(*text)
-		if active {
-			*text = reg.ReplaceAllString(*text, "")
-			return true
-		}
-	}
-	return false
-}

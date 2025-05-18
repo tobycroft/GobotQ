@@ -66,6 +66,7 @@ func main2() {
 	//rs := Redis.StreamNew("test")
 	//fmt.Println(rs.Publish(map[string]any{"sss": "bbb"}))
 	//fmt.Println(rs.XRange())
+	
 	chunk_test()
 }
 
